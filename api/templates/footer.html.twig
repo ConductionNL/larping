@@ -9,14 +9,22 @@
                 </a>
                 <p class="my-4">Conduction Academy provides both matchmaking and an online internship platform</p>
                 <div class="dropdown mb-4 mb-lg-0">
+                    {% set query = app.request.attributes.get('_route_params') %}
                     <a id="langsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle footer-language-link pb-2">
-                        <img src="/bundles/rocket/assets/img/flags/united-states-of-america.svg" alt="USA Flag" class="language-flag"> United States
+                        {% if app.request.locale == 'en'  %}
+                        <img src="/bundles/rocket/assets/img/flags/united-kingdom.svg" alt="USA Flag" class="language-flag">{{ 'english'|trans|capitalize }}
+                        {% elseif app.request.locale == 'nl'  %}
+                        <img src="/bundles/rocket/assets/img/flags/netherlands.svg" alt="NL Flag" class="language-flag">{{ 'dutch'|trans|capitalize }}
+                        {% else %}
+                            {{ 'no curent language could be established'|trans|capitalize }}
+                        {% endif %}
                         <i class="fas fa-chevron-down ml-1"></i>
                     </a>
                     <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-center mt-0">
-                        <a href="#" class="dropdown-item text-gray text-sm"><img src="/bundles/rocket/assets/img/flags/germany.svg" alt="Germany Flag" class="language-flag"> German</a>
-                        <a href="#" class="dropdown-item text-gray text-sm"><img src="/bundles/rocket/assets/img/flags/spain.svg" alt="Spain Flag" class="language-flag"> Spanish</a>
-                        <a href="#" class="dropdown-item text-gray text-sm"><img src="/bundles/rocket/assets/img/flags/france.svg" alt="France Flag" class="language-flag"> French</a>
+                        {% set query = query|merge({'_locale': 'en'}) %}
+                        <a href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}" class="dropdown-item text-gray text-sm"><img src="/bundles/rocket/assets/img/flags/united-kingdom.svg" alt="UK Flag" class="language-flag">{{ 'english'|trans|capitalize }}</a>
+                        {% set query = query|merge({'_locale': 'nl'}) %}
+                        <a href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}" class="dropdown-item text-gray text-sm"><img src="/bundles/rocket/assets/img/flags/netherlands.svg" alt="NL Flag" class="language-flag">{{ 'dutch'|trans|capitalize }}</a>
                     </div>
                 </div>
             </div>

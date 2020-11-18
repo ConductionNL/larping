@@ -6,9 +6,9 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 text-center">
                     <h1 class="mb-3">{{ 'challenges'|trans|capitalize }}</h1>
-                    <p class="lead px-lg-5 mb-5">{{ 'Are you a creative and driven student and looking for a different kind of internship? '|trans|capitalize }}{{ 'Here we offer challenges from companies with special challenges, who are looking for a suitable solution. '|trans|capitalize }}{{ 'You as a student can participate! '|trans|capitalize }}{{ 'Pitch your innovative solution / idea for these challenges and win a unique internship where you can implement your idea. '|trans|capitalize }}{{ 'You can do this individually or with others. '|trans|capitalize }}{{ 'Looking for team players watch '|trans|capitalize }}
+                    <p class="lead px-lg-5 mb-5">{{ 'Are you a creative and driven student and looking for a different kind of internship?'|trans|capitalize }} {{ 'Here we offer challenges from companies with special challenges, who are looking for a suitable solution.'|trans|capitalize }} {{'You as a student can participate!'|trans|capitalize }} {{'Pitch your innovative solution / idea for these challenges and win a unique internship where you can implement your idea.'|trans|capitalize }} {{'You can do this individually or with others.'|trans|capitalize }} {{'Looking for team players watch'|trans|capitalize }}
                         <a href="{{ path('app_team_index') }}"
-                           style="color: #EE5050;">{{ 'here '|trans }} </a>{{ 'and make contact. '|trans }}</p>
+                           style="color: #EE5050;">{{ 'here'|trans }} </a>{{ 'and make contact.'|trans }}</p>
                     <form action="#">
                         <div class="form-group bg-white shadow-soft rounded-pill mb-4 px-3 py-2">
                             <div class="row align-items-center">
@@ -19,7 +19,7 @@
                                                     class="fas fa-search"></i></span></div>
                                         <input name="search" id="search" type="text"
                                                class="form-control border-0 form-control-flush shadow-none pb-2"
-                                               placeholder="{{ 'search for challenges'|trans|capitalize }}..."
+                                               placeholder="{{'search for challenges'|trans|capitalize}}..."
                                                required=""
                                                {% if query.search is defined and query.search is not empty %}value="{{ query.search }}"{% endif %}>
                                     </div>
@@ -55,10 +55,20 @@
                                              src="{{ organization.style.favicon.base64 }}" alt="">
                                     {% endif %}
                                     {% if challenge.submitter is defined and challenge.submitter is not empty %}
-                                        <h6 class="text-muted small ml-2 mb-0">{{ challenge.submitter }}</h6>
+                                        {% if 'http' in challenge.submitter %}
+                                            {% set submitter = commonground_is_resource(challenge.submitter) %}
+                                            {% if submitter != false %}
+                                                {% set submitter = submitter.name %}
+                                            {% else %}
+                                                {% set submitter = challenge.submitter %}
+                                            {% endif %}
+                                        {% else %}
+                                            {% set submitter = challenge.submitter %}
+                                        {% endif %}
+
+                                        <h6 class="text-muted small ml-2 mb-0">{{ submitter }}</h6>
                                     {% endif %}
                                 </div>
-
                                 {% if challenge.dateClose is defined and challenge.dateClose is not empty %}
                                     <div class="d-flex align-items-center my-4"><h6
                                             class="text-muted small ml-2 mb-0">{{ 'closing date: '|trans|capitalize }}{{ challenge.dateClose|date("d-m-Y", "Europe/Paris") }}</h6>
@@ -66,7 +76,7 @@
                                 {% endif %}
                                 {% if challenge.budget is defined and challenge.budget is not empty %}
                                     <div class="d-flex align-items-center my-4"><h6
-                                            class="text-muted small ml-2 mb-0">{{ 'reward: '|trans|capitalize }}{{ challenge.budget }}</h6>
+                                            class="text-muted small ml-2 mb-0">{{ 'reward: '|trans|capitalize }}&euro;{{ challenge.budget }}</h6>
                                     </div>
                                 {% endif %}
                                 <p class="mb-0">{{ challenge.description }}</p>
@@ -94,14 +104,14 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-10 text-center">
-                    <h2 class="h1">{{ 'post a challenge for students'|trans|capitalize }}</h2>
-                    <p class="lead px-lg-5 mb-5">{{ 'Do you have as an organization a (digital) issue or a challenge? '|trans|capitalize }}{{ 'and do you want it to be viewed from a different refreshing perspective, or to come up with a solution? '|trans|capitalize }} {{ 'Post a challenge '|trans|capitalize }}{{ 'and invite students to respond and pitch their ideas and / or products!'|trans }}
+                    <h2 class="h1">{{'post a challenge for students'|trans|capitalize }}</h2>
+                    <p class="lead px-lg-5 mb-5">{{'Do you have as an organization a (digital) issue or a challenge?'|trans|capitalize }} {{ 'and do you want it to be viewed from a different refreshing perspective, or to come up with a solution?'|trans|capitalize }} {{ 'Post a challenge'|trans|capitalize }} {{ 'and invite students to respond and pitch their ideas and / or products!'|trans }}
                     </p>
                     {% if app.user %}
                         <a href="{{ path('app_dashboardorganization_challenges') }}">
                             <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal"
                                     data-target=".pricing-modal"><span class="mr-2"><i
-                                        class="fas fa-bullseye-arrow"></i></span>{{ 'post a challenge'|trans|capitalize }}
+                                        class="fas fa-bullseye-arrow"></i></span>{{'post a challenge'|trans|capitalize }}
                             </button>
                         </a>
                     {% else %}

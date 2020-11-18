@@ -36,9 +36,7 @@
                                         {% endfor %}
                                     {% endif %}
                                     <ul class="social-buttons py-3">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"><a
-                                                href="{{ path('app_student_portfolio', {id: student.id}) }}"></a>
-                                            {{ 'bekijk portfolio'|trans|capitalize }}</button>
+                                        <a href="{{ path('app_student_portfolio', {id: student.id}) }}" class="btn btn-primary">{{ 'bekijk portfolio'|trans|capitalize }}</a>
                                     </ul>
                                     <ul class="social-buttons py-3">
                                         {% if socials.facebook is defined and socials.facebook is not empty %}

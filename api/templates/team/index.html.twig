@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 text-center">
-                    <h1 class="mb-3">{{ 'teams make the world go around'|trans|capitalize }}</h1>
+                    <h1 class="mb-3">{{'teams make the world go around'|trans|capitalize }}</h1>
                     <p class="lead px-lg-5 mb-5">{{ 'either join an exsisting team or start your own to tackle the worlds problems.'|trans|capitalize }}
                         </p>
                     <form action="{{ path('app_team_index', query) }}">
@@ -89,7 +89,7 @@
                                                     class="h6 text-sm ml-2">0</span></span>
                                         {% endif %}
                                         <span class="ml-4"><i class="fas fa-bullseye-arrow text-primary"></i><span
-                                                class="h6 text-sm ml-2">[challenges]{# the amount of challanges that this team is participating in #}</span></span>
+                                                class="h6 text-sm ml-2">{{ commonground_resource_list({'component': 'chrc', 'type': 'entries'},{'submitter': team['@id']})['hydra:totalItems'] }}</span></span>
                                     </div>
                                 </div>
                             </div>
@@ -103,16 +103,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center mb-5">
-                   <p> {{ 'Starting your own teams allows jou to attract teammates and tackle challenges together, there is
-                        no set definition of who should be in a team so you could either be a group of students of the
-                        same study or a multidisciplinary team consisting of different study\'s. Or you could just be a
-                        group of friends. '|trans|capitalize }}</p>
-                    <p>{{ 'The choice is all yours. '|trans|capitalize }}</p>
+                   <p>{{'Starting your own teams allows jou to attract teammates and tackle challenges together, there is no set definition of who should be in a team so you could either be a group of students of the same study or a multidisciplinary team consisting of different study\'s. Or you could just be a group of friends.'|trans|capitalize}}</p>
+                    <p>{{'The choice is all yours.'|trans|capitalize }}</p>
                 </div>
                 <div class="col-12 text-center">
                     <a href="#"><button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal"
-                            data-target=".pricing-modal"><span class="mr-2"><i class="fas fa-rocket"></i></span>{{ 'Start a
-                        team '|trans|capitalize }}
+                            data-target=".pricing-modal"><span class="mr-2"><i class="fas fa-rocket"></i></span>{{'Start a team'|trans|capitalize }}
                     </button></a>
                 </div>
             </div>

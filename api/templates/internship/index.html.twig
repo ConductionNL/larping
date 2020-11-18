@@ -13,7 +13,9 @@
                                 <div class="col">
                                     <div class="input-group input-group-merge shadow-none">
                                         <div class="input-group-prepend"><span class="input-group-text bg-transparent border-0"><i class="fas fa-search"></i></span></div>
-                                        <input name="search" id="search" type="text" class="form-control border-0 form-control-flush shadow-none pb-2" placeholder="{{ 'search for internships'|trans|capitalize }}..." required="" {% if query.search is defined and query.search is not empty %}value="{{ query.search }}"{% endif %}>
+                                        <input name="search" id="search" type="text" class="form-control border-0 form-control-flush shadow-none pb-2"
+                                               placeholder="{{ 'search for internships'|trans|capitalize }}..." required="" {% if query.search is defined and query.search is not empty %}
+                                        value="{{ query.search }}"{% endif %}>
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -34,35 +36,35 @@
                     <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-building"></span></div>
-                            <h6 class="text-gray mb-0"> {{ 'full-time'|capitalize }} </h6></div>
+                            <h6 class="text-gray mb-0"> {{ 'full-time'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
                     <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-stopwatch"></span></div>
-                            <h6 class="text-gray mb-0"> {{ 'part-time'|capitalize }} </h6></div>
+                            <h6 class="text-gray mb-0"> {{ 'part-time'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
                     <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-business-time"></span></div>
-                            <h6 class="text-gray mb-0"> {{ 'temporarily'|capitalize }} </h6></div>
+                            <h6 class="text-gray mb-0"> {{ 'temporarily'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2">
                     <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-sun"></span></div>
-                            <h6 class="text-gray mb-0"> {{ 'season'|capitalize }} </h6></div>
+                            <h6 class="text-gray mb-0"> {{ 'season'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2">
                     <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-network-wired"></span></div>
-                            <h6 class="text-gray mb-0"> {{ 'internship'|capitalize }} </h6></div>
+                            <h6 class="text-gray mb-0"> {{ 'internship'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
             </div>
@@ -102,7 +104,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-12 d-flex align-items-center justify-content-md-end">
-{#                                  voor als er is geklikt#}
+{#
 {#                                  <button type="submit" class="btn btn-secondary mr-3 animate-up-2 m-0"><i class="fas fa-heart"></i></button>#}
                                     {% if app.user is defined and app.user is not null %}
                                         <a href="{{ path('app_internship_like') }}" class="btn btn-secondary mr-3 animate-up-2 m-0"><i class="fal fa-heart"></i></a>
@@ -126,9 +128,11 @@
             <div class="row">
                 <div class="col-12 text-center mb-5">
                     <h2 class="mb-4">{{ 'Join the Conduction Academy'|trans }}</h2>
-                    <p class="lead mb-5">{{ 'We\ve got '|trans|capitalize }} <span class="font-weight-bolder">{{ 'cookies '|trans }}</span></p>
+                    <p class="lead mb-5">{{ 'We use'|trans|capitalize }} <span class="font-weight-bolder">{{ 'cookies '|trans }}</span></p>
                     <p>{{ 'Become a part of the comunity today to find the best interhsips and tutorials to lift of your career'|trans }}</p>
-                    <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal" data-target=".pricing-modal"><a href="{{ path('app_user_idvault') }}" style="color: white"><span class="mr-2"><i class="fas fa-hand-pointer"></i></span>{{ 'register now'|trans|capitalize }}</a></button>
+                    <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal" data-target=".pricing-modal">
+                        <a href="{{ path('app_user_idvault') }}" style="color: white"><span class="mr-2"><i class="fas fa-hand-pointer"></i>
+                            </span>{{ 'register now'|trans|capitalize }}</a></button>
                 </div>
             </div>
         </div>

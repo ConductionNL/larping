@@ -30,8 +30,10 @@ class TeamController extends AbstractController
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
+        //@TODO filter when filter arrays are possible
+
         // Get resource
-        $variables['teams'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations'], $variables['query'])['hydra:member'];
+        $variables['teams'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'], $variables['query'])['hydra:member'];
         $variables['entries'] = $commonGroundService->getResourceList(['component' => 'chrc', 'type' => 'entries'], $variables['query'])['hydra:member'];
 
         return $variables;
@@ -47,7 +49,9 @@ class TeamController extends AbstractController
 
         // Get Resource
         $variables['team'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
-        $variables['entry'] = $commonGroundService->getResourceList(['component' => 'chrc', 'type' => 'entries'], ['tender.id' => $id])['hydra:member'];
+        $entries = $commonGroundService->getResourceList(['component' => 'chrc', 'type' => 'entries'], ['submitter' => $variables['@id']]);
+        $variables['entries'] = $entries['hydra:member'];
+        $variables['numberOfEntries'] = $entries['hydra:totalItems'];
 
         return $variables;
     }

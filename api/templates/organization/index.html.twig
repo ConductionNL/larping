@@ -7,9 +7,7 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 text-center">
                     <h1 class="mb-3">{{ h1|trans|capitalize }}</h1>
-                    {% if p|default %}
-                        <p class="lead px-lg-5 mb-5">{{ 'find any organization on the platform'|trans|capitalize }}</p>
-                    {% endif %}
+                    <p class="lead px-lg-5 mb-5">{{ 'find any organization on the platform'|trans|capitalize }}</p>
                     <form action="{{ path(path) }}" method="post">
                         <div class="form-group bg-white shadow-soft rounded-pill mb-4 px-3 py-2">
                             <div class="row align-items-center">
@@ -26,8 +24,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <button type="submit" id="searchButton"
-                                            class="btn btn-block btn-primary rounded-pill">Zoeken
-                                    </button>
+                                            class="btn btn-block btn-primary rounded-pill">{{ 'search'|trans|capitalize }}</button>
                                 </div>
                             </div>
                         </div>

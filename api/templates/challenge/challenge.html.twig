@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 {% else %}
-                    <p>er zijn geen rewards </p>
+                    <p>{{ 'there are no rewards'|trans|capitalize }}</p>
                 {% endif %}
             </div>
         </div>
@@ -96,6 +96,7 @@
                 {% set counter = 0 %}
                 {% for stage in stages %}
                 <div class="timeline timeline-six px-3 px-lg-0">
+                    {% if counter == 0 or counter % 2 == 0 %}
                     <div class="row no-gutters">
                         <div class="col-lg"></div>
                         <div class="col-lg-1 text-center flex-column d-none d-lg-flex">
@@ -104,7 +105,7 @@
                                 <div class="col">&nbsp;</div>
                             </div>
                             <span
-                                class="d-none d-lg-block m-4 h4 lh-200 dot-separator bg-soft shadow-soft border border-light text-primary">1</span>
+                                class="d-none d-lg-block m-4 h4 lh-200 dot-separator bg-soft shadow-soft border border-light text-primary">{{ counter + 1 }}</span>
                             <div class="row h-50">
                                 <div class="col middle-line">&nbsp;</div>
                                 <div class="col">&nbsp;</div>
@@ -113,18 +114,19 @@
                         <div class="col-lg py-2">
                             <div class="card timeline-card bg-soft shadow-soft border-light p-3">
                                 <div class="card-body p-4">
-                                    <h4 class="mb-3"><span class="d-lg-none">{{ loop.index }}</span>{{ stage.name }}
+                                    <h4 class="mb-3"><span class="d-lg-none">{{ counter }}</span>{{ stage.name }}
                                     </h4>
                                     <p class="my-2">{{ stage.description }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% else %}
                     <div class="row no-gutters">
                         <div class="col-lg py-2">
                             <div class="card left-timeline-card bg-soft shadow-soft border-light p-3">
                                 <div class="card-body p-4">
-                                    <h4 class="mb-3"><span class="d-lg-none">{{ loop.index }}</span>{{ stage.name }}
+                                    <h4 class="mb-3"><span class="d-lg-none">{{ counter }}</span>{{ stage.name }}
                                     </h4>
                                     <p class="my-2">{{ stage.description }}</p>
                                 </div>
@@ -144,7 +146,8 @@
                         </div>
                         <div class="col-lg"></div>
                     </div>
-                    {% if counter >= stage|length %}
+                    {% endif %}
+                    {% if counter >= stages|length %}
                         {% set counter = 0 %}
                     {% else %}
                         {% set counter = counter + 1 %}
