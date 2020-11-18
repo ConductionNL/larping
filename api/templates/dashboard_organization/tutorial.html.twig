@@ -23,9 +23,7 @@
 
 
     <form action="{{ path('app_dashboardorganization_tutorial',{'id': tutorial.id}) }}" method="post">
-
         <!-- left collum -->
-    <form action="{{ path('app_dashboardorganization_tutorial',{'id': tutorial.id}) }}" method="post">
     <div class="row">
         <div class="col-12 col-xl-8">
             <div class="card card-body bg-white border-light shadow-sm mb-4">
@@ -66,19 +64,6 @@
                         </div>
                     </div>
 
-                <div class="row align-items-center">
-                    <div class="col-md-12 mb-3">
-                        <div class="form-group">
-                            <label for="educationEvents">{{ 'Tutorial type'|trans|capitalize }}</label>
-                            <input class="form-control" id="educationEvents" type="text"
-                                   required=""
-                                {% if tutorial.educationEvents is defined and tutorial.educationEvents is not empty %}
-                                    value="{{ tutorial.educationEvents }}" {% else %}
-                                    placeholder="{{ 'your tutorial type...'|trans|capitalize }}"{% endif %} name="educationEvents" required>
-                        </div>
-                    </div>
-                </div>
-
                     <div class="row align-items-center">
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
@@ -94,15 +79,30 @@
                         </div>
                     </div>
 
-                    <div class="row align-items-center">
-                        <div class="col-md-12 mb-3">
+                <div class="row align-items-center">
+                <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                        <label for="additionalType">Type tutorial</label>
+                        <select class="form-control" name="additionalType" id="additionalType">
+
+                            <option value="werkomgeving">{{ 'werkomgeving'|trans }}</option>
+                            <option value="setup">{{ 'setup'|trans }}</option>
+                            <option value="layout"> {{ 'layout'|trans }} </option>
+                            <option value="datamodellen">{{ 'datamodellen'|trans }}</option>
+
+                        </select>
+                    </div>
+                </div>
+
+
+                        <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label for="time required">{{ 'Tutorial time required '|trans|capitalize }}</label>
                                 <input class="form-control" id="description" type="text"
                                        required=""
                                     {% if tutorial.timeRequired is defined and tutorial.timeRequired is not empty %}
                                         value="{{ tutorial.timeRequired }}" {% else %}
-                                        placeholder="{{ 'The time required to read the entire tutorial...'|trans|capitalize }}"{% endif %}
+                                        placeholder="{{ 'The time required to read the tutorial...'|trans|capitalize }}"{% endif %}
                                        name="timeRequired" required>
                             </div>
                         </div>
@@ -139,10 +139,10 @@
                                 <label
                                     for="occupationalCredentialAwarded">{{ 'Occupational Credential'|trans|capitalize }}</label>
                                 {% if tutorial.occupationalCredentialAwarded is defined and tutorial.occupationalCredentialAwarded is not empty %}
-                                    <textarea class="form-control" id="text" name="text" rows="3"
+                                    <textarea class="form-control" id="occupationalCredentialAwarded" name="occupationalCredentialAwarded" rows="3"
                                               cols="6">{{ tutorial.occupationalCredentialAwarded }}</textarea>
                                 {% else %}
-                                    <textarea class="form-control" id="text" name="text"
+                                    <textarea class="form-control" id="occupationalCredentialAwarded" name="occupationalCredentialAwarded"
                                               placeholder="Indicate in the tutorial which professional certificate you receive..."
                                               rows="3" cols="6"></textarea>{% endif %}
                             </div>
@@ -178,7 +178,7 @@
                     <tbody>
                     <tr>
                         {% if participants is defined and participants is not empty %}
-                        {% for participants in participants %}
+                        {% for participant in participants %}
                         <td>
                             <div class="form-check dashboard-check">
                                 <input class="form-check-input" type="checkbox" value="" id="userCheck1">
@@ -189,17 +189,17 @@
                             <a href="#" class="d-flex align-items-center"><img
                                     src="../../assets/img/team/profile-picture-1.jpg"
                                     class="user-avatar rounded-circle mr-3" alt="Avatar">
-                                <div class="d-block"><span class="font-weight-bold">{{ participants.person }}</span>
-                                    <div class="small text-gray">{{ participants.description }}</div>
+                                <div class="d-block"><span class="font-weight-bold">{{ participant.person }}</span>
+                                    <div class="small text-gray"> </div>
                                 </div>
                             </a>
                         </td>
-                        <td><span class="font-weight-normal">{{ participants.created|date("d-m-Y", "Europe/Paris") }}</span>
+                        <td><span class="font-weight-normal">{{ participant.created|date("d-m-Y", "Europe/Paris") }}</span>
                         </td>
                         <td><span class="font-weight-normal">
                                 <span class="fas fa-check-circle text-success mr-2"></span>Email</span>
                         </td>
-                        <td><span class="font-weight-normal text-success">.........</span></td>
+                        <td><span class="font-weight-normal text-success">{{ participant.results }}</span></td>
                         <td>
                             <div class="btn-group">
                                 <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
@@ -460,111 +460,6 @@
             <div class="col-12 col-xl-4">
                 <div class="row">
 
-
-
-
-                <div class="col-12 mb-4 mb-xl-0">
-                    <div class="card card-body bg-white border-light">
-                        <h2 class="h5 mb-4">Events</h2>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="border-0">
-                                    {#                                    <div class="form-check dashboard-check">#}
-                                    {#                                        <input class="form-check-input" type="checkbox" value="" id="userCheck55">#}
-                                    {#                                        <label class="form-check-label" for="userCheck55"></label>#}
-                                    {#                                    </div>#}
-                                </th>
-                                <th class="border-0">Name</th>
-                                {#                                <th class="border-0">Action</th>#}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% if  educationEvents is defined and educationEvents is not empty %}
-                                {% for educationEvent in educationEvents %}
-                                    <tr>
-                                        <td>
-                                            <div class="form-check dashboard-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                       value="/educationEvents/{{ educationEvent.id }}"
-                                                       id="{{ educationEvent.id }}Checkbox" name="educationEvents[]"
-                                                    {% if educationEvent.educationEvents|default %}{% for act in tutorial.educationEvents %}
-                                                    {% if educationEvent.id == act.id %}checked{% endif %}{% endfor %}{% endif %}>
-                                                <label class="form-check-label"
-                                                       for="{{ educationEvent.id }}Checkbox"></label>
-                                            </div>
-                                            <input type="hidden" name="coursePrerequisites[]" value="{{ req['@id'] }}">
-                                        </td>
-                                        <td><span
-                                                class="font-weight-normal">{{ educationEvent.name }}</span>
-                                        </td>
-                                        {#                                        <td>#}
-                                        {#                                            <div class="btn-group">#}
-                                        {#                                                <button#}
-                                        {#                                                    class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"#}
-                                        {#                                                    data-toggle="dropdown" aria-haspopup="true"#}
-                                        {#                                                    aria-expanded="false"><span#}
-                                        {#                                                        class="icon icon-sm"><span#}
-                                        {#                                                            class="fas fa-ellipsis-h icon-dark"></span> </span><span#}
-                                        {#                                                        class="sr-only">Toggle Dropdown</span>#}
-                                        {#                                                </button>#}
-                                        {#                                                <div class="dropdown-menu"><a class="dropdown-item" href="#"><span#}
-                                        {#                                                            class="fas fa-user-shield mr-2"></span> Reset Pass</a> <a#}
-                                        {#                                                        class="dropdown-item" href="#"><span#}
-                                        {#                                                            class="fas fa-eye mr-2"></span>View#}
-                                        {#                                                        Details</a> <a class="dropdown-item text-danger" href="#"><span#}
-                                        {#                                                            class="fas fa-user-times mr-2"></span>Suspend</a></div>#}
-                                        {#                                            </div>#}
-                                        {#                                            <a href="#" class="text-danger ml-2" title="" data-toggle="modal"#}
-                                        {#                                               data-target="#{{ activity.id }}"><span#}
-                                        {#                                                    class="fas fa-times-circle"></span></a>#}
-                                        {#                                        </td>#}
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
-                            </tbody>
-                        </table>
-                        {% if educationEvents|default %}
-                            {% for educationEvent in educationEvents %}
-                                <div class="modal fade" id="{{ educationEvent.id }}" tabindex="-1" role="dialog"
-                                     aria-labelledby="modal-default" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title">Edit {{ educationEvent.id }}</h6>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>With less than a month to go before the European Union enacts new
-                                                    consumer privacy laws for its citizens, companies around the
-                                                    world
-                                                    are updating their terms of service agreements to comply.</p>
-                                                <p>The European Union's General Data Protection Regulation
-                                                    (G.D.P.R.)
-                                                    goes into effect on May 25 and is meant to ensure a common set
-                                                    of
-                                                    data rights in the European Union. It requires organizations to
-                                                    notify users as
-                                                    soon as possible of high-risk data breaches that could
-                                                    personally
-                                                    affect them.</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-sm btn-secondary">I Got It
-                                                </button>
-                                                <button type="button" class="btn btn-link text-danger ml-auto"
-                                                        data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
 
 
 

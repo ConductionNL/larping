@@ -32,6 +32,35 @@
                 {% if challenge['@id'] is defined and challenge['@id'] is not empty %}
                     <input type="hidden" name="@id" id="@id" value="{{ challenge['@id'] }}">
                 {% endif %}
+                {% if challenge['id'] is defined and challenge['id'] is not empty %}
+                    <input type="hidden" name="id" id="id" value="{{ challenge['id'] }}">
+                {% endif %}
+                {% if challenge.currentStage is defined and challenge.currentStage is not empty %}
+                    <input type="hidden" name="currentStage" id="id" value="/tender_stages/{{ challenge.currentStage['id'] }}">
+                {% endif %}
+                {% if challenge.questions is defined and challenge.questions is not empty %}
+                    {% for question in challenge.questions %}
+                        <input type="hidden" name="questions[]" id="id" value="/questions/{{ question['id'] }}">
+                    {% endfor %}
+                {% endif %}
+                {% if challenge.entries is defined and challenge.entries is not empty %}
+                    {% for entry in challenge.entries %}
+                        <input type="hidden" name="entries[]" id="id" value="/entries/{{ entry['id'] }}">
+                    {% endfor %}
+                {% endif %}
+                {% if challenge.pitches is defined and challenge.pitches is not empty %}
+                    {% for pitch in challenge.pitches %}
+                        <input type="hidden" name="pitches[]" id="id" value="/pitches/{{ pitch['id'] }}">
+                    {% endfor %}
+                {% endif %}
+                {% if challenge.proposals is defined and challenge.proposals is not empty %}
+                    {% for proposal in challenge.proposals %}
+                        <input type="hidden" name="proposals[]" id="id" value="/proposals/{{ proposal['id'] }}">
+                    {% endfor %}
+                {% endif %}
+                {% if challenge.deal is defined and challenge.deal is not empty %}
+                    <input type="hidden" name="deal" id="id" value="/deals/{{ challenge.deal['id'] }}">
+                {% endif %}
                 <div class="row">
                     <div class="col-md-8 mb-3">
                         <div class="form-group">
@@ -39,22 +68,24 @@
                             <input class="form-control" id="name" name="name" type="text"
                                    required=""
                                 {% if challenge.name is defined and challenge.name is not empty %}
-                                value="{{ challenge.name }}" {% else %} placeholder="{{ 'your challenge name'|trans|capitalize }}"{% endif %}>
+                                    value="{{ challenge.name }}" {% else %} placeholder="{{ 'your challenge name'|trans|capitalize }}"
+                                {% endif %}
+                            >
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <div class="form-group">
                             <label for="submitter">{{ 'submitter'|trans|capitalize }}</label>
-                            {% if challenge.submitter is defined and challenge.submitter is not empty %}
-                                <input class="form-control" id="submitter" name="submitter" type="text"
-                                       required="" value="{{ challenge.submitter }}" disabled>
-                            {% else %}
-                                <select class="form-control" id="submitter" name="submitter" type="text"
-                                        required="">
-                                    {% for bedrijf in organizations %}
-                                        <option value="{{ bedrijf['@id'] }}">{{ bedrijf.name }}</option>
-                                    {% endfor %}
-                                </select>
+                            <select class="form-control" id="submitter" name="submitter" type="text" required=""
+                            {% if challenge.submitter is defined and challenge.submitter %}disabled{% endif %}
+                            >
+                                {% for bedrijf in organizations %}
+                                    <option {% if challenge.submitter is defined and challenge.submitter is not empty and challenge.submitter == bedrijf['@id'] %}selected{% endif %}
+                                            value="{{ bedrijf['@id'] }}">{{ bedrijf.name }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if challenge.submitter is defined and challenge.submitter %}
+                                <input class="form-control" id="submitter" name="submitter" type="hidden" value="{{ challenge.submitter }}">
                             {% endif %}
                         </div>
                     </div>
@@ -68,7 +99,7 @@
                                        value="{{ challenge.description }}">
                             {% else %}
                                 <textarea class="form-control" id="description" name="description"
-                                          rows="3"></textarea>
+                                          rows="3" maxlength="600"></textarea>
                             {% endif %}
                         </div>
                     </div>
@@ -83,6 +114,7 @@
                                        value="{{ challenge.selectionCritera[0] }}" {% endfor %} disabled>
                             {% else %}
                                 <select class="form-control" id="selectionCritera[]" name="selectionCritera[]">
+                                    <option>{{ 'Geen requirements'|trans|capitalize }}</option>
                                     {% for tutorial in tutorials %}
                                         <option>{{ tutorial.name }}</option>
                                     {% endfor %}
@@ -96,7 +128,7 @@
                             {% if challenge.documents is defined and challenge.documents is not empty %}
                                 <input class="form-control" id="documents[]" name="documents[]" type="text"
                                     {% for documents in challenge.documents %}
-                                        value="{{ challenge.documents[0] }}" {% endfor %} disabled>
+                                        value="{{ challenge.documents[0] }}" {% endfor %} readonly>
                             {% else %}
                                 <input class="form-control" id="documents[]" name="documents[]" type="file">
                             {% endif %}
@@ -108,10 +140,10 @@
                         <div class="form-group">
                             <label for="budget">{{ 'budget'|trans|capitalize }}</label>
                             {% if challenge.budget is defined and challenge.budget is not empty %}
-                                <input class="form-control" id="budget" name="budget" type="number"
-                                       value="{{ challenge.budget }}" disabled>
+                                <input class="form-control" id="budget" name="budget" type="number" min="0"
+                                       value="{{ challenge.budget }}" readonly>
                             {% else %}
-                                <input class="form-control" id="budget" name="budget" type="number" defaultValue="0">
+                                <input class="form-control" id="budget" name="budget" type="number" min="0" defaultValue="0">
                             {% endif %}
                         </div>
                     </div>
@@ -119,11 +151,11 @@
                         <div class="form-group">
                             <label for="dateClose">{{ 'close date'|trans|capitalize }}</label>
                             {% if challenge.dateClose is defined and challenge.dateClose is not empty %}
-                                <input class="form-control" id="dateClose" name="dateClose" type="datetime-local"
-                                       required="" value="{{ challenge.dateClose|date("d-m-Y", "Europe/Paris") }}"
-                                       disabled>
+                                <input class="form-control" id="dateClose" name="dateClose" type="datetime-local" required=""
+                                       value="{{ challenge.dateClose|date("Y-m-d", "Europe/Paris")~'T'~challenge.dateClose|date("H:i:s", "Europe/Paris") }}"
+                                       readonly>
                             {% else %}
-                                <input class="form-control" id="dateClose" name="dateClose" type="datetime-local">
+                                <input class="form-control" id="dateClose" name="dateClose" type="datetime-local" required="">
                             {% endif %}
                         </div>
                     </div>

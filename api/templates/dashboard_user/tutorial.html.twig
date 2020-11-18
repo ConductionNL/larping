@@ -12,20 +12,20 @@
                 </ol>
             </nav>
             <h2 class="h4">{{ tutorial.name|capitalize }}</h2>
-            <p class="mb-0">{{ tutorial.summary|capitalize }}</p>
+            <p class="mb-0">{{ tutorial.description|capitalize }}</p>
         </div>
     </div>
 
 <div class="row">
     <!-- left collum -->
-    <div class="col-12 col-xl-8">
-        <div class="card border-light shadow-sm">
-            <div class="card-body">
-                <h2 class="h5">{{ 'content'|trans|capitalize }}</h2>
-                <p>{{ tutorial.content }}</p>
-            </div>
-        </div>
-    </div>
+{#    <div class="col-12 col-xl-8">#}
+{#        <div class="card border-light shadow-sm">#}
+{#            <div class="card-body">#}
+{#                <h2 class="h5">{{ 'content'|trans|capitalize }}</h2>#}
+{#                <p>{{ tutorial.content }}</p>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
     <!-- right collum -->
     <div class="col-12 col-xl-4">
         {% include 'dashboard/tables/activities.html.twig'%}

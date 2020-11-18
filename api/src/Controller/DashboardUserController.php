@@ -41,7 +41,9 @@ class DashboardUserController extends AbstractController
         } else {
             $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person'=> 'https://dev.zuid-drecht.nl/api/v1/cc/people/d961291d-f5c1-46f4-8b4a-6abb41df88db']])['hydra:member'];
         }
-        $variables['participant'] = $participants[0];
+        if (count($participants) > 0) {
+            $variables['participant'] = $participants[0];
+        }
 
         $variables['courses'] = $variables['participant']['courses'];
         $variables['programs'] = $variables['participant']['programs'];
@@ -61,15 +63,22 @@ class DashboardUserController extends AbstractController
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
+        $variables['tutorials'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'courses'], $variables['query'])['hydra:member'];
+
         //  Getting the participant @todo this needs to be more foolproof
         if ($this->getUser()) {
             $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person'=> $this->getUser()->getPerson()]])['hydra:member'];
-        } else {
-            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person'=> 'https://dev.zuid-drecht.nl/api/v1/cc/people/d961291d-f5c1-46f4-8b4a-6abb41df88db']])['hydra:member'];
         }
-        $variables['participant'] = $participants[0];
-
-        $variables['tutorials'] = $variables['participant']['courses'];
+        if (count($participants) > 0) {
+            // Get all tutorials for each participant of this user
+            $tutorials = [];
+            foreach ($participants as $participant) {
+                if (isset($participant['course'])) {
+                    array_push($tutorials, $participant['course']);
+                }
+            }
+            $variables['tutorials'] = $tutorials;
+        }
 
         return $variables;
     }
@@ -78,9 +87,11 @@ class DashboardUserController extends AbstractController
      * @Route("/tutorials/{id}")
      * @Template
      */
-    public function tutorialAction(CommonGroundService $commonGroundService, Request $request)
+    public function tutorialAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables = [];
+
+        $variables['tutorial'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'courses', 'id' => $id]);
 
         return $variables;
     }

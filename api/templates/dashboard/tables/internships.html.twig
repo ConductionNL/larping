@@ -18,16 +18,16 @@
             <thead class="thead-light">
             <tr>
                 <th scope="col">{{ 'name'|trans|capitalize }}</th>
-                <th scope="col">Page Views</th>
+                <th scope="col">{{ 'organization'|trans|capitalize }}</th>
                 <th scope="col">Page Value</th>
-                <th scope="col">Bounce rate</th>
+                <th scope="col">{{ 'details'|trans|capitalize }}</th>
             </tr>
             </thead>
             <tbody>
             {% for internship in internships|slice(0, 10) %}
                 <tr>
                     <th>{{ internship.name }}</th>
-                    <td>3,225</td>
+                    <td>{{ commonground_resource(internship.hiringOrganization).name }}</td>
                     <td>$20</td>
                     <td>
                     {% if editPath is  defined %}

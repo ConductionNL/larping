@@ -29,7 +29,10 @@ class StudentController extends AbstractController
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
         // Get resource students
-        $variables['students'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'participants'], $variables['query'])['hydra:member'];
+        $variables['students'] = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants'], $variables['query'])['hydra:member'];
+        $variables['emails'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'emails'])['hydra:member'];
+        $variables['socials'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'socials'])['hydra:member'];
+
 
         return $variables;
     }

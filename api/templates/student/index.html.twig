@@ -14,44 +14,90 @@
     </section>
     <section class="section section-lg pt-0">
         <div class="container mt-n8 mt-lg-n12 z-2">
-            {% for student in students %}
-            {% set person = commonground_resource(student.person) %}
             <div class="row mt-6 mt-md-n7">
-                <div class="col-md-6 col-lg-4">
-                    <div class="profile-card mb-7">
-                        <div class="card shadow-soft border-light text-center">
-                            <div class="profile-image"><img src="/bundles/rocket/assets/img/team/profile-picture-1.jpg" class="card-img-top" alt="image"></div>
-                            <div class="card-body mt-n5">
-                                {% if person['@type'] == 'Ingeschrevenpersoon' %}
-                                    <span class="card__title">{{ person.naam.voornamen }} {{ person.naam.geslachtsnaam }}</span><br>
-                                    <span>{{ person.naam.aanschrijfwijze }}</span>
-                                {% else %}
+                {% for student in students %}
+                    {% set person = commonground_resource(student.person) %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="profile-card mb-7">
+                            <div class="card shadow-soft border-light text-center">
+                                <div class="profile-image"><img
+                                        src="/bundles/rocket/assets/img/team/profile-picture-1.jpg" class="card-img-top"
+                                        alt="image"></div>
+                                <div class="card-body mt-n5">
+                                    {% if person.name is defined and person.name is not empty %}
                                     <span class="card__title">{{ person.name }}</span><br>
-                                {% endif %}<br>
-                                {% if person.birthday is defined and person.birthday is not empty %}
-                                <p class="card-text my-2">{{ person.birthday }}</p>
-                                {% endif %}
-                                <ul class="social-buttons py-3">
-                                    <li><a href="{{ path('app_student_portfolio', {id: student.id}) }}" target="_blank"><i class="fas fa-file-user"></i> {{ 'portfolio'|trans|capitalize }}</a></li>
-                                </ul>
+                                    {% endif %}<br>
+                                    {% if person.birthday is defined and person.birthday is not empty %}
+                                        <p class="card-text my-2">{{ person.birthday }}</p>
+                                    {% endif %}
+                                    {% if email.emails is defined and email.emails is not empty %}
+                                        {% for email in emails %}
+                                            <p class="card-text my-2">{{ person.emails[0] }}</p>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <ul class="social-buttons py-3">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"><a
+                                                href="{{ path('app_student_portfolio', {id: student.id}) }}"></a>
+                                            {{ 'bekijk portfolio'|trans|capitalize }}</button>
+                                    </ul>
+                                    <ul class="social-buttons py-3">
+                                        {% if socials.facebook is defined and socials.facebook is not empty %}
+                                        <li>
+                                            <a href="{{ socials.facebook }}" target="_blank" class="btn btn-link btn-facebook">
+                                                <i class="fab fa-facebook-f"></i>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if socials.twitter is defined and socials.twitter is not empty %}
+                                        <li>
+                                            <a href="{{ socials.twitter }}" target="_blank" class="btn btn-link btn-twitter">
+                                                <i class="fab fa-twitter"></i>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if socials.linkedin is defined and socials.linkedin is not empty %}
+                                        <li>
+                                            <a href="{{ socials.linkedin }}" target="_blank" class="btn btn-link btn-linkedin">
+                                                <i class="fab fa-linkedin"></i>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if socials.instagram is defined and socials.instagram is not empty %}
+                                        <li>
+                                            <a href="{{ socials.instagram }}" target="_blank" class="btn btn-link btn-instagram">
+                                                <i class="fab fa-instagram"></i>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if socials.website is defined and socials.website is not empty %}
+                                        <li>
+                                            <a href="{{ socials.website }}" target="_blank" class="btn btn-link btn-dribbble">
+                                                <i class="fad fa-browser"></i>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    {% if not app.user %}
+        <section class="section section-lg pb-5 bg-soft">
+            <div class="container z-2">
+                <div class="row justify-content-center">
+                    <div class="col-md-10 text-center">
+                        <h2 class="h1">{{ 'Lets lift off'|trans|capitalize }}</h2>
+                        <p>{{ 'Your profile belong here and you know it.'|trans|capitalize }}{{ 'Get your self found by the best challenge leads and organizations and join today'|trans|capitalize }}</p>
+                        <p class="lead py-4 text-gray"></p><a href="{{ path('app_user_idvault') }}"
+                                                              class="btn btn-lg btn-secondary animate-up-2">{{ 'aanmelden'|trans|capitalize }}</a>
+                    </div>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-    </section>
-    {% if not app.user %}
-    <section class="section section-lg pb-5 bg-soft">
-        <div class="container z-2">
-            <div class="row justify-content-center">
-                <div class="col-md-10 text-center">
-                    <h2 class="h1">{{ 'Lets lift off'|trans|capitalize }}</h2>
-                    <p>{{ 'Your profile belong here and you know it. Get your self found by the best challange leads and organizations and joint today'|trans|capitalize }}</p>
-                    <p class="lead py-4 text-gray"></p><a href="{{ path('app_user_idvault') }}" class="btn btn-lg btn-secondary animate-up-2">{{ 'aanmelden'|trans|capitalize }}</a></div>
-            </div>
-        </div>
-    </section>
+        </section>
     {% endif %}
 {% endblock %}
