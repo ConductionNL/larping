@@ -277,6 +277,7 @@ class DashboardUserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+        $redirectToPlural = false;
         if ($id && $id != 'new') {
             $variables['item'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
         } else {
@@ -294,6 +295,10 @@ class DashboardUserController extends AbstractController
 
             // Add the post data to the already aquired resource data
             $resource = array_merge($variables['item'], $resource);
+
+            if (isset($resource['style'])) {
+                $resource['style'] = '/styles/'.$resource['style']['id'];
+            }
 
             // Update to the commonground component
             $variables['item'] = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);

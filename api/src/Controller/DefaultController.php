@@ -51,21 +51,21 @@ class DefaultController extends AbstractController
 
                 $authorizations = $commonGroundService->getResourceList(['component' => 'wac', 'type' => 'authorizations'], ['userUrl' => $userUrl, 'application' => '/applications/'.$provider['configuration']['app_id']])['hydra:member'];
 
-                if (count($authorizations) > 0) {
-                    $authorization = $authorizations[0];
-
-                    $dossier = [];
-                    $dossier['name'] = 'employee dossier';
-                    $dossier['description'] = 'employee dossier for '.$person['name'];
-                    $dossier['sso'] = $this->generateUrl('app_dashboard_index');
-                    $date = new \DateTime('now');
-                    $date->add(new \DateInterval('P2Y'));
-                    $dossier['expiryDate'] = $date->format('h:m Y-m-d');
-                    $dossier['goal'] = 'have access to employee dossier';
-                    $dossier['authorization'] = '/authorizations/'.$authorization['id'];
-
-                    $commonGroundService->createResource($dossier, ['component' => 'wac', 'type' => 'dossiers']);
-                }
+//                if (count($authorizations) > 0) {
+//                    $authorization = $authorizations[0];
+//
+//                    $dossier = [];
+//                    $dossier['name'] = 'employee dossier';
+//                    $dossier['description'] = 'employee dossier for '.$person['name'];
+//                    $dossier['sso'] = $this->generateUrl('app_dashboard_index');
+//                    $date = new \DateTime('now');
+//                    $date->add(new \DateInterval('P2Y'));
+//                    $dossier['expiryDate'] = $date->format('h:m Y-m-d');
+//                    $dossier['goal'] = 'have access to employee dossier';
+//                    $dossier['authorization'] = '/authorizations/'.$authorization['id'];
+//
+//                    $commonGroundService->createResource($dossier, ['component' => 'wac', 'type' => 'dossiers']);
+//                }
             }
         }
 

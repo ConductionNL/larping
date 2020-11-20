@@ -31,14 +31,6 @@
                     {% if tutorial['@id'] is defined and tutorial['@id'] is not empty %}
                         <input type="hidden" name="@id" id="@id" value="{{ tutorial['@id'] }}">
                     {% endif %}
-
-
-                {% if tutorial.organization is defined and tutorial.organization is not empty %}
-                    <input type="hidden" name="organization" id="organization"
-                           value="{{ tutorial.organization }}">
-                {% endif %}
-
-
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
@@ -80,6 +72,21 @@
                             </div>
                         </div>
                     </div>
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="additionalType">{{ 'organization'|trans|capitalize }}</label>
+                            <select class="form-control" name="organization" id="organization">
+                                {% for organization in organizations %}
+                                    {% set organizationUrl = commonground_cleanurl({'component':'wrc', 'type':'organizations', 'id':organization.id}) %}
+                                    <option {% if app.user.organization is defined and app.user.organization == organizationUrl %} selected
+                                        {% elseif tutorial.organization is defined and tutorial.organization == organizationUrl %} selected {% endif %}
+                                            value="{{ organizationUrl }}">{{ organization.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row align-items-center">
                 <div class="col-md-6 mb-3">

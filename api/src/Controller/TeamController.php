@@ -33,7 +33,7 @@ class TeamController extends AbstractController
         //@TODO filter when filter arrays are possible
 
         // Get resource
-        $variables['teams'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'], $variables['query'])['hydra:member'];
+        $variables['teams'] = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'groups'], $variables['query'])['hydra:member'];
         $variables['entries'] = $commonGroundService->getResourceList(['component' => 'chrc', 'type' => 'entries'], $variables['query'])['hydra:member'];
 
         return $variables;
@@ -48,7 +48,7 @@ class TeamController extends AbstractController
         $variables = [];
 
         // Get Resource
-        $variables['team'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+        $variables['team'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'groups', 'id' => $id]);
         $entries = $commonGroundService->getResourceList(['component' => 'chrc', 'type' => 'entries'], ['submitter' => $variables['team']['@id']]);
         $variables['entries'] = $entries['hydra:member'];
         $variables['numberOfEntries'] = $entries['hydra:totalItems'];

@@ -45,6 +45,13 @@ class ChallengeController extends AbstractController
         $variables = [];
 
         // Get resource challenges (known as tender component side)
+        if ($this->getUser()) {
+            $person = $commonGroundService->getResource($this->getUser()->getPerson());
+            $personUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'people', 'id' => $person['id']]);
+
+            $variables['personUrl'] = $personUrl;
+            $variables['person'] = $person;
+        }
         $variables['challenge'] = $commonGroundService->getResource(['component' => 'chrc', 'type' => 'tenders', 'id' => $id]);
         $variables['entry'] = $commonGroundService->getResourceList(['component' => 'chrc', 'type' => 'entries'], ['tender.id' => $id])['hydra:member'];
         $variables['stages'] = $commonGroundService->getResourceList(['component' => 'chrc', 'type' => 'tender_stages'], ['tender.id' => $id])['hydra:member'];

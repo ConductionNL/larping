@@ -118,7 +118,7 @@
                                     {% if app.user is defined and app.user is not null %}
 {#                                        <a href="{{ path('app_internship_like') }}" class="btn btn-secondary mr-3 animate-up-2 m-0"><i class="fal fa-heart"></i></a>#}
                                     {% else %}
-                                        <a href="{{ path('app_user_idvault') }}" class="btn btn-secondary mr-3 animate-up-2 m-0" data-toggle="tooltip" data-placement="top" title="{{ 'u moet eerst inloggen'|trans|capitalize }}"><i class="fal fa-heart"></i></a>
+                                        <a href="{{ path('app_user_idvault') }}" class="btn btn-secondary mr-3 animate-up-2 m-0" data-toggle="tooltip" data-placement="top" title="{{ 'you need to login before you can submit'|trans|capitalize }}"><i class="fal fa-heart"></i></a>
                                     {% endif %}
                                     <a href="{{ path('app_internship_position', {id: internship.id}) }}#apply" class="btn btn-secondary mr-3 animate-up-2 m-0">{{ 'apply'|trans|capitalize }}</a>
                                     <a href="{{ path('app_internship_position', {id: internship.id}) }}" class="btn btn-primary animate-up-2 m-0"><i class="fas fa-clipboard-list mr-2"></i>{{ 'see details'|trans|capitalize }}</a>

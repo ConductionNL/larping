@@ -80,9 +80,10 @@
                                 <select class="form-control" id="submitter" name="submitter" type="text" required=""
                                         {% if challenge.submitter is defined and challenge.submitter is not empty %}disabled{% endif %}>
                                     {% for bedrijf in organizations %}
+                                        {% set organizationUrl = commonground_cleanurl({'component': 'wrc', 'type': 'organizations', 'id': bedrijf.id}) %}
                                         <option
-                                            {% if challenge.submitter is defined and challenge.submitter is not empty and challenge.submitter == bedrijf['@id'] %}selected{% endif %}
-                                            value="{{ bedrijf['@id'] }}">{{ bedrijf.name }}</option>
+                                            {% if challenge.submitter is defined and challenge.submitter is not empty and challenge.submitter == organizationUrl %}selected{% endif %}
+                                            value="{{ organizationUrl }}">{{ bedrijf.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
