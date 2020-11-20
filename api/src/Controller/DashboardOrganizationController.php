@@ -137,12 +137,8 @@ class DashboardOrganizationController extends AbstractController
         //Get resources Organizations
         $variables['organizations'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations'], $variables['query'])['hydra:member'];
 
-        if (isset($variables['internship']['application'])) {
-            //Get current application
-            $variables['application'] = $commonGroundService->getResource(['component' => 'mrc', 'type' => 'applications', 'id' => $variables['internship']['application']['id']]);
-            //get employee
-            $variables['employee'] = $commonGroundService->getResource($variables['application']['employee']);
-        }
+        //get applications from current job_posting
+        $variables['applications'] = $commonGroundService->getResourceList(['component' => 'mrc', 'type' => 'applications'], ['jobPosting.id' => $id])['hydra:member'];
 
         return $variables;
     }

@@ -105,7 +105,6 @@ class InternshipController extends AbstractController
                 $dossier['authorization'] = '/authorizations/'.$authorization['id'];
 
                 $commonGroundService->createResource($dossier, ['component' => 'wac', 'type' => 'dossiers']);
-
             }
 
             // Send an email to organization of this jobPosting:

@@ -48,7 +48,7 @@
                                     <span class="icon icon-sm {% if app.request.attributes.get('_route') == 'app_internship_index' %}icon-secondary{% else %}icon-primary{% endif %}"><span
                                                 class="fas fa-briefcase"></span></span>
                                     <div class="ml-4">
-                                        <span class="text-dark d-block">{{ 'stages'|trans|capitalize }}</span>
+                                        <span class="text-dark d-block">{{ 'internships'|trans|capitalize }}</span>
                                         <span class="small">{{ 'vind een stage'|trans|capitalize }}</span>
                                     </div>
                                 </a>
@@ -99,7 +99,7 @@
                                         <span class="icon icon-sm {% if app.request.attributes.get('_route') == 'app_internship_index' %}icon-secondary{% else %}icon-primary{% endif %}"><span
                                                 class="fas fa-briefcase"></span></span>
                                     <div class="ml-4">
-                                        <span class="text-dark d-block">{{ 'stages'|trans|capitalize }}</span>
+                                        <span class="text-dark d-block">{{ 'internships'|trans|capitalize }}</span>
                                         <span class="small">{{ 'plaats een open positie'|trans|capitalize }}</span>
                                     </div>
                                 </a>
@@ -115,7 +115,7 @@
                                 <a href="{{ path('app_organization_index') }}"  class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
                                     <span class="icon icon-sm {% if app.request.attributes.get('_route') == 'app_organization_index' %}icon-secondary{% else %}icon-primary{% endif %}"><span class="fas fa-building"></span></span>
                                     <div class="ml-4">
-                                        <span class="text-dark d-block">{{ 'organisaties'|trans|capitalize }}</span>
+                                        <span class="text-dark d-block">{{ 'organisaties'|capitalize }}</span>
                                         <span class="small">{{ 'zoek andere organisaties'|trans|capitalize }}</span>
                                     </div>
                                 </a>
@@ -171,9 +171,9 @@
                     <div class="dropdown pl-3">{{ app.user.username }}</div>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ path('app_dashboarduser_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
-                    <a class="dropdown-item" href="{{ path('app_dashboarduser_tutorials') }}">My {{ 'tutorials'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="{{ path('app_dashboarduser_tutorials') }}">{{ 'my tutorials'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="{{ path('app_dashboarduser_challenges') }}">{{ 'challenges'|trans|capitalize }}</a>
-                    <a class="dropdown-item" href="{{ path('app_dashboarduser_internships') }}">{{ 'stages'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="{{ path('app_dashboarduser_internships') }}">{{ 'internships'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="{{ path('app_dashboarduser_teams') }}">{{ 'teams'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="{{ path('app_dashboarduser_settings') }}">{{ 'instellingen'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="{{ path('app_dashboarduser_organizations') }}">{{ 'organisaties'|trans|capitalize }}</a>

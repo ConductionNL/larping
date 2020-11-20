@@ -33,40 +33,49 @@
         <div class="container z-2 mt-n10 mt-lg-n11 mt-sm-n8">
             <div class="row">
                 <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
-                    <a href="#" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'full-time'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-building"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'full-time'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
-                    <a href="#" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'part-time'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-stopwatch"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'part-time'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
-                    <a href="#" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'temporary'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-business-time"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'temporarily'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2">
-                    <a href="#" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'seasonal'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-sun"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'season'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2">
-                    <a href="#" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'internship'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-network-wired"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'internship'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
+                {% if query is defined and query is not empty %}
+                    <div class="col-12 col-md-4 col-lg-2">
+                        <a href="{{ path('app_internship_index') }}" class="card text-center shadow-soft border-light animate-up-3">
+                            <div class="card-body p-5">
+                                <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-clipboard-list"></span></div>
+                                <h6 class="text-gray mb-0">{{ 'clear filters'|trans|capitalize }}</h6></div>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </section>

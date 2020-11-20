@@ -43,11 +43,11 @@
         </table>
     </div>
     {% for result in results|slice(0, 10) %}
-        {% include 'dashboard/modals/participants.html.twig' with {'id': result.id, 'result':result}%}
+        {% include 'dashboard/modals/result.html.twig' with {'id': result.id, 'result':result}%}
     {% endfor %}
     {% else %}
 
-    {% include 'dashboard/modals/participants.html.twig' with {'id': 'new'}%}
+    {% include 'dashboard/modals/result.html.twig' with {'id': 'new'}%}
 
     <div class="card-body text-center">
         <p>{{ 'no tutorials found'|trans|capitalize }}</p>

@@ -6,7 +6,7 @@ entries:
     created: "2020-11-19T08:38:13.4943386Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
-    digest: 81dce625b9ed9b0c17f8ae6943ec64987b5b2aced639da771925961ae25d6f9f
+    digest: 6d5afa58571232214fe78bacd860984347aa10e455fcb487c97b8adc1bd5bec4
     home: www.stage-platform.com
     icon: www.stage-platform.com
     name: stage-platform

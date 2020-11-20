@@ -203,8 +203,8 @@
                     </tr>
                     </thead>
                     {#for loop voor de applications op de position maken #}
-                    {% if internship.application is defined and internship.application is not empty %}
-                        {% for application in internship.application %}
+                    {% if applications is defined and applications is not empty %}
+                        {% for application in applications %}
                     <tbody>
                         <tr>
                             <td>
@@ -226,13 +226,12 @@
                                     </div>
                                 </a>
                             </td>
-                            <td><span class="font-weight-normal">{{ internship.application.dateCreated|date("Y-m-d") }}</span></td>
-                            <td><span class="font-weight-normal text-warning">{{ internship.application.status }}</span></td>
+                            <td><span class="font-weight-normal">{{ application.dateCreated|date("Y-m-d") }}</span></td>
+                            <td><span class="font-weight-normal text-warning">{{ application.status }}</span></td>
                             <td>
                                 <div class="btn-group">
                                     <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon icon-sm"><span class="fas fa-ellipsis-h icon-dark"></span> </span><span class="sr-only">Toggle Dropdown</span></button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#"><span class="fas fa-user-shield mr-2"></span> Reset Pass</a>
                                         <a class="dropdown-item" data-toggle="modal" data-target="#modal-default"><span class="fas fa-eye mr-2"></span>{{ 'view details'|trans|capitalize }}</a>
                                         <a class="dropdown-item text-danger" href="#"><span class="fas fa-user-times mr-2"></span>{{ 'delete application'|trans|capitalize }}</a></div>
                                 </div>
@@ -251,7 +250,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>{{ internship.application.motivation }}</p>
+                                            <p>{{ application.motivation }}</p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-link text-danger ml-auto" data-dismiss="modal">Close</button>

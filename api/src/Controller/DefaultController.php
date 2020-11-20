@@ -30,7 +30,6 @@ class DefaultController extends AbstractController
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
         if ($this->getUser()) {
-
             $person = $commonGroundService->getResource($this->getUser()->getPerson());
             $personUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'people', 'id' => $person['id']]);
 
@@ -66,9 +65,7 @@ class DefaultController extends AbstractController
                     $dossier['authorization'] = '/authorizations/'.$authorization['id'];
 
                     $commonGroundService->createResource($dossier, ['component' => 'wac', 'type' => 'dossiers']);
-
                 }
-
             }
         }
 

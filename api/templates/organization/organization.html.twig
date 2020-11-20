@@ -12,7 +12,13 @@
 
                         <div class="d-flex flex-column flex-lg-row justify-content-center">
                             <span class="h5 mb-3 mb-lg-0"><i class="fas fa-map-marker-alt"></i><span class="ml-3">{% if organization.contact|default and commonground_resource(organization.contact).adresses['0']|default %}
-                                        {{ commonground_resource(organization.contact).adresses['0'] }} {% else %}
+                                        {% set address = commonground_resource(organization.contact).adresses['0'] %}
+                                        {% if address.street|default %}{{ address.street }}{% endif %}
+                                        {% if address.houseNumber|default %}{{ address.houseNumber }}{% endif %}
+                                        {% if address.houseNumberSuffix|default %}{{ address.houseNumberSuffix }}{% endif %}
+                                        {% if address.postalCode|default %}{{ address.postalCode }}{% endif %}
+                                        {% if address.locality|default %}{{ address.locality }}{% endif %}
+                                        {% else %}
                                         Geen contact info{% endif %}</span></span>
                             <span class="ml-lg-5 mb-3 mb-lg-0 h5"><i class="fas fa-briefcase"></i><span class="ml-3">{% if jobPostings is defined and jobPostings is not empty %}
                                         {{ jobPostings|length }} {% else %}
