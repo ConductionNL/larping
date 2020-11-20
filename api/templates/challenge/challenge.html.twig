@@ -179,8 +179,12 @@
                                                     <span class="input-group-text"><i
                                                             class="far fa-user-alt"></i></span>
                                                 </div>
-                                                <input class="form-control" id="submitter" name="submitter"
-                                                       type="text">
+                                                {% if person is defined and person is not empty %}
+                                                    <input disabled class="form-control" id="" name=""
+                                                           type="text" value="{{ person.name }}">
+
+                                                    <input type="hidden" name="submitter" id="submitter" value="{{ personUrl }}">
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>

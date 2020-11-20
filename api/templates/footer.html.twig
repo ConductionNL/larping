@@ -3,11 +3,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4 mb-4 mb-lg-0">
-                <a class="footer-brand mr-lg-5 d-flex" href="/bundles/rocket/index.html">
+                <a class="footer-brand mr-lg-5 d-flex" href="/">
                     <img src="/bundles/rocket/assets/img/brand/light.svg" class="mr-3" alt="Footer logo">
                     <h4>{% if app_name|default %}{{ app_name|trans|capitalize }}{% else %}Stage platform{% endif %}</h4>
                 </a>
-                <p class="my-4">Conduction Academy provides both matchmaking and an online internship platform</p>
+                <p class="my-4">{{ 'Conduction Academy provides both matchmaking and an online internship platform'|trans|capitalize }}</p>
                 <div class="dropdown mb-4 mb-lg-0">
                     {% set query = app.request.attributes.get('_route_params') %}
                     <a id="langsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle footer-language-link pb-2">
@@ -29,15 +29,15 @@
                 </div>
             </div>
             <div class="col-6 col-sm-3 col-lg-2 mb-4 mb-lg-0">
-                <h5>Conduction</h5>
+                <h5>{{ 'Conduction'|trans|capitalize }}</h5>
                 <ul class="links-vertical">
-                    <li><a target="_blank" href="https://conduction.nl">About us</a></li>
-                    <li><a target="_blank" href="https://conduction.nl/products">Products</a></li>
-                    <li><a target="_blank" href="https://conduction.nl/contact">Contact Us</a></li>
+                    <li><a target="_blank" href="https://conduction.nl">{{ 'About us'|trans|capitalize }}</a></li>
+                    <li><a target="_blank" href="https://conduction.nl/products">{{ 'Products'|trans|capitalize }}</a></li>
+                    <li><a target="_blank" href="https://conduction.nl/contact">{{ 'Contact Us'|trans|capitalize }}</a></li>
                 </ul>
             </div>
             <div class="col-6 col-sm-3 col-lg-2 mb-4 mb-lg-0">
-                <h5>The Academy</h5>
+                <h5>{{ 'The Academy'|trans|capitalize }}</h5>
                 <ul class="links-vertical">
                     <li><a href="{{ path('app_education_tutorials') }}">{{ 'tutorials'|trans|capitalize }}</a></li>
                     <li><a href="{{ path('app_internship_index') }}">{{ 'positions'|trans|capitalize }}</a></li>
@@ -49,29 +49,30 @@
                 </ul>
             </div>
             <div class="col-12 col-sm-6 col-lg-4">
-                <h5>Subscribe</h5>
-                <p class="font-small">The latest {% if app_name|default %}{{ app_name }}{% else %}Rocket{% endif%} news, articles, and resources, sent straight to your inbox every month.</p>
+                <h5>{{ 'subscribe'|trans|capitalize }}</h5>
+                <p class="font-small">{{ 'The latest stageplatform news, articles, and resources, sent straight to your inbox every month.'|trans|capitalize }}</p>
                 <form action="#">
                     <div class="form-row">
                         <div class="col-8">
-                            <input type="email" class="form-control mb-2" placeholder="Email Address" name="email" required>
+                            <input type="email" class="form-control mb-2" placeholder="{{ 'e-mail address'|trans|capitalize }}" name="email" required>
                         </div>
                         <div class="col-4">
-                            <button type="submit" class="btn btn-secondary"><span>Subscribe</span></button>
+                            <button type="submit" class="btn btn-secondary"><span>{{ 'subscribe'|trans|capitalize }}</span></button>
                         </div>
                     </div>
                 </form>
-                <small class="mt-2 form-text">We’ll never share your details. See our <a href="/bundles/rocket/pages/terms.html" class="font-weight-bold text-underline">Privacy Policy</a></small>
+                {#
+                <small class="mt-2 form-text">{{ 'We’ll never share your details. See our'|trans|capitalize }} <a href="#" class="font-weight-bold text-underline">{{ 'Privacy Policy'|trans|capitalize }}</a></small>#}
             </div>
         </div>
         <hr class="my-4 my-lg-5">
         <div class="row">
             <div class="col pb-4 mb-md-0">
-                <a href="https://themesberg.com" target="_blank" class="d-flex justify-content-center">
+                <a href="https://conduction.nl" target="_blank" class="d-flex justify-content-center">
                     <img src="/images/logo.png" class="mb-3" alt="Conduction Logo" style="height: 40px;">
                 </a>
                 <div class="d-flex text-center justify-content-center align-items-center">
-                    <p class="font-weight-normal font-small mb-0">Copyright © <a href="https://www.conduction.nl" target="_blank">Conduction</a> <span class="current-year"></span>. All rights reserved.</p>
+                    <p class="font-weight-normal font-small mb-0">Copyright © <a href="https://www.conduction.nl" target="_blank">Conduction</a> <span class="current-year"></span>. {{ 'All rights reserved'|trans|capitalize }}.</p>
                 </div>
             </div>
         </div>

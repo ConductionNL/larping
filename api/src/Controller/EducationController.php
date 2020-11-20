@@ -66,11 +66,19 @@ class EducationController extends AbstractController
         //  Getting the participant @todo this needs to be more foolproof and part of a service
         if ($this->getUser()) {
             $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person'=> $this->getUser()->getPerson()]])['hydra:member'];
-        } else {
-            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person'=> 'https://dev.zuid-drecht.nl/api/v1/cc/people/d961291d-f5c1-46f4-8b4a-6abb41df88db']])['hydra:member'];
-        }
-        if (count($participants) > 0) {
-            $variables['participants'] = $participants;
+            if (count($participants) > 0) {
+                $variables['participants'] = $participants;
+
+                // lets see if the participant is in this course
+                $variables['registered'] = false;
+                foreach ($variables['participants'] as $tempParticipant) {
+                    if (isset($tempParticipant['course'])) {
+                        if ($tempParticipant['course']['id'] == $id) {
+                            $variables['registered'] = true;
+                        }
+                    }
+                }
+            }
         }
 
         // Lets see if there is a post to procces
@@ -84,16 +92,6 @@ class EducationController extends AbstractController
             $commonGroundService->createResource($participant, ['component' => 'edu', 'type' => 'participants']);
 
             return $this->redirect($this->generateUrl('app_education_tutorial', ['id'=>$id]));
-        }
-
-        // lets see if the participant is in this course
-        $variables['registered'] = false;
-        foreach ($variables['participants'] as $tempParticipant) {
-            if (isset($tempParticipant['course'])) {
-                if ($tempParticipant['course']['id'] == $id) {
-                    $variables['registered'] = true;
-                }
-            }
         }
 
         return $variables;

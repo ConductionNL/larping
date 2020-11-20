@@ -27,11 +27,12 @@
             </thead>
             <tbody>
             {% for application in applications|slice(0, 10) %}
+                {% set hiringOrganization = commonground_resource(application.jobPosting.hiringOrganization) %}
                 <tr>
-                    <th>{{ applications.position.name }}</th>
-                    <td>{{ commonground_resource(applications.organization).name }}</td>
-                    <td>{{ applications.status }}</td>
-                    <td>{{ applications.status }}</td>
+                    <th>{{ application.jobPosting.name }}</th>
+                    <td>{{ hiringOrganization.name }}</td>
+                    <td>{{ app.user.name }}</td>
+                    <td>{{ application.status }}</td>
                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-{{ application.id }}">{{ 'edit'|trans|capitalize }}</button></td>
                 </tr>
             {% endfor %}

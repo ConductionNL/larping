@@ -71,7 +71,7 @@ class UserController extends AbstractController
         }
 
         if (isset($provider['configuration']['app_id']) && isset($provider['configuration']['secret'])) {
-            return $this->redirect('http://dev.id-vault.com/oauth/authorize?client_id='.$provider['configuration']['app_id'].'&response_type=code&scopes=schema.person.email+schema.person.given_name+schema.person.family_name+single_sign_on&state=12345&redirect_uri='.$redirect);
+            return $this->redirect('http://id-vault.com/oauth/authorize?client_id='.$provider['configuration']['app_id'].'&response_type=code&scopes=schema.person.email+schema.person.given_name+schema.person.family_name&state=12345&redirect_uri='.$redirect);
         } else {
             return $this->render('500.html.twig');
         }

@@ -2,23 +2,36 @@
 <html lang="en">
 
 <head>
-    <title>Rocket - Dashboard</title>
+    <title>
+        {% if application|default %}
+            {% if slug is defined and slug is not empty %}
+                {{ slug|capitalize }} | Dashboard
+            {% endif %}
+            {{ application['name'] }} | Dashboard
+        {% elseif app_name|default %}
+            {% if slug is defined and slug is not empty %}
+                {{ slug|capitalize }} | Dashboard
+            {% endif %}
+        {% else %}
+            Stage platform | Dashboard
+        {% endif %}
+    </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-    <meta name="title" content="Rocket - Dashboard">
-    <meta name="author" content="Themesberg">
-    <meta name="description" content="Rocket is a premium SaaS Bootstrap 4 Dashboard template featuring over 27 presentational and technical pages including pricing, support, team, careers and many more.">
+    <meta name="title" content="Conduction - Stage Platform">
+    <meta name="author" content="Conduction">
+    <meta name="description" content="Conduction - Stage Platform">
     <meta name="keywords" content="bootstrap, bootstrap template, saas website template, saas bootstrap template, saas bootstrap 4 template, saas bootstrap theme, saas bootstrap 4 theme, dashboard, saas dashboard, themesberg">
     <link rel="canonical" href="https://themes.getbootstrap.com/product/rocket/">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://demo.themesberg.com/rocket">
-    <meta property="og:title" content="Rocket - Dashboard">
-    <meta property="og:description" content="Rocket is a premium SaaS Bootstrap 4 Dashboard template featuring over 27 presentational and technical pages including pricing, support, team, careers and many more.">
+    <meta property="og:title" content="Conduction - Stage Platform">
+    <meta property="og:description" content="Conduction - Stage Platform">
     <meta property="og:image" content="https://themesberg.s3.us-east-2.amazonaws.com/public/products/rocket/rocket-preview.jpg">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://demo.themesberg.com/rocket">
-    <meta property="twitter:title" content="Rocket - Dashboard">
-    <meta property="twitter:description" content="Rocket is a premium SaaS Bootstrap 4 Dashboard template featuring over 27 presentational and technical pages including pricing, support, team, careers and many more.">
+    <meta property="twitter:title" content="Stage Platform - Dashboard">
+    <meta property="twitter:description" content="Conduction - Stage Platform">
     <meta property="twitter:image" content="https://themesberg.s3.us-east-2.amazonaws.com/public/products/rocket/rocket-preview.jpg">
 
     <link rel="apple-touch-icon" sizes="120x120" href="/bundles/rocket/assets/img/favicon/conduction.png">

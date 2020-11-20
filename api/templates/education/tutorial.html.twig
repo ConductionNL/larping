@@ -52,7 +52,7 @@
                     <div class="mb-1 text-center">
                         <h2 class="h1">{{'register for this tutorial'|trans|capitalize}}</h2>
                     </div>
-                    {%  if registered %}
+                    {%  if registered is defined and registered %}
                         <p class="mt-4 text-center">{{ 'you have already registerd for this cource'|trans|capitalize }}</p>
                         <a class="mt-2 text-center btn btn-secondary" href="{{ path('app_dashboarduser_tutorial', {id: tutorial.id}) }}">
                             {{ 'click here to participate'|trans|capitalize }}

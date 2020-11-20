@@ -669,12 +669,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/CommonGroundBundle.git",
-                "reference": "6d7e67974ffeb8649c0eaa06f596730fdf42e106"
+                "reference": "39b200fcf76bcfa772b666c030fe4aabadb376b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/6d7e67974ffeb8649c0eaa06f596730fdf42e106",
-                "reference": "6d7e67974ffeb8649c0eaa06f596730fdf42e106",
+                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/39b200fcf76bcfa772b666c030fe4aabadb376b2",
+                "reference": "39b200fcf76bcfa772b666c030fe4aabadb376b2",
                 "shasum": ""
             },
             "require": {
@@ -752,12 +752,7 @@
                 "postcode",
                 "rsin"
             ],
-            "support": {
-                "email": "ruben@conduction.nl",
-                "issues": "https://github.com/ConductionNL/ConductionCommonGroundBundle/issues",
-                "source": "https://github.com/ConductionNL/ConductionCommonGroundBundle"
-            },
-            "time": "2020-10-29T11:18:11+00:00"
+            "time": "2020-11-13T20:25:19+00:00"
         },
         {
             "name": "conduction/rocketbundle",

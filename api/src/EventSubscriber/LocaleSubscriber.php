@@ -1,6 +1,7 @@
 <?php
 
 // src/EventSubscriber/LocaleSubscriber.php
+
 namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -30,17 +31,16 @@ class LocaleSubscriber implements EventSubscriberInterface
             $request->getSession()->set('_locale', $locale);
             $request->setLocale($locale);
         } else {
-        // if no explicit locale has been set on this request, use one from the session
+            // if no explicit locale has been set on this request, use one from the session
             $request->setLocale($request->getSession()->get('_locale', $this->defaultLocale));
         }
-
     }
 
     public static function getSubscribedEvents()
     {
         return [
-        // must be registered before (i.e. with a higher priority than) the default Locale listener
-        KernelEvents::REQUEST => [['onKernelRequest', 20]],
-        ];
+            // must be registered before (i.e. with a higher priority than) the default Locale listener
+            KernelEvents::REQUEST => [['onKernelRequest', 20]],
+            ];
     }
 }

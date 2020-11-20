@@ -26,7 +26,6 @@ class DashboardUserController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, Request $request)
     {
         $variables = [];
-        $personUrl = $this->getUser()->getPerson();
 
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
@@ -38,22 +37,31 @@ class DashboardUserController extends AbstractController
 
         //  Getting the participant @todo this needs to be more foolproof
         if ($this->getUser()) {
+            $personUrl = $this->getUser()->getPerson();
             $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person'=> $personUrl]])['hydra:member'];
-        } else {
-            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person'=> 'https://dev.zuid-drecht.nl/api/v1/cc/people/d961291d-f5c1-46f4-8b4a-6abb41df88db']])['hydra:member'];
+
+            if (count($participants) > 0) {
+                $variables['participant'] = $participants[0];
+            }
         }
-        if (count($participants) > 0) {
-            $variables['participant'] = $participants[0];
-        }
+
         //employee connected to user
         $employee = $commonGroundService->getResourceList(['component' => 'mrc', 'type' => 'employees', ['person' => $personUrl]])['hydra:member'];
+        if (count($employee) > 0) {
+            $employee = $employee[0];
+        }
         //applications ophalen die gemaakt zijn door de user
         $variables['applications'] = $commonGroundService->getResourceList(['component' => 'mrc', 'type' => 'applications', ['employee' => $employee['@id']]])['hydra:member'];
 
-
-        $variables['courses'] = $variables['participant']['courses'];
-        $variables['programs'] = $variables['participant']['programs'];
-        $variables['results'] = $variables['participant']['results'];
+        if (!empty($variables['participant']['courses'])) {
+            $variables['courses'] = $variables['participant']['courses'];
+        }
+        if (!empty($variables['participant']['programs'])) {
+            $variables['programs'] = $variables['participant']['programs'];
+        }
+        if (!empty($variables['participant']['programs'])) {
+            $variables['results'] = $variables['participant']['results'];
+        }
 
         return $variables;
     }
@@ -73,7 +81,7 @@ class DashboardUserController extends AbstractController
 
         //  Getting the participant @todo this needs to be more foolproof
         if ($this->getUser()) {
-            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person'=> $this->getUser()->getPerson()]])['hydra:member'];
+            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person' => $this->getUser()->getPerson()]])['hydra:member'];
         }
         if (count($participants) > 0) {
             // Get all tutorials for each participant of this user
@@ -219,7 +227,121 @@ class DashboardUserController extends AbstractController
      */
     public function organizationsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['path'] = 'app_dashboarduser_organizations';
+        $variables['pathToSingular'] = 'app_dashboarduser_organization';
+        $variables['type'] = 'organization';
+
+        if ($organization = $this->getUser()->getOrganization()) {
+            $variables['organization'] = $commonGroundService->getResource($organization);
+        }
+
+        $user = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()], true, false, true, false, false)['hydra:member'][0];
+        $userGroups = $user['userGroups'];
+
+        // Organizations
+        $variables['items'] = [];
+        $organizationIds = [];
+        foreach ($userGroups as $userGroup) {
+            $organization = $commonGroundService->getResource($userGroup['organization']);
+            if (!in_array($organization['id'], $organizationIds)) {
+                $variables['items'][] = $organization;
+                $organizationIds[] = $organization['id'];
+            }
+        }
+
+        if ($request->isMethod('POST')) {
+            $resource = $request->request->all();
+            $user = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()], true, false, true, false, false)['hydra:member'][0];
+
+            $resource = array_merge($user, $resource);
+            unset($resource['userGroups']);
+            $user = $commonGroundService->saveResource($resource, ['component' => 'uc', 'type' => 'users']);
+//            $this->getUser()->setOrganization($resource['organization']);
+
+            if (isset($variables['item']) && !empty($variables['item'])) {
+                return $this->redirectToRoute($variables['path'], ['id' => $variables['item']['id']]);
+            } else {
+                return $this->redirectToRoute($variables['path']);
+            }
+        }
+
+        return $variables;
+    }
+
+    /**
+     * @Template
+     * @Route("/organizations/{id}")
+     */
+    public function organizationAction(CommonGroundService $commonGroundService, Request $request, $id = null)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+        $redirectToPlural = false;
+        if ($id && $id != 'new') {
+            $variables['item'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
+        } else {
+            $variables['item'] = [];
+            $variables['item']['name'] = 'New';
+
+            $redirectToPlural = true;
+        }
+        $variables['path'] = 'app_dashboarduser_organization';
+        $variables['pathToPlural'] = 'app_dashboarduser_organizations';
+
+        // Lets see if there is a post to procces
+        if ($request->isMethod('POST')) {
+            $resource = $request->request->all();
+
+            // Add the post data to the already aquired resource data
+            $resource = array_merge($variables['item'], $resource);
+
+            if (isset($resource['style'])) {
+                $resource['style'] = '/styles/'.$resource['style']['id'];
+            }
+
+            // Update to the commonground component
+            $variables['item'] = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
+
+            $variables['userGroups'] = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'groups'], ['organization' => $variables['item']['@id']])['hydra:member'];
+
+            $user = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()], true, false, true, false, false)['hydra:member'][0];
+
+            if (!empty($resource['nameUG']) && !empty($resource['descUG'])) {
+                $newUserGroup['name'] = $resource['nameUG'];
+                $newUserGroup['description'] = $resource['descUG'];
+                $newUserGroup['title'] = $resource['nameUG'];
+                $newUserGroup['organization'] = $variables['item']['@id'];
+                $newUserGroup['canBeRegisteredFor'] = true;
+                $newUserGroup['users'][] = 'users/'.$user['id'];
+
+                $newUserGroup = $commonGroundService->saveResource($newUserGroup, ['component' => 'uc', 'type' => 'groups']);
+            }
+
+            if (count($variables['userGroups']) == 0) {
+                $userGroup = [];
+                $userGroup['name'] = $variables['item']['name'].'-admin';
+                $userGroup['organization'] = $variables['item']['@id'];
+                $userGroup['description'] = 'The administrators for the organization';
+                $userGroup['code'] = $variables['item']['name'].'-admin';
+                $userGroup['canBeRegisteredFor'] = false;
+                $userGroup['users'][] = 'users/'.$user['id'];
+
+                $userGroup = $commonGroundService->saveResource($userGroup, ['component' => 'uc', 'type' => 'groups']);
+            } else {
+                $userGroup = $variables['userGroups'][0];
+            }
+            if (!$this->getUser()->getOrganization()) {
+                $user['organization'] = $userGroup['organization'];
+                unset($user['userGroups']);
+                $user = $commonGroundService->saveResource($user, ['component' => 'uc', 'type' => 'users']);
+            }
+            if ($redirectToPlural === true) {
+                return $this->redirectToRoute($variables['pathToPlural']);
+            } else {
+                return $this->redirectToRoute($variables['path'], ['id' => $variables['item']['id']]);
+            }
+        }
 
         return $variables;
     }

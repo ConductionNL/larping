@@ -30,6 +30,14 @@ class OrganizationController extends AbstractController
         $variables['path'] = 'app_organization_index';
         $variables['organizations'] = $commonGroundService->getResourceList(['component'=>'wrc', 'type'=>'organizations'])['hydra:member'];
 
+        // Set the organization background-color for the icons shown with every organization
+        foreach ($variables['organizations'] as &$organization) {
+            if (isset($organization['style']['css'])) {
+                preg_match('/background-color: ([#A-Za-z0-9]+)/', $organization['style']['css'], $matches);
+                $organization['backgroundColor'] = $matches;
+            }
+        }
+
         if ($request->isMethod('POST')) {
             $search = $request->request->all()['search'];
 

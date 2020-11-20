@@ -7,6 +7,7 @@ namespace App\Controller;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,7 +39,7 @@ class InternshipController extends AbstractController
      * @Route("/{id}")
      * @Template
      */
-    public function positionAction(CommonGroundService $commonGroundService, Request $request, $id)
+    public function positionAction(CommonGroundService $commonGroundService, Request $request, $id, ParameterBagInterface $params)
     {
         $variables = [];
 
@@ -80,6 +81,33 @@ class InternshipController extends AbstractController
             // Update to the commonground component
             $variables['application'] = $commonGroundService->saveResource($resource, ['component' => 'mrc', 'type' => 'applications']);
 
+            //lets try and create dossier for application
+//            $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
+//            $provider = $providers[0];
+//
+//            $users = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()])['hydra:member'];
+//            $user = $users[0];
+//
+//            $userUrl = $commonGroundService->cleanUrl(['component' => 'uc', 'type' => 'users', 'id' => $user['id']]);
+//
+//            $authorizations = $commonGroundService->getResourceList(['component' => 'wac', 'type' => 'authorizations'], ['userUrl' => $userUrl, 'application' => '/applications/'.$provider['configuration']['app_id']])['hydra:member'];
+//
+//            if (count($authorizations) > 0) {
+//                $authorization = $authorizations[0];
+//
+//                $dossier = [];
+//                $dossier['name'] = 'application for '.$variables['internship']['name'];
+//                $dossier['description'] = 'applied for internship at '.$variables['internship']['name'];
+//                $dossier['sso'] = 'https://conduction.nl';
+//                $date = new \DateTime('now');
+//                $date->add(new \DateInterval('P2Y'));
+//                $dossier['expiryDate'] = $date->format('h:m Y-m-d');
+//                $dossier['goal'] = 'show application for internship';
+//                $dossier['authorization'] = '/authorizations/'.$authorization['id'];
+//
+//                $commonGroundService->createResource($dossier, ['component' => 'wac', 'type' => 'dossiers']);
+//            }
+
             // Send an email to organization of this jobPosting:
             // (Maybe this should be handled with the VSBE to send emails whenever an application is created?)
             if (isset($variables['internship']['hiringOrganization'])) {
@@ -117,16 +145,16 @@ class InternshipController extends AbstractController
     }
 
     /**
-     * @Route("/internships/like")
+     * @Route("/internships/like/{id}")
      * @Template
      */
-    public function likeAction(CommonGroundService $commonGroundService, Request $request)
+    public function likeAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
         // Get resources like
-        $variables['like'] = $commonGroundService->getResource(['component' => 'rc', 'type' => 'like'], $variables['query'])['hydra:member'];
+        $variables['like'] = $commonGroundService->getResource(['component' => 'rc', 'type' => 'likes'], $variables['query'])['hydra:member'];
 
         return $variables;
     }

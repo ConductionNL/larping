@@ -29,10 +29,19 @@ class StudentController extends AbstractController
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
         // Get resource students
-        $variables['students'] = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants'], $variables['query'])['hydra:member'];
-        $variables['emails'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'emails'])['hydra:member'];
-        $variables['socials'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'socials'])['hydra:member'];
+        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants'], $variables['query'])['hydra:member'];
 
+//        var_dump($variables['participants']);
+        // Remove duplicate persons to get students
+        $personIds = [];
+        foreach ($variables['participants'] as $participant) {
+            if (!in_array($participant['id'], $personIds)) {
+                if (isset($participant['person']) && $participant['person']) {
+                    $variables['students'][] = $commonGroundService->getResource($participant['person']);
+                }
+                $personIds[] = $participant['id'];
+            }
+        }
 
         return $variables;
     }
@@ -43,14 +52,32 @@ class StudentController extends AbstractController
      */
     public function portfolioAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
 
-        // Get resource students
-        $variables['students'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'participants'])['hydra:member'];
-
         // Get Resource student
-        $variables['student'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'participants', 'id' => $id]);
-        $variables['person'] = $commonGroundService->getResource($variables['student']['person']);
+        $variables['student'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'people', 'id' => $id]);
+        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants'], ['person' => $variables['student']['@id']])['hydra:member'];
+
+        $programIds = [];
+        foreach ($variables['participants'] as $participant) {
+            if (isset($participant['program']) && $participant['program']) {
+                if (!in_array($participant['program']['id'], $programIds)) {
+                    $variables['programs'][] = $participant['program'];
+                    $programIds[] = $participant['id'];
+                }
+            }
+        }
+
+        $courseIds = [];
+        foreach ($variables['participants'] as $participant) {
+            if (isset($participant['course']) && $participant['course']) {
+                if (!in_array($participant['course']['id'], $courseIds)) {
+                    $variables['courses'][] = $participant['course'];
+                    $courseIds[] = $participant['course']['id'];
+                }
+            }
+        }
 
         return $variables;
     }

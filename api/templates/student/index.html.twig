@@ -1,7 +1,13 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <section class="section-header pb-9 pb-md-11 pb-lg-13 mb-4 mb-lg-6 bg-primary text-white">
+    <section class="
+    {% if app.user|default and students|default and not students|length > 0 %}
+    section-header pb-9 pb-md-11 pb-lg-13 mb-4 mb-lg-6 bg-primary text-white
+{% else %}
+    section-header pb-10 bg-primary text-white
+    {% endif %}
+">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-8 text-center">
@@ -13,73 +19,88 @@
         <div class="pattern bottom"></div>
     </section>
     <section class="section section-lg pt-0">
-        <div class="container mt-n8 mt-lg-n12 z-2">
-            <div class="row mt-6 mt-md-n7">
-                {% for student in students %}
-                    {% set person = commonground_resource(student.person) %}
-                    <div class="col-md-6 col-lg-4">
-                        <div class="profile-card mb-7">
-                            <div class="card shadow-soft border-light text-center">
-                                <div class="profile-image"><img
-                                        src="/bundles/rocket/assets/img/team/profile-picture-1.jpg" class="card-img-top"
-                                        alt="image"></div>
-                                <div class="card-body mt-n5">
-                                    {% if person.name is defined and person.name is not empty %}
-                                    <span class="card__title">{{ person.name }}</span><br>
-                                    {% endif %}<br>
-                                    {% if person.birthday is defined and person.birthday is not empty %}
-                                        <p class="card-text my-2">{{ person.birthday }}</p>
-                                    {% endif %}
-                                    {% if email.emails is defined and email.emails is not empty %}
-                                        {% for email in emails %}
-                                            <p class="card-text my-2">{{ person.emails[0] }}</p>
-                                        {% endfor %}
-                                    {% endif %}
-                                    <ul class="social-buttons py-3">
-                                        <a href="{{ path('app_student_portfolio', {id: student.id}) }}" class="btn btn-primary">{{ 'bekijk portfolio'|trans|capitalize }}</a>
-                                    </ul>
-                                    <ul class="social-buttons py-3">
-                                        {% if socials.facebook is defined and socials.facebook is not empty %}
-                                        <li>
-                                            <a href="{{ socials.facebook }}" target="_blank" class="btn btn-link btn-facebook">
-                                                <i class="fab fa-facebook-f"></i>
-                                            </a>
-                                        </li>
+        <div class="
+        {% if students|default and students|length > 0 %}
+        container mt-n10
+{% else %}
+        container
+        {% endif %}
+">
+            <div class="row mt-6">
+                {% if students|default %}
+                    {% for student in students %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="profile-card mb-7">
+                                <div class="card shadow-soft border-light text-center">
+                                    <div class="card-body">
+                                        {% if student.name|default %}
+                                            <span class="card__title"><h4>{{ student.name }}</h4></span>
                                         {% endif %}
-                                        {% if socials.twitter is defined and socials.twitter is not empty %}
-                                        <li>
-                                            <a href="{{ socials.twitter }}" target="_blank" class="btn btn-link btn-twitter">
-                                                <i class="fab fa-twitter"></i>
-                                            </a>
-                                        </li>
+                                        {% if student.emails|default %}
+                                            {% for email in student.emails %}
+                                                <p class="card-text my-2">{{ email.email }}</p>
+                                            {% endfor %}
                                         {% endif %}
-                                        {% if socials.linkedin is defined and socials.linkedin is not empty %}
-                                        <li>
-                                            <a href="{{ socials.linkedin }}" target="_blank" class="btn btn-link btn-linkedin">
-                                                <i class="fab fa-linkedin"></i>
-                                            </a>
-                                        </li>
+                                        <ul class="social-buttons pt-3">
+                                            <li>
+                                                <a class="btn btn-primary"
+                                                   href="{{ path('app_student_portfolio', {id: student.id}) }}">{{ 'view portfolio'|trans|capitalize }}</a>
+
+                                            </li>
+                                        </ul>
+                                        {% if student.socials|default %}
+                                            <ul class="social-buttons pt-3">
+                                                {% if student.socials.0.facebook|default %}
+                                                    <li>
+                                                        <a href="{{ student.socials.0.facebook }}" target="_blank"
+                                                           class="btn btn-link btn-facebook">
+                                                            <i class="fab fa-facebook-f"></i>
+                                                        </a>
+                                                    </li>
+                                                    </li>
+                                                {% endif %}
+                                                {% if student.socials.0.twitter|default %}
+                                                    <li>
+                                                        <a href="{{ student.socials.0.twitter }}" target="_blank"
+                                                           class="btn btn-link btn-twitter">
+                                                            <i class="fab fa-twitter"></i>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                                {% if student.socials.0.linkedin|default %}
+                                                    <li>
+                                                        <a href="{{ student.socials.0.linkedin }}" target="_blank"
+                                                           class="btn btn-link btn-linkedin">
+                                                            <i class="fab fa-linkedin"></i>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                                {% if student.socials.0.instagram|default %}
+                                                    <li>
+                                                        <a href="{{ student.socials.0.instagram }}" target="_blank"
+                                                           class="btn btn-link btn-instagram">
+                                                            <i class="fab fa-instagram"></i>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                                {% if student.socials.0.website|default %}
+                                                    <li>
+                                                        <a href="{{ student.socials.0.website }}" target="_blank"
+                                                           class="btn btn-link btn-dribbble">
+                                                            <i class="fad fa-browser"></i>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
                                         {% endif %}
-                                        {% if socials.instagram is defined and socials.instagram is not empty %}
-                                        <li>
-                                            <a href="{{ socials.instagram }}" target="_blank" class="btn btn-link btn-instagram">
-                                                <i class="fab fa-instagram"></i>
-                                            </a>
-                                        </li>
-                                        {% endif %}
-                                        {% if socials.website is defined and socials.website is not empty %}
-                                        <li>
-                                            <a href="{{ socials.website }}" target="_blank" class="btn btn-link btn-dribbble">
-                                                <i class="fad fa-browser"></i>
-                                            </a>
-                                        </li>
-                                        {% endif %}
-                                    </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    <h3 class="text-center">{{ 'no students have been found'|trans|capitalize }}</h3>
+                {% endif %}
             </div>
         </div>
     </section>

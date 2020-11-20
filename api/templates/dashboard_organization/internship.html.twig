@@ -13,11 +13,11 @@
                 </ol>
             </nav>
             {% if internship['@id'] is defined and internship['@id'] is not empty %}
-            <h2 class="h4">{{ internship.name }} aanpassen</h2>
-            <p class="mb-0">wijzig hier uw vacature</p>
+            <h2 class="h4">{{ internship.name }} {{ 'To adjust'|trans|capitalize }}</h2>
+            <p class="mb-0">{{ 'change your vacancy here'|trans|capitalize }}</p>
             {% else %}
-            <h2 class="h4">Vacature plaatsen</h2>
-            <p class="mb-0">Plaats een nieuwe vacature via ons formulier</p>
+            <h2 class="h4">{{ 'post vacancy'|trans|capitalize }}</h2>
+            <p class="mb-0">{{ 'post a new vacancy via our form'|trans|capitalize }}</p>
             {% endif %}
         </div>
     </div>
@@ -26,7 +26,7 @@
         <!-- left collum -->
         <div class="col-12 col-xl-8">
             <div class="card card-body bg-white border-light shadow-sm mb-4">
-                <h2 class="h5 mb-4">Vacature informatie</h2>
+                <h2 class="h5 mb-4">{{ 'Vacature informatie'|trans|capitalize }}</h2>
                 <form action="{{ path('app_dashboardorganization_internships') }}" method="post">
                     {% if internship['@id'] is defined and internship['@id'] is not empty %}
                         <input type="hidden" name="@id" id="@id" value="{{ internship['@id'] }}">
@@ -34,7 +34,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label for="name">Naam van de stage</label>
+                                <label for="name">{{ 'name of the internship'|trans|capitalize }}</label>
                                 <input class="form-control" id="name" type="text"
                                        {% if internship.name is defined and internship.name is not empty %}
                                         value="{{ internship.name }}"{% else %}
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label for="title">Titel van de stage</label>
+                                <label for="title">{{ 'title of the internship'|trans|capitalize }}</label>
                                 <input class="form-control" id="title" type="text"
                                     {% if internship.name is defined and internship.name is not empty %}
                                     value="{{ internship.title }}"{% else %}
@@ -52,12 +52,12 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label for="employmentType">Type werk</label>
+                                <label for="employmentType">{{ 'type of work'|trans|capitalize }}</label>
                                 <select class="form-control" name="employmentType" id="employmentType">
                                     {% if internship.employmentType is defined and internship.employmentType is not empty %}
                                     <option value="{{ internship.employmentType }}">{{ internship.employmentType }}</option>{% endif %}
-                                    <option value="full-time">full-time</option>
-                                    <option value="part-time">part-time</option>
+                                    <option value="full-time">{{ 'full-time'|trans|capitalize }}</option>
+                                    <option value="part-time">{{ 'part-time'|trans|capitalize }}</option>
                                     <option value="temporary"> {{ 'temporary'|trans }} </option>
                                     <option value="seasonal">{{ 'seasonal'|trans }}</option>
                                     <option value="internship">{{ 'internship'|trans }}</option>
@@ -66,11 +66,11 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label for="standardHours"> {{ 'standard hours'|trans|capitalize }} per week </label>
+                                <label for="standardHours"> {{ 'standard hours'|trans|capitalize }} {{ 'weekly'|trans|capitalize }}</label>
                                 <input class="form-control" id="standardHours" name="standardHours" type="text" step="1" pattern="\d+"
                                     {% if internship.standardHours is defined and internship.standardHours is not empty %}
                                         value="{{ internship.standardHours }}"{% else %}
-                                       placeholder="Uren per week voor de positie" {% endif %} required>
+                                       placeholder={{ 'hours a week for the position'|trans|capitalize }} {% endif %} required>
                             </div>
                         </div>
 
@@ -80,17 +80,17 @@
                                 <input class="form-control form-control-sm" id="salaryCurrency" name="salaryCurrency" type="text"
                                     {% if internship.salaryCurrency is defined and internship.salaryCurrency is not empty %}
                                         value="{{ internship.salaryCurrency }}"{% else %}
-                                        placeholder="Valuta waarin de medewerker betaald wordt (EUR,USD etc)" {% endif %} required>
+                                        placeholder={{ 'currency in which the employee is paid (EUR, USD etc)'|trans|capitalize }} {% endif %} required>
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label for="baseSalary">{{ 'Maandsalaris'|trans|capitalize }}</label>
+                                <label for="baseSalary">{{ 'monthly salary'|trans|capitalize }}</label>
                                 <input class="form-control" id="baseSalary" name="baseSalary" type="text"
                                     {% if internship.baseSalary is defined and internship.baseSalary is not empty %}
                                         value="{{ internship.baseSalary }}"{% else %}
-                                        placeholder="Salaris voor de medewerker"{% endif %} required>
+                                        placeholder= {{ 'salary for the employee'|trans|capitalize }}{% endif %} required>
                             </div>
                         </div>
 
@@ -100,7 +100,7 @@
                                 <input class="form-control" id="summary" name="summary" type="text"
                                     {% if internship.summary is defined and internship.summary is not empty %}
                                         value="{{ internship.summary }}"{% else %}
-                                        placeholder="Een korte omschrijving van de vacature"{% endif %} required>
+                                        placeholder={{ 'a brief description of the vacancy'|trans|capitalize }}{% endif %} required>
                             </div>
                         </div>
 
@@ -108,22 +108,20 @@
                             <div class="form-group">
                                 <label for="hiringOrganization"> {{ 'organization'|trans|capitalize }} </label>
                                 <select class="form-control" id="hiringOrganization" name="hiringOrganization">
-                                    {% if organizations is defined %}
                                     {% for bedrijf in organizations %}
-                                    <option value="{{ bedrijf['@id'] }}">{{ bedrijf.name }}</option>
+                                        {% set organizationUrl = commonground_cleanurl({'component': 'wrc', 'type': 'organizations', 'id': bedrijf.id}) %}
+                                        <option
+                                            {% if internship.hiringOrganization is defined and internship.hiringOrganization is not empty and internship.hiringOrganization == organizationUrl %}selected{% endif %}
+                                            value="{{ organizationUrl }}">{{ bedrijf.name }}</option>
                                     {% endfor %}
-                                        {% elseif internship.hiringOrganization is defined and internship.hiringOrganization is not empty %}
-                                            <option value="{{ internship.hiringOrganization }}">{{  commonground_resource(internship.hiringOrganization).name }}</option>
-
-                                    {% endif %}
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <div class="form-group" id="Requirements">
-                                <label for="educationRequirements[]">voorwaarden stage (alles waar de solicitant aan moet voldoen)<br>
-                                    <strong> Druk op de blauwe knop om meer voorwaarden toe te voegen</strong><br>Opleiding:</label>
+                                <label for="educationRequirements[]">{{ 'internship conditions (everything that the applicant must meet)'|trans|capitalize }}<br>
+                                    <strong>{{ 'press the blue button to add more conditions'|trans|capitalize }}</strong><br>{{ 'education:'|trans|capitalize }}</label>
                                 {% if internship.educationRequirements is defined and internship.educationRequirements is not empty %}
                                 {% for educationRequirements in  internship['educationRequirements'] %}
                                 <input class="form-control" id="educationRequirements[]" type="text" value="{{ educationRequirements }}" placeholder="Vul hier 1 voorwaarden in" name="educationRequirements[]" required>
@@ -138,7 +136,7 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label for="jobLocationType">Locatie van de stage</label>
+                                <label for="jobLocationType">{{ 'location of the internship'|trans|capitalize }}</label>
                                 <input class="form-control" id="jobLocationType" type="text"
                                     {% if internship.jobLocationType is defined and internship.jobLocationType is not empty %}
                                     value="{{ internship.jobLocationType }}"{% else %}
@@ -148,19 +146,19 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="form-group">
-                            <label for="jobStartDate">Begindatum van de stage</label>
+                            <label for="jobStartDate">{{ 'start date of the internship'|trans|capitalize }}</label>
                             <input class="form-control" id="jobStartDate" type="datetime-local"
                                 {% if internship.jobStartDate is defined and internship.jobStartDate is not empty %}
-                                value="{{ internship.jobStartDate }}"{% else %}
+                                value="{{ internship.jobStartDate|date("Y-m-d\\TH:i") }}"{% else %}
                                    placeholder="format jaar-maand-dag"{% endif %} name="jobStartDate" required>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="form-group">
-                            <label for="validThrough">Einddatum van de stage</label>
+                            <label for="validThrough">{{ 'end date of the internship'|trans|capitalize }}</label>
                             <input class="form-control" id="validThrough" type="datetime-local"
                                 {% if internship.validThrough is defined and internship.validThrough is not empty %}
-                                    value="{{ internship.validThrough }}"{% else %}
+                                    value="{{ internship.validThrough|date("Y-m-d\\TH:i") }}"{% else %}
                                    placeholder="format jaar-maand-dag" {% endif %} name="validThrough" required>
                         </div>
                     </div>
@@ -168,7 +166,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label for="description">Beschrijving</label>
+                                <label for="description">{{ 'description'|trans|capitalize }}</label>
                                 {% if internship.description is defined and internship.description is not empty %}
                                 <textarea class="form-control" id="description" name="description" rows="3" cols="6">{{ internship.description }}</textarea>
                                 {% else %}
@@ -177,7 +175,7 @@
                         </div>
                     </div>
                     <div class="mt-3">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">{{ 'save'|trans|capitalize }}</button>
                     </div>
                 </form>
             </div>
@@ -203,9 +201,8 @@
                     </tr>
                     </thead>
                     {#for loop voor de applications op de position maken #}
-                    {% if internship.application is defined and internship.application is not empty %}
-                        {% set application = internship.application %}
-                        {% for application in internship.application %}
+                    {% if applications is defined and applications is not empty %}
+                        {% for application in applications %}
                     <tbody>
                         <tr>
                             <td>
@@ -216,24 +213,25 @@
                             </td>
                             <td>
                                 <a href="#" class="d-flex align-items-center"><img src="../../assets/img/team/profile-picture-1.jpg" class="user-avatar rounded-circle mr-3" alt="Avatar">
+                                    {% set employee = commonground_resource(application.employee) %}
                                     <div class="d-block"><span class="font-weight-bold">{{ commonground_resource(employee.person).name }}</span>
                                         <div class="small text-gray">
                                             {% if commonground_resource(employee.person).emais is defined and commonground_resource(employee.person).emais is not empty %}
                                             {{ commonground_resource(employee.person).emais[0] }}
                                             {% else %}
-                                            {{ 'no email available'|trans|capitalize }}
+                                                {{ 'no email available'|trans|capitalize }}
                                             {% endif %}
                                         </div>
                                     </div>
                                 </a>
                             </td>
-                            <td><span class="font-weight-normal">{{ internship.application.dateCreated|date("Y-m-d") }}</span></td>
-                            <td><span class="font-weight-normal text-warning">{{ internship.application.status }}</span></td>
+                            <td><span class="font-weight-normal">{{ application.dateCreated|date("Y-m-d") }}</span></td>
+                            <td><span class="font-weight-normal text-warning">{{ application.status }}</span></td>
                             <td>
                                 <div class="btn-group">
                                     <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon icon-sm"><span class="fas fa-ellipsis-h icon-dark"></span> </span><span class="sr-only">Toggle Dropdown</span></button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#"><span class="fas fa-user-shield mr-2"></span> Reset Pass</a>
+                                        <a class="dropdown-item" href="#"><span class="fas fa-user-shield mr-2"></span> {{ 'reset pass'|trans|capitalize }}</a>
                                         <a class="dropdown-item" data-toggle="modal" data-target="#modal-default"><span class="fas fa-eye mr-2"></span>{{ 'view details'|trans|capitalize }}</a>
                                         <a class="dropdown-item text-danger" href="#"><span class="fas fa-user-times mr-2"></span>{{ 'delete application'|trans|capitalize }}</a></div>
                                 </div>
@@ -252,7 +250,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>{{ internship.application.motivation }}</p>
+                                            <p>{{ application.motivation }}</p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-link text-danger ml-auto" data-dismiss="modal">Close</button>
@@ -276,13 +274,13 @@
                 <div class="card-footer px-3 d-flex align-items-center justify-content-between">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination mb-0">
-                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#">{{ 'previous'|trans|capitalize }}</a></li>
                             <li class="page-item"><a class="page-link" href="#">1</a></li>
                             <li class="page-item active"><a class="page-link" href="#">2</a></li>
                             <li class="page-item"><a class="page-link" href="#">3</a></li>
                             <li class="page-item"><a class="page-link" href="#">4</a></li>
                             <li class="page-item"><a class="page-link" href="#">5</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            <li class="page-item"><a class="page-link" href="#">{{ 'next'|trans|capitalize }}</a></li>
                         </ul>
                     </nav>
                     <div class="font-weight-bold small">Showing <b>5</b> out of <b>25</b> entries</div>

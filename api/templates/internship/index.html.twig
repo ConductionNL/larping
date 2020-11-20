@@ -33,40 +33,49 @@
         <div class="container z-2 mt-n10 mt-lg-n11 mt-sm-n8">
             <div class="row">
                 <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
-                    <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'full-time'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-building"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'full-time'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
-                    <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'part-time'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-stopwatch"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'part-time'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
-                    <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'temporary'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-business-time"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'temporarily'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2">
-                    <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'seasonal'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-sun"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'season'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
                 <div class="col-12 col-md-4 col-lg-2">
-                    <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
+                    <a href="{{ path('app_internship_index', {'employmentType': 'internship'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-network-wired"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'internship'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
+                {% if query is defined and query is not empty %}
+                    <div class="col-12 col-md-4 col-lg-2">
+                        <a href="{{ path('app_internship_index') }}" class="card text-center shadow-soft border-light animate-up-3">
+                            <div class="card-body p-5">
+                                <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-clipboard-list"></span></div>
+                                <h6 class="text-gray mb-0">{{ 'clear filters'|trans|capitalize }}</h6></div>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </section>
@@ -107,9 +116,9 @@
 {#
 {#                                  <button type="submit" class="btn btn-secondary mr-3 animate-up-2 m-0"><i class="fas fa-heart"></i></button>#}
                                     {% if app.user is defined and app.user is not null %}
-                                        <a href="{{ path('app_internship_like') }}" class="btn btn-secondary mr-3 animate-up-2 m-0"><i class="fal fa-heart"></i></a>
+{#                                        <a href="{{ path('app_internship_like') }}" class="btn btn-secondary mr-3 animate-up-2 m-0"><i class="fal fa-heart"></i></a>#}
                                     {% else %}
-                                        <a href="{{ path('app_user_idvault') }}" class="btn btn-secondary mr-3 animate-up-2 m-0" data-toggle="tooltip" data-placement="top" title="{{ 'u moet eerst inloggen'|trans|capitalize }}"><i class="fal fa-heart"></i></a>
+                                        <a href="{{ path('app_user_idvault') }}" class="btn btn-secondary mr-3 animate-up-2 m-0" data-toggle="tooltip" data-placement="top" title="{{ 'you need to login before you can submit'|trans|capitalize }}"><i class="fal fa-heart"></i></a>
                                     {% endif %}
                                     <a href="{{ path('app_internship_position', {id: internship.id}) }}#apply" class="btn btn-secondary mr-3 animate-up-2 m-0">{{ 'apply'|trans|capitalize }}</a>
                                     <a href="{{ path('app_internship_position', {id: internship.id}) }}" class="btn btn-primary animate-up-2 m-0"><i class="fas fa-clipboard-list mr-2"></i>{{ 'see details'|trans|capitalize }}</a>
@@ -128,7 +137,7 @@
             <div class="row">
                 <div class="col-12 text-center mb-5">
                     <h2 class="mb-4">{{ 'Join the Conduction Academy'|trans }}</h2>
-                    <p class="lead mb-5">{{ 'We use'|trans|capitalize }} <span class="font-weight-bolder">{{ 'cookies '|trans }}</span></p>
+                    <p class="lead mb-5">{{ 'we have '|trans|capitalize }} <span class="font-weight-bolder">{{ 'cookies :)'|trans }}</span></p>
                     <p>{{ 'Become a part of the comunity today to find the best interhsips and tutorials to lift of your career'|trans }}</p>
                     <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal" data-target=".pricing-modal">
                         <a href="{{ path('app_user_idvault') }}" style="color: white"><span class="mr-2"><i class="fas fa-hand-pointer"></i>

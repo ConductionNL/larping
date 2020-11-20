@@ -33,34 +33,24 @@
     <section class="section section-md pb-0">
         <div class="container z-2 mt-n9 mt-lg-n11">
             <div class="row">
-                <div class="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                    <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
-                        <div class="card-body p-5">
-                            <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-code"></span></div>
-                            <h6 class="text-gray mb-0">{{ 'code'|trans|capitalize }}</h6></div>
-                    </a>
-                </div>
-                <div class="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                    <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
-                        <div class="card-body p-5">
-                            <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-file-code"></span></div>
-                            <h6 class="text-gray mb-0">{{ 'soft skills'|trans|capitalize }}</h6></div>
-                    </a>
-                </div>
-                <div class="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                    <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
-                        <div class="card-body p-5">
-                            <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-heartbeat"></span></div>
-                            <h6 class="text-gray mb-0">{{ 'life'|trans|capitalize }}</h6></div>
-                    </a>
-                </div>
-                <div class="col-12 col-md-6 col-lg-3">
-                    <a href="./support-topic.html" class="card text-center shadow-soft border-light animate-up-3">
-                        <div class="card-body p-5">
-                            <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-layer-group"></span></div>
-                            <h6 class="text-gray mb-0">{{ 'onboarding'|trans|capitalize }}</h6></div>
-                    </a>
-                </div>
+                {% for type in types %}
+                    <div class="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                        <a href="{{ path('app_education_tutorials',{'additionalType': type}) }}" class="card text-center shadow-soft border-light animate-up-3">
+                            <div class="card-body p-5">
+                                <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-clipboard-list"></span></div>
+                                <h6 class="text-gray mb-0">{{ type|trans|capitalize }}</h6></div>
+                        </a>
+                    </div>
+                {% endfor %}
+                {% if query is defined and query is not empty %}
+                    <div class="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                        <a href="{{ path('app_education_tutorials') }}" class="card text-center shadow-soft border-light animate-up-3">
+                            <div class="card-body p-5">
+                                <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-clipboard-list"></span></div>
+                                <h6 class="text-gray mb-0">{{ 'clear filters'|trans|capitalize }}</h6></div>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </section>

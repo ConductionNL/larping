@@ -45,9 +45,20 @@
 
                         <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-5">
                             <div class="card bg-white border-light shadow-soft p-4 rounded">
-                                <a href="{{ path('app_organization_organization', {id: org.id}) }}"><img
-                                        src="/bundles/rocket/assets/img/blog/image-2.jpg" class="card-img-top fmxh-300"
-                                        alt=""></a>
+                                <a href="{{ path('app_organization_organization', {id: org.id}) }}" style="margin-left: auto; margin-right: auto">
+                                    <img
+                                        {% if org.style.favicon.base64 is defined and org.style.favicon.base64 is not empty %}
+                                            src="{{ org.style.favicon.base64 }}"
+                                        {% else %}
+                                            src="/bundles/rocket/assets/img/blog/image-2.jpg"
+                                        {% endif %}
+                                        alt=""
+                                        style="width: auto; height: 13rem;
+                                        {% if org.backgroundColor is defined and org.backgroundColor|length > 0 %}
+                                            background-color: {{ org.backgroundColor[1] }}
+                                        {% endif %}"
+                                    >
+                                </a>
                                 <div class="card-body p-0 pt-4">
                                      <a
                                         href="{{ path('app_organization_organization', {id: org.id}) }}"
@@ -94,7 +105,7 @@
         <div class="container z-2">
             <div class="row justify-content-center">
                 <div class="col-md-10 text-center">
-                    <h2 class="h1">{{ 'Desparatly missing your organization here?'|trans|capitalize }}</h2>
+                    <h2 class="h1">{{ 'do you miss your organization here?'|trans|capitalize }}</h2>
                     <p>{{ 'Dont worry, joining the comunnity and adding the your organizations unqiue value to it is a breazey. Just register and add it under organizations'|trans|capitalize }}</p>
                     <p class="lead py-4 text-gray"></p><a href="{{ path('app_user_idvault') }}" class="btn btn-lg btn-secondary animate-up-2">{{ 'aanmelden'|trans|capitalize }}</a></div>
             </div>
