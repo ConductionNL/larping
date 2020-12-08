@@ -507,7 +507,7 @@
       </trans-unit>
       <trans-unit id="qvq498b" resname="job applications">
         <source>job applications</source>
-        <target>aanvragen</target>
+        <target>sollicitaties</target>
       </trans-unit>
       <trans-unit id="nXV1Fkg" resname="cources">
         <source>cources</source>
@@ -2417,7 +2417,7 @@
       </trans-unit>
       <trans-unit id=".VTlqC4" resname="applications">
         <source>applications</source>
-        <target>aanvragen</target>
+        <target>sollicitaties</target>
       </trans-unit>
       <trans-unit id="Y8LHTj." resname="add tutorial">
         <source>add tutorial</source>
@@ -2433,11 +2433,11 @@
       </trans-unit>
       <trans-unit id="CIrMBTD" resname="no applications found">
         <source>no applications found</source>
-        <target>geen aanvragen gevonden</target>
+        <target>geen sollicitaties gevonden</target>
       </trans-unit>
       <trans-unit id="GybUA6y" resname="add your first application!">
         <source>add your first application!</source>
-        <target>voeg je eerste solicitatie toe!</target>
+        <target>voeg je eerste sollicitatie toe!</target>
       </trans-unit>
       <trans-unit id="OaaS.Ip" resname="find an position to apply to">
         <source>find an position to apply to</source>
@@ -2893,7 +2893,7 @@
       </trans-unit>
       <trans-unit id="GLGTpd." resname="motivate your application">
         <source>motivate your application</source>
-        <target>motiveer je solicitatie</target>
+        <target>motiveer je sollicitatie</target>
       </trans-unit>
       <trans-unit id="cfZMht." resname="open positions">
         <source>open positions</source>
@@ -3542,6 +3542,10 @@
       <trans-unit id="JO921n2" resname="this team participates in these tutorials">
           <source>this team participates in these tutorials</source>
           <target>dit team doet mee met deze tutorials</target>
+       </trans-unit>
+      <trans-unit id="8h1B21s" resname="you need to be logged in to join a team">
+          <source>you need to be logged in to join a team</source>
+          <target>je moet ingelogd zijn om je bij een team in te kunnen schrijven</target>
        </trans-unit>
     </body>
   </file>
