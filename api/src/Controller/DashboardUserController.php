@@ -4,6 +4,7 @@
 
 namespace App\Controller;
 
+use App\Service\MailingService;
 use Conduction\BalanceBundle\Service\BalanceService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -74,16 +75,14 @@ class DashboardUserController extends AbstractController
                         $courseIds[] = $participant['course']['id'];
                     }
                 }
-                if (isset($participant['groups']) && $participant['status'] && $participant['status'] == 'accepted') {
-                    foreach ($participant['groups'] as $group) {
-                        if (!in_array($group['id'], $groupIds)) {
-                            $variables['groups'][] = $group;
-                            $groupIds[] = $group['id'];
-                        }
+                if (isset($participant['groupColumn']) && $participant['status'] && $participant['status'] == 'accepted') {
+                    if (!in_array($participant['groupColumn']['id'], $groupIds)) {
+                        $variables['groups'][] = $participant['groupColumn'];
+                        $groupIds[] = $participant['groupColumn']['id'];
                     }
                 }
                 if (!in_array($participant['id'], $participationIds) &&
-                    ($participant['groups'] || $participant['program'] || $participant['course'])) {
+                    ($participant['groupColumn'] || $participant['program'] || $participant['course'])) {
                     $variables['participations'][] = $participant;
                     $participationIds[] = $participant['id'];
                 }
@@ -105,23 +104,24 @@ class DashboardUserController extends AbstractController
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
-        // Get all tutorials for when there is no user defined
+        // Get all tutorials
         $variables['tutorials'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'courses'], $variables['query'])['hydra:member'];
 
         //  Getting the participants
-        $participants = [];
         if ($this->getUser()) {
-            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person' => $this->getUser()->getPerson()]])['hydra:member'];
-        }
-        if (count($participants) > 0) {
-            // Get all tutorials for each participant of this user
-            $tutorials = [];
-            foreach ($participants as $participant) {
-                if (isset($participant['course'])) {
-                    array_push($tutorials, $participant['course']);
+            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
+            if (count($participants) > 0) {
+                // Get all tutorials for each participant of this user
+                $tutorials = [];
+                foreach ($participants as $participant) {
+                    if (isset($participant['course'])) {
+                        array_push($tutorials, $participant['course']);
+                    }
                 }
+                $variables['tutorials'] = $tutorials;
+            } else {
+                unset($variables['tutorials']);
             }
-            $variables['tutorials'] = $tutorials;
         }
 
         return $variables;
@@ -238,23 +238,24 @@ class DashboardUserController extends AbstractController
         // On an index route we might want to filter based on user input
         $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
 
-        // Get all teams for when there is no user defined
+        // Get all teams
         $variables['teams'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'groups'], $variables['query'])['hydra:member'];
 
         //  Getting the participants
-        $participants = [];
         if ($this->getUser()) {
-            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person' => $this->getUser()->getPerson()]])['hydra:member'];
-        }
-        if (count($participants) > 0) {
-            // Get all groups for each participant of this user
-            $teams = [];
-            foreach ($participants as $participant) {
-                if (isset($participant['group'])) {
-                    array_push($teams, $participant['group']);
+            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants'], ['person' => $this->getUser()->getPerson()])['hydra:member'];
+            if (count($participants) > 0) {
+                // Get the group for each participant of this user
+                $teams = [];
+                foreach ($participants as $participant) {
+                    if (isset($participant['groupColumn'])) {
+                        array_push($teams, $participant['groupColumn']);
+                    }
                 }
+                $variables['teams'] = $teams;
+            } else {
+                unset($variables['teams']);
             }
-            $variables['teams'] = $teams;
         }
 
         return $variables;
@@ -321,7 +322,7 @@ class DashboardUserController extends AbstractController
             }
         }
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $name = $request->get('name');
 
             // Update (or create) the cc/person of this user
@@ -329,14 +330,9 @@ class DashboardUserController extends AbstractController
                 $person = $variables['person'];
             }
 
-            if($request->files->get('personalPhoto')) {
+            if ($request->files->get('personalPhoto')) {
                 $person['personalPhoto'] = base64_encode(file_get_contents($request->files->get('personalPhoto')));
-                var_dump($request->files->get('personalPhoto'));
-                die;
             }
-
-            var_dump($_FILES);
-            die;
 
             $person['name'] = $name;
             $person['aboutMe'] = $request->get('aboutMe');
@@ -563,7 +559,7 @@ class DashboardUserController extends AbstractController
      * @Template
      * @Route("/transactions/{organization}")
      */
-    public function transactionsAction(Session $session, CommonGroundService $commonGroundService, BalanceService $balanceService, Request $request, $organization)
+    public function transactionsAction(Session $session, CommonGroundService $commonGroundService, BalanceService $balanceService, MailingService $mailingService, Request $request, $organization)
     {
         // On an index route we might want to filter based on user input
         $variables = [];
@@ -576,6 +572,13 @@ class DashboardUserController extends AbstractController
             $mollieCode = $session->get('mollieCode');
             $session->remove('mollieCode');
             $result = $balanceService->processMolliePayment($mollieCode, $organizationUrl);
+
+            $person = $commonGroundService->getResource($this->getUser()->getPerson());
+            $data = [];
+            $data['receiver'] = $person['name'];
+            $data['invoice'] = $result['invoice'];
+
+            $mailingService->sendMail('mails/invoice.html.twig', 'no-reply@conduction.academy', $this->getUser()->getUsername(), 'invoice', $data);
 
             if ($result['status'] == 'paid') {
                 $variables['message'] = 'Payment processed successfully! <br> €'.$result['amount'].'.00 was added to your balance. <br>  Invoice with reference: '.$result['reference'].' is created.';

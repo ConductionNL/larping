@@ -25,7 +25,7 @@
                             <label for="descInput">{{ 'description'|trans|capitalize }}</label>
                             <textarea class="form-control" name="description" id="descInput"></textarea>
                         </div>
-                        <input type="hidden" name="backUrl" value="{{ backUrl }}">
+                        <input type="hidden" name="backUrl" value="{% if backUrl is defined %}{{ backUrl }}{% else %}{{ path('app_dashboarduser_organization') }}{% endif %}">
                         <input type="hidden" name="rsin" value=" ">
                         <button type="submit" class="btn btn-primary btn-block">{{ 'join'|trans|capitalize }}</button>
                     </form>

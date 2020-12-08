@@ -49,14 +49,6 @@
         <source>name</source>
         <target>naam</target>
       </trans-unit>
-      <trans-unit id="WXKCQud" resname="deadline for which you can register">
-        <source>deadline for which you can register</source>
-        <target>uiterlijke datum waarvoor je kan inschrijven</target>
-      </trans-unit>
-      <trans-unit id="0VhlQZ6" resname="full name">
-        <source>full name</source>
-        <target>voor- en achternaam</target>
-      </trans-unit>
       <trans-unit id="QG7.sen" resname="created">
         <source>created</source>
         <target>aangemaakt</target>
@@ -139,7 +131,7 @@
       </trans-unit>
       <trans-unit id="djVFUl." resname="part-time">
         <source>part-time</source>
-        <target>deeltijd</target>
+        <target>part time</target>
       </trans-unit>
       <trans-unit id="wGpPjwZ" resname="temporarily">
         <source>temporarily</source>
@@ -152,6 +144,10 @@
       <trans-unit id="7uZB9Ww" resname="telecommute">
         <source>telecommute</source>
         <target>thuiswerken</target>
+      </trans-unit>
+      <trans-unit id="B.E7zGX" resname="deadline for which you can register">
+        <source>deadline for which you can register</source>
+        <target>uiterlijke datum waarvoor je kan inschrijven</target>
       </trans-unit>
       <trans-unit id="NAnvSYE" resname="full name">
         <source>full name</source>
@@ -507,7 +503,7 @@
       </trans-unit>
       <trans-unit id="qvq498b" resname="job applications">
         <source>job applications</source>
-        <target>aanvragen</target>
+        <target>sollicitaties</target>
       </trans-unit>
       <trans-unit id="nXV1Fkg" resname="cources">
         <source>cources</source>
@@ -669,9 +665,13 @@
         <source>find your perfect internship</source>
         <target>vind je perfecte stageplek</target>
       </trans-unit>
-      <trans-unit id="gpbqaoV" resname="we have listed all the companies that are looking for an intern for you. So that you can make a choice for which internship you would like to go.">
-        <source>we have listed all the companies that are looking for an intern for you. So that you can make a choice for which internship you would like to go.</source>
-        <target>we hebben alle bedrijven voor je op een rijtje gezet die op zoek zijn naar een stagiair. Zodat je een keuze kunt maken voor welke stage je wilt gaan.</target>
+      <trans-unit id="lYp6aw9" resname="we have listed all the companies that are looking for an intern for you.">
+        <source>we have listed all the companies that are looking for an intern for you.</source>
+        <target>we hebben alle bedrijven op een rijtje gezet die voor jou op zoek zijn naar een stagiair.</target>
+      </trans-unit>
+      <trans-unit id=".k_E2nj" resname="so that you can make a choice for which internship you would like to go.">
+        <source>so that you can make a choice for which internship you would like to go.</source>
+        <target>zodat je een keuze kunt maken voor welke stage jij wilt gaan.</target>
       </trans-unit>
       <trans-unit id="rtfgGj6" resname="internship">
         <source>internship</source>
@@ -679,7 +679,7 @@
       </trans-unit>
       <trans-unit id="MkJZV0T" resname="we are always looking for creative, talented self-starters to join the Front family. Check out our open positions and fill out an application.">
         <source>we are always looking for creative, talented self-starters to join the Front family. Check out our open positions and fill out an application.</source>
-        <target>we zijn altijd op zoek naar creatieve, getalenteerde zelfstarters om lid te worden van de Front-familie. Bekijk onze openstaande stages en vul een sollicitatie in.</target>
+        <target>We zijn altijd op zoek naar creatieve, getalenteerde zelfstarters om lid te worden van de Front-familie. Bekijk onze openstaande stages en vul een sollicitatie in.</target>
       </trans-unit>
       <trans-unit id="Dntbauq" resname="no requirements found">
         <source>no requirements found</source>
@@ -804,6 +804,10 @@
       <trans-unit id="AjY2.Rz" resname="you have already registerd for this cource">
         <source>you have already registerd for this cource</source>
         <target>u heeft zich al aangemeld voor deze cursus</target>
+      </trans-unit>
+      <trans-unit id="hd9vr_n" resname="you have already applied for this team">
+        <source>you have already applied for this team</source>
+        <target>je hebt je al aangemeld voor dit team</target>
       </trans-unit>
       <trans-unit id="JrgRo3s" resname="click here to participate">
         <source>click here to participate</source>
@@ -955,7 +959,7 @@
       </trans-unit>
       <trans-unit id="zwJiGsD" resname="Starting your own teams allows jou to attract teammates and tackle challenges together, there is no set definition of who should be in a team so you could either be a group of students of the same study or a multidisciplinary team consisting of different study\'s. Or you could just be a group of friends.">
         <source>Starting your own teams allows jou to attract teammates and tackle challenges together, there is no set definition of who should be in a team so you could either be a group of students of the same study or a multidisciplinary team consisting of different study\'s. Or you could just be a group of friends.</source>
-        <target>door je eigen teams te starten, kun je teamgenoten aantrekken en samen challenges aangaan, er is geen vaste definitie van wie er in een team zou moeten zitten, dus je zou een groep studenten van dezelfde studie kunnen zijn of een multidisciplinair team dat uit verschillende studies bestaat. Of je zou gewoon een groep vrienden kunnen zijn.</target>
+        <target>door je eigen teams te starten, kun je teamgenoten aantrekken en samen challenges aangaan. Er is geen vaste definitie van wie er in een team zou moeten zitten, dus je zou een groep studenten van dezelfde studie kunnen zijn of een multidisciplinair team dat uit verschillende studies bestaat. Of je zou gewoon een groep vrienden kunnen zijn.</target>
       </trans-unit>
       <trans-unit id="YZacozN" resname="The choice is all yours.">
         <source>The choice is all yours.</source>
@@ -983,7 +987,7 @@
       </trans-unit>
       <trans-unit id="8r6nJyn" resname="Dont worry, joining the comunnity and adding the your organizations unqiue value to it is a breazey. Just register and add it under organizations">
         <source>Dont worry, joining the comunnity and adding the your organizations unqiue value to it is a breazey. Just register and add it under organizations</source>
-        <target>maak je geen zorgen, lid worden van de gemeenschap en de unieke waarde van je organisatie eraan toevoegen is een fluitje van een cent! Gewoon registreren en toevoegen onder organisaties.</target>
+        <target>Maak je geen zorgen, lid worden van de gemeenschap en de unieke waarde van je organisatie eraan toevoegen is een fluitje van een cent! Gewoon registreren en toevoegen onder organisaties.</target>
       </trans-unit>
       <trans-unit id="gge8raz" resname="Lift off your career">
         <source>Lift off your career</source>
@@ -1099,7 +1103,7 @@
       </trans-unit>
       <trans-unit id="7Nkc66x" resname="interns can help us to solve challenges we experience inside or outside our organizations. They have a fresh and new perspective on things. Let/s focus on what interns need to learn to transform their fresh brain to strategic problem-solving skills. So instead of offering a student an internship, provide them with a challenge to solve.">
         <source>interns can help us to solve challenges we experience inside or outside our organizations. They have a fresh and new perspective on things. Let/s focus on what interns need to learn to transform their fresh brain to strategic problem-solving skills. So instead of offering a student an internship, provide them with a challenge to solve.</source>
-        <target>stagiaires kunnen ons helpen bij het oplossen van challenges die we binnen of buiten onze organisaties ervaren. Ze hebben een frisse en nieuwe kijk op dingen. Laten we ons concentreren op wat stagiaires nodig hebben om te leren om hun frisse brein om te zetten in strategische probleemoplossende vaardigheden. Dus in plaats van een student een stageplaats aan te bieden, geef ze een challenge om op te lossen.</target>
+        <target>Stagiaires kunnen ons helpen bij het oplossen van challenges die we binnen of buiten onze organisaties ervaren. Ze hebben een frisse en nieuwe kijk op dingen. Laten we ons concentreren op wat stagiaires nodig hebben om te leren om hun frisse brein om te zetten in strategische probleemoplossende vaardigheden. Dus in plaats van een student een stageplaats aan te bieden, geef ze een challenge om op te lossen.</target>
       </trans-unit>
       <trans-unit id="ugLS5Kr" resname="work together online">
         <source>work together online</source>
@@ -1155,7 +1159,7 @@
       </trans-unit>
       <trans-unit id="CRR1Bau" resname="In the old world we used to do onboaring and on the job trainging, that is now no longer possible. we need to find a new way for interns and new employees to onboard themselfs into the workspace">
         <source>In the old world we used to do onboaring and on the job trainging, that is now no longer possible. we need to find a new way for interns and new employees to onboard themselfs into the workspace</source>
-        <target>in de oude wereld deden we aan onboaring en on the job training, dat is nu niet meer mogelijk. We moeten een nieuwe manier vinden voor het onboarden van stagiaires en medewerkers.</target>
+        <target>In de oude wereld deden we aan onboaring en on the job training, dat is nu niet meer mogelijk. We moeten een nieuwe manier vinden voor het onboarden van stagiaires en medewerkers.</target>
       </trans-unit>
       <trans-unit id="LdR6a.E" resname="interhsips">
         <source>interhsips</source>
@@ -1495,7 +1499,7 @@
       </trans-unit>
       <trans-unit id="qYXWs6B" resname="an online platform to find and place a suitable internship">
         <source>an online platform to find and place a suitable internship</source>
-        <target>een online platform om een ​​geschikte stageplaats te vinden en te plaatsen</target>
+        <target>een online platform om een geschikte stageplaats te vinden en te plaatsen</target>
       </trans-unit>
       <trans-unit id="bse4eIC" resname="public access">
         <source>public access</source>
@@ -2065,21 +2069,13 @@
         <source>type of work</source>
         <target>type werk</target>
       </trans-unit>
-      <trans-unit id="9bnh1Ne" resname="full-time">
-        <source>full-time</source>
-        <target>full time</target>
-      </trans-unit>
-      <trans-unit id="9frg1Ne" resname="part-time">
-        <source>part-time</source>
-        <target>part time</target>
-      </trans-unit>
-      <trans-unit id="9fwqaNe" resname="weekly">
+      <trans-unit id="iFDs7Zh" resname="weekly">
         <source>weekly</source>
         <target>wekelijks</target>
       </trans-unit>
-      <trans-unit id="890qaNe" resname="hours a week for the position">
-       <source>hours a week for the position</source>
-       <target>uren per week voor de positie</target>
+      <trans-unit id="CYeIRqt" resname="hours a week for the position">
+        <source>hours a week for the position</source>
+        <target>uren per week voor de positie</target>
       </trans-unit>
       <trans-unit id="YX4fLVE" resname="currency in which the employee is paid (EUR, USD etc)">
         <source>currency in which the employee is paid (EUR, USD etc)</source>
@@ -2133,17 +2129,15 @@
         <source>about</source>
         <target>over</target>
       </trans-unit>
-
-      <trans-unit id="rtbasxb" resname="total visits">
-              <source>total visits</source>
-              <target>totaal aantal bezoekers</target>
-            </trans-unit>
-            <trans-unit id="yyyyztY" resname="worldwide">
-              <source>worldwide</source>
-              <target>wereldwijd</target>
-            </trans-unit>
-
-      <trans-unit id="LtyyxTU" resname="share">
+      <trans-unit id="nHoCR3u" resname="total visits">
+        <source>total visits</source>
+        <target>totaal aantal bezoekers</target>
+      </trans-unit>
+      <trans-unit id="esqbLEo" resname="worldwide">
+        <source>worldwide</source>
+        <target>wereldwijd</target>
+      </trans-unit>
+      <trans-unit id="w7xFrDU" resname="share">
         <source>share</source>
         <target>delen</target>
       </trans-unit>
@@ -2417,7 +2411,7 @@
       </trans-unit>
       <trans-unit id=".VTlqC4" resname="applications">
         <source>applications</source>
-        <target>aanvragen</target>
+        <target>sollicitaties</target>
       </trans-unit>
       <trans-unit id="Y8LHTj." resname="add tutorial">
         <source>add tutorial</source>
@@ -2433,11 +2427,11 @@
       </trans-unit>
       <trans-unit id="CIrMBTD" resname="no applications found">
         <source>no applications found</source>
-        <target>geen aanvragen gevonden</target>
+        <target>geen sollicitaties gevonden</target>
       </trans-unit>
       <trans-unit id="GybUA6y" resname="add your first application!">
         <source>add your first application!</source>
-        <target>voeg je eerste solicitatie toe!</target>
+        <target>voeg je eerste sollicitatie toe!</target>
       </trans-unit>
       <trans-unit id="OaaS.Ip" resname="find an position to apply to">
         <source>find an position to apply to</source>
@@ -2713,7 +2707,7 @@
       </trans-unit>
       <trans-unit id="31iOZkm" resname="they say 1+1=3, so that’s why we recommend students to work in teams on challenges!">
         <source>they say 1+1=3, so that’s why we recommend students to work in teams on challenges!</source>
-        <target>ze zeggen 1 + 1 = 3, dus daarom raden we studenten aan om in teams aan uitdagingen te werken!</target>
+        <target>ze zeggen 1 + 1 = 3, dus daarom raden we studenten aan om in teams aan challenges te werken!</target>
       </trans-unit>
       <trans-unit id="jZ9mmS3" resname="Tutorials">
         <source>Tutorials</source>
@@ -2803,8 +2797,8 @@
         <source>about me</source>
         <target>over mij</target>
       </trans-unit>
-      <trans-unit id="nEZjBW5" resname="About you Profile text">
-        <source>'About you' Profile text</source>
+      <trans-unit id="lHTGBow" resname="About you Profile text">
+        <source>About you Profile text</source>
         <target>'Over mij' profiel tekst</target>
       </trans-unit>
       <trans-unit id="YNtYABb" resname="a text that you want to show on your profile">
@@ -2828,7 +2822,7 @@
         <target>dus dat is waar teams binnenkomen!</target>
       </trans-unit>
       <trans-unit id="YgtHxqO" resname="Together you can come up with the best solutions for challenges.">
-        <source>together you can come up with the best solutions for challenges.</source>
+        <source>Together you can come up with the best solutions for challenges.</source>
         <target>samen bedenk je de beste oplossingen voor challenges.</target>
       </trans-unit>
       <trans-unit id="qPpsBpv" resname="A tutorial can help you gain en gather more knowlegde in general or about the challenge you’re going to work on/ company you’re going to work with">
@@ -2893,7 +2887,7 @@
       </trans-unit>
       <trans-unit id="GLGTpd." resname="motivate your application">
         <source>motivate your application</source>
-        <target>motiveer je solicitatie</target>
+        <target>motiveer je sollicitatie</target>
       </trans-unit>
       <trans-unit id="cfZMht." resname="open positions">
         <source>open positions</source>
@@ -2933,11 +2927,11 @@
       </trans-unit>
       <trans-unit id="qDVtgQz" resname="posistions">
         <source>posistions</source>
-        <target>vacatures</target>
+        <target>stages</target>
       </trans-unit>
       <trans-unit id="AtBGIwp" resname="post an open positions">
         <source>post an open positions</source>
-        <target>plaat stage</target>
+        <target>plaat een stage</target>
       </trans-unit>
       <trans-unit id="sMkyMxc" resname="challange students">
         <source>challange students</source>
@@ -2985,7 +2979,7 @@
       </trans-unit>
       <trans-unit id="dkzxU7r" resname="Starting your own teams allows jou to attract teammates and tackle challenges together, there is no set definition of who should be in a team so you could either be a group of students of the same study or a multidisciplinary team consisting of different study's. Or you could just be a group of friends.">
         <source>Starting your own teams allows jou to attract teammates and tackle challenges together, there is no set definition of who should be in a team so you could either be a group of students of the same study or a multidisciplinary team consisting of different study's. Or you could just be a group of friends.</source>
-        <target>door je eigen teams te starten, kun je teamgenoten aantrekken en samen challenges aangaan, er is geen vaste definitie van wie er in een team zou moeten zitten, dus je zou een groep studenten van dezelfde studie kunnen zijn of een multidisciplinair team dat uit verschillende studies bestaat. Of je zou gewoon een groep vrienden kunnen zijn.</target>
+        <target>Door je eigen teams te starten, kun je teamgenoten aantrekken en samen challenges aangaan. Er is geen vaste definitie van wie er in een team zou moeten zitten, dus je zou een groep studenten van dezelfde studie kunnen zijn of een multidisciplinair team dat uit verschillende studies bestaat. Of je zou gewoon een groep vrienden kunnen zijn.</target>
       </trans-unit>
       <trans-unit id="AXWrXPf" resname="online environment for internships">
         <source>online environment for internships</source>
@@ -3035,7 +3029,7 @@
         <source>newsletter</source>
         <target>nieuwsbrief</target>
       </trans-unit>
-      <trans-unit id="C-iAUwQ" resname="you have successfully signed up for the newsletter!">
+      <trans-unit id="cjBIFup" resname="you have successfully signed up for the newsletter!">
         <source>you have successfully signed up for the newsletter!</source>
         <target>u heeft zich succesvol aangemeld voor de nieuwsbrief!</target>
       </trans-unit>
@@ -3229,7 +3223,7 @@
       </trans-unit>
       <trans-unit id="D6ZwGqM" resname="In the Beta phase (now), the platform is free to use for everyone. This will always be free for students.">
         <source>In the Beta phase (now), the platform is free to use for everyone. This will always be free for students.</source>
-        <target>in de Beta-fase (nu), is het platform voor iedereen gratis te gebruiken. Dit is altijd gratis voor studenten.</target>
+        <target>In de Beta-fase (nu), is het platform voor iedereen gratis te gebruiken. Dit is altijd gratis voor studenten.</target>
       </trans-unit>
       <trans-unit id="WbGG9p5" resname="What makes the internship platform different from other matching sites?">
         <source>What makes the internship platform different from other matching sites?</source>
@@ -3275,34 +3269,34 @@
         <source>find an internship</source>
         <target>vind een stage</target>
       </trans-unit>
-      <trans-unit id="chebc9t" resname="hiring organization">
-          <source>hiring organization</source>
-          <target>in dienst nemende organisatie</target>
-        </trans-unit>
-    <trans-unit id="chebctt" resname="title">
-              <source>title</source>
-              <target>titel</target>
-            </trans-unit>
-      <trans-unit id="394ufRH" resname="title of the position">
-              <source>title of the position</source>
-              <target>titel van de positie</target>
-            </trans-unit>
-    <trans-unit id="hetxyaH" resname="standard weekly hours">
-            <source>standard weekly hours</source>
-            <target>standaard wekelijkse uren</target>
-          </trans-unit>
-    <trans-unit id="dheyxat" resname="your internship standard hours">
-            <source>your internship standard hours</source>
-            <target>je standaard stage uren</target>
-          </trans-unit>
-    <trans-unit id="dwaaddH" resname="salary indication">
-            <source>salary indication</source>
-            <target>salarisindicatie</target>
-          </trans-unit>
-    <trans-unit id="dwertdH" resname="your internship salary indication">
-                <source>your internship salary indication</source>
-                <target>uw stagesalarisindicatie</target>
-              </trans-unit>
+      <trans-unit id="lazRlWz" resname="hiring organization">
+        <source>hiring organization</source>
+        <target>in dienst nemende organisatie</target>
+      </trans-unit>
+      <trans-unit id="qvIyBkY" resname="title">
+        <source>title</source>
+        <target>titel</target>
+      </trans-unit>
+      <trans-unit id="8fO1UNF" resname="title of the position">
+        <source>title of the position</source>
+        <target>titel van de positie</target>
+      </trans-unit>
+      <trans-unit id="lYIg._g" resname="standard weekly hours">
+        <source>standard weekly hours</source>
+        <target>standaard wekelijkse uren</target>
+      </trans-unit>
+      <trans-unit id="2lKl9qP" resname="your internship standard hours">
+        <source>your internship standard hours</source>
+        <target>je standaard stage uren</target>
+      </trans-unit>
+      <trans-unit id="HJzx_k5" resname="salary indication">
+        <source>salary indication</source>
+        <target>salarisindicatie</target>
+      </trans-unit>
+      <trans-unit id="ndPOnxy" resname="your internship salary indication">
+        <source>your internship salary indication</source>
+        <target>uw stagesalarisindicatie</target>
+      </trans-unit>
       <trans-unit id="Uoy9WRH" resname="place an internship">
         <source>place an internship</source>
         <target>plaats een stage</target>
@@ -3323,226 +3317,560 @@
         <source>you need to login before you can submit</source>
         <target>je moet eerst inloggen voor je kan indienen</target>
       </trans-unit>
-
-      <trans-unit id="238769t" resname="summary note">
-              <source>summary note</source>
-              <target>samenvattende opmerking</target>
-            </trans-unit>
-            <trans-unit id="cdfre9t" resname="your internship summary note">
-                <source>your internship summary note</source>
-                <target>je stageoverzicht</target>
-              </trans-unit>
-          <trans-unit id="mnvbctt" resname="position conditions (everything that the applicant must meet)">
-                    <source>position conditions (everything that the applicant must meet)</source>
-                    <target>functievoorwaarden (alles waaraan de sollicitant moet voldoen)</target>
-                  </trans-unit>
-            <trans-unit id="3cmvhrH" resname="new condition">
-                    <source>new condition</source>
-                    <target>nieuwe voorwaarde</target>
-                  </trans-unit>
-          <trans-unit id="hetqeaH" resname="enter a condition here">
-                  <source>enter a condition here</source>
-                  <target>voer hier een voorwaarde in</target>
-                </trans-unit>
-
-      <trans-unit id="UohevaH" resname="location of the position">
-              <source>location of the position</source>
-              <target>locatie van de positie</target>
-            </trans-unit>
-            <trans-unit id="k88asLp" resname="your internship job location">
-              <source>your internship job location</source>
-              <target>locatie van je stageplaats</target>
-            </trans-unit>
-
-            <trans-unit id="NahXtsH" resname="post a tutorial">
-                          <source>post a tutorial</source>
-                          <target>plaats een tutorial</target>
-                        </trans-unit>
-                        <trans-unit id="OapXCLp" resname="post a tutorial for students">
-                          <source>post a tutorial for students</source>
-                          <target>plaats een tutorial voor studenten</target>
-                        </trans-unit>
-            <trans-unit id="gNcbatQ" resname="think about problem solving">
-                          <source>think about problem solving</source>
-                          <target>denk aan probleem oplossen</target>
-                        </trans-unit>
-            <trans-unit id="5122sC7" resname="start date of the position">
-              <source>start date of the position</source>
-              <target>startdatum van de positie</target>
-            </trans-unit>
-            <trans-unit id="ghcyatQ" resname="end date of the position">
-              <source>end date of the position</source>
-              <target>einddatum van de positie</target>
-            </trans-unit>
-            <trans-unit id="lkmcogd" resname="extensive description of the position">
-              <source>extensive description of the position</source>
-              <target>uitgebreide omschrijving van de positie</target>
-            </trans-unit>
-    <trans-unit id="6664ZC7" resname="example: Education: MBO 3 ICT administrator">
-            <source>example: Education: MBO 3 ICT administrator</source>
-            <target>voorbeeld: Opleiding: MBO 3 ICT-beheerder</target>
-          </trans-unit>
-
-    <trans-unit id="UbcgstH" resname="choose the requirements for your tutorial">
-            <source>choose the requirements for your tutorial</source>
-            <target>kies de voorwaarden voor uw tutorial</target>
-          </trans-unit>
-          <trans-unit id="93hx7Lp" resname="the checked activities are the requirements of your tutorial">
-            <source>the checked activities are the requirements of your tutorial</source>
-            <target>de aangevinkte activiteiten zijn de vereisten van je tutorial</target>
-          </trans-unit>
-          <trans-unit id="526st57" resname="you can select the requirements for your tutorial here">
-            <source>you can select the requirements for your tutorial here</source>
-            <target>u kunt hier de voorwaarden voor uw tutorial selecteren</target>
-          </trans-unit>
-
-     <trans-unit id="UnRchdH" resname="choose the activities for your tutorial">
-             <source>choose the activities for your tutorial</source>
-             <target>kies de activiteiten voor je tutorial</target>
-           </trans-unit>
-           <trans-unit id="kBDHSYp" resname="the checked activities are the activities of your tutorial">
-             <source>the checked activities are the activities of your tutorial</source>
-             <target>de aangevinkte activiteiten zijn de activiteiten van je tutorial</target>
-           </trans-unit>
-           <trans-unit id="NWBXYC7" resname="you can select the activities for your tutorial here">
-             <source>you can select the activities for your tutorial here</source>
-             <target>je kunt hier de activiteiten voor je tutorial selecteren</target>
-           </trans-unit>
-           <trans-unit id="QHS54AQ" resname="view portfolio">
-             <source>view portfolio</source>
-             <target>bekijk portfolio</target>
-           </trans-unit>
-           <trans-unit id="9KTXMgd" resname="you need to login before you can submit">
-             <source>you need to login before you can submit</source>
-             <target>je moet eerst inloggen voor je kan indienen</target>
-           </trans-unit>
-           <trans-unit id="xjsudgd" resname="there are currently no participants on this tutorial">
-                        <source>there are currently no participants on this tutorial</source>
-                        <target>er zijn momenteel geen deelnemers aan deze tutorial</target>
-                      </trans-unit>
-     <trans-unit id="BDhxtgd" resname="no contact info">
-                  <source>no contact info</source>
-                  <target>geen contact info</target>
-                </trans-unit>
-      <trans-unit id="kRRRTYp" resname="there are currently no requirements to choose from">
-                   <source>there are currently no requirements to choose from</source>
-                   <target>er zijn momenteel geen voorwaarden om uit te kiezen</target>
-                 </trans-unit>
-                 <trans-unit id="NBDHXC7" resname="there are currently no requirements on this tutorial">
-                   <source>there are currently no requirements on this tutorial</source>
-                   <target>er zijn momenteel geen voorwaarden voor deze tutorial</target>
-                 </trans-unit>
-                 <trans-unit id="QHhetDQ" resname="there are currently no activities on this tutorial">
-                   <source>there are currently no activities on this tutorial</source>
-                   <target>er zijn momenteel geen activiteiten om uit te kiezen</target>
-                 </trans-unit>
-                 <trans-unit id="QsdcvDQ" resname="create your own team today and take on the challenges together">
-                                    <source>create your own team today and take on the challenges together</source>
-                                    <target>creëer vandaag nog je eigen team en ga samen de challenges aan</target>
-                                  </trans-unit>
-                 <trans-unit id="NXhstgd" resname="you need to login before you can submit">
-                   <source>you need to login before you can submit</source>
-                   <target>je moet eerst inloggen voor je kan indienen</target>
-                 </trans-unit>
-
-                 <trans-unit id="NSTARCd" resname="get your self found by the best challenge leads and organizations and join today">
-                                    <source>get your self found by the best challenge leads and organizations and join today</source>
-                                    <target>vind jezelf door de beste challenge leads en organisaties en doe vandaag nog mee</target>
-                                  </trans-unit>
-                 <trans-unit id="NXBCtDQ" resname="lets lift off">
-                                    <source>lets lift off</source>
-                                    <target>laten we opstijgen</target>
-                                  </trans-unit>
-      <trans-unit id="ujh12Na" resname="from">
-          <source>from</source>
-          <target>van</target>
-       </trans-unit>
-       <trans-unit id="uNDHc6a" resname="create a team">
-                 <source>create a team</source>
-                 <target>start een team</target>
-              </trans-unit>
-        <trans-unit id="BAGXc6a" resname="create your own team">
-                         <source>create your own team</source>
-                         <target>stel je eigen team samen</target>
-                      </trans-unit>
-        <trans-unit id="BXvzx6a" resname="post a challenge for students ">
-                                 <source>post a challenge for students </source>
-                                 <target>plaats een challenge voor studenten</target>
-                              </trans-unit>
-        <trans-unit id="BSGxztQ" resname="propose challenges">
-                      <source>propose challenges</source>
-                      <target>challenges voorstellen</target>
-                    </trans-unit>
-
-       <trans-unit id="tLCXZa2" resname="prices">
-               <source>prices</source>
-               <target>prijzen</target>
-             </trans-unit>
-       <trans-unit id="BsgXTC7" resname="reward for solutions">
-               <source>reward for solutions</source>
-               <target>beloning voor oplossingen</target>
-             </trans-unit>
-       <trans-unit id="BXHCTC7" resname="organizations are always looking for creative, driven and talented newbies. View the challenges and internships and respond or apply!">
-                      <source>organizations are always looking for creative, driven and talented newbies. View the challenges and internships and respond or apply!</source>
-                      <target>organisaties zijn altijd op zoek naar creatieve, gedreven en getalenteerde newbies. Bekijk de challenges en stages en reageer of solliciteer!
+      <trans-unit id="GarBHlu" resname="summary note">
+        <source>summary note</source>
+        <target>samenvattende opmerking</target>
+      </trans-unit>
+      <trans-unit id="VxTMDrR" resname="your internship summary note">
+        <source>your internship summary note</source>
+        <target>je stageoverzicht</target>
+      </trans-unit>
+      <trans-unit id="X5t5oVu" resname="position conditions (everything that the applicant must meet)">
+        <source>position conditions (everything that the applicant must meet)</source>
+        <target>functievoorwaarden (alles waaraan de sollicitant moet voldoen)</target>
+      </trans-unit>
+      <trans-unit id="rTOHt.." resname="new condition">
+        <source>new condition</source>
+        <target>nieuwe voorwaarde</target>
+      </trans-unit>
+      <trans-unit id="KgdkZJV" resname="enter a condition here">
+        <source>enter a condition here</source>
+        <target>voer hier een voorwaarde in</target>
+      </trans-unit>
+      <trans-unit id="li.c0kh" resname="location of the position">
+        <source>location of the position</source>
+        <target>locatie van de positie</target>
+      </trans-unit>
+      <trans-unit id="aWdMAeL" resname="your internship job location">
+        <source>your internship job location</source>
+        <target>locatie van je stageplaats</target>
+      </trans-unit>
+      <trans-unit id="6NBlMOE" resname="post a tutorial">
+        <source>post a tutorial</source>
+        <target>plaats een tutorial</target>
+      </trans-unit>
+      <trans-unit id="5hD52TU" resname="post a tutorial for students">
+        <source>post a tutorial for students</source>
+        <target>plaats een tutorial voor studenten</target>
+      </trans-unit>
+      <trans-unit id="bRYjlTC" resname="think about problem solving">
+        <source>think about problem solving</source>
+        <target>denk aan probleem oplossen</target>
+      </trans-unit>
+      <trans-unit id="sUQLO4H" resname="start date of the position">
+        <source>start date of the position</source>
+        <target>startdatum van de positie</target>
+      </trans-unit>
+      <trans-unit id="dzUE1Yo" resname="end date of the position">
+        <source>end date of the position</source>
+        <target>einddatum van de positie</target>
+      </trans-unit>
+      <trans-unit id="anLj5vM" resname="extensive description of the position">
+        <source>extensive description of the position</source>
+        <target>uitgebreide omschrijving van de positie</target>
+      </trans-unit>
+      <trans-unit id="dvhs2Rk" resname="example: Education: MBO 3 ICT administrator">
+        <source>example: Education: MBO 3 ICT administrator</source>
+        <target>voorbeeld: Opleiding: MBO 3 ICT-beheerder</target>
+      </trans-unit>
+      <trans-unit id="H7ntdOK" resname="choose the requirements for your tutorial">
+        <source>choose the requirements for your tutorial</source>
+        <target>kies de voorwaarden voor uw tutorial</target>
+      </trans-unit>
+      <trans-unit id="jyyHCiF" resname="the checked activities are the requirements of your tutorial">
+        <source>the checked activities are the requirements of your tutorial</source>
+        <target>de aangevinkte activiteiten zijn de vereisten van je tutorial</target>
+      </trans-unit>
+      <trans-unit id="r0T6Uy." resname="you can select the requirements for your tutorial here">
+        <source>you can select the requirements for your tutorial here</source>
+        <target>u kunt hier de voorwaarden voor uw tutorial selecteren</target>
+      </trans-unit>
+      <trans-unit id="GliFu0y" resname="choose the activities for your tutorial">
+        <source>choose the activities for your tutorial</source>
+        <target>kies de activiteiten voor je tutorial</target>
+      </trans-unit>
+      <trans-unit id="m0JW7iq" resname="the checked activities are the activities of your tutorial">
+        <source>the checked activities are the activities of your tutorial</source>
+        <target>de aangevinkte activiteiten zijn de activiteiten van je tutorial</target>
+      </trans-unit>
+      <trans-unit id="TxnrhYt" resname="you can select the activities for your tutorial here">
+        <source>you can select the activities for your tutorial here</source>
+        <target>je kunt hier de activiteiten voor je tutorial selecteren</target>
+      </trans-unit>
+      <trans-unit id="18yzBqj" resname="no contact info">
+        <source>no contact info</source>
+        <target>geen contact info</target>
+      </trans-unit>
+      <trans-unit id="tPsK9Ev" resname="there are currently no requirements to choose from">
+        <source>there are currently no requirements to choose from</source>
+        <target>er zijn momenteel geen voorwaarden om uit te kiezen</target>
+      </trans-unit>
+      <trans-unit id="RNqaKYH" resname="there are currently no requirements on this tutorial">
+        <source>there are currently no requirements on this tutorial</source>
+        <target>er zijn momenteel geen voorwaarden voor deze tutorial</target>
+      </trans-unit>
+      <trans-unit id="97M97GY" resname="there are currently no activities on this tutorial">
+        <source>there are currently no activities on this tutorial</source>
+        <target>er zijn momenteel geen activiteiten om uit te kiezen</target>
+      </trans-unit>
+      <trans-unit id="EtZQiio" resname="create your own team today and take on the challenges together">
+        <source>create your own team today and take on the challenges together</source>
+        <target>creëer vandaag nog je eigen team en ga samen de challenges aan</target>
+      </trans-unit>
+      <trans-unit id="4oUC3En" resname="get your self found by the best challenge leads and organizations and join today">
+        <source>get your self found by the best challenge leads and organizations and join today</source>
+        <target>vind jezelf door de beste challenge leads en organisaties en doe vandaag nog mee</target>
+      </trans-unit>
+      <trans-unit id="oGjo.YL" resname="lets lift off">
+        <source>lets lift off</source>
+        <target>laten we opstijgen</target>
+      </trans-unit>
+      <trans-unit id="dafWD9E" resname="create a team">
+        <source>create a team</source>
+        <target>start een team</target>
+      </trans-unit>
+      <trans-unit id="FKAIwoa" resname="create your own team">
+        <source>create your own team</source>
+        <target>stel je eigen team samen</target>
+      </trans-unit>
+      <trans-unit id="B1tcE4c" resname="post a challenge for students ">
+        <source>post a challenge for students </source>
+        <target>plaats een challenge voor studenten</target>
+      </trans-unit>
+      <trans-unit id="RUPk5Dj" resname="propose challenges">
+        <source>propose challenges</source>
+        <target>challenges voorstellen</target>
+      </trans-unit>
+      <trans-unit id=".oH5OQ." resname="prices">
+        <source>prices</source>
+        <target>prijzen</target>
+      </trans-unit>
+      <trans-unit id="xdD.uel" resname="reward for solutions">
+        <source>reward for solutions</source>
+        <target>beloning voor oplossingen</target>
+      </trans-unit>
+      <trans-unit id="PNdHP1v" resname="organizations are always looking for creative, driven and talented newbies. View the challenges and internships and respond or apply!">
+        <source>organizations are always looking for creative, driven and talented newbies. View the challenges and internships and respond or apply!</source>
+        <target>organisaties zijn altijd op zoek naar creatieve, gedreven en getalenteerde newbies. Bekijk de challenges en stages en reageer of solliciteer!
                               </target>
-                    </trans-unit>
-       <trans-unit id="KANZGYp" resname="conduction Academy provides both matchmaking and an online internship platform">
-                    <source>conduction Academy provides both matchmaking and an online internship platform</source>
-                    <target>conduction academy verzorgt zowel matching als een online stageplatform</target>
-                  </trans-unit>
-       <trans-unit id="BSHXTYp" resname="the latest stageplatform news, articles, and resources, sent straight to your inbox every month.">
-                           <source>the latest stageplatform news, articles, and resources, sent straight to your inbox every month.</source>
-                           <target>het laatse nieuws over het stageplatform, elke maand rechtstreeks in jouw mailbox</target>
-                         </trans-unit>
-       <trans-unit id="AQESYC7" resname="join!">
-                    <source>join!</source>
-                    <target>doe mee!</target>
-                  </trans-unit>
-                  <trans-unit id="MKL54AQ" resname="create a profile and find the best challenges and organization for your internship">
-                    <source>create a profile and find the best challenges and organization for your internship</source>
-                    <target>maak een profiel aan en vind de leukste challenges en organisatie voor jouw stage</target>
-                  </trans-unit>
-       <trans-unit id="tXDsaa2" resname="become part of the community!">
-                      <source>become part of the community!</source>
-                      <target>word onderdeel van de community! </target>
-                    </trans-unit>
-              <trans-unit id="BPLkmC7" resname="to find the best internships, challenges and tutorials that can boost your career">
-                      <source>to find the best internships, challenges and tutorials that can boost your career</source>
-                      <target>om de beste stages, challenges  en tutorials te vinden die je carrière een boost kunnen geven</target>
-                    </trans-unit>
-       <trans-unit id="NxgZZa2" resname="do you as an organization have a (digital) issue or a challenge? And do you want a fresh look or an innovative solution? Post a challenge and invite students to respond and pitch their ideas and / or products!">
-                      <source>do you as an organization have a (digital) issue or a challenge? And do you want a fresh look or an innovative solution? Post a challenge and invite students to respond and pitch their ideas and / or products!</source>
-                      <target>heeft u als organisatie een (digitaal) vraagstuk of een challenge? En wilt u een frisse blik of een innovatieve oplossing ? Plaats een challenge en nodig studenten uit om te reageren en hun ideeën en / of producten te pitchen!</target>
-                    </trans-unit>
-       <trans-unit id="BsgXCZa" resname="by starting your own team, you can attract teammates and take on challenges / challenges together. There is no set definition of who should be on a team, so you could be a group of students from the same study or a multidisciplinary team of students from different studies.">
-                 <source>by starting your own team, you can attract teammates and take on challenges / challenges together. There is no set definition of who should be on a team, so you could be a group of students from the same study or a multidisciplinary team of students from different studies.</source>
-                 <target>door je eigen teams te starten, kun je teamgenoten aantrekken en samen challenges aangaan, er is geen vaste definitie van wie er in een team zou moeten zitten, dus je zou een groep studenten van dezelfde studie kunnen zijn of een multidisciplinair team dat uit verschillende studies bestaat.</target>
-              </trans-unit>
-        <trans-unit id="NAZKsai" resname="the choice is yours!">
-                            <source>the choice is yours!</source>
-                            <target>de keuze is aan jou!</target>
-                          </trans-unit>
-      <trans-unit id="E12Afs2" resname="add your first tutorial">
-          <source>add your first tutorial</source>
-          <target>voeg je eerste tutorial toe</target>
-       </trans-unit>
-      <trans-unit id="i12n3Na" resname="there are currently no participants on this tutorial">
-          <source>there are currently no participants on this tutorial</source>
-          <target>er zijn momenteel geen deelnemers voor deze tutorial</target>
-       </trans-unit>
-      <trans-unit id="Uj12N2z" resname="change your tutorial here">
-          <source>change your tutorial here</source>
-          <target>pas hier uw tutorial aan</target>
-       </trans-unit>
-      <trans-unit id="IO12NA3" resname="you are a member of this team">
-          <source>you are a member of this team</source>
-          <target>je bent lid van dit team</target>
-       </trans-unit>
-      <trans-unit id="JO921n2" resname="this team participates in these tutorials">
-          <source>this team participates in these tutorials</source>
-          <target>dit team doet mee met deze tutorials</target>
-       </trans-unit>
+      </trans-unit>
+      <trans-unit id="wTNyZCw" resname="conduction Academy provides both matchmaking and an online internship platform">
+        <source>conduction Academy provides both matchmaking and an online internship platform</source>
+        <target>conduction academy verzorgt zowel matching als een online stageplatform</target>
+      </trans-unit>
+      <trans-unit id="J8s8g9O" resname="the latest stageplatform news, articles, and resources, sent straight to your inbox every month.">
+        <source>the latest stageplatform news, articles, and resources, sent straight to your inbox every month.</source>
+        <target>het laatse nieuws over het stageplatform, elke maand rechtstreeks in jouw mailbox</target>
+      </trans-unit>
+      <trans-unit id="35ruT4M" resname="join!">
+        <source>join!</source>
+        <target>doe mee!</target>
+      </trans-unit>
+      <trans-unit id="_tcVFJ1" resname="create a profile and find the best challenges and organization for your internship">
+        <source>create a profile and find the best challenges and organization for your internship</source>
+        <target>maak een profiel aan en vind de leukste challenges en organisatie voor jouw stage</target>
+      </trans-unit>
+      <trans-unit id="DcYLuQV" resname="become part of the community!">
+        <source>become part of the community!</source>
+        <target>word onderdeel van de community! </target>
+      </trans-unit>
+      <trans-unit id="WOIqLIy" resname="to find the best internships, challenges and tutorials that can boost your career">
+        <source>to find the best internships, challenges and tutorials that can boost your career</source>
+        <target>om de beste stages, challenges  en tutorials te vinden die je carrière een boost kunnen geven</target>
+      </trans-unit>
+      <trans-unit id="_eZ1FWk" resname="do you as an organization have a (digital) issue or a challenge? And do you want a fresh look or an innovative solution? Post a challenge and invite students to respond and pitch their ideas and / or products!">
+        <source>do you as an organization have a (digital) issue or a challenge? And do you want a fresh look or an innovative solution? Post a challenge and invite students to respond and pitch their ideas and / or products!</source>
+        <target>heeft u als organisatie een (digitaal) vraagstuk of een challenge? En wilt u een frisse blik of een innovatieve oplossing ? Plaats een challenge en nodig studenten uit om te reageren en hun ideeën en / of producten te pitchen!</target>
+      </trans-unit>
+      <trans-unit id="l7wq8Wg" resname="by starting your own team, you can attract teammates and take on challenges / challenges together. There is no set definition of who should be on a team, so you could be a group of students from the same study or a multidisciplinary team of students from different studies.">
+        <source>by starting your own team, you can attract teammates and take on challenges / challenges together. There is no set definition of who should be on a team, so you could be a group of students from the same study or a multidisciplinary team of students from different studies.</source>
+        <target>door je eigen teams te starten, kun je teamgenoten aantrekken en samen challenges aangaan, er is geen vaste definitie van wie er in een team zou moeten zitten, dus je zou een groep studenten van dezelfde studie kunnen zijn of een multidisciplinair team dat uit verschillende studies bestaat.</target>
+      </trans-unit>
+      <trans-unit id="nd.Owoq" resname="the choice is yours!">
+        <source>the choice is yours!</source>
+        <target>de keuze is aan jou!</target>
+      </trans-unit>
+      <trans-unit id="Kb.mXyY" resname="add your first tutorial">
+        <source>add your first tutorial</source>
+        <target>voeg je eerste tutorial toe</target>
+      </trans-unit>
+      <trans-unit id="jIhquM2" resname="change your tutorial here">
+        <source>change your tutorial here</source>
+        <target>pas hier uw tutorial aan</target>
+      </trans-unit>
+      <trans-unit id="jwLNi7t" resname="you are a member of this team">
+        <source>you are a member of this team</source>
+        <target>je bent lid van dit team</target>
+      </trans-unit>
+      <trans-unit id="cTDgRJV" resname="this team participates in these tutorials">
+        <source>this team participates in these tutorials</source>
+        <target>dit team doet mee met deze tutorials</target>
+      </trans-unit>
+      <trans-unit id="_nQlndP" resname="you need to be logged in to join a team">
+        <source>you need to be logged in to join a team</source>
+        <target>je moet ingelogd zijn om je bij een team in te kunnen schrijven</target>
+      </trans-unit>
+      <trans-unit id="RZCkwP6" resname="are you a creative and driven student and looking for a different kind of internship?">
+        <source>are you a creative and driven student and looking for a different kind of internship?</source>
+        <target>Ben jij een creatieve en gedreven student en ben je ook zoek naar een ander soort stage?</target>
+      </trans-unit>
+      <trans-unit id="sKqKbDW" resname="likes">
+        <source>likes</source>
+        <target>likes</target>
+      </trans-unit>
+      <trans-unit id="mdHKjLn" resname="no organization found">
+        <source>no organization found</source>
+        <target>geen organisatie gevonden</target>
+      </trans-unit>
+      <trans-unit id="95YrJhB" resname="participations">
+        <source>participations</source>
+        <target>deelnemers</target>
+      </trans-unit>
+      <trans-unit id="LXCZmuG" resname="reviewer">
+        <source>reviewer</source>
+        <target>beoordelaar</target>
+      </trans-unit>
+      <trans-unit id="Vjk0eA_" resname="no organization">
+        <source>no organization</source>
+        <target>geen organisatie</target>
+      </trans-unit>
+      <trans-unit id="P9AQm8A" resname="accepted on">
+        <source>accepted on</source>
+        <target>geaccepteert op</target>
+      </trans-unit>
+      <trans-unit id="A5z9i9Y" resname="no status">
+        <source>no status</source>
+        <target>geen status</target>
+      </trans-unit>
+      <trans-unit id="lvbBnV0" resname="no participations found">
+        <source>no participations found</source>
+        <target>geen deelnemers gevonden</target>
+      </trans-unit>
+      <trans-unit id="790gVqc" resname="no programs found">
+        <source>no programs found</source>
+        <target>geen programma's gevonden</target>
+      </trans-unit>
+      <trans-unit id="3NHVIj9" resname="Name">
+        <source>Name</source>
+        <target>naam</target>
+      </trans-unit>
+      <trans-unit id="VY0Sm8C" resname="View&#10;                                                Details">
+        <source>View
+                                                Details</source>
+        <target>details bekijken</target>
+      </trans-unit>
+      <trans-unit id="ZXwaKE6" resname="summery">
+        <source>summery</source>
+        <target>samenvatting</target>
+      </trans-unit>
+      <trans-unit id="EqOdKaT" resname="Vacature informatie">
+        <source>Vacature informatie</source>
+        <target>vacature informatie</target>
+      </trans-unit>
+      <trans-unit id="kb.Ac5d" resname="name of the position">
+        <source>name of the position</source>
+        <target>naam van de stage</target>
+      </trans-unit>
+      <trans-unit id="eYTKUDF" resname="no name available">
+        <source>no name available</source>
+        <target>geen naam beschikbaar</target>
+      </trans-unit>
+      <trans-unit id="_2ss5SB" resname="Toggle Dropdown">
+        <source>Toggle Dropdown</source>
+        <target>toggle Dropdown</target>
+      </trans-unit>
+      <trans-unit id="IWm8EsD" resname="here you can see and pay all your invoices">
+        <source>here you can see and pay all your invoices</source>
+        <target>hier kunt u al uw facturen zien en betalen</target>
+      </trans-unit>
+      <trans-unit id="49_GWMT" resname="text about invoices">
+        <source>text about invoices</source>
+        <target>tekst over facturen</target>
+      </trans-unit>
+      <trans-unit id="3PavbYo" resname="dashboard organization">
+        <source>dashboard organization</source>
+        <target>dashboard organisatie</target>
+      </trans-unit>
+      <trans-unit id="yIDvcxV" resname="here is an overview of all participants that want to join one of your projects.">
+        <source>here is an overview of all participants that want to join one of your projects.</source>
+        <target>hier is een overzicht van alle deelnemers die mee willen doen aan een van uw projecten.</target>
+      </trans-unit>
+      <trans-unit id="_aqTslU" resname="you can choose to view their application and decide to accept or reject them.">
+        <source>you can choose to view their application and decide to accept or reject them.</source>
+        <target>u kunt ervoor kiezen om hun aanvraag te bekijken en beslissen om ze te accepteren of af te wijzen.</target>
+      </trans-unit>
+      <trans-unit id="yFzOCGk" resname="save changes">
+        <source>save changes</source>
+        <target>save changes</target>
+      </trans-unit>
+      <trans-unit id="A1i9bKq" resname="no subject">
+        <source>no subject</source>
+        <target>geen onderwerp</target>
+      </trans-unit>
+      <trans-unit id="wSXQOXt" resname="accept">
+        <source>accept</source>
+        <target>accepteren</target>
+      </trans-unit>
+      <trans-unit id=".V_MvtP" resname="decline">
+        <source>decline</source>
+        <target>afwijzen</target>
+      </trans-unit>
+      <trans-unit id="d3WauWr" resname="no participants found">
+        <source>no participants found</source>
+        <target>geen deelnemers gevonden</target>
+      </trans-unit>
+      <trans-unit id="LOYQXwG" resname="[name]">
+        <source>[name]</source>
+        <target>[naam]</target>
+      </trans-unit>
+      <trans-unit id="mACzRWu" resname="[text about what a team is]">
+        <source>[text about what a team is]</source>
+        <target>[text about what a team is]</target>
+      </trans-unit>
+      <trans-unit id="WkTIjua" resname="They say 1+1=3, so that’s why we recommend students to work in teams on challenges!">
+        <source>They say 1+1=3, so that’s why we recommend students to work in teams on challenges!</source>
+        <target>ze zeggen 1 + 1 = 3, dus daarom raden we studenten aan om in teams aan challenges te werken!</target>
+      </trans-unit>
+      <trans-unit id="ZMvhalM" resname="your tutorial name">
+        <source>your tutorial name</source>
+        <target>jouw tutorial naam</target>
+      </trans-unit>
+      <trans-unit id="9RbmwmS" resname="suspend">
+        <source>suspend</source>
+        <target>opschorten</target>
+      </trans-unit>
+      <trans-unit id="25XeQct" resname="there are currently no activities to choose from">
+        <source>there are currently no activities to choose from</source>
+        <target>er zijn momenteel geen activiteiten om uit te kiezen</target>
+      </trans-unit>
+      <trans-unit id="zKBmL53" resname="Likes">
+        <source>Likes</source>
+        <target>likes</target>
+      </trans-unit>
+      <trans-unit id="Ha4zMa1" resname="funds">
+        <source>funds</source>
+        <target>tegoed</target>
+      </trans-unit>
+      <trans-unit id="VvCSFIp" resname="select amount you wish to add to account">
+        <source>select amount you wish to add to account</source>
+        <target>selecteer de hoeveelheid waarmee u wilt opwaarderen</target>
+      </trans-unit>
+      <trans-unit id="s0RPA7R" resname="amount with taxes:">
+        <source>amount with taxes:</source>
+        <target>totaal met belasting:</target>
+      </trans-unit>
+      <trans-unit id="A19M8ED" resname="add funds">
+        <source>add funds</source>
+        <target>tegoed opwaarderen</target>
+      </trans-unit>
+      <trans-unit id="BA.9WSX" resname="payment">
+        <source>payment</source>
+        <target>betaling</target>
+      </trans-unit>
+      <trans-unit id="phM4Yqw" resname="administration contact">
+        <source>administration contact</source>
+        <target>administratie contact</target>
+      </trans-unit>
+      <trans-unit id="lDgbbeC" resname="privacy contact">
+        <source>privacy contact</source>
+        <target>privacy contact</target>
+      </trans-unit>
+      <trans-unit id="pCw8TY9" resname="technical contact">
+        <source>technical contact</source>
+        <target>technisch contact</target>
+      </trans-unit>
+      <trans-unit id="Rt_JKGd" resname="add organization">
+        <source>add organization</source>
+        <target>organisatie toevoegen</target>
+      </trans-unit>
+      <trans-unit id="HBNRkK2" resname="see all organizations">
+        <source>see all organizations</source>
+        <target>bekijk alle organisaties</target>
+      </trans-unit>
+      <trans-unit id="zpIlGaP" resname="transaction">
+        <source>transaction</source>
+        <target>transactie</target>
+      </trans-unit>
+      <trans-unit id="6NRAUIc" resname="wallet">
+        <source>wallet</source>
+        <target>portemonnee</target>
+      </trans-unit>
+      <trans-unit id="e0lLpym" resname="last change:">
+        <source>last change:</source>
+        <target>laatste update:</target>
+      </trans-unit>
+      <trans-unit id="ee4ZPNQ" resname="stage-platform">
+        <source>stage-platform</source>
+        <target>stage-platform</target>
+      </trans-unit>
+      <trans-unit id="sTwOoVW" resname="oke">
+        <source>oke</source>
+        <target>oke</target>
+      </trans-unit>
+      <trans-unit id="0RAqMUf" resname="Thanks for wanting to join conduction academy. &lt;br&gt; With this form you are able to create an organization for conduction academy. &lt;br&gt; Having created an organization you are able to post internships, tutorials and challenges. &lt;br&gt; Allowing students to participate in these activities and apply for your internships!">
+        <source>Thanks for wanting to join conduction academy. &lt;br&gt; With this form you are able to create an organization for conduction academy. &lt;br&gt; Having created an organization you are able to post internships, tutorials and challenges. &lt;br&gt; Allowing students to participate in these activities and apply for your internships!</source>
+        <target><![CDATA[Bedankt dat u mee wilt doen met conduction academy. <br> Met dit formulier is het mogelijk om een organisatie aan te maken op conduction academy. <br> Het hebben van een organisatie stelt u in staat om stages, tutorials en challenges toe te voegen aan het platform. <br> Wat studenten in staat brengt te solliciteren voor uw stages.]]></target>
+      </trans-unit>
+      <trans-unit id="sqWRGmO" resname="Academy">
+        <source>Academy</source>
+        <target>academy</target>
+      </trans-unit>
+      <trans-unit id="yGPMhs3" resname="Proto Applicatie NL Design">
+        <source>Proto Applicatie NL Design</source>
+        <target>proto Applicatie NL Design</target>
+      </trans-unit>
+      <trans-unit id="fKv0VNR" resname="welcome to the proto application NL design, this application offers a thin implementation of Symfony for running NL Design System on a commonground Haven environment.">
+        <source>welcome to the proto application NL design, this application offers a thin implementation of Symfony for running NL Design System on a commonground Haven environment.</source>
+        <target>welkom bij de proto applicatie NL design, deze applicatie biedt een dunne implementatie van Symfony voor het draaien van NL Design System op een gemeenschappelijke Haven omgeving.</target>
+      </trans-unit>
+      <trans-unit id="2RqRQeO" resname="why do I see this page?">
+        <source>why do I see this page?</source>
+        <target>waarom zie ik deze pagina?</target>
+      </trans-unit>
+      <trans-unit id="IIMR5Jl" resname="congratulations! Your installation was successful!">
+        <source>congratulations! Your installation was successful!</source>
+        <target>Gefeliciteerd! Je installatie is gelukt!</target>
+      </trans-unit>
+      <trans-unit id="Krv8UFI" resname="however, a few additional details are required for the application to function properly">
+        <source>however, a few additional details are required for the application to function properly</source>
+        <target>er zijn echter een paar aanvullende details vereist om de toepassing correct te laten werken</target>
+      </trans-unit>
+      <trans-unit id="yeLCTaJ" resname="Conduction Academy">
+        <source>Conduction Academy</source>
+        <target>Conduction Academy</target>
+      </trans-unit>
+      <trans-unit id="PvkI2G2" resname="place an tutorial">
+        <source>place an tutorial</source>
+        <target>plaats een tutorial</target>
+      </trans-unit>
+      <trans-unit id="qqGovQt" resname="add your organization">
+        <source>add your organization</source>
+        <target>organisatie toevoegen</target>
+      </trans-unit>
+      <trans-unit id="sK6.NF3" resname="Sillicon Valley, CA">
+        <source>Sillicon Valley, CA</source>
+        <target>Sillicon Valley, CA</target>
+      </trans-unit>
+      <trans-unit id="XFK7j.X" resname="search for a student">
+        <source>search for a student</source>
+        <target>zoek een student</target>
+      </trans-unit>
+      <trans-unit id="K1w9JnI" resname="Contact">
+        <source>Contact</source>
+        <target>contact</target>
+      </trans-unit>
+      <trans-unit id="S5LF0LA" resname="you need to be logged in to contact a student">
+        <source>you need to be logged in to contact a student</source>
+        <target>je moet ingelogd zijn om contact op te nemen met een student</target>
+      </trans-unit>
+      <trans-unit id="uPcpigv" resname="interns can help us to solve challenges we experience inside or outside our organizations.">
+        <source>interns can help us to solve challenges we experience inside or outside our organizations.</source>
+        <target>stagiaires kunnen ons helpen bij het oplossen van challenges die we binnen of buiten onze organisaties ervaren.</target>
+      </trans-unit>
+      <trans-unit id="lDTnTmT" resname="they have a fresh and new perspective on things. Let/s focus on what interns need to learn to transform their fresh brain to strategic problem-solving skills.">
+        <source>they have a fresh and new perspective on things. Let/s focus on what interns need to learn to transform their fresh brain to strategic problem-solving skills.</source>
+        <target>Ze hebben een frisse en nieuwe kijk op dingen. Laten we ons concentreren op wat stagiaires nodig hebben om te leren om hun frisse brein om te zetten in strategische probleemoplossende vaardigheden.</target>
+      </trans-unit>
+      <trans-unit id="Xp4emII" resname="so instead of offering a student an internship, provide them with a challenge to solve.">
+        <source>so instead of offering a student an internship, provide them with a challenge to solve.</source>
+        <target>dus in plaats van een student een stageplaats aan te bieden, geef je hem een challenge om op te lossen.</target>
+      </trans-unit>
+      <trans-unit id="wMvw_8r" resname="proposals">
+        <source>proposals</source>
+        <target>voorstellen</target>
+      </trans-unit>
+      <trans-unit id="9pGkQRt" resname="relate internships, challenges to competencies">
+        <source>relate internships, challenges to competencies</source>
+        <target>relateer stages, challenges aan competenties</target>
+      </trans-unit>
+      <trans-unit id="jrVZ93h" resname="in the old world we used to do onboaring and on the job trainging, that is now no longer possible.">
+        <source>in the old world we used to do onboaring and on the job trainging, that is now no longer possible.</source>
+        <target>in de oude wereld deden we aan onboaring en on the job trainging, dat is nu niet meer mogelijk.</target>
+      </trans-unit>
+      <trans-unit id="FMu.pV2" resname="we need to find a new way for interns and new employees to onboard themselfs into the workspace">
+        <source>we need to find a new way for interns and new employees to onboard themselfs into the workspace</source>
+        <target>we moeten een nieuwe manier vinden voor stagiaires en nieuwe medewerkers om zichzelf in de werkruimte te begeven</target>
+      </trans-unit>
+      <trans-unit id="X01E36o" resname="dear">
+        <source>dear</source>
+        <target>beste</target>
+      </trans-unit>
+      <trans-unit id="z5IPGYD" resname="this is your invoice created by conduction academy">
+        <source>this is your invoice created by conduction academy</source>
+        <target>dus is uw factuur gemaakt door conduction academy</target>
+      </trans-unit>
+      <trans-unit id="r35_gnV" resname="thanks for your order">
+        <source>thanks for your order</source>
+        <target>bedankt voor uw bestelling</target>
+      </trans-unit>
+      <trans-unit id="OBPCwVL" resname="organizations are always looking for creative, driven and talented newbies.">
+        <source>organizations are always looking for creative, driven and talented newbies.</source>
+        <target>organisaties zijn altijd op zoek naar creatieve, gedreven en getalenteerde newbies.</target>
+      </trans-unit>
+      <trans-unit id="N85Wwpx" resname="view the challenges and internships and respond or apply!">
+        <source>view the challenges and internships and respond or apply!</source>
+        <target>bekijk de challenges en stages en reageer of solliciteer!</target>
+      </trans-unit>
+      <trans-unit id="CxhLxdU" resname="Sign Out">
+        <source>Sign Out</source>
+        <target>uitloggen</target>
+      </trans-unit>
+      <trans-unit id="2NN9JV6" resname="do you as an organization have a (digital) issue or a challenge?">
+        <source>do you as an organization have a (digital) issue or a challenge?</source>
+        <target>heeft u als organisatie een (digitaal) vraagstuk of een challenge?</target>
+      </trans-unit>
+      <trans-unit id="_MtVT4w" resname="by starting your own team, you can attract teammates and take on challenges / challenges together.">
+        <source>by starting your own team, you can attract teammates and take on challenges / challenges together.</source>
+        <target>door je eigen team te starten, kun je teamgenoten aantrekken en samen uitdagingen / uitdagingen aangaan.</target>
+      </trans-unit>
+      <trans-unit id="FV1CPYZ" resname="there is no set definition of who should be on a team, so you could be a group of students from the same study or a multidisciplinary team of students from different studies.">
+        <source>there is no set definition of who should be on a team, so you could be a group of students from the same study or a multidisciplinary team of students from different studies.</source>
+        <target>er is geen vaste definitie van wie er in een team zou moeten zitten, dus je zou een groep studenten van dezelfde studie kunnen zijn of een multidisciplinair team van studenten van verschillende studies.</target>
+      </trans-unit>
+      <trans-unit id="V5jeb4o" resname="and do you want a fresh look or an innovative solution?">
+        <source>and do you want a fresh look or an innovative solution?</source>
+        <target>en wilt u een frisse blik of een innovatieve oplossing?</target>
+      </trans-unit>
+      <trans-unit id="kjm7DS7" resname="post a challenge and invite students to respond and pitch their ideas and / or products!">
+        <source>post a challenge and invite students to respond and pitch their ideas and / or products!</source>
+        <target>plaats een challenge en nodig studenten uit om te reageren en hun ideeën en / of producten te pitchen!</target>
+      </trans-unit>
+      <trans-unit id="LPCeor9" resname="are you a creative and driven student and looking for a different kind of internship? Here we offer challenges from companies with special challenges, who are looking for a suitable solution. You as a student can participate! Pitch your innovative solution / idea for these challenges and win a unique internship where you can implement your idea. You can do this individually or with others. Looking for team players watch">
+        <source>are you a creative and driven student and looking for a different kind of internship? Here we offer challenges from companies with special challenges, who are looking for a suitable solution. You as a student can participate! Pitch your innovative solution / idea for these challenges and win a unique internship where you can implement your idea. You can do this individually or with others. Looking for team players watch</source>
+        <target>Ben jij een creatieve en gedreven student en op zoek naar een ander soort stage? Hier bieden we uitdagingen aan van bedrijven met bijzondere challenges, die op zoek zijn naar een passende oplossing. Jij als student kan meedoen! Pitch jouw innovatieve oplossing / idee voor deze uitdagingen en win een unieke stage waarin jij jouw idee kunt implementeren. U kunt dit individueel of met anderen doen. Op zoek naar teamspelers kijken</target>
+      </trans-unit>
+      <trans-unit id="jlv0cgC" resname="add invoice">
+        <source>add invoice</source>
+        <target>factuur toevoegen</target>
+      </trans-unit>
+      <trans-unit id="bJ4oG1I" resname="due to">
+        <source>due to</source>
+        <target>vanwege</target>
+      </trans-unit>
+      <trans-unit id="t.CPCtX" resname="no invoices found">
+        <source>no invoices found</source>
+        <target>Geen facturen gevonden</target>
+      </trans-unit>
+      <trans-unit id="2VHqN.d" resname="interns are of big value, they bring new and fresh energy to your organization! Also they are the future employees :)">
+        <source>interns are of big value, they bring new and fresh energy to your organization! Also they are the future employees :)</source>
+        <target>Stagiaires zijn van grote waarde, ze brengen nieuwe en frisse energie in uw organisatie! Zij zijn ook de toekomstige werknemers :)</target>
+      </trans-unit>
+      <trans-unit id="XMk8PWA" resname="invoice details">
+        <source>invoice details</source>
+        <target>factuur details</target>
+      </trans-unit>
+      <trans-unit id="_SNx8Qv" resname="they say 1+1=3, so that’s why we recommend students to work in teams on challenges! Together you can come up with the best solutions for challenges.">
+        <source>they say 1+1=3, so that’s why we recommend students to work in teams on challenges! Together you can come up with the best solutions for challenges.</source>
+        <target>Ze zeggen 1 + 1 = 3, dus daarom raden we studenten aan om in teams aan uitdagingen te werken! Samen bedenk je de beste oplossingen voor uitdagingen.</target>
+      </trans-unit>
+      <trans-unit id="63IZig5" resname="We collect as many tutorials as possible that share your knowledge and which increases the chance of a great internship! For some internships it is going through a few tutorials is a must, you will then submit a little after watching test so that the company can see that you have acquired the knowledge. That also makes it much easier for you to immediately join your internship company">
+        <source>We collect as many tutorials as possible that share your knowledge and which increases the chance of a great internship! For some internships it is going through a few tutorials is a must, you will then submit a little after watching test so that the company can see that you have acquired the knowledge. That also makes it much easier for you to immediately join your internship company</source>
+        <target>We verzamelen zoveel mogelijk tutorials die jouw kennis delen en die de kans op een toffe stage vergroten! Voor sommige stages is het doorlopen van een paar werkcolleges een must, je levert dan een stukje na het bekijken van toets in zodat het bedrijf kan zien dat je de kennis hebt opgedaan. Dat maakt het voor jou ook veel gemakkelijker om direct bij je stagebedrijf te komen</target>
+      </trans-unit>
+      <trans-unit id="cskMs54" resname="in the old world we used to do onboaring and on the job trainging, that is now no longer possible. We need to find a new way for interns and new employees to onboard themselfs into the workspace">
+        <source>in the old world we used to do onboaring and on the job trainging, that is now no longer possible. We need to find a new way for interns and new employees to onboard themselfs into the workspace</source>
+        <target>in de oude wereld deden we aan onboaring en on the job trainging, dat is nu niet meer mogelijk. We moeten een nieuwe manier vinden voor stagiaires en nieuwe medewerkers om zichzelf in de werkruimte te begevenF</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

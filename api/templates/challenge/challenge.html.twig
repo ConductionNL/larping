@@ -199,7 +199,7 @@
                                 <p class="mt-4 text-center">{{ 'you need to be logged in to apply for this challenge'|trans|capitalize }}</p>
                                 <div class="mb-5 mb-lg-6 text-center">
                                 <a class="mt-2 text-center btn btn-secondary"
-                                   href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }} </a>
+                                   href="{{ path('app_user_idvault') }}?backUrl={{ path('app_challenge_challenge', {id: challenge.id} ) }}">{{ 'click here to log in'|trans|capitalize }} </a>
                                 </div>
                                     {% endif %}
                         </div>

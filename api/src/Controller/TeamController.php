@@ -53,23 +53,24 @@ class TeamController extends AbstractController
         $variables['entries'] = $entries['hydra:member'];
         $variables['numberOfEntries'] = $entries['hydra:totalItems'];
 
-        $variables['participations'] = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants'], [''])['hydra:member'];
+        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants'], [''])['hydra:member'];
 
         if ($request->isMethod('POST') && $this->getUser()) {
             $participant['person'] = $this->getUser()->getPerson();
-            $participant['groups'][] = '/groups/'.$variables['team']['id'];
+            $participant['groupColumn'] = '/groups/'.$variables['team']['id'];
 
             if ($request->request->get('motivaton')) {
-                $participant = $request->request->get('motivaton');
+                $participant['motiviation'] = $request->request->get('motivaton');
             }
             $participant['status'] = 'pending';
 
-            $participant = $commonGroundService->saveResource($participant, ['component' => 'edu', 'type' => 'participants']);
-            $variables['team'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'groups', 'id' => $id]);
+            $commonGroundService->createResource($participant, ['component' => 'edu', 'type' => 'participants']);
+
+            return $this->redirect($this->generateUrl('app_team_team', ['id' => $id]));
         }
 
-        if (isset($variables['team']['participations']) && count($variables['team']['participations']) > 0) {
-            foreach ($variables['team']['participations'] as $part) {
+        if (isset($variables['team']['participants']) && count($variables['team']['participants']) > 0) {
+            foreach ($variables['team']['participants'] as $part) {
                 if ($part['person'] == $this->getUser()->getPerson()) {
                     $variables['userIsInTeam'] = true;
                 }

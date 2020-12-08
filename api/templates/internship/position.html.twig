@@ -98,7 +98,7 @@
                     </form>
                     {% else %}
                     <p class="mt-4 text-center">{{ 'you need to be logged in to apply to a position'|trans|capitalize }}</p>
-                    <a class="mt-2 text-center btn btn-secondary" href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }}</a>
+                    <a class="mt-2 text-center btn btn-secondary" href="{{ path('app_user_idvault') }}?backUrl={{ path('app_internship_position', {id: internship.id}) }}">{{ 'click here to log in'|trans|capitalize }}</a>
                     {% endif %}
                 </div>
             </div>

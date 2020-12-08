@@ -25,7 +25,9 @@ class StudentController extends AbstractController
      */
     public function indexAction(CommonGroundService $commonGroundService, Request $request)
     {
-        if ($request->query->get('organization') && empty($this->getUser()->getOrganization())) {
+        if (!$this->getUser() && $request->query->get('organization')) {
+            return $this->redirect($this->generateUrl('app_user_idvault').'?backUrl='.$request->getUri());
+        } elseif ($this->getUser() && $request->query->get('organization') && empty($this->getUser()->getOrganization())) {
             return $this->redirect($this->generateUrl('app_default_organization').'?backUrl='.$request->getUri());
         }
 
@@ -74,6 +76,10 @@ class StudentController extends AbstractController
         $variables['student'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'people', 'id' => $id]);
         $variables['participants'] = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants'], ['person' => $variables['student']['@id']])['hydra:member'];
 
+        if ($this->getUser()) {
+            $variables['sender'] = ($commonGroundService->isResource($this->getUser()->getOrganization()));
+        }
+
         $variables['portfolio'] = $commonGroundService->getResourceList(['component' => 'pfc', 'type' => 'portfolios'], ['owner' => $variables['student']['@id']])['hydra:member'];
         if (isset($variables['portfolio']) && $variables['portfolio']) {
             $variables['portfolio'] = $variables['portfolio'][0];
@@ -97,12 +103,10 @@ class StudentController extends AbstractController
                     $courseIds[] = $participant['course']['id'];
                 }
             }
-            if (isset($participant['groups']) && $participant['groups']) {
-                foreach ($participant['groups'] as $group) {
-                    if (!in_array($group['id'], $groupIds)) {
-                        $variables['groups'][] = $group;
-                        $groupIds[] = $group['id'];
-                    }
+            if (isset($participant['groupColumn']) && $participant['groupColumn']) {
+                if (!in_array($participant['groupColumn']['id'], $groupIds)) {
+                    $variables['groups'][] = $participant['groupColumn'];
+                    $groupIds[] = $participant['groupColumn']['id'];
                 }
             }
         }
@@ -112,7 +116,7 @@ class StudentController extends AbstractController
 
             if (isset($resource['contactMoment']) && $resource['contactMoment']) {
                 $resource['contactMoment']['receiver'] = $variables['student']['@id'];
-                $resource['contactMoment']['sender'] = $variables['student']['@id'];
+                $resource['contactMoment']['sender'] = $variables['sender']['@id'];
                 $resource['contactMoment']['channel'] = 'Direct message';
                 $resource['contactMoment']['topic'] = 'Direct message';
             }

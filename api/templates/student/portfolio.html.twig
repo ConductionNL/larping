@@ -207,33 +207,43 @@
                                             <h2 class="h1 mb-5">{{ 'contact this student'|trans|capitalize }}</h2>
                                         </div>
                                         {% if app.user|default %}
-                                            <form class="px-3"
-                                                  action="{{ path('app_student_portfolio', {id: student.id}) }}"
-                                                  method="post">
-                                                <div class="row">
-                                                    <div class="col col-12 mt-4">
-                                                        <div class="form-group">
-                                                            <label class="form-label text-muted"
-                                                                   for="messageTextarea">{{ 'what would you like to tell or ask this student'|trans|capitalize~'?' }}
-                                                                <span
-                                                                    class="text-danger">*</span></label>
-                                                            <textarea class="form-control" name="contactMoment[message]"
-                                                                      id="messageTextarea" rows="8"></textarea>
-                                                        </div>
-                                                        <div class="text-center">
-                                                            <button type="submit" class="btn btn-secondary mt-4"><span
-                                                                    class="mr-2"><i
-                                                                        class="fas fa-paper-plane"></i></span>{{ 'submit'|trans|capitalize }}
-                                                            </button>
+                                            {% if app.user.organization|default %}
+                                                <form class="px-3"
+                                                      action="{{ path('app_student_portfolio', {id: student.id}) }}"
+                                                      method="post">
+                                                    <div class="row">
+                                                        <div class="col col-12 mt-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label text-muted"
+                                                                       for="messageTextarea">{{ 'what would you like to tell or ask this student'|trans|capitalize~'?' }}
+                                                                    <span
+                                                                        class="text-danger">*</span></label>
+                                                                <textarea class="form-control"
+                                                                          name="contactMoment[message]"
+                                                                          id="messageTextarea" rows="8"></textarea>
+                                                            </div>
+                                                            <div class="text-center">
+                                                                <button type="submit"
+                                                                        class="btn btn-secondary mt-4"><span
+                                                                        class="mr-2"><i
+                                                                            class="fas fa-paper-plane"></i></span>{{ 'submit'|trans|capitalize }}
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                </form>
+                                            {% else %}
+                                                <p class="mt-4 text-center">{{ 'you need to be logged in to contact a student'|trans|capitalize }}</p>
+                                                <div class="mb-5 mb-lg-6 text-center">
+                                                    <a class="mt-2 text-center btn btn-secondary"
+                                                       href="{{ path('app_default_organization') }}?backUrl={{ path('app_student_portfolio', {id: student.id}) }}">{{ 'click here to log in'|trans|capitalize }} </a>
                                                 </div>
-                                            </form>
+                                            {% endif %}
                                         {% else %}
                                             <p class="mt-4 text-center">{{ 'you need to be logged in to contact a student'|trans|capitalize }}</p>
                                             <div class="mb-5 mb-lg-6 text-center">
                                                 <a class="mt-2 text-center btn btn-secondary"
-                                                   href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }} </a>
+                                                   href="{{ path('app_user_idvault') }}?backUrl={{ path('app_student_portfolio', {id: student.id}) }}">{{ 'click here to log in'|trans|capitalize }} </a>
                                             </div>
                                         {% endif %}
                                     </div>

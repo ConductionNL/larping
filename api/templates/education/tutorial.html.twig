@@ -85,7 +85,7 @@
                     </form>
                 {% else %}
                     <p class="mt-4 text-center">{{ 'you need to be logged in to register for a tutorial'|trans|capitalize }}</p>
-                    <a class="mt-2 text-center btn btn-secondary" href="{{ path('app_user_idvault') }}">
+                    <a class="mt-2 text-center btn btn-secondary" href="{{ path('app_user_idvault') }}?backUrl={{ path('app_education_tutorial', {id: tutorial.id}) }}">
                         {{ 'click here to log in'|trans|capitalize }}
                     </a>
                 {% endif %}

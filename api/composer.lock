@@ -640,12 +640,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/BalanceBundle.git",
-                "reference": "9629f11655eb3f284ee5501adf32f8166a02946f"
+                "reference": "10dfc214c8fc7cdd6c279982d9d9429ce762cde6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/BalanceBundle/zipball/9629f11655eb3f284ee5501adf32f8166a02946f",
-                "reference": "9629f11655eb3f284ee5501adf32f8166a02946f",
+                "url": "https://api.github.com/repos/ConductionNL/BalanceBundle/zipball/10dfc214c8fc7cdd6c279982d9d9429ce762cde6",
+                "reference": "10dfc214c8fc7cdd6c279982d9d9429ce762cde6",
                 "shasum": ""
             },
             "require": {
@@ -687,7 +687,7 @@
                 "commonground",
                 "conduction"
             ],
-            "time": "2020-12-03T12:30:24+00:00"
+            "time": "2020-12-08T10:19:20+00:00"
         },
         {
             "name": "conduction/commongroundbundle",

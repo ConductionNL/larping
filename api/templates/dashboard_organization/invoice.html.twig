@@ -6,48 +6,42 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-10">
                     <div class="card shadow-soft border-light p-4 p-md-5 position-relative">
-                        <div
-                            class="d-flex justify-content-between pb-4 pb-md-5 mb-4 mb-md-5 border-bottom border-light">
+                        <div class="d-flex justify-content-between pb-4 pb-md-5 mb-4 mb-md-5 border-bottom border-light" style="display: none">
                             <img class="image-md" src="../assets/img/brand/dark.svg" alt="Rocket Logo" width="30" height="30">
                             <div>
-                                <h4>{{ organization.name }}</h4>
+                                <h4></h4>
                                 <ul class="list-group simple-list">
                                     <li class="list-group-item font-weight-normal">
-                                        {% if organization.contact.adresses[0].houseNumber is defined and organization.contact.adresses[0].houseNumber is not empty %}
-                                            {{ organization.contact.adresses[0].houseNumber }} {{ organization.contact.adresses[0].street }}
-                                        {% else %} {{ 'adres not found'|trans|capitalize }}
-                                        {% endif %}
                                     </li>
-                                    <li class="list-group-item font-weight-normal">{{ organization.contact.adresses[0].region }}, {{ organization.contact.adresses[0].country }}</li>
                                     <li class="list-group-item font-weight-normal">
-                                        <a class="font-weight-bold text-primary" href="#">
-                                            {% if organization.contact.emails[0] is defined and organization.contact.emails[0] is not empty %}
-                                                {{ organization.contact.emails[0].email }}{% else %}
-                                                {{ 'no email found'|trans|capitalize }}
-                                            {% endif %}
-                                        </a>
+                                    </li>
+                                    <li class="list-group-item font-weight-normal">
+                                        <a class="font-weight-bold text-primary" href="#"></a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="mb-6 d-flex align-items-center justify-content-center">
                             <h2 class="h1 mb-0">{{ 'invoice details'|trans|capitalize }}</h2>
-                            <span class="badge badge-xl badge-success ml-2">{{ invoice.name }}</span>
+                            <span class="badge badge-xl badge-primary ml-2">{{ invoice.name }}</span>
                         </div>
                         <div class="row justify-content-between mb-4 mb-md-5">
-                            <div class="col-sm"><h5>{{'Client Information'|trans|capitalize}}:</h5>
+                            <div class="col-sm"><h5></h5>
                                 <div>
                                     <ul class="list-group simple-list">
-                                        <li class="list-group-item font-weight-normal">{{ commonground_rescource(customer.administrationContact).username }}</li>
-                                        <li class="list-group-item font-weight-normal">{{ customer.name }}</li>
-                                        <li class="list-group-item font-weight-normal">311 West Mechanic Lane Middletown, NY 10940
+                                        <li class="list-group-item font-weight-normal">
                                         </li>
-                                        <li class="list-group-item font-weight-normal"><a class="font-weight-bold text-primary" href="#">name@company.com</a></li>
+                                        <li class="list-group-item font-weight-normal"></li>
+                                        <li class="list-group-item font-weight-normal">
+                                        </li>
+                                        <li class="list-group-item font-weight-normal">
+                                            <a class="font-weight-bold text-primary"></a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-sm col-lg-4">
-                                <dl class="row text-sm-right">
+                                <dl class="row text-sm-left">
                                     <dt class="col-6"><strong>Invoice No.</strong></dt>
                                     <dd class="col-6">00123</dd>
                                     <dt class="col-6"><strong>Date Issued:</strong></dt>
@@ -92,12 +86,8 @@
                                                 <td class="right">{{ invoice.price }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="left"><strong>Discount (20%)</strong></td>
-                                                <td class="right">$1,699,40</td>
-                                            </tr>
-                                            <tr>
                                                 <td class="left"><strong>VAT (10%)</strong></td>
-                                                <td class="right">$679,76</td>
+                                                <td class="right"></td>
                                             </tr>
                                             <tr>
                                                 <td class="left"><strong>Total</strong></td>

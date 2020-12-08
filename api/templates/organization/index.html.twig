@@ -125,13 +125,27 @@
             </div>
         </div>
     </section>
-    <section class="section section-lg pb-5 bg-soft">
+    <section id="plaatsen" class="section section-lg pb-5 bg-soft">
         <div class="container z-2">
             <div class="row justify-content-center">
                 <div class="col-md-10 text-center">
                     <h2 class="h1">{{ 'do you miss your organization here?'|trans|capitalize }}</h2>
                     <p>{{ 'Dont worry, joining the comunnity and adding the your organizations unqiue value to it is a breazey. Just register and add it under organizations'|trans }}</p>
-                    <p class="lead py-4 text-gray"></p><a href="{{ path('app_user_idvault') }}" class="btn btn-lg btn-secondary animate-up-2">{{ 'aanmelden'|trans|capitalize }}</a></div>
+                    {% if app.user %}
+                        <a href="{{ path('app_default_organization') }}">
+                            <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal"
+                                    data-target=".pricing-modal"><span class="mr-2"><i
+                                        class="fas fa-hand-pointer"></i></span>{{'add your organization'|trans|capitalize }}
+                            </button>
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_user_idvault') }}?backUrl={{ path('app_default_organization') }}">
+                            <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal"
+                                    data-target=".pricing-modal"><span class="mr-2"><i
+                                        class="fas fa-hand-pointer"></i></span>{{ 'add your organization'|trans|capitalize }}
+                            </button>
+                        </a>
+                    {% endif %}
             </div>
         </div>
     </section>
