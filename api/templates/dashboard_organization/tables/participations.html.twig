@@ -1,0 +1,82 @@
+<div class="card border-light shadow-sm">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="h5">{{ 'participations'|trans|capitalize }}</h2>
+            </div>
+        </div>
+    </div>
+    {% if items|default %}
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">{{ 'subject'|trans|capitalize }}</th>
+                    <th scope="col">{{ 'reviewer'|trans|capitalize }}</th>
+                    <th scope="col">{{ 'status'|trans|capitalize }}</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items|slice(0, 10) %}
+                    {% if item.course.organization|default and 'http' in item.course.organization %}
+                        {% set organization = commonground_resource(item.course.organization) %}
+                        {% set path = path('app_dashboarduser_tutorial', {'id': item.course.id}) %}
+                    {% elseif item.program.organization|default and 'http' in item.program.organization %}
+                        {% set organization = commonground_resource(item.program.organizationn) %}
+                        {% set path = path('app_dashboarduser_program', {'id': item.program.id}) %}
+                    {% elseif item.groups.0.organization|default and 'http' in item.groups.0.organization %}
+                        {% set organization = commonground_resource(item.groups.0.organization) %}
+                        {% set path = path('app_dashboarduser_team', {'id': item.groups.0.id}) %}
+                    {% else %}
+                        {% set organization = null %}
+                        {% set path = null %}
+                    {% endif %}
+                    <tr
+                        {% if item.status|default and item.status == 'rejected' %}
+                            style="background: #ffcccb"
+                        {% elseif item.status|default and item.status == 'pending' %}
+                            style="background: lightyellow"
+                        {% elseif item.status|default and item.status == 'accepted' %}
+                            style="background: #d2f8d2"
+                        {% endif %}
+                    >
+                        {% if item.course|default %}
+                            <td>{{ item.course.name|capitalize }}</td>
+                        {% elseif item.program|default %}
+                            <td>{{ item.program.name|capitalize }}</td>
+                        {% elseif item.groups|default %}
+                            <td>{{ item.groups.0.name }}</td>
+                        {% endif %}
+                        {% if organization|default %}
+                            <td>{{ organization.name|capitalize }}</td>
+                        {% else %}
+                            <td style="color: lightgrey">{{ 'no organization'|trans|capitalize }}</td>
+                        {% endif %}
+                        {% if item.status|default and item.status == 'accepted' %}
+                            <td>{{ 'accepted on'|trans|capitalize~' '~item.dateOfAcceptance|date('d-m-Y', 'Europe/Amsterdam') }}</td>
+                        {% elseif item.status|default %}
+                            <td>{{ item.status|capitalize }}</td>
+                        {% else %}
+                            <td style="color: lightgrey">{{ 'no status'|trans|capitalize }}</td>
+                        {% endif %}
+
+                        {% if path|default %}
+                            <td class="text-right">
+                                <a class="btn btn-sm btn-primary" href="{{ path }}">{{ 'view'|trans|capitalize }}</a>
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        <div class="card-body text-center">
+            <p>{{ 'no participations found'|trans|capitalize }}</p>
+        </div>
+    {% endif %}
+</div>

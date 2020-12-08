@@ -1,36 +1,91 @@
 {% extends "dashboard/base.html.twig" %}
 
-{% block content %}    <!-- breadcrumbs -->
+{% block content %}
+
+    {% if tutorial.organization|default and 'http' in tutorial.organization %}
+        {% set organization = commonground_resource(tutorial.organization) %}
+    {% endif %}
+
+    <!-- breadcrumbs -->
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
                 <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
-                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}"><span class="fas fa-home"></span></a></li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_dashboarduser_index') }}">{{ 'Dashboard'|trans|capitalize }}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_dashboarduser_tutorials') }}">{{ 'Tutorials'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}"><span
+                                class="fas fa-home"></span></a>
+                    </li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboarduser_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboarduser_tutorials') }}">{{ 'tutorials'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ tutorial.name|capitalize }}</li>
                 </ol>
             </nav>
-            <h2 class="h4">{{ tutorial.name|capitalize }}</h2>
+            <h2 class="h4">{{ tutorial.name|capitalize~' '~'from'|trans }} <a target="_blank"
+                                                                              href="{{ path('app_organization_organization', {id: organization.id}) }}">{{ organization.name|capitalize }}</a>
+            </h2>
             <p class="mb-0">{{ tutorial.description|capitalize }}</p>
+
+            <p>Bekijk hier de <a target="_blank" href="{{ path('app_education_tutorial', {id: tutorial.id}) }}">aanmeldpagina</a>.</p>
+
+            {% if tutorial.video is defined and tutorial.video is not empty %}
+                <article class="section section-lg pt-0">
+                    <div class="container mt-n8 mt-lg-n11 z-2">
+                        <div class="row justify-content-center">
+                            <div class="col">
+                                <div class="card shadow-soft border-light p-4 p-md-5">
+                                    <div class="card-body">{{ tutorial.text }}</div>
+                                    <iframe width="420" height="315"
+                                            src="{{ tutorial.video }}">
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            {% endif %}
         </div>
     </div>
 
-<div class="row">
-    <!-- left collum -->
-{#    <div class="col-12 col-xl-8">#}
-{#        <div class="card border-light shadow-sm">#}
-{#            <div class="card-body">#}
-{#                <h2 class="h5">{{ 'content'|trans|capitalize }}</h2>#}
-{#                <p>{{ tutorial.content }}</p>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-    <!-- right collum -->
-    <div class="col-12 col-xl-4">
-        {% include 'dashboard/tables/activities.html.twig'%}
+    <div class="row">
+        <!-- left collum -->
+        {#    <div class="col-12 col-xl-8">#}
+        {#        <div class="card border-light shadow-sm">#}
+        {#            <div class="card-body">#}
+        {#                <h2 class="h5">{{ 'content'|trans|capitalize }}</h2>#}
+        {#                <p>{{ tutorial.content }}</p>#}
+        {#            </div>#}
+        {#        </div>#}
+        {#    </div>#}
+        <!-- right collum -->
+        {% if tutorial.activities|default %}
+            <div class="col-12 mb-3">
+                {% include 'dashboard/tables/activities.html.twig' with {
+                    'activities': tutorial.activities,
+                    'dontShowAllButton': 'true',
+                    'organization': organization.name
+                } %}
+            </div>
+        {% endif %}
 
-        {% include 'dashboard/tables/results.html.twig'%}
+        {% if tutorial.results|default %}
+            <div class="col-12 mb-3">
+                {% include 'dashboard/tables/results.html.twig' with {
+                    'results': tutorial.results,
+                    'dontShowAllButton': 'true',
+                    'organization': organization.name
+                } %}
+            </div>
+        {% endif %}
+
+        {% if tutorial.programs|default %}
+            <div class="col-12 mb-3">
+                {% include 'dashboard/tables/programs.html.twig' with {
+                    'programs': tutorial.programs,
+                    'dontShowAllButton': 'true',
+                    'organization': organization.name
+                } %}
+            </div>
+        {% endif %}
     </div>
-</div>
 {% endblock %}

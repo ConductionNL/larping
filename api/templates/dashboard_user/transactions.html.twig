@@ -1,0 +1,84 @@
+{% extends "dashboard/base.html.twig" %}
+
+{% block content %}
+    <!-- breadcrumbs -->
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+        <div class="d-block mb-4 mb-md-0">
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+                <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}"><span
+                                class="fas fa-home"></span></a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboard_index') }}">{{ 'Dashboard'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboarduser_organizations') }}">{{ 'organizations'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboarduser_organization', {id: organization.id}) }}">{{ 'organizations'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item active">{{ 'transaction'|trans|capitalize }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-8 mb-4">
+            <div class="card border-light">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <h2>{{ account.name }}</h2>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ path('app_dashboarduser_organization', {id: organization.id}) }}"><span class="icon icon-xs"><span class="fas fa-chevron-left mr-2"></span></span> {{ 'back'|trans|capitalize }}</a>
+                                <button type="button" data-toggle="modal" data-target="#fundsModal" class="btn btn-sm btn-primary text-sm-center animate-up-2">{{ 'add funds'|trans|capitalize }}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table">
+                                <thead>
+                                <th></th>
+                                <th>{{ 'amount'|trans|capitalize }}</th>
+                                <th>{{ 'date'|trans|capitalize }}</th>
+                                </thead>
+                                <tbody>
+                                {% for payment in payments %}
+                                    <tr>
+                                        {% if payment.debit is defined and payment.debit is not empty %}
+                                            {% set amount = payment.debit / 100 %}
+                                            <td><span class="fas fa-angle-down text-danger mr-1"></span></td>
+                                            <td><span class="text-danger">€{{ amount }}</span></td>
+                                        {% elseif payment.credit is defined and payment.credit is not empty %}
+                                            {% set amount = payment.credit / 100 %}
+                                            <td><span class="fas fa-angle-up text-success mr-1"></span></td>
+                                            <td><span class="text-success">€{{ amount }}</span></td>
+                                        {% endif %}
+                                        <td>{{ payment.dateCreated|date("H:i:s d-m-Y", "Europe/Paris") }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'dashboard_user/modals/add_funds_modal.html.twig' %}
+
+    {% include 'dashboard_user/modals/payment_message_modal.html.twig' %}
+
+    <script>
+        {% if message is defined %}
+        $(window).on('load', function(){
+            $('#messageModal').modal('show');
+        });
+        {% endif %}
+    </script>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+<div class="card border-light shadow-sm">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="h5">{{ 'tutorials'|trans|capitalize }}</h2>
+            </div>
+            <div class="col text-right">
+                {% if editPath is  defined %}
+                    <a href="{{ path(editPath, {'id':'new' }) }}"
+                       class="btn btn-primary">{% if tutorials|default %}{{ 'add'|trans|capitalize }}{% else %}{{ 'add your first tutorial'|trans|capitalize }}{% endif %}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if tutorials is  defined and tutorials|length > 0 %}
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">{{ 'name'|trans|capitalize }}</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for tutorial in tutorials %}
+                    <tr>
+                        <th>{{ tutorial.name }}</th>
+                        <td class="float-right">
+                            <a href="{{ path(editPath, {'id':tutorial.id }) }}">{{ 'view'|trans|capitalize }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        <div class="card-body">
+            <p>{{ 'no tutorials found'|trans|capitalize }}</p>
+        </div>
+    {% endif %}
+</div>

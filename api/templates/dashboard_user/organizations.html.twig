@@ -13,6 +13,7 @@
                             href="{{ path('app_dashboard_index') }}">{{ 'Dashboard'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item active">{{ 'organizations'|trans|capitalize }}</li>
                 </ol>
+                <h2 class="h4">{{ 'Choose your organization'|trans|capitalize }}</h2>
             </nav>
         </div>
     </div>
@@ -25,22 +26,17 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <h2 class="h5">{{ "Choose your organization"|trans|capitalize }}</h2>
-                                </div>
+                                    <h2 class="h5">{{ 'organizations'|trans|capitalize }}</h2></div>
                                 <div class="col text-right">
-                                    <a href="{{ path(path) }}" class="btn btn btn-primary btn-xs"><i class="fa fa-sync-alt"></i></a>
-                                    <a href="{{ '#add'~type|capitalize~'Modal' }}" class="btn btn btn-primary btn-xs"
-                                       data-toggle="modal"
-                                       data-target="{{ '#add'~type|capitalize~'Modal' }}"><i
-                                            class="fa fa-edit"></i>{{'Add new'|trans|capitalize}}</a>
+                                    {% if addPath is  defined %}
+                                        <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add organization'|trans|capitalize }}</a>
+                                    {% else %}
+                                        <a href="{{ path('app_organization_index') }}" class="btn btn-sm btn-secondary">{{ 'see all organizations'|trans|capitalize }}</a>
+                                    {% endif %}
                                 </div>
                             </div>
-                            <p class="card-category">
-                                Select your organization</p>
                         </div>
-
-
-                        <div class="table-responsive table-hover table-sales">
+                        <div class="table-responsive">
                             <form method="post" action="{{ path(path) }}">
                                 <table class="table align-items-center table-flush">
                                     <thead class="thead-light">
@@ -113,6 +109,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-12 col-xl-4 mb-4">
+            <div class="col-12 px-0 mb-4">
+                <div class="card border-light shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5">{{ 'organizations'|trans|capitalize }}</h2>
+                        <p>[[tekst over organizaties]]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
         {#  Modal for new object #}
         {% include 'dashboard_user/modals/edit_object.html.twig' with {
@@ -137,8 +144,5 @@
                 'type': type
             } %}
         {% endif %}
-    </div>
-    </div>
-    </div>
-    </div>
+
 {% endblock %}

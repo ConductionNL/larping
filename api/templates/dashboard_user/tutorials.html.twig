@@ -6,8 +6,10 @@
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
                 <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
-                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}"><span class="fas fa-home"></span></a></li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_dashboard_index') }}">{{ 'Dashboard'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}"><span
+                                class="fas fa-home"></span></a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboard_index') }}">{{ 'Dashboard'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item active">{{ 'tutorials'|trans|capitalize }}</li>
                 </ol>
             </nav>
@@ -20,7 +22,8 @@
         <div class="col-12 col-xl-8">
             <div class="row">
                 <div class="col-12 mb-4">
-                    {% include 'dashboard/tables/tutorials.html.twig' with {'editPath': 'app_dashboarduser_tutorial'}%}
+
+                    {% include 'dashboard_user/tables/tutorials.html.twig' with {'editPath': 'app_dashboarduser_tutorial'} %}
 
                 </div>
             </div>

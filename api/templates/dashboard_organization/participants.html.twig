@@ -1,0 +1,39 @@
+{% extends "dashboard/base.html.twig" %}
+
+{% block content %}
+
+    <!-- breadcrumbs -->
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+        <div class="d-block mb-4 mb-md-0">
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+                <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}"><span class="fas fa-home"></span></a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard organization'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item active">{{ 'participants'|trans|capitalize }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-8">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    {% include 'dashboard_organization/tables/participants.html.twig'  with {'editPath': 'app_dashboardorganization_tutorial'} %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-4 mb-4">
+            <div class="col-12 px-0 mb-4">
+                <div class="card border-light shadow-sm">
+                    <div class="card-body">
+                        <p>{{ 'here is an overview of all participants that want to join one of your projects.'|trans|capitalize~' '~'you can choose to view their application and decide to accept or reject them.'|trans|capitalize}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

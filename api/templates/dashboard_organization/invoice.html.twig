@@ -1,0 +1,117 @@
+{% extends "dashboard/base.html.twig" %}
+
+{% block content %}
+    <section class="section bg-soft section-lg pt-8">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <div class="card shadow-soft border-light p-4 p-md-5 position-relative">
+                        <div
+                            class="d-flex justify-content-between pb-4 pb-md-5 mb-4 mb-md-5 border-bottom border-light">
+                            <img class="image-md" src="../assets/img/brand/dark.svg" alt="Rocket Logo" width="30" height="30">
+                            <div>
+                                <h4>{{ organization.name }}</h4>
+                                <ul class="list-group simple-list">
+                                    <li class="list-group-item font-weight-normal">
+                                        {% if organization.contact.adresses[0].houseNumber is defined and organization.contact.adresses[0].houseNumber is not empty %}
+                                            {{ organization.contact.adresses[0].houseNumber }} {{ organization.contact.adresses[0].street }}
+                                        {% else %} {{ 'adres not found'|trans|capitalize }}
+                                        {% endif %}
+                                    </li>
+                                    <li class="list-group-item font-weight-normal">{{ organization.contact.adresses[0].region }}, {{ organization.contact.adresses[0].country }}</li>
+                                    <li class="list-group-item font-weight-normal">
+                                        <a class="font-weight-bold text-primary" href="#">
+                                            {% if organization.contact.emails[0] is defined and organization.contact.emails[0] is not empty %}
+                                                {{ organization.contact.emails[0].email }}{% else %}
+                                                {{ 'no email found'|trans|capitalize }}
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mb-6 d-flex align-items-center justify-content-center">
+                            <h2 class="h1 mb-0">{{ 'invoice details'|trans|capitalize }}</h2>
+                            <span class="badge badge-xl badge-success ml-2">{{ invoice.name }}</span>
+                        </div>
+                        <div class="row justify-content-between mb-4 mb-md-5">
+                            <div class="col-sm"><h5>{{'Client Information'|trans|capitalize}}:</h5>
+                                <div>
+                                    <ul class="list-group simple-list">
+                                        <li class="list-group-item font-weight-normal">{{ commonground_rescource(customer.administrationContact).username }}</li>
+                                        <li class="list-group-item font-weight-normal">{{ customer.name }}</li>
+                                        <li class="list-group-item font-weight-normal">311 West Mechanic Lane Middletown, NY 10940
+                                        </li>
+                                        <li class="list-group-item font-weight-normal"><a class="font-weight-bold text-primary" href="#">name@company.com</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm col-lg-4">
+                                <dl class="row text-sm-right">
+                                    <dt class="col-6"><strong>Invoice No.</strong></dt>
+                                    <dd class="col-6">00123</dd>
+                                    <dt class="col-6"><strong>Date Issued:</strong></dt>
+                                    <dd class="col-6">{{ invoice.dateCreated|date("d-m-Y") }}</dd>
+                                    <dt class="col-6"><strong>Date Due:</strong></dt>
+                                    <dd class="col-6">30/04/2020</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead class="bg-light border-top">
+                                        <tr>
+                                            <th scope="row" class="border-0 text-left">Item</th>
+                                            <th scope="row" class="border-0">Description</th>
+                                            <th scope="row" class="border-0">Price</th>
+                                            <th scope="row" class="border-0">Qty</th>
+                                            <th scope="row" class="border-0">Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for item in invoice.items %}
+                                            <tr>
+                                                <th scope="row" class="text-left font-weight-bold h6">{{ item.name }}</th>
+                                                <td>{{item.description}}</td>
+                                                <td>{{ invoice.priceCurrency }} {{ item.price }}</td>
+                                                <td>{{ item.quantity }}</td>
+                                                <td>{{ item.price * item.quantity }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="d-flex justify-content-end text-right mb-4 py-4 border-bottom">
+                                    <div class="mt-4">
+                                        <table class="table table-clear">
+                                            <tbody>
+                                            <tr>
+                                                <td class="left"><strong>Subtotal</strong></td>
+                                                <td class="right">{{ invoice.price }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left"><strong>Discount (20%)</strong></td>
+                                                <td class="right">$1,699,40</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left"><strong>VAT (10%)</strong></td>
+                                                <td class="right">$679,76</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left"><strong>Total</strong></td>
+                                                <td class="right"><strong>$7.477,36</strong></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <h4>Payments to:</h4><span>payment@rocket.com</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -63,9 +63,20 @@ class EducationController extends AbstractController
         // Get resource tutorial
         $variables['tutorial'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'courses', 'id' => $id]);
 
+        // Get other tutorials from this org
+        if (isset($variables['tutorial']['organization'])) {
+            $tutorials = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'courses'], ['organization' => $variables['tutorial']['organization']])['hydra:member'];
+            // Filter to prevent duplicate tutorial
+            foreach ($tutorials as $tut) {
+                if ($variables['tutorial']['id'] != $tut['id']) {
+                    $variables['tutorials'][] = $tut;
+                }
+            }
+        }
+
         //  Getting the participant @todo this needs to be more foolproof and part of a service
         if ($this->getUser()) {
-            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person'=> $this->getUser()->getPerson()]])['hydra:member'];
+            $participants = $commonGroundService->getResourceList(['component' => 'edu', 'type' => 'participants', ['person' => $this->getUser()->getPerson()]])['hydra:member'];
             if (count($participants) > 0) {
                 $variables['participants'] = $participants;
 
@@ -89,9 +100,14 @@ class EducationController extends AbstractController
             $participant['person'] = $this->getUser()->getPerson();
             $participant['course'] = '/courses/'.$variables['tutorial']['id'];
 
+            $participant['status'] = 'pending';
+            if (isset($resource['motivation'])) {
+                $participant['motivation'] = $resource['motivation'];
+            }
+
             $commonGroundService->createResource($participant, ['component' => 'edu', 'type' => 'participants']);
 
-            return $this->redirect($this->generateUrl('app_education_tutorial', ['id'=>$id]));
+            return $this->redirect($this->generateUrl('app_education_tutorial', ['id' => $id]));
         }
 
         return $variables;
@@ -121,7 +137,7 @@ class EducationController extends AbstractController
         $variables = [];
 
         // Get resource program
-        $variables['tutorial'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'programs', 'id' => $id]);
+        $variables['program'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'programs', 'id' => $id]);
 
         return $variables;
     }

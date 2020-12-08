@@ -7,7 +7,7 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 text-center">
                     <h1 class="mb-3">{{ h1|trans|capitalize }}</h1>
-                    <p class="lead px-lg-5 mb-5">{{ 'find any organization on the platform'|trans|capitalize }}</p>
+                    <p class="lead px-lg-5 mb-5">{{ 'find any organization on the platform'|trans|capitalize }}.</p>
                     <form action="{{ path(path) }}" method="post">
                         <div class="form-group bg-white shadow-soft rounded-pill mb-4 px-3 py-2">
                             <div class="row align-items-center">
@@ -45,9 +45,20 @@
 
                         <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-5">
                             <div class="card bg-white border-light shadow-soft p-4 rounded">
-                                <a href="{{ path('app_organization_organization', {id: org.id}) }}"><img
-                                        src="/bundles/rocket/assets/img/blog/image-2.jpg" class="card-img-top fmxh-300"
-                                        alt=""></a>
+                                <a href="{{ path('app_organization_organization', {id: org.id}) }}" style="margin-left: auto; margin-right: auto">
+                                    <img
+                                        {% if org.style.favicon.base64 is defined and org.style.favicon.base64 is not empty %}
+                                            src="{{ org.style.favicon.base64 }}"
+                                        {% else %}
+                                            src="/bundles/rocket/assets/img/blog/image-2.jpg"
+                                        {% endif %}
+                                        alt=""
+                                        style="width: auto; height: 13rem;
+                                        {% if org.backgroundColor is defined and org.backgroundColor|length > 0 %}
+                                            background-color: {{ org.backgroundColor[1] }}
+                                        {% endif %}"
+                                    >
+                                </a>
                                 <div class="card-body p-0 pt-4">
                                      <a
                                         href="{{ path('app_organization_organization', {id: org.id}) }}"
@@ -62,10 +73,34 @@
                                     {% if org.description|default %}
                                         <p class="mb-0">{{ org.description }}</p>
                                     {% endif %}
+                                    <br>
+                                    <div>
+                                         <span class="ml-lg-2 mb-3 mb-lg-0 h5"><i class="fas fa-briefcase"></i>
+                                             <span class="ml-3">
+                                                 {% set jobPostings = commonground_resource_list({'component': 'mrc', 'type': 'job_postings'}, {'organization': org['@id']})['hydra:member'] %}
+                                                 {% if jobPostings|default and jobPostings|length > 0 %}
+                                        {{ jobPostings|length }} {% else %}
+                                                     0{% endif %}</span></span>
+
+
+                                        <span class="ml-lg-5 mb-3 mb-lg-0 h5"><i class="fas fa-bullseye-arrow"></i>
+                                            <span class="ml-3">
+                                                {% set challenges = commonground_resource_list({'component': 'chrc', 'type': 'tenders'}, {'organization': org['@id']})['hydra:member'] %}
+                                                {% if challenges|default and challenges|length > 0 %}
+                                        {{ challenges|length }} {% else %}
+                                                    0{% endif %}</span></span>
+
+
+                                        <span class="ml-lg-5 mb-3 mb-lg-0 h5"><i class="fas fa-file-alt"></i>
+                                            <span class="ml-3">
+                                                {% set tutorials = commonground_resource_list({'component': 'edu', 'type': 'courses'}, {'organization': org['@id']})['hydra:member'] %}
+                                                {% if tutorials|default and tutorials|length > 0 %}
+                                        {{ tutorials|length }} {% else %}
+                                                    0{% endif %}</span></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
                     {% endfor %}
 
                     {#                    <div class="d-flex justify-content-center w-100">#}
@@ -95,7 +130,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-10 text-center">
                     <h2 class="h1">{{ 'do you miss your organization here?'|trans|capitalize }}</h2>
-                    <p>{{ 'Dont worry, joining the comunnity and adding the your organizations unqiue value to it is a breazey. Just register and add it under organizations'|trans|capitalize }}</p>
+                    <p>{{ 'Dont worry, joining the comunnity and adding the your organizations unqiue value to it is a breazey. Just register and add it under organizations'|trans }}</p>
                     <p class="lead py-4 text-gray"></p><a href="{{ path('app_user_idvault') }}" class="btn btn-lg btn-secondary animate-up-2">{{ 'aanmelden'|trans|capitalize }}</a></div>
             </div>
         </div>

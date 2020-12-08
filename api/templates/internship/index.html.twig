@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <section class="section-header bg-primary pb-7 pb-lg-10 text-white">
+    <section class="section-header bg-primary text-white">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 text-center">
@@ -29,10 +29,10 @@
         </div>
         <div class="pattern bottom"></div>
     </section>
-    <section class="section section-lg pb-0" style="margin-left: 10%">
-        <div class="container z-2 mt-n10 mt-lg-n11 mt-sm-n8">
-            <div class="row">
-                <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
+    <section class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-4 col-xl-2  mb-4 mb-lg-0">
                     <a href="{{ path('app_internship_index', {'employmentType': 'full-time'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-building"></span></div>
@@ -53,14 +53,14 @@
                             <h6 class="text-gray mb-0"> {{ 'temporarily'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
-                <div class="col-12 col-md-4 col-lg-2">
+                <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
                     <a href="{{ path('app_internship_index', {'employmentType': 'seasonal'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-sun"></span></div>
                             <h6 class="text-gray mb-0"> {{ 'season'|trans|capitalize }} </h6></div>
                     </a>
                 </div>
-                <div class="col-12 col-md-4 col-lg-2">
+                <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
                     <a href="{{ path('app_internship_index', {'employmentType': 'internship'}) }}" class="card text-center shadow-soft border-light animate-up-3">
                         <div class="card-body p-5">
                             <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-network-wired"></span></div>
@@ -68,7 +68,7 @@
                     </a>
                 </div>
                 {% if query is defined and query is not empty %}
-                    <div class="col-12 col-md-4 col-lg-2">
+                    <div class="col-12 col-md-4 col-lg-2 mb-4 mb-lg-0">
                         <a href="{{ path('app_internship_index') }}" class="card text-center shadow-soft border-light animate-up-3">
                             <div class="card-body p-5">
                                 <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-clipboard-list"></span></div>
@@ -84,44 +84,61 @@
             <div class="row justify-content-center mb-5 mb-lg-6">
                 <div class="col-12 text-center">
                     <h2 class="h1 mb-3">{{ 'internships'|trans|capitalize }}</h2>
-                    <p class="lead px-5 px-lg-7">{{'we are always looking for creative, talented self-starters to join the Front family. Check out our open positions and fill out an application.'|trans|capitalize}}</p>
+                    <p class="lead px-5 px-lg-7">{{'organizations are always looking for creative, driven and talented newbies. View the challenges and internships and respond or apply!'|trans|capitalize}}</p>
                 </div>
             </div>
             <div class="row">
 
                {% for internship in internships %}
-                <div class="col-12 mb-4">
+                <div class="col-12 mb-4" id="{{ internship.id }}">
                     <div class="card bg-white border-light shadow-soft">
                         <div class="card-body p-4 p-lg-5">
                             <div class="row">
                                 <div class="col-12 col-md-12 mb-4 mb-lg-0">
                                     <h3 class="mb-3">{{ internship.name }}</h3>
                                     <p class="text-gray mb-4">{{ internship.summary }}</p>
-                                    <div class="d-flex">
-                                        <p class="stretched-link"><i class="fas fa-map-marker-alt"></i><span class="h6 text-sm ml-2">{{ internship.jobLocationType|trans|capitalize }}</span></p>
-                                        <span class="ml-4"><i class="fas fa-building text-secondary"></i><span class="h6 text-sm ml-2">{{ commonground_resource(internship.hiringOrganization).name }}</span></span>
-                                        <span class="ml-4"><i class="fas fa-user-tie text-secondary"></i><span class="h6 text-sm ml-2">{{ internship.employmentType|trans|capitalize }}</span></span>
-                                        <span class="ml-4"><i class="fas fa-stopwatch text-secondary"></i><span class="h6 text-sm ml-2">{{ internship.standardHours }}</span></span>
-                                        <span class="ml-4"><i class="fal fa-calendar-times text-secondary"></i><span class="h6 text-sm ml-2"> {{ internship.validThrough|date("Y-m-d H:m") }}</span></span>
-                                        <span class="ml-4"><i class="fas fa-file-certificate text-secondary"></i><span class="h6 text-sm ml-2">
+                                    <div>
+                                        <div>
+                                            <p class="stretched-link"><i class="fas fa-map-marker-alt"></i><span class="h6 text-sm ml-2">{{ internship.jobLocationType|trans|capitalize }}</span>
+                                                <span class="ml-4"><i class="fas fa-building text-secondary"></i><span class="h6 text-sm ml-2">{{ commonground_resource(internship.hiringOrganization).name }}</span></span>
+                                                <span class="ml-4"><i class="fas fa-user-tie text-secondary"></i><span class="h6 text-sm ml-2">{{ internship.employmentType|trans|capitalize }}</span></span>
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="stretched-link">
+                                                <span><i class="fas fa-stopwatch text-secondary"></i><span class="h6 text-sm ml-2">{{ internship.standardHours }}</span></span>
+                                                <span class="ml-4"><i class="fal fa-calendar-times text-secondary"></i><span class="h6 text-sm ml-2"> {{ internship.validThrough|date("Y-m-d H:m") }}</span></span>
+                                                <span class="ml-4"><i class="fas fa-file-certificate text-secondary"></i><span class="h6 text-sm ml-2">
                                                 {% if internship.educationRequirements is defined and internship.educationRequirements is not empty  %}
-                                                    {{ internship.educationRequirements['0'] }}
+                                                    {{ internship.educationRequirements|length }} {{ 'requirements'|trans|capitalize }}
                                                 {% else %}
                                                     {{ 'no requirements found'|trans|capitalize }}
                                                 {% endif %}
-                                            </span></span>
+                                                </span></span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-12 d-flex align-items-center justify-content-md-end">
-{#
-{#                                  <button type="submit" class="btn btn-secondary mr-3 animate-up-2 m-0"><i class="fas fa-heart"></i></button>#}
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-2">
+                                        <a href="{{ path('app_internship_position', {id: internship.id}) }}" class="btn btn-primary animate-up-2 m-0"><i class="fas fa-clipboard-list mr-2"></i>{{ 'see details'|trans|capitalize }}</a>
+                                    </div>
                                     {% if app.user is defined and app.user is not null %}
-{#                                        <a href="{{ path('app_internship_like') }}" class="btn btn-secondary mr-3 animate-up-2 m-0"><i class="fal fa-heart"></i></a>#}
+                                        <a href="{{ path('app_internship_like', {id: internship.id, backUrl: 'app_internship_index'}) }}" class="btn btn-secondary mr-3 animate-up-2 m-0">
+                                            <i
+                                                {% if internship.like|default %}
+                                                    class="fal fa-heart"
+                                                {% else %}
+                                                    class="fas fa-heart"
+                                                {% endif %}
+                                            ></i>
+                                        </a>
                                     {% else %}
-                                        <a href="{{ path('app_user_idvault') }}" class="btn btn-secondary mr-3 animate-up-2 m-0" data-toggle="tooltip" data-placement="top" title="{{ 'you need to login before you can submit'|trans|capitalize }}"><i class="fal fa-heart"></i></a>
+                                        <a href="{{ path('app_user_idvault') }}" class="btn btn-secondary mr-3 animate-up-2 m-0" data-toggle="tooltip" data-placement="top" title="{{ 'you need to login before you can submit'|trans|capitalize }}">
+                                            <i class="fas fa-heart"></i>
+                                        </a>
                                     {% endif %}
                                     <a href="{{ path('app_internship_position', {id: internship.id}) }}#apply" class="btn btn-secondary mr-3 animate-up-2 m-0">{{ 'apply'|trans|capitalize }}</a>
-                                    <a href="{{ path('app_internship_position', {id: internship.id}) }}" class="btn btn-primary animate-up-2 m-0"><i class="fas fa-clipboard-list mr-2"></i>{{ 'see details'|trans|capitalize }}</a>
                                 </div>
                             </div>
                         </div>
@@ -136,9 +153,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center mb-5">
-                    <h2 class="mb-4">{{ 'Join the Conduction Academy'|trans }}</h2>
-                    <p class="lead mb-5">{{ 'we have '|trans|capitalize }} <span class="font-weight-bolder">{{ 'cookies :)'|trans }}</span></p>
-                    <p>{{ 'Become a part of the comunity today to find the best interhsips and tutorials to lift of your career'|trans }}</p>
+                    <h2 class="mb-4">{{ 'become part of the community!'|trans }}</h2>
+                    <p>{{ 'to find the best internships, challenges and tutorials that can boost your career'|trans }}</p>
                     <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal" data-target=".pricing-modal">
                         <a href="{{ path('app_user_idvault') }}" style="color: white"><span class="mr-2"><i class="fas fa-hand-pointer"></i>
                             </span>{{ 'register now'|trans|capitalize }}</a></button>

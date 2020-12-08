@@ -10,27 +10,96 @@
                     <h1 class="display-2 font-weight-extreme mb-4">{{ organization.name }}</h1>
                     <p class="lead">{{ organization.description }}</p>
 
+                    {% if organization.contact|default and commonground_resource(organization.contact).socials['0']|default %}
+                        {% set socials = commonground_resource(organization.contact).socials['0'] %}
                         <div class="d-flex flex-column flex-lg-row justify-content-center">
-                            <span class="h5 mb-3 mb-lg-0"><i class="fas fa-map-marker-alt"></i><span class="ml-3">{% if organization.contact|default and commonground_resource(organization.contact).adresses['0']|default %}
-                                        {% set address = commonground_resource(organization.contact).adresses['0'] %}
-                                        {% if address.street|default %}{{ address.street }}{% endif %}
-                                        {% if address.houseNumber|default %}{{ address.houseNumber }}{% endif %}
-                                        {% if address.houseNumberSuffix|default %}{{ address.houseNumberSuffix }}{% endif %}
-                                        {% if address.postalCode|default %}{{ address.postalCode }}{% endif %}
-                                        {% if address.locality|default %}{{ address.locality }}{% endif %}
-                                        {% else %}
-                                        Geen contact info{% endif %}</span></span>
-                            <span class="ml-lg-5 mb-3 mb-lg-0 h5"><i class="fas fa-briefcase"></i><span class="ml-3">{% if jobPostings is defined and jobPostings is not empty %}
-                                        {{ jobPostings|length }} {% else %}
-                                        0{% endif %}</span></span>
-                            <span class="ml-lg-5 mb-3 mb-lg-0 h5"><i class="fas fa-bullseye-arrow"></i><span class="ml-3">{% if challenges is defined and challenges is not empty %}
-                                        {{ challenges|length }} {% else %}
-                                        0{% endif %}</span></span>
-                            <span class="ml-lg-5 mb-3 mb-lg-0 h5"><i class="fas fa-file-alt"></i><span class="ml-3">{% if courses is defined and courses is not empty %}
-                                        {{ courses|length }} {% else %}
-                                        0{% endif %}</span></span>
+                            {% if socials.website|default %}
+                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
+                                    <a href="{{ socials.website }}">
+                                        <i class="fa fa-globe"></i>
+                                        <span>Website</span>
+                                    </a>
+                                </span>
+                            {% endif %}
+                            {% if socials.twitter|default %}
+                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
+                                    <a href="{{ socials.twitter }}">
+                                        <i class="fa fa-twitter"></i>
+                                        <span>Twitter</span>
+                                    </a>
+                                </span>
+                            {% endif %}
+                            {% if socials.facebook|default %}
+                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
+                                    <a href="{{ socials.facebook }}">
+                                        <i class="fa fa-facebook-f"></i>
+                                        <span>Facebook</span>
+                                    </a>
+                                </span>
+                            {% endif %}
+                            {% if socials.instagram|default %}
+                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
+                                    <a href="{{ socials.instagram }}">
+                                        <i class="fa fa-instagram"></i>
+                                        <span>Instagram</span>
+                                    </a>
+                                </span>
+                            {% endif %}
+                            {% if socials.linkedin|default %}
+                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
+                                    <a href="{{ socials.linkedin }}">
+                                        <i class="fa fa-linkedin-square"></i>
+                                        <span>Linkedin</span>
+                                    </a>
+                                </span>
+                            {% endif %}
+                            {% if socials.github|default %}
+                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
+                                    <a href="{{ socials.github }}">
+                                        <i class="fa fa-github"></i>
+                                        <span>Github</span>
+                                    </a>
+                                </span>
+                            {% endif %}
                         </div>
+                        <br>
+                    {% endif %}
 
+                    <div class="d-flex flex-column flex-lg-row justify-content-center">
+                        <span class="h5 mb-3 mb-lg-0">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span class="ml-3">
+                                {% if organization.contact|default and commonground_resource(organization.contact).adresses['0']|default %}
+                                    {% set address = commonground_resource(organization.contact).adresses['0'] %}
+                                    {% if address.street|default %}{{ address.street }}{% endif %}
+                                    {% if address.houseNumber|default %}{{ address.houseNumber }}{% endif %}
+                                    {% if address.houseNumberSuffix|default %}{{ address.houseNumberSuffix }}{% endif %}
+                                    {% if address.postalCode|default %}{{ address.postalCode }}{% endif %}
+                                    {% if address.locality|default %}{{ address.locality }}{% endif %}
+                                {% else %}
+                                    {{ 'no contact info'|trans|capitalize }}
+                                {% endif %}
+                            </span>
+                        </span>
+                        <span class="ml-lg-5 mb-3 mb-lg-0 h5">
+                            <i class="fas fa-briefcase"></i>
+                            <span class="ml-3">
+                                {% if jobPostings is defined and jobPostings is not empty %}{{ jobPostings|length }}{% else %}0{% endif %}
+                            </span>
+                        </span>
+                        <span class="ml-lg-5 mb-3 mb-lg-0 h5">
+                            <i class="fas fa-bullseye-arrow"></i>
+                            <span class="ml-3">
+                                {% if challenges is defined and challenges is not empty %}{{ challenges|length }}{% else %}0{% endif %}
+                            </span>
+                        </span>
+                        <span class="ml-lg-5 mb-3 mb-lg-0 h5">
+                            <i class="fas fa-file-alt"></i>
+                            <span class="ml-3">
+                                {% if courses is defined and courses is not empty %}{{ courses|length }} {% else %}0{% endif %}
+                            </span>
+                        </span>
+                    </div>
                 </div>
                 <div class="col col-12 text-center"><a href="{{ path('app_education_tutorials') }}" class="btn btn-secondary text-white animate-up-2 mr-3"><i class="fas fa-arrow-left mr-2"></i>{{'all organizations'|trans|capitalize}}</a></div>
             </div>
@@ -45,7 +114,6 @@
                 <div class="col">
                     <div class="card shadow-soft border-light p-4 p-md-5">
                         <div class="card-body">{{ organization.description }}</div>
-
                     </div>
                 </div>
             </div>
@@ -63,7 +131,6 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-
                     {% if challenges|default %}
                         {% for chal in challenges|slice(0, 5) %}
                             <div class="col-12 col-lg-10 mb-4">
@@ -80,7 +147,7 @@
                                                 <div class="d-flex">
                                                     {#<a href="#" class="stretched-link">#}<i
                                                         class="fas fa-map-marker-alt"></i><span
-                                                        class="h6 text-sm ml-2">Sillicon Valley, CA</span>{#</a>#}
+                                                        class="h6 text-sm ml-2">{{ 'Sillicon Valley, CA'|trans|capitalize }}</span>{#</a>#}
 
                                                     {% if chal.budget|default %}
                                                         <span class="ml-4"><i
@@ -140,7 +207,7 @@
                                                 <div class="d-flex">
                                                     {#<a href="#" class="stretched-link">#}<i
                                                         class="fas fa-map-marker-alt"></i><span
-                                                        class="h6 text-sm ml-2">Sillicon Valley, CA</span>{#</a>#}
+                                                        class="h6 text-sm ml-2">{{ 'Sillicon Valley, CA'|trans|capitalize }}</span>{#</a>#}
 
                                                     {#                                                {% if chal.budget|default %}#}
                                                     {#                                                <span class="ml-4"><i class="fas fa-money-bill text-secondary"></i>#}
@@ -200,7 +267,7 @@
                                                 <div class="d-flex">
                                                     {#<a href="#" class="stretched-link">#}<i
                                                         class="fas fa-map-marker-alt"></i><span
-                                                        class="h6 text-sm ml-2">Sillicon Valley, CA</span>{#</a>#}
+                                                        class="h6 text-sm ml-2">{{ 'Sillicon Valley, CA'|trans|capitalize }}</span>{#</a>#}
 
                                                     {% if job.standardHours|default and job.employmentType|default %}
                                                         <span class="ml-4"><i class="fas fa-clock text-secondary"></i>
@@ -212,9 +279,9 @@
                                             </div>
                                             <div
                                                 class="col-12 col-md-6 d-flex align-items-center justify-content-md-end">
-                                                <a href="#"
+                                                <a href="{{ path('app_internship_position', {id: job.id}) }}#apply"
                                                    class="btn btn-secondary mr-3 animate-up-2 m-0">{{ 'apply'|trans|capitalize }}</a>
-                                                <a href="#"
+                                                <a href="{{ path('app_internship_position', {id: job.id}) }}"
                                                    class="btn btn-primary animate-up-2 m-0"><i
                                                         class="fas fa-clipboard-list mr-2"></i>{{ 'view'|trans|capitalize }}
                                                 </a>
@@ -230,5 +297,4 @@
             </div>
         </section>
     {% endif %}
-
 {% endblock %}

@@ -1,0 +1,84 @@
+<div class="card border-light shadow-sm">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="h5">{{ 'participants'|trans|capitalize }}</h2>
+            </div>
+            {#            <div class="col text-right">#}
+            {#                {% if editPath is  defined %}#}
+            {#                    <a href="{{ path(editPath, {'id':'new' }) }}"#}
+            {#                       class="btn btn-primary">{% if tutorials|default %}{{ 'add'|trans|capitalize }}{% else %}{{ 'add your first tutorial'|trans|capitalize }}{% endif %}</a>#}
+            {#                {% endif %}#}
+            {#            </div>#}
+        </div>
+    </div>
+
+    {% if participants|default %}
+        {% set items = participants %}
+    {% endif %}
+    {% if items|default %}
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">{{ 'name'|trans|capitalize }}</th>
+                    <th scope="col">{{ 'motivation'|trans|capitalize }}</th>
+                    <th scope="col">{{ 'subject'|trans|capitalize }}</th>
+                    <th scope="col">{{ 'status'|trans|capitalize }}</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                    <tr>
+                        {% if item.person|default and 'http' in item.person %}
+                            {% set person = commonground_resource(item.person) %}
+                        {% endif %}
+                        <th>{{ person.name }}</th>
+                        <th>{{ item.motivation|capitalize }}</th>
+                        {% if item.course|default %}
+                            {% set subject = item.course.name %}
+                            <th>{{ subject }}</th>
+                        {% else %}
+                            <th style="color: lightgrey">{{ 'no subject'|trans|capitalize }}</th>
+                        {% endif %}
+                        {% if item.status|default and item.status == 'accepted' %}
+                            <th>{{ 'accepted on'|trans|capitalize~' '~item.dateOfAcceptance|date('d-m-Y', 'Europe/Amsterdam') }}</th>
+                        {% elseif item.status|default %}
+                            <th>{{ item.status|capitalize }}</th>
+                        {% endif %}
+                        {% if item.status != 'accepted' %}
+                            <td class="float-right">
+                                <form action="{{ path('app_dashboardorganization_participants') }}" method="post">
+                                    <input type="hidden" value="{{ item['@id'] }}" name="id">
+                                    <button type="submit" name="status" value="accepted"
+                                            class="btn btn-sm btn-success">{{ 'accept'|trans|capitalize }}</button>
+                                </form>
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        {% if item.status != 'rejected' %}
+                            <td class="float-right">
+                                <form action="{{ path('app_dashboardorganization_participants') }}" method="post">
+                                    <input type="hidden" value="{{ item['@id'] }}" name="id">
+                                    <button type="submit" name="status" value="rejected"
+                                            class="btn btn-sm btn-danger">{{ 'decline'|trans|capitalize }}</button>
+                                </form>
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        <div class="card-body">
+            <p>{{ 'no participants found'|trans|capitalize }}</p>
+        </div>
+    {% endif %}
+</div>

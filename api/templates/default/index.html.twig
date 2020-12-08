@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-12 text-center">
                     <img class="navbar-brand-dark rotate-logo" src="./bundles/rocket/assets/img/brand/light.svg" height="120" alt="Logo light">
-                    <h1 class="display-1 mb-2">Stage-platform</h1>
+                    <h1 class="display-1 mb-2">{{'stage-platform'|trans|capitalize}}</h1>
                     <h2 class="h3 text-muted mb-5">{{'Lift off your career'|trans|capitalize}}</h2>
                     <!-- Button Modal -->
                     <div class="d-flex justify-content-center mb-6">
@@ -15,7 +15,7 @@
                         <a href="{{ path('app_user_idvault') }}" class="btn btn-secondary animate-up-2 mr-4"><span class="fas fa-rocket mr-2 d-none d-sm-inline"></span> {{ 'register'|trans|capitalize }}</a>
                         <a href="{{ path('app_user_idvault') }}" class="btn btn-outline-white animate-up-2"><span class="fas fa-lock mr-2 d-none d-sm-inline"></span> {{ 'login'|trans|capitalize }}</a>
                         {% else %}
-                        <a href="{{ path('app_dashboard_index') }}" class="btn btn-secondary animate-up-2 mr-4"><span class="fas fa-rocket mr-2 d-none d-sm-inline"></span> {{ 'dashboard'|trans|capitalize }}</a>
+                        <a href="{{ path('app_dashboarduser_index') }}" class="btn btn-secondary animate-up-2 mr-4"><span class="fas fa-rocket mr-2 d-none d-sm-inline"></span> {{ 'dashboard'|trans|capitalize }}</a>
                         {% endif %}
                     </div>
                     <div class="d-flex justify-content-center flex-column mb-6">
@@ -36,7 +36,7 @@
                     <div class="card border-light p-4">
                         <div class="card-header pb-0">
                             <div class="image-md">
-                                <img src="./bundles/rocket/assets//img/icons/research.svg" alt="icon">
+                                <img src="./imgages/student.svg" alt="icon">
                             </div>
                             <h2 class="h4 mt-3">{{'Students'|trans|capitalize}}</h2>
                             <p class="mb-0"> {{'Find the best internship that you can do from home'|trans|capitalize}}</p>
@@ -44,14 +44,17 @@
                         <div class="card-body">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex text-left pl-0">
-                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span><div>{{'Find the best future internships'|trans|capitalize}}</div>
-                                </li>
+                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span>
+                                    <div style="padding-left: 1px"> {{'Find the best future internships'|trans|capitalize}}
+                                    </div></li>
                                 <li class="list-group-item d-flex text-left pl-0">
-                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span><div> {{'Build and grow your knowledge with tutorials and challenges'|trans|capitalize}}</div>
-                                </li>
+                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span><div>
+                                        <div style="padding-left: 10px">{{'Build and grow your knowledge with tutorials and challenges'|trans|capitalize}}</div>
+                                    </div></li>
                                 <li class="list-group-item d-flex text-left pl-0">
-                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span><div> {{'Come in contact with other students and form teams'|trans|capitalize}}</div>
-                                </li>
+                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span><div>
+                                        <div style="padding-left: 10px"> {{'Come in contact with other students and form teams'|trans|capitalize}}</div>
+                                    </div></li>
                             </ul>
                         </div>
                         <div class="card-footer pt-0">
@@ -63,7 +66,7 @@
                     <div class="card border-light p-4">
                         <div class="card-header pb-0">
                             <div class="image-md">
-                                <img src="./bundles/rocket/assets/img/icons/research.svg" alt="icon">
+                                <img src="./imgages/employer.svg" alt="icon">
                             </div>
                             <h2 class="h4 mt-3">{{'Employers'|trans|capitalize}}</h2>
                             <p class="mb-0">{{'Aquire next generation talent'|trans|capitalize}}</p>
@@ -71,18 +74,21 @@
                         <div class="card-body">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex text-left pl-0">
-                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span><div>{{'Find the most suitable interns for your company'|trans|capitalize}}</div>
+                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span>
+                                        <div style="padding-left: 10px">{{'Find the most suitable interns for your company'|trans|capitalize}}</div>
                                 </li>
                                 <li class="list-group-item d-flex text-left pl-0">
-                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span><div>{{'Connect with students and teams and make interesting challenges'|trans|capitalize}}</div>
+                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span>
+                                    <div style="padding-left: 18px">{{'Connect with students and teams and make interesting challenges'|trans|capitalize}}</div>
                                 </li>
                                 <li class="list-group-item d-flex text-left pl-0">
-                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span><div>{{'Find other likeminded organizations'|trans|capitalize}}</div>
+                                    <span class="list-icon"><i class="fas fa-check-circle text-success"></i></span>
+                                    <div style="padding-left: 2px">{{'Find other likeminded organizations'|trans|capitalize}}</div>
                                 </li>
                             </ul>
                         </div>
                         <div class="card-footer pt-0">
-                            <a href="{{ path('app_user_idvault') }}" class="btn btn-block btn-primary">{{'Join'|trans|capitalize}}<span class="icon icon-xs ml-2"><i class="fas fa-arrow-right"></i></span></a>
+                            <a href="{{ path('app_default_organization') }}?backUrl={{ path('app_dashboarduser_index') }}" class="btn btn-block btn-primary">{{'Join'|trans|capitalize}}<span class="icon icon-xs ml-2"><i class="fas fa-arrow-right"></i></span></a>
                         </div>
                     </div>
                 </div>
@@ -100,4 +106,14 @@
     {# include 'widgets/code.html.twig' #}
 
     {% include 'widgets/faq.html.twig' %}
+
+    {% include 'default/modals/newsletter_message_modal.html.twig' %}
+
+    <script>
+        {% if query.message is defined %}
+        $(window).on('load', function(){
+            $('#messageModal').modal('show');
+        });
+        {% endif %}
+    </script>
 {% endblock %}

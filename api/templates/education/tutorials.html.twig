@@ -38,7 +38,7 @@
                         <a href="{{ path('app_education_tutorials',{'additionalType': type}) }}" class="card text-center shadow-soft border-light animate-up-3">
                             <div class="card-body p-5">
                                 <div class="icon icon-shape icon-shape-primary rounded-circle mb-4"><span class="fas fa-clipboard-list"></span></div>
-                                <h6 class="text-gray mb-0">{{ type|trans|capitalize }}</h6></div>
+                                <h6 class="text-gray mb-0">{{ type|capitalize }}</h6></div>
                         </a>
                     </div>
                 {% endfor %}
@@ -65,10 +65,12 @@
                             <div class="card-body p-0 pt-4"><a href="{{ path('app_education_tutorial', {id: tutorial.id}) }}" class="h3">{{ tutorial.name }}</a>
                                 {% if tutorial.organization is defined and tutorial.organization is not empty %}
                                     {% set organization = commonground_resource(tutorial.organization) %}
-                                    <div class="d-flex align-items-center my-4"><img class="avatar avatar-sm rounded-circle" src="{{ organization.style.favicon.base64 }}" alt="">
+                                    <div class="d-flex align-items-center mt-2 mb-2"><img class="avatar avatar-sm rounded-circle" src="{{ organization.style.favicon.base64 }}" alt="">
                                         <h6 class="text-muted small ml-2 mb-0">{{ organization.name }}</h6>
                                     </div>
-                                    {{ tutorial.additionalType }}
+                                    <div class="mb-2 font-weight-bold">
+                                        {{ tutorial.additionalType }}
+                                    </div>
                                 {% endif %}
                                 <p class="mb-0">{{ tutorial.description }}</p>
                             </div>
@@ -92,14 +94,29 @@
         </div>
     </section>
 
-    <section class="section section-lg pb-5 bg-soft">
+
+    <section id="plaats" class="section section-lg pb-5 bg-soft">
         <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="mb-4">{{ 'Share your knowledge to gain inseight'|trans }}</h2>
-                    <p class="lead mb-5">{{ 'sharing might be'|trans|capitalize }} <span class="font-weight-bolder">{{ 'caring'|trans }}</span>  {{ 'but learning is yearning'|trans }}</p>
+            <div class="row justify-content-center">
+                <div class="col-md-10 text-center">
+                    <h2 class="h1">{{ 'post a tutorial for students'|trans|capitalize }}</h2>
+                    <p class="lead px-lg-5 mb-5">{{ 'Share your knowledge to gain inseight'|trans }}</p>
                     <p>{{'by providing tutorials you don\'t just support the next generation of profesional\'s, you activly help them onboard for your ecosystem'|trans|capitalize}}</p>
-                    <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal" data-target=".pricing-modal"><a href="{{ path('app_user_idvault') }}" style="color: white"><span class="mr-2"><i class="fas fa-hand-pointer"></i></span>{{ 'register now to post your tutorials'|trans|capitalize }}</a></button>
+                    {% if app.user %}
+                        <a href="{{ path('app_dashboardorganization_tutorials') }}">
+                            <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal"
+                                    data-target=".pricing-modal"><span class="mr-2"><i
+                                        class="fas fa-hand-pointer"></i></span>{{'post a tutorial'|trans|capitalize }}
+                            </button>
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_user_idvault') }}">
+                            <button type="button" class="btn btn-secondary animate-up-2" data-toggle="modal"
+                                    data-target=".pricing-modal"><span class="mr-2"><i
+                                        class="fas fa-hand-pointer"></i></span>{{ 'post a tutorial'|trans|capitalize }}
+                            </button>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

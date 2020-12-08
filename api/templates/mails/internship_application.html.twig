@@ -1,0 +1,24 @@
+<table align="center"  style="background-color: #F5F5F5; width: 100%; padding: 5px; max-width: 1200px;">
+    <tr>
+        <td align="center" style="text-align: -webkit-center">
+            <table style="width: 80%; background-color: white;">
+                <tr>
+                    <td style="width: 100%; height: fit-content; background-color: #01689B">
+                        <h1 style=" margin: 15px 0 15px 30px; color: white; font-family: Verdana,serif; ">Conduction Academy</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p style="margin: 15px 30px 0 30px"><strong>Er is zojuist een inschrijving gedaan op {% if internship.name is defined and internship.name is not empty %}{{ internship.name }}{% endif %}!</strong></p>
+
+                        <p style="margin: 15px 30px 0 30px">{% if student.name is defined and student.name is not empty %}{{ student.name }}{% endif %} heeft zich zojuist ingeschreven voor {% if internship.name is defined and internship.name is not empty %}{{ internship.name }}{% endif %}.</p>
+
+                        <p style="margin: 15px 30px 0 30px">Met vriendelijke groet,</p>
+                        <p style="margin: 15px 30px 0 30px">Het stage platform team</p>
+                        <p></p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

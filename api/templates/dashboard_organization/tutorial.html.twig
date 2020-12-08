@@ -16,30 +16,42 @@
                     <li class="breadcrumb-item active" aria-current="page">{{ 'Tutorial'|trans|capitalize }}</li>
                 </ol>
             </nav>
-            <h2 class="h4">{{ tutorial.name }}</h2>
-            <p class="mb-0">{{ 'tutorials help us all to gain and gather knowledge.'|trans|capitalize }}</p>
+            {% if tutorial['@id'] is defined and tutorial['@id'] is not empty %}
+                <h2 class="h4">{{ tutorial.name }} {{ 'To adjust'|trans|capitalize }}</h2>
+                <p class="mb-0">{{ 'change your tutorial here'|trans|capitalize }}.</p>
+            {% else %}
+                <h2 class="h4">{{ 'post tutorial'|trans|capitalize }}</h2>
+                <p class="mb-0">{{ 'post a new tutorial via our form'|trans|capitalize }}.</p>
+            {% endif %}
         </div>
     </div>
 
-
     <form action="{{ path('app_dashboardorganization_tutorial',{'id': tutorial.id}) }}" method="post">
-        <!-- left collum -->
-    <div class="row">
-        <div class="col-12 col-xl-8">
-            <div class="card card-body bg-white border-light shadow-sm mb-4">
-                <h2 class="h5 mb-4">{{ 'general information'|trans|capitalize }}</h2>
+        <div class="row">
+            <div class="col-12 ">
+                <div class="card card-body bg-white border-light shadow-sm mb-4">
+                    <h2 class="h5 mb-4">{{ 'general information'|trans|capitalize }}</h2>
+
                     {% if tutorial['@id'] is defined and tutorial['@id'] is not empty %}
                         <input type="hidden" name="@id" id="@id" value="{{ tutorial['@id'] }}">
                     {% endif %}
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label for="Tutorial name">{{ 'name'|trans|capitalize }}</label>
-                                <input class="form-control" id="name" type="text"
-                                    {% if tutorial.name is defined and tutorial.name is not empty %}
-                                        value="{{ tutorial.name }}" {% else %}
-                                        placeholder="{{ 'your tutorial name'|trans|capitalize }}"{% endif %}
-                                       name="name" required>
+                                <label for="Tutorial name">{{ 'name'|trans|capitalize }} <span
+                                        class="text-danger">*</span></label>
+                                <input
+                                    class="form-control"
+                                    id="name"
+                                    type="text"
+                                    {% if tutorial.name|default %}
+                                        value="{{ tutorial.name }}"
+                                    {% else %}
+                                        placeholder="{{ 'your tutorial name'|trans|capitalize }}"
+                                    {% endif %}
+                                    name="name"
+                                    required
+                                >
                             </div>
                         </div>
                     </div>
@@ -47,13 +59,20 @@
                     <div class="row align-items-center">
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label for="description">{{ 'description'|trans|capitalize }}</label>
-                                <input class="form-control" id="description" type="text"
-                                       required=""
+                                <label for="description">{{ 'description'|trans|capitalize }} <span class="text-danger">*</span></label>
+                                <input
+                                    class="form-control"
+                                    id="description"
+                                    type="text"
+                                    required=""
                                     {% if tutorial.description is defined and tutorial.description is not empty %}
-                                        value="{{ tutorial.description }}" {% else %}
-                                        placeholder="{{'your tutorial description'|trans|capitalize }}"{% endif %}
-                                       name="description" required>
+                                        value="{{ tutorial.description }}"
+                                    {% else %}
+                                        placeholder="{{ 'your tutorial description'|trans|capitalize }}"
+                                    {% endif %}
+                                    name="description"
+                                    required
+                                >
                             </div>
                         </div>
                     </div>
@@ -63,56 +82,101 @@
                             <div class="form-group">
                                 <label for="text">{{ 'text'|trans|capitalize }}</label>
                                 {% if tutorial.text is defined and tutorial.text is not empty %}
-                                    <textarea class="form-control" id="text" name="text" rows="3"
-                                              cols="6">{{ tutorial.text }}</textarea>
+                                    <textarea class="form-control" id="text" name="text"
+                                              rows="3" cols="6">{{ tutorial.text }}
+                                    </textarea>
                                 {% else %}
                                     <textarea class="form-control" id="text" name="text"
-                                              placeholder="{{'the text of your tutorial will be displayed here'|trans|capitalize }}"
-                                              rows="3" cols="6"></textarea>{% endif %}
+                                              placeholder="{{ 'the text of your tutorial will be displayed here'|trans|capitalize }}"
+                                              rows="3" cols="6">
+                                    </textarea>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                <div class="row align-items-center">
-                    <div class="col-md-6 mb-3">
-                        <div class="form-group">
-                            <label for="additionalType">{{ 'organization'|trans|capitalize }}</label>
-                            <select class="form-control" name="organization" id="organization">
-                                {% for organization in organizations %}
-                                    {% set organizationUrl = commonground_cleanurl({'component':'wrc', 'type':'organizations', 'id':organization.id}) %}
-                                    <option {% if app.user.organization is defined and app.user.organization == organizationUrl %} selected
-                                        {% elseif tutorial.organization is defined and tutorial.organization == organizationUrl %} selected {% endif %}
-                                            value="{{ organizationUrl }}">{{ organization.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row align-items-center">
-                <div class="col-md-6 mb-3">
-                    <div class="form-group">
-                        <label for="additionalType">{{ 'type'|trans|capitalize }}</label>
-                        <select class="form-control" name="additionalType" id="additionalType">
-
-                            <option value="werkomgeving">{{ 'working environment'|trans }}</option>
-                            <option value="setup">{{ 'setup'|trans }}</option>
-                            <option value="layout"> {{ 'layout'|trans }} </option>
-                            <option value="datamodellen">{{ 'data models'|trans }}</option>
-
-                        </select>
-                    </div>
-                </div>
-
-
+                    <div class="row align-items-center">
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label for="time required">{{ 'time required'|trans|capitalize }}</label>
-                                <input class="form-control" id="description" type="text"
-                                       required=""
+                                <label for="organization">{{ 'organization'|trans|capitalize }}</label>
+                                <select class="form-control" name="organization" id="organization">
+                                    {#                                    {% for organization in organizations %}#}
+                                    {#                                        {% set organizationUrl = commonground_cleanurl({'component':'wrc', 'type':'organizations', 'id':organization.id}) %}#}
+                                    {#                                        <option#}
+                                    {#                                            {% if app.user.organization is defined and app.user.organization == organizationUrl %} selected#}
+                                    {#                                            {% elseif tutorial.organization is defined and tutorial.organization == organizationUrl %} selected#}
+                                    {#                                            {% endif %}#}organization
+                                    {#                                            value="{{ organizationUrl }}">{{ .name }}#}
+                                    {#                                        </option>#}
+                                    {#                                    {% endfor %}#}
+{#                                    {% if app.user.organization|default %}#}
+{#                                        {% set org = commonground_resource(app.user.organization) %}#}
+{#                                        <option style="background: #f5f8fb" class="form-control" id="organizationInput"#}
+{#                                                type="text" value="{{ org['@id'] }}"#}
+{#                                                selected>{{ org.name|capitalize }}</option>#}
+{#                                    {% endif %}#}
+                                </select>
+                                {#                                {% if app.user.organization|default %}#}
+                                {#                                    {% set org = commonground_resource(app.user.organization) %}#}
+                                {#                                    <input style="background: #f5f8fb" class="form-control" id="organizationInput"#}
+                                {#                                           type="text"#}
+                                {#                                           name="organization" value="{{ org.name|capitalize }}" disabled>#}
+                                {#                                {% endif %}#}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="additionalType">{{ 'type'|trans|capitalize }}</label>
+                                <select class="form-control" name="additionalType" id="additionalType">
+                                    <option
+                                        {% if tutorial.additionalType|default and tutorial.additionalType == 'werkomgeving' %}
+                                            selected
+                                        {% endif %}
+                                        value="code">{{ 'code'|trans }}
+                                    </option>
+                                    <option
+                                        {% if tutorial.additionalType|default and tutorial.additionalType == 'setup' %}
+                                            selected
+                                        {% endif %}
+                                        value="Soft skills">{{ 'soft skills'|trans }}
+                                    </option>
+                                    <option
+                                        {% if tutorial.additionalType|default and tutorial.additionalType == 'layout' %}
+                                            selected
+                                        {% endif %}
+                                        value="life"> {{ 'life'|trans }}
+                                    </option>
+                                    <option
+                                        {% if tutorial.additionalType|default and tutorial.additionalType == 'datamodellen' %}
+                                            selected
+                                        {% endif %}
+                                        value="onboarding">{{ 'onboarding'|trans }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="time required">{{ 'time required'|trans|capitalize }} <span
+                                        class="text-danger">*</span></label>
+                                <input
+                                    class="form-control"
+                                    id="description"
+                                    type="text"
                                     {% if tutorial.timeRequired is defined and tutorial.timeRequired is not empty %}
-                                        value="{{ tutorial.timeRequired }}" {% else %}
-                                        placeholder="{{ 'The time required to read the tutorial'|trans|capitalize }}"{% endif %}
-                                       name="timeRequired" required>
+                                        value="{{ tutorial.timeRequired }}"
+                                    {% else %}
+                                        placeholder="{{ 'The time required to read the tutorial'|trans|capitalize }}"
+                                    {% endif %}
+                                    name="timeRequired"
+                                    required
+                                >
                             </div>
                         </div>
                     </div>
@@ -121,26 +185,42 @@
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label
-                                    for="educationalCredentialAwarded">{{ 'educational credential'|trans|capitalize }}</label>
-                                <input class="form-control" id="educationalCredentialAwarded" type="text"
-                                       required=""
+                                    for="educationalCredentialAwarded">{{ 'educational credential'|trans|capitalize }}
+                                    <span class="text-danger">*</span></label>
+                                <input
+                                    class="form-control"
+                                    id="educationalCredentialAwarded"
+                                    type="text"
                                     {% if tutorial.educationalCredentialAwarded is defined and tutorial.educationalCredentialAwarded is not empty %}
-                                        value="{{ tutorial.educationalCredentialAwarded }}" {% else %}
-                                        placeholder="{{ 'the level of education required for this tutorial'|trans|capitalize }}"{% endif %}
-                                       name="educationalCredentialAwarded" required>
+                                        value="{{ tutorial.educationalCredentialAwarded }}"
+                                    {% else %}
+                                        placeholder="{{ 'the level of education required for this tutorial'|trans|capitalize }}"
+                                    {% endif %}
+                                    name="educationalCredentialAwarded"
+                                    required
+                                >
                             </div>
                         </div>
                     </div>
 
-                <div class="row align-items-center">
-                    <div class="col-md-12 mb-3">
-                        <div class="form-group">
-                            <label for="video">{{ 'video url'|trans|capitalize }}</label>
-                            <input class="form-control" id="video" type="text"
-                                   placeholder="{{ 'a url for a video as an example'|trans|capitalize }}" name="video">
+                    <div class="row align-items-center">
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label for="video">{{ 'video url'|trans|capitalize }}</label>
+                                <input
+                                    class="form-control"
+                                    id="video"
+                                    type="text"
+                                    {% if tutorial.video is defined and tutorial.video is not empty %}
+                                        value="{{ tutorial.video }}"
+                                    {% else %}
+                                        placeholder="{{ 'a url for a video as an example'|trans|capitalize }}"
+                                    {% endif %}
+                                    name="video"
+                                >
+                            </div>
                         </div>
                     </div>
-                </div>
 
                     <div class="row align-items-center">
                         <div class="col-md-12 mb-3">
@@ -148,12 +228,15 @@
                                 <label
                                     for="occupationalCredentialAwarded">{{ 'occupational credential'|trans|capitalize }}</label>
                                 {% if tutorial.occupationalCredentialAwarded is defined and tutorial.occupationalCredentialAwarded is not empty %}
-                                    <textarea class="form-control" id="occupationalCredentialAwarded" name="occupationalCredentialAwarded" rows="3"
-                                              cols="6">{{ tutorial.occupationalCredentialAwarded }}</textarea>
+                                    <textarea class="form-control" id="occupationalCredentialAwarded"
+                                              name="occupationalCredentialAwarded"
+                                              rows="3" cols="6">{{ tutorial.occupationalCredentialAwarded }}</textarea>
                                 {% else %}
-                                    <textarea class="form-control" id="occupationalCredentialAwarded" name="occupationalCredentialAwarded"
+                                    <textarea class="form-control" id="occupationalCredentialAwarded"
+                                              name="occupationalCredentialAwarded"
                                               placeholder="{{ 'indicate in the tutorial which professional certificate you receive'|trans|capitalize }}"
-                                              rows="3" cols="6"></textarea>{% endif %}
+                                              rows="3" cols="6"></textarea>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -161,219 +244,247 @@
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary">{{ 'save all'|trans|capitalize }}</button>
                     </div>
-                </form><br>
-
-
-            <h3 class="h4">{{ 'participants'|trans|capitalize }}</h3>
-            <p class="mb-0">{{ 'these people are following your tutorial'|trans|capitalize }}</p>
-
-            <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-0">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th class="border-0">
-                            <div class="form-check dashboard-check">
-                                <input class="form-check-input" type="checkbox" value="" id="userCheck55">
-                                <label class="form-check-label" for="userCheck55"></label>
-                            </div>
-                        </th>
-                        <th class="border-0">{{ 'name'|trans|capitalize }}</th>
-                        <th class="border-0">{{ 'date created'|trans|capitalize }}</th>
-                        <th class="border-0">{{ 'verified'|trans|capitalize }}</th>
-                        <th class="border-0">{{ 'status'|trans|capitalize }}</th>
-                        <th class="border-0">{{ 'action'|trans|capitalize }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        {% if participants is defined and participants is not empty %}
-                        {% for participant in participants %}
-                        <td>
-                            <div class="form-check dashboard-check">
-                                <input class="form-check-input" type="checkbox" value="" id="userCheck1">
-                                <label class="form-check-label" for="userCheck1"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <a href="#" class="d-flex align-items-center"><img
-                                    src="../../assets/img/team/profile-picture-1.jpg"
-                                    class="user-avatar rounded-circle mr-3" alt="Avatar">
-                                <div class="d-block"><span class="font-weight-bold">{{ participant.person }}</span>
-                                    <div class="small text-gray"> </div>
-                                </div>
-                            </a>
-                        </td>
-                        <td><span class="font-weight-normal">{{ participant.dateCreated|date("d-m-Y", "Europe/Paris") }}</span>
-                        </td>
-                        <td><span class="font-weight-normal">
-                                <span class="fas fa-check-circle text-success mr-2"></span>Email</span>
-                        </td>
-                        <td><span class="font-weight-normal text-success">{# participant.results #}</span></td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
-                                        class="icon icon-sm"><span
-                                            class="fas fa-ellipsis-h icon-dark"></span> </span><span
-                                        class="sr-only">Toggle Dropdown</span>
-                                </button>
-
-                                <div class="dropdown-menu"><a class="dropdown-item" href="#"><span
-                                            class="fas fa-user-shield mr-2"></span>Reset Pass</a> <a
-                                        class="dropdown-item" href="#"><span class="fas fa-eye mr-2"></span>View
-                                        Details</a> <a class="dropdown-item text-danger" href="#"><span class="fas fa-user-times mr-2"></span>Suspend</a></div>
-                            </div>
-
-                            <a href="#" class="text-danger ml-2" title="" data-toggle="tooltip"
-                               data-original-title="Delete"><span class="fas fa-times-circle"></span></a></td>
-                        {% endfor %}
-                        {% endif %}
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="card-footer px-3 d-flex align-items-center justify-content-between">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination mb-0">
-                            <li class="page-item"><a class="page-link" href="#">{{ 'Previous'|trans|capitalize }}</a></li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item"><a class="page-link" href="#">5</a></li>
-                            <li class="page-item"><a class="page-link" href="#">{{ 'Next'|trans|capitalize }}</a></li>
-                        </ul>
-                    </nav>
-                    <div class="font-weight-bold small">{{ 'showing'|trans|capitalize }} <b>5</b>  {{ 'out of'|trans|capitalize }}<b>25</b> {{ 'entries'|trans|capitalize }}</div>
                 </div>
+            </div>
+        </div>
 
-                <h3 class="h4">{{ 'participants'|trans|capitalize }}</h3>
-                {% if participants|default %}
-                    <p class="mb-0">{{ 'these people are following your tutorial'|trans|capitalize }}</p>
+        {% if tutorial.id != 'new' %}
+            <h3 class="h4">{{ 'participants'|trans|capitalize }}</h3>
+            {% if participants|default %}
+                <p class="mb-0">{{ 'these people are following your tutorial'|trans|capitalize }}</p>
 
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-0">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="border-0">
+                                    </th>
+                                    <th class="border-0">{{ 'name'|trans|capitalize }}</th>
+                                    <th class="border-0">{{ 'date created'|trans|capitalize }}</th>
+                                    <th class="border-0">{{ 'verified'|trans|capitalize }}</th>
+                                    <th class="border-0">{{ 'status'|trans|capitalize }}</th>
+                                    <th class="border-0">{{ 'action'|trans|capitalize }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if participants is defined and participants is not empty %}
+                                    {% for participant in participants %}
+                                        {% if participant.person is defined and participant.person is not empty and commonground_is_resource(participant.person) %}
+                                            {% set participantPerson = commonground_resource(participant.person) %}
+                                        {% endif %}
+                                        <tr>
+                                            <td>
+                                                <div class="form-check dashboard-check">
+                                                    <input class="form-check-input" type="checkbox" value=""
+                                                           id="userCheck1">
+                                                    <label class="form-check-label" for="userCheck1"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="d-flex align-items-center">
+                                                    <img src="/bundles/rocket/assets/img/team/profile-picture-1.jpg"
+                                                         class="user-avatar rounded-circle mr-3" alt="Avatar">
+                                                    <div class="d-block">
+                                                        <span class="font-weight-bold">
+                                                            {% if participantPerson.name is defined and participantPerson.name is not empty %}
+                                                                {{ participantPerson.name }}
+                                                            {% else %}
+                                                                {{ 'no name available'|trans|capitalize }}
+                                                            {% endif %}
+                                                        </span>
+                                                        <div class="small text-gray">
+                                                            {% if employeePerson.emais is defined and employeePerson.emais is not empty %}
+                                                                {{ employeePerson.emais[0] }}
+                                                            {% else %}
+                                                                {{ 'no email available'|trans|capitalize }}
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    class="font-weight-normal">{{ participant.dateCreated|date("d-m-Y", "Europe/Paris") }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="font-weight-normal"><span
+                                                        class="fas fa-check-circle text-success mr-2"></span>{{ 'email'|trans|capitalize }}</span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    class="font-weight-normal text-success">{# participant.results #}</span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button
+                                                        class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                            <span class="icon icon-sm">
+                                                                <span class="fas fa-ellipsis-h icon-dark"></span>
+                                                            </span>
+                                                        <span
+                                                            class="sr-only">{{ 'Toggle Dropdown'|trans|capitalize }}</span>
+                                                    </button>
 
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#">
+                                                            <span class="fas fa-user-shield mr-2"></span>
+                                                            {{ 'Reset Pass'|trans|capitalize }}
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <span class="fas fa-eye mr-2"></span>
+                                                            {{ 'View Details'|trans|capitalize }}
+                                                        </a>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <span class="fas fa-user-times mr-2"></span>
+                                                            {{ 'suspend'|trans|capitalize }}
+                                                        </a>
+                                                    </div>
+                                                </div>
 
-                <div class="col-12 mb-4 mb-xl-0">
-                    <div class="card card-body bg-white border-light">
-                        <h2 class="h5 mb-4">{{ 'requirements'|trans|capitalize }}</h2>
+                                                <a href="#" class="text-danger ml-2" title="" data-toggle="tooltip"
+                                                   data-original-title="Delete"><span
+                                                        class="fas fa-times-circle"></span></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                </tbody>
+                            </table>
+                            <div class="card-footer px-3 d-flex align-items-center justify-content-between">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item"><a class="page-link"
+                                                                 href="#">{{ 'Previous'|trans|capitalize }}</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                        <li class="page-item"><a class="page-link"
+                                                                 href="#">{{ 'Next'|trans|capitalize }}</a></li>
+                                    </ul>
+                                </nav>
+                                <div class="font-weight-bold small">{{ 'showing'|trans|capitalize }}
+                                    <b>5</b> {{ 'out of'|trans }} <b>25</b> {{ 'entries'|trans }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="mb-0">{{ 'there are currently no participants on this tutorial'|trans|capitalize }}.</p>
+            {% endif %}
+            <br>
+        {% endif %}
+
+        <h3 class="h4">{{ 'requirements'|trans|capitalize }}</h3>
+        {% if requirements|default %}
+            {% if tutorial.id == 'new' %}
+                <p class="mb-0">{{ 'choose the requirements for your tutorial'|trans|capitalize }}.</p>
+            {% elseif tutorial.coursePrerequisites|default %}
+                <p class="mb-0">{{ 'the checked activities are the requirements of your tutorial'|trans|capitalize }}.</p>
+            {% else %}
+                <p class="mb-0">{{ 'you can select the requirements for your tutorial here'|trans|capitalize }}.</p>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-0">
                         <table class="table table-hover">
                             <thead>
                             <tr>
                                 <th class="border-0">
-                                    {#                                    <div class="form-check dashboard-check">#}
-                                    {#                                        <input class="form-check-input" type="checkbox" value="" id="userCheck55">#}
-                                    {#                                        <label class="form-check-label" for="userCheck55"></label>#}
-                                    {#                                    </div>#}
                                 </th>
                                 <th class="border-0">{{ 'name'|trans|capitalize }}</th>
-                                {#                                <th class="border-0">Action</th>#}
                             </tr>
                             </thead>
                             <tbody>
                             {% if requirements is defined and requirements is not empty %}
                                 {% for requirement in requirements %}
-                                    <tr>
-                                        <td>
-                                            <div class="form-check dashboard-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                       value="/requirements/{{ requirement.id }}"
-                                                       id="{{ requirement.id }}Checkbox" name="requirements[]"
-                                                    {% if tutorial.requirements|default %}{% for act in tutorial.requirements %}
-                                                    {% if requirement.id == act.id %}checked{% endif %}{% endfor %}{% endif %}>
-                                                <label class="form-check-label"
-                                                       for="{{ requirement.id }}Checkbox"></label>
-                                            </div>
-                                        </td>
-                                        <td><span
-                                                class="font-weight-normal">{{ requirement.name }}</span>
-                                        </td>
-                                        {#                                        <td>#}
-                                        {#                                            <div class="btn-group">#}
-                                        {#                                                <button#}
-                                        {#                                                    class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"#}
-                                        {#                                                    data-toggle="dropdown" aria-haspopup="true"#}
-                                        {#                                                    aria-expanded="false"><span#}
-                                        {#                                                        class="icon icon-sm"><span#}
-                                        {#                                                            class="fas fa-ellipsis-h icon-dark"></span> </span><span#}
-                                        {#                                                        class="sr-only">Toggle Dropdown</span>#}
-                                        {#                                                </button>#}
-                                        {#                                                <div class="dropdown-menu"><a class="dropdown-item" href="#"><span#}
-                                        {#                                                            class="fas fa-user-shield mr-2"></span> Reset Pass</a> <a#}
-                                        {#                                                        class="dropdown-item" href="#"><span#}
-                                        {#                                                            class="fas fa-eye mr-2"></span>View#}
-                                        {#                                                        Details</a> <a class="dropdown-item text-danger" href="#"><span#}
-                                        {#                                                            class="fas fa-user-times mr-2"></span>Suspend</a></div>#}
-                                        {#                                            </div>#}
-                                        {#                                            <a href="#" class="text-danger ml-2" title="" data-toggle="modal"#}
-                                        {#                                               data-target="#{{ activity.id }}"><span#}
-                                        {#                                                    class="fas fa-times-circle"></span></a>#}
-                                        {#                                        </td>#}
-                                    </tr>
+                                    {% if requirement.id != tutorial.id %} {# do not show this tutorial as a possible requirement! #}
+                                        <tr>
+                                            <td>
+                                                <div class="form-check dashboard-check">
+                                                    <input class="form-check-input"
+                                                           type="checkbox"
+                                                           value="/courses/{{ requirement.id }}"
+                                                           id="{{ requirement.id }}Checkbox"
+                                                           name="coursePrerequisites[]"
+                                                        {% if tutorial.coursePrerequisites|default %}
+                                                            {% for act in tutorial.coursePrerequisites %}
+                                                                {% if requirement['id'] == act|split('/')[2] %}
+                                                                    checked
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    >
+                                                    <label
+                                                        class="form-check-label"
+                                                        for="{{ requirement.id }}Checkbox">
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('app_dashboardorganization_tutorial',{'id': requirement.id}) }}"
+                                                   class="d-flex align-items-center">
+                                                    <span class="font-weight-bold">{{ requirement.name }}</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
                                 {% endfor %}
                             {% endif %}
                             </tbody>
                         </table>
-                        {% if requirements|default %}
-                            {% for requirement in requirements %}
-                                <div class="modal fade" id="{{ requirement.id }}" tabindex="-1" role="dialog"
-                                     aria-labelledby="modal-default" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title">Edit {{ requirement.id }}</h6>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>With less than a month to go before the European Union enacts new
-                                                    consumer privacy laws for its citizens, companies around the
-                                                    world
-                                                    are updating their terms of service agreements to comply.</p>
-                                                <p>The European Union's General Data Protection Regulation
-                                                    (G.D.P.R.)
-                                                    goes into effect on May 25 and is meant to ensure a common set
-                                                    of
-                                                    data rights in the European Union. It requires organizations to
-                                                    notify users as
-                                                    soon as possible of high-risk data breaches that could
-                                                    personally
-                                                    affect them.</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-sm btn-secondary">I Got It
-                                                </button>
-                                                <button type="button" class="btn btn-link text-danger ml-auto"
-                                                        data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                        <div class="card-footer px-3 d-flex align-items-center justify-content-between">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination mb-0">
+                                    <li class="page-item"><a class="page-link"
+                                                             href="#">{{ 'Previous'|trans|capitalize }}</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="#">{{ 'Next'|trans|capitalize }}</a></li>
+                                </ul>
+                            </nav>
+                            <div class="font-weight-bold small">{{ 'showing'|trans|capitalize }}
+                                <b>5</b> {{ 'out of'|trans }} <b>25</b> {{ 'entries'|trans }}</div>
+                        </div>
                     </div>
                 </div>
+            </div>
+        {% elseif tutorial.id == 'new' %}
+            <p class="mb-0">{{ 'there are currently no requirements to choose from'|trans|capitalize }}</p>
+        {% else %}
+            <p class="mb-0"></p>{{ 'there are currently no requirements on this tutorial'|trans|capitalize }}
+        {% endif %}
+        <br>
 
+        <h3 class="h4">{{ 'activities'|trans|capitalize }}</h3>
+        {% if activities|default %}
+            {% if tutorial.id == 'new' %}
+                <p class="mb-0">{{ 'choose the activities for your tutorial'|trans|capitalize }}</p>
+            {% elseif tutorial.activities|default %}
+                <p class="mb-0">{{ 'the checked activities are the activities of your tutorial'|trans|capitalize }}</p>
+            {% else %}
+                <p class="mb-0">{{ 'you can select the activities for your tutorial here'|trans|capitalize }}</p>
+            {% endif %}
 
-
-
-
-
-
-                <div class="col-12 mb-4 mb-xl-0">
-                    <div class="card card-body bg-white border-light">
-                        <h2 class="h5 mb-4">{{ 'activities'|trans|capitalize }}</h2>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-0">
                         <table class="table table-hover">
                             <thead>
                             <tr>
                                 <th class="border-0">
-                                    {#                                    <div class="form-check dashboard-check">#}
-                                    {#                                        <input class="form-check-input" type="checkbox" value="" id="userCheck55">#}
-                                    {#                                        <label class="form-check-label" for="userCheck55"></label>#}
-                                    {#                                    </div>#}
                                 </th>
                                 <th class="border-0">{{ 'name'|trans|capitalize }}</th>
-                                {#                                <th class="border-0">Action</th>#}
                             </tr>
                             </thead>
                             <tbody>
@@ -382,100 +493,59 @@
                                     <tr>
                                         <td>
                                             <div class="form-check dashboard-check">
-                                                <input class="form-check-input" type="checkbox"
+                                                <input class="form-check-input"
+                                                       type="checkbox"
                                                        value="/activities/{{ activity.id }}"
-                                                       id="{{ activity.id }}Checkbox" name="activities[]"
-                                                       {% if tutorial.activities|default %}{% for act in tutorial.activities %}
-                                                    {% if activity.id == act.id %}checked{% endif %}{% endfor %}{% endif %}>
-                                                <label class="form-check-label"
-                                                       for="{{ activity.id }}Checkbox"></label>
+                                                       id="{{ activity.id }}Checkbox"
+                                                       name="activities[]"
+                                                    {% if tutorial.activities|default %}
+                                                        {% for act in tutorial.activities %}
+                                                            {% if activity.id == act.id %}
+                                                                checked
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                >
+                                                <label
+                                                    class="form-check-label"
+                                                    for="{{ activity.id }}Checkbox">
+                                                </label>
                                             </div>
                                         </td>
-                                        <td><span
-                                                class="font-weight-normal">{{ activity.name }}</span>
+                                        <td>
+                                            <a href="#" class="d-flex align-items-center">
+                                                <span class="font-weight-bold">{{ activity.name }}</span>
+                                            </a>
                                         </td>
-                                        {#                                        <td>#}
-                                        {#                                            <div class="btn-group">#}
-                                        {#                                                <button#}
-                                        {#                                                    class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"#}
-                                        {#                                                    data-toggle="dropdown" aria-haspopup="true"#}
-                                        {#                                                    aria-expanded="false"><span#}
-                                        {#                                                        class="icon icon-sm"><span#}
-                                        {#                                                            class="fas fa-ellipsis-h icon-dark"></span> </span><span#}
-                                        {#                                                        class="sr-only">Toggle Dropdown</span>#}
-                                        {#                                                </button>#}
-                                        {#                                                <div class="dropdown-menu"><a class="dropdown-item" href="#"><span#}
-                                        {#                                                            class="fas fa-user-shield mr-2"></span> Reset Pass</a> <a#}
-                                        {#                                                        class="dropdown-item" href="#"><span#}
-                                        {#                                                            class="fas fa-eye mr-2"></span>View#}
-                                        {#                                                        Details</a> <a class="dropdown-item text-danger" href="#"><span#}
-                                        {#                                                            class="fas fa-user-times mr-2"></span>Suspend</a></div>#}
-                                        {#                                            </div>#}
-                                        {#                                            <a href="#" class="text-danger ml-2" title="" data-toggle="modal"#}
-                                        {#                                               data-target="#{{ activity.id }}"><span#}
-                                        {#                                                    class="fas fa-times-circle"></span></a>#}
-                                        {#                                        </td>#}
                                     </tr>
                                 {% endfor %}
                             {% endif %}
                             </tbody>
                         </table>
-                        {% if activities|default %}
-                            {% for activity in activities %}
-                                <div class="modal fade" id="{{ activity.id }}" tabindex="-1" role="dialog"
-                                     aria-labelledby="modal-default" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title">Edit {{ activity.id }}</h6>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>With less than a month to go before the European Union enacts new
-                                                    consumer privacy laws for its citizens, companies around the
-                                                    world
-                                                    are updating their terms of service agreements to comply.</p>
-                                                <p>The European Union's General Data Protection Regulation
-                                                    (G.D.P.R.)
-                                                    goes into effect on May 25 and is meant to ensure a common set
-                                                    of
-                                                    data rights in the European Union. It requires organizations to
-                                                    notify users as
-                                                    soon as possible of high-risk data breaches that could
-                                                    personally
-                                                    affect them.</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-sm btn-secondary">I Got It
-                                                </button>
-                                                <button type="button" class="btn btn-link text-danger ml-auto"
-                                                        data-dismiss="modal">Close
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                {% else %}
-                    <p class="mb-0">There are currently no participants on this tutorial</p>
-                {% endif %}
-            </div>
-            <!-- right collum -->
-            <div class="col-12 col-xl-4">
-                <div class="row">
-
-
-
-
-
-
-
+                        <div class="card-footer px-3 d-flex align-items-center justify-content-between">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination mb-0">
+                                    <li class="page-item"><a class="page-link"
+                                                             href="#">{{ 'Previous'|trans|capitalize }}</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="#">{{ 'Next'|trans|capitalize }}</a></li>
+                                </ul>
+                            </nav>
+                            <div class="font-weight-bold small">{{ 'showing'|trans|capitalize }}
+                                <b>5</b> {{ 'out of'|trans }} <b>25</b> {{ 'entries'|trans }}</div>
+                        </div>
                     </div>
                 </div>
-
+            </div>
+        {% elseif tutorial.id == 'new' %}
+            <p class="mb-0">{{ 'there are currently no activities to choose from'|trans|capitalize }}</p>
+        {% else %}
+            <p class="mb-0">{{ 'there are currently no activities on this tutorial'|trans|capitalize }}</p>
+        {% endif %}
+    </form>
 {% endblock %}

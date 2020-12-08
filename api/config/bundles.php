@@ -19,4 +19,6 @@ return [
     Endroid\QrCodeBundle\EndroidQrCodeBundle::class                      => ['all' => true],
     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class     => ['all' => true],
     Conduction\RocketBundle\RocketBundle::class                          => ['all' => true],
+    Conduction\BalanceBundle\BalanceBundle::class                        => ['all' => true],
+    Conduction\IdVaultBundle\IdVaultBundle::class                        => ['all' => true],
 ];
