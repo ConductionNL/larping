@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f8c0c20d41c1b9ff51fd1830b258f899",
+    "content-hash": "56cc14b8f7bc1b9cc03ff0ab2681c0c7",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -831,6 +831,57 @@
                 "conduction"
             ],
             "time": "2020-12-03T18:06:09+00:00"
+        },
+        {
+            "name": "conduction/listybundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ConductionNL/ListyBundle.git",
+                "reference": "0a92cd9a3231a37dc9404101e3d2fadefca2834e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ConductionNL/ListyBundle/zipball/0a92cd9a3231a37dc9404101e3d2fadefca2834e",
+                "reference": "0a92cd9a3231a37dc9404101e3d2fadefca2834e",
+                "shasum": ""
+            },
+            "require": {
+                "conduction/commongroundbundle": "dev-master || dev-symfony51",
+                "php": "^7.1.3",
+                "twig/extensions": "^1.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Conduction\\ListyBundle\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ruben van der Linde",
+                    "email": "ruben@conduction.nl"
+                },
+                {
+                    "name": "Conduction",
+                    "homepage": "https://www.conduction.nl"
+                }
+            ],
+            "description": "Symfony Bundle for dutch common ground functionality",
+            "homepage": "https://www.conduction.nl",
+            "keywords": [
+                "nl design",
+                "symfony",
+                "theme"
+            ],
+            "time": "2020-11-30T14:20:12+00:00"
         },
         {
             "name": "conduction/rocketbundle",
@@ -10855,6 +10906,7 @@
         "conduction/balancebundle": 20,
         "conduction/commongroundbundle": 20,
         "conduction/idvaultbundle": 20,
+        "conduction/listybundle": 20,
         "conduction/rocketbundle": 20
     },
     "prefer-stable": false,

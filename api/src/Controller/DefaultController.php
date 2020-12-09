@@ -30,76 +30,11 @@ class DefaultController extends AbstractController
      */
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-        // On an index route we might want to filter based on user input
-        $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
-
-        if ($this->getUser()) {
-            $person = $commonGroundService->getResource($this->getUser()->getPerson());
-            $personUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'people', 'id' => $person['id']]);
-
-            $employees = $commonGroundService->getResourceList(['component' => 'mrc', 'type' => 'employees'], ['person' => $personUrl])['hydra:member'];
-
-            if (!count($employees) > 0) {
-                $mailingService->sendMail('mails/welcome_mail.html.twig', 'no-reply@conduction.academy', $this->getUser()->getUsername(), 'Welkom op conduction.academy');
-
-                $employee = [];
-                $employee['person'] = $personUrl;
-
-                $commonGroundService->createResource($employee, ['component' => 'mrc', 'type' => 'employees']);
-
-                $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
-                $provider = $providers[0];
-
-                $users = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()])['hydra:member'];
-                $user = $users[0];
-
-                $userUrl = $commonGroundService->cleanUrl(['component' => 'uc', 'type' => 'users', 'id' => $user['id']]);
-            }
-        }
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/login")
-     * @Template
-     */
-    public function loginAction(CommonGroundService $commonGroundService, Request $request)
-    {
         $variables = [];
 
         return $variables;
     }
 
-    /**
-     * @Route("/register")
-     * @Template
-     */
-    public function registerAction(CommonGroundService $commonGroundService, Request $request)
-    {
-        $variables = [];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/organization")
-     * @Template
-     */
-    public function organizationAction(CommonGroundService $commonGroundService, Request $request)
-    {
-        $variables = [];
-
-        if (!$this->getUser()) {
-            return $this->redirect($this->generateUrl('app_user_idvault').'?backUrl='.$request->getUri());
-        }
-
-        if ($request->query->get('backUrl')) {
-            $variables['backUrl'] = $request->query->get('backUrl');
-        }
-
-        return $variables;
-    }
 
     /**
      * @Route("/newsletter")

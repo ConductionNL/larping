@@ -9,7 +9,7 @@
         "conduction/balancebundle": "dev-master",
         "conduction/commongroundbundle": "dev-symfony51",
         "conduction/idvaultbundle": "dev-master",
-        "conduction/rocketbundle": "dev-main",
+        "conduction/listybundle": "dev-master",
         "dompdf/dompdf": "^0.8.5",
         "endroid/qr-code-bundle": "^3.4",
         "phpdocumentor/reflection-docblock": "^4.3",
