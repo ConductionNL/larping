@@ -46,6 +46,9 @@
     "conduction/idvaultbundle": {
         "version": "dev-master"
     },
+    "conduction/listybundle": {
+        "version": "dev-master"
+    },
     "conduction/rocketbundle": {
         "version": "dev-main"
     },
