@@ -5,6 +5,10 @@
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
     <body>
+      <trans-unit id="91nabW2" resname="create account">
+        <source>aanmelden</source>
+        <target>aanmelden</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
