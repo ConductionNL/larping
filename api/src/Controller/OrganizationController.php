@@ -30,6 +30,7 @@ class OrganizationController extends AbstractController
      */
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
+        $variables['resources'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'programs'])['hydra:member'];
         $variables = [];
 
         return $variables;
