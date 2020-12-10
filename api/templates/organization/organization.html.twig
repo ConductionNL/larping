@@ -1,0 +1,569 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    <section class="py-7 pt-md-9 pb-md-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="mb-2 mb-lg-0">
+                        <h1 class="single-listing-title">{{ item.name }}</h1>
+                        {% if item.emails.0.email|default %}
+                            <p class="text-muted mb-1"><i
+                                    class="fa fa-mail-forward text-primary mr-1"></i>{{ item.emails.0.email }}</p>
+                        {% endif %}
+                        {% if item.phonenumbers.0.phonenumber|default %}
+                            <p class="text-muted mb-1"><i
+                                    class="fa fa-phone text-primary mr-1"></i> {{ item.phonenumbers.0.phonenumber }}</p>
+                        {% endif %}
+                        <div class="d-flex align-items-center">
+                            <ul class="list-inline list-inline-rating mr-2">
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                            </ul>
+                            <span class="d-inline-block mr-2">(5 Reviews)</span>
+                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Favourite this listing">
+                                <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
+                                <span>5 k</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
+                    <a href="#" class="btn btn-primary">Write a review</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="pb-4  pb-md-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-lg-8">
+                    <!-- About -->
+                    <div class="single-listing-content mb-6">
+                        {% if item.description|default %}
+                            <h3 class="font-weight-normal mb-6">{{ 'about this'|trans|capitalize~' '~'organization'|trans }}</h3>
+                            <p class="mb-6">{{ item.description }}</p>
+                        {% endif %}
+                        <!-- Hours -->
+                        <div class="mb-6">
+                            <h4 class="font-weight-normal mb-4">Hours</h4>
+                            <p class="mb-1">LUNCH - MONDAY – FRIDAY: 11:30am-3pm</p>
+                            <p class="mb-1">ALL DAY MENU - MONDAY – FRIDAY: 3pm-5:30pm</p>
+                            <p class="mb-1">DINNER - MONDAY – SUNDAY: 5:30pm-11pm</p>
+                            <p class="mb-1">BRUNCH - 10am-3pm</p>
+                        </div>
+
+                        <!-- Departments at this Store -->
+                        <div class="mb-6">
+                            <h4 class="font-weight-normal mb-4">Services</h4>
+                            <p class="mb-1">Counter Service</p>
+                            <p class="mb-1">Table Service</p>
+                            <p class="mb-1">Buffet Service</p>
+                            <p class="mb-1">Self Service</p>
+                            <p class="mb-1">Gueridon Service</p>
+                        </div>
+
+                        <!-- Departments at this Store -->
+                        <div class="mb-6">
+                            <h4 class="font-weight-normal mb-4">Seating</h4>
+                            <p class="mb-1">55 Guests in our Main Dining Room</p>
+                            <p class="mb-1">16 Guests in our Garden Room</p>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <!-- Features -->
+                    <div class="my-6">
+                        <h3 class="font-weight-normal mb-6">Features</h3>
+                        <ul class="list-unstyled mb-7">
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-wifi mr-2" aria-hidden="true"></i>High Speed Wifi
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-car mr-2" aria-hidden="true"></i>Street Parking
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-glass mr-2" aria-hidden="true"></i>Alcohol
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-pagelines mr-2" aria-hidden="true"></i>Vegetarian
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-cube mr-2" aria-hidden="true"></i>Reservations
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-check-circle-o mr-2" aria-hidden="true"></i> Pets Friendly
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-credit-card mr-2" aria-hidden="true"></i>Accept Credit Card
+                            </li>
+                        </ul>
+                        <hr>
+                    </div>
+
+                    <!-- Added By -->
+                    <div>
+                        <h3 class="font-weight-normal mb-6">Added By </h3>
+                        <div class="media mb-7">
+                            <div class="media-img">
+                                <img src="assets/img/user/user-xs-4.jpg" class="mr-3 media-object rounded-circle"
+                                     alt="Image User">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading">Adam Smith</h5>
+                                <div class="d-flex flex-column flex-lg-row align-items-lg-center">
+                                    <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
+
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-phone" aria-hidden="true"></i>
+                                            <span class="ml-2">+55 654 545 122</span>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                            <span class="ml-2">example.com</span>
+                                        </li>
+
+                                    </ul>
+
+                                    <ul class="list-inline list-inline-icon ml-lg-auto">
+                                        <li class="list-inline-item">
+                                            <a class="mr-2" href="#">
+                                                <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a class="mr-2" href="#">
+                                                <i class="fa fa-twitter" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a class="mr-2" href="#">
+                                                <i class="fa fa-instagram" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                    </div>
+
+                    <!-- Reviews -->
+                    <div class="my-6">
+                        <h3 class="font-weight-normal mb-6">Reviews (3)</h3>
+                        <div class="media mb-3">
+                            <div class="media-img">
+                                <img src="assets/img/user/user-xs-1.jpg" class="mr-3 media-object rounded-circle"
+                                     alt="Image User">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading">Aaren</h5>
+                                <ul class="list-inline list-inline-rating">
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                </ul>
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                                    laudan totam rem ape
+                                    riam,</p>
+
+                                <!-- Reply Section -->
+                                <div class="reply-wrapper">
+                                    <a class="d-inline-block mb-2 btn-reply" href="javascript:0">Reply</a>
+                                    <form class="form-reply my-3">
+                                        <textarea class="form-control mb-6" rows="3"
+                                                  placeholder="Enter your comment"></textarea>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="media mb-3">
+                            <div class="media-img">
+                                <img src="assets/img/user/user-xs-2.jpg" class="mr-3 media-object rounded-circle"
+                                     alt="Image User">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading">Abby</h5>
+                                <ul class="list-inline list-inline-rating">
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                    </li>
+                                </ul>
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                                    lauda totam rem ape riam,
+                                </p>
+
+                                <p class="bg-light p-4 rounded">Nam illo asperiores architecto fuga corrupti.
+                                    Voluptates, assumenda. Repellendus,
+                                    dicta voluptatum. Voluptatibus eos voluptatum, consequuntur rerum voluptas
+                                    reiciendis et quo deleniti illum
+                                    nihil</p>
+                            </div>
+                        </div>
+                        <div class="media mb-3">
+                            <div class="media-img">
+                                <img src="assets/img/user/user-xs-3.jpg" class="mr-3 media-object rounded-circle"
+                                     alt="Image User">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading">Abriel</h5>
+                                <ul class="list-inline list-inline-rating">
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                    </li>
+                                </ul>
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                                    laudan totam rem ape
+                                    riam,</p>
+
+                                <p class="bg-light p-4 rounded">Nam illo asperiores architecto fuga corrupti.
+                                    Voluptates, assumenda. Repellendus,
+                                    dicta
+                                    voluptatum. Voluptatibus eos voluptatum, consequuntur rerum voluptas reiciendis et
+                                    quo deleniti illum nihil</p>
+
+                            </div>
+                        </div>
+
+                        <hr>
+                    </div>
+
+                    <!-- Add Review -->
+                    <div class="my-6" id="add-review">
+                        <h3 class="font-weight-normal mb-6"> Add Review </h3>
+                        <span class="star add-rating-default pl-0 mb-6 jq-ry-container" style="width: 100px;"><div
+                                class="jq-ry-group-wrapper"><div class="jq-ry-normal-group jq-ry-group"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg></div><div
+                                    class="jq-ry-rated-group jq-ry-group" style="width: 0%;"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg></div></div></span>
+                        <form>
+                            <div class="form-check form-check-inline mb-6 mr-lg-7">
+                                <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
+                                       id="inlineRadio1" value="option1" checked="">
+                                <label class="form-check-label" for="inlineRadio1">
+                                    <div class="media media-xs align-items-center">
+                                        <img src="assets/img/user/user-xs-3.jpg"
+                                             class="mr-2 media-object rounded-circle" alt="Image User">
+                                        <div class="media-body">
+                                            <h5 class="media-heading mb-0">William</h5>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline mb-6">
+                                <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
+                                       id="inlineRadio2" value="option2">
+                                <label class="form-check-label" for="inlineRadio2">
+                                    <div class="media media-xs align-items-center">
+                                        <img src="assets/img/user/avatar-01.png"
+                                             class="mr-2 media-object rounded-circle border" alt="Image User">
+                                        <div class="media-body">
+                                            <h5 class="media-heading mb-0">Anonymous</h5>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-group mb-6">
+                                <textarea class="form-control" rows="6" placeholder="Enter Your Comment"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary text-uppercase"> Send Review</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!--======= Sidebar =======-->
+                <div class="col-md-5 col-lg-4 pl-xl-8">
+                    <!-- Single listing Map -->
+                    <div class="map-sidebar border rounded mb-5">
+                        <div id="single-listing-map" data-lat="40.805638" data-lag="-73.965384"></div>
+                        <div class="px-6 py-5">
+                            <ul class="list-unstyled mb-0">
+                                <li class="d-flex align-items-start">
+                                    <i class="fa fa-map-marker mr-3 mt-1" aria-hidden="true"></i>
+                                    <span>2880 Broadway, New York, NY 10025, USA</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Make Online Reservations -->
+                    <form class="mb-5" action="#">
+                        <h3 class="mb-3 font-weight-normal">Make Online Reservations</h3>
+
+                        <div class="form-group mb-6">
+                            <input type="text" class="form-control single-date">
+                        </div>
+
+                        <div class="form-group mb-6">
+                            <div class="select-bg-transparent select-border w-100">
+                                <div class="selectric-wrapper selectric-select-location">
+                                    <div class="selectric-hide-select"><select class="select-location" tabindex="-1">
+                                            <option>Time</option>
+                                            <option>4.00 pm</option>
+                                            <option>5.00 pm</option>
+                                            <option>6.00 pm</option>
+                                            <option>7.00 pm</option>
+                                            <option>8.00 pm</option>
+                                        </select></div>
+                                    <div class="selectric"><span class="label">Time</span>
+                                        <div class="arrow-button"><i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <div class="selectric-items" tabindex="-1">
+                                        <div class="selectric-scroll">
+                                            <ul>
+                                                <li data-index="0" class="selected">Time</li>
+                                                <li data-index="1" class="">4.00 pm</li>
+                                                <li data-index="2" class="">5.00 pm</li>
+                                                <li data-index="3" class="">6.00 pm</li>
+                                                <li data-index="4" class="">7.00 pm</li>
+                                                <li data-index="5" class="last">8.00 pm</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <input class="selectric-input" tabindex="0"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-6">
+                            <div class="select-bg-transparent select-border w-100">
+                                <div class="selectric-wrapper selectric-select-location">
+                                    <div class="selectric-hide-select"><select class="select-location" tabindex="-1">
+                                            <option>01 People</option>
+                                            <option>02 People</option>
+                                            <option>03 People</option>
+                                            <option>04 People</option>
+                                            <option>05 People</option>
+                                            <option>06 People</option>
+                                        </select></div>
+                                    <div class="selectric"><span class="label">01 People</span>
+                                        <div class="arrow-button"><i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <div class="selectric-items" tabindex="-1">
+                                        <div class="selectric-scroll">
+                                            <ul>
+                                                <li data-index="0" class="selected">01 People</li>
+                                                <li data-index="1" class="">02 People</li>
+                                                <li data-index="2" class="">03 People</li>
+                                                <li data-index="3" class="">04 People</li>
+                                                <li data-index="4" class="">05 People</li>
+                                                <li data-index="5" class="last">06 People</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <input class="selectric-input" tabindex="0"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-6">
+                            <button type="submit" class="btn btn-primary"> Book Now</button>
+                        </div>
+
+                    </form>
+
+                    <!-- Opening Hours -->
+                    <div class="border rounded px-6 py-5 mb-5">
+                        <h3 class="mb-4 font-weight-normal">Opening Hours</h3>
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                                <span>Monday</span>
+                                <span>08.00am - 05.00pm</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                                <span>Tuesday</span>
+                                <span>08.00am - 05.00pm</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                                <span>Wednesday</span>
+                                <span>08.00am - 05.00pm</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                                <span>Thrusday</span>
+                                <span>08.00am - 05.00pm</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                                <span>Friday</span>
+                                <span>08.00am - 05.00pm</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                                <span>Saturday</span>
+                                <span><a href="#">Closed</a></span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3">
+                                <span>Sunday</span>
+                                <span><a href="#">Closed</a></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- You may also like  -->
+                    <div class="border rounded px-6 pt-5 mb-5">
+                        <h3 class="mb-4 font-weight-normal">You may also like</h3>
+
+                        <div class="card rounded-0 card-hover-overlay">
+                            <div class="position-relative">
+                                <img class="card-img rounded-0" src="assets/img/listing/listing-4.jpg"
+                                     alt="Card image cap">
+                                <div class="card-img-overlay">
+                                    <ul class="list-inline list-inline-rating">
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                                        </li>
+                                    </ul>
+                                    <h3>
+                                        <a href="listing-reservation.html">
+                                            Think Coffee <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                        </a>
+                                    </h3>
+                                    <p class="text-white">215 Terry Lane, New York</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card rounded-0 card-hover-overlay">
+                            <div class="position-relative">
+                                <img class="card-img rounded-0" src="assets/img/listing/listing-5.jpg"
+                                     alt="Card image cap">
+                                <div class="card-img-overlay">
+                                    <ul class="list-inline list-inline-rating">
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                    </ul>
+                                    <h3>
+                                        <a href="listing-reservation.html">
+                                            Burger House<i class="fa fa-check-circle" aria-hidden="true"></i>
+                                        </a>
+                                    </h3>
+                                    <p class="text-white">2726 Shinn Street, New York</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

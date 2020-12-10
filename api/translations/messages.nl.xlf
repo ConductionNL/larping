@@ -9,6 +9,78 @@
         <source>aanmelden</source>
         <target>aanmelden</target>
       </trans-unit>
+      <trans-unit id="Uhb21B2" resname="organizations">
+        <source>organizations</source>
+        <target>organisaties</target>
+      </trans-unit>
+      <trans-unit id="P1zoaw0" resname="organization">
+        <source>organization</source>
+        <target>organisatie</target>
+      </trans-unit>
+      <trans-unit id="K21lMa6" resname="participants">
+        <source>participants</source>
+        <target>deelnemers</target>
+      </trans-unit>
+      <trans-unit id="m91H32p" resname="events">
+        <source>events</source>
+        <target>evenementen</target>
+      </trans-unit>
+      <trans-unit id="H2178Ax" resname="add larp">
+        <source>add larp</source>
+        <target>larp toevoegen</target>
+      </trans-unit>
+      <trans-unit id="U122n1a" resname="add">
+        <source>add</source>
+        <target>aanmaken</target>
+      </trans-unit>
+      <trans-unit id="j21nmAr" resname="all">
+        <source>all</source>
+        <target>alle</target>
+      </trans-unit>
+      <trans-unit id="U81janb" resname="view">
+        <source>view</source>
+        <target>bekijken</target>
+      </trans-unit>
+      <trans-unit id="N18nzx1" resname="cancel">
+        <source>cancel</source>
+        <target>annuleren</target>
+      </trans-unit>
+      <trans-unit id="J213Ba2" resname="close">
+        <source>close</source>
+        <target>sluiten</target>
+      </trans-unit>
+      <trans-unit id="b2n1maz" resname="no e-mail">
+        <source>no e-mail</source>
+        <target>geen e-mail</target>
+      </trans-unit>
+      <trans-unit id="On1bas2" resname="no results found">
+        <source>no results found</source>
+        <target>geen resultaten gevonden</target>
+      </trans-unit>
+      <trans-unit id="Uh12ap0" resname="save">
+        <source>save</source>
+        <target>opslaan</target>
+      </trans-unit>
+      <trans-unit id="oUI109s" resname="phone number">
+        <source>phone number</source>
+        <target>telefoonnummer</target>
+      </trans-unit>
+      <trans-unit id="Hb21asd" resname="add organization">
+        <source>add organization</source>
+        <target>organisatie toevoegen</target>
+      </trans-unit>
+      <trans-unit id="opAbn12" resname="we found">
+        <source>we found</source>
+        <target>we hebben</target>
+      </trans-unit>
+      <trans-unit id="Aknn124" resname="results for">
+        <source>results for</source>
+        <target>resultaten gevonden voor</target>
+      </trans-unit>
+      <trans-unit id="unBnawa" resname="about this">
+        <source>about this</source>
+        <target>over deze</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

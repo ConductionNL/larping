@@ -19,18 +19,18 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="my-bookings.html">
-                        <i class="fa fa-bookmark" aria-hidden="true"></i> organizations </a>
+                    <a class="nav-link " href="{{ path('app_dashboard_organizations') }}">
+                        <i class="fa fa-building" aria-hidden="true"></i>{{ 'organizations'|trans|capitalize }}</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="my-favourites.html">
-                        <i class="fa fa-heart" aria-hidden="true"></i> participants </a>
+                    <a class="nav-link " href="{{ path('app_dashboard_participants') }}">
+                        <i class="fa fa-users" aria-hidden="true"></i>{{ 'participants'|trans|capitalize }}</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="my-reviews.html">
-                        <i class="fa fa-eye" aria-hidden="true"></i> My Reviews </a>
+                    <a class="nav-link " href="{{ path('app_dashboard_events') }}">
+                        <i class="fa fa-calendar-o" aria-hidden="true"></i>{{ 'events'|trans|capitalize }}</a>
                 </li>
             </ul>
 

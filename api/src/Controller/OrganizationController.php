@@ -30,8 +30,20 @@ class OrganizationController extends AbstractController
      */
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-        $variables['resources'] = $commonGroundService->getResource(['component' => 'edu', 'type' => 'programs'])['hydra:member'];
         $variables = [];
+        $variables['items'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/{id}")
+     * @Template
+     */
+    public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
+    {
+        $variables = [];
+        $variables['item'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id'=>$id]);
 
         return $variables;
     }
