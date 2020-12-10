@@ -1,0 +1,48 @@
+<form action="{{ path('app_dashboard_organizations') }}" method="post">
+    <div class="modal-body">
+        {% if item|default %}
+            <input type="hidden" name="organization[id]" value="{{ item.id }}">
+        {% endif %}
+        <div class="form-group">
+            <label for="nameInput">{{ 'name'|trans }}</label>
+            <input type="text" class="form-control" id="nameInput"
+                   {% if item.name|default %}value="{{ item.name|capitalize }}"{% endif %}
+                   name="organization[name]"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="descriptionInput">{{ 'description'|trans|capitalize }}</label>
+            <textarea class="form-control" rows="5" id="descriptionInput"
+                      name="organization[description]">{% if item.description|default %}{{ item.description }}{% endif %}</textarea>
+        </div>
+
+        <br>
+
+        {% if item.telephones.0.id|default %}
+            <input type="hidden" name="telephone[id]" value="{{ item.telephones.0.id }}">
+        {% endif %}
+        <div class="form-group">
+            <label for="phoneInput">{{ 'phone number'|trans|capitalize }}</label>
+            <input type="text" class="form-control" id="phoneInput"
+                   {% if item.telephones.0.telephone|default %}value="{{ item.telephones.0.telephone|capitalize }}"{% endif %}
+                   name="telephone[telephone]">
+        </div>
+
+        {% if item.emails.0.id|default %}
+            <input type="hidden" name="email[id]" value="{{ item.emails.0.id }}">
+        {% endif %}
+        <div class="form-group">
+            <label for="emailInput">{{ 'e-mail'|trans|capitalize }}</label>
+            <input type="text" class="form-control" id="emailInput"
+                   {% if item.emails.0.email|default %}value="{{ item.emails.0.email }}"{% endif %}
+                   name="email[email]">
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+                data-dismiss="modal">{{ 'close'|trans|capitalize }}</button>
+        <button type="submit"
+                class="btn btn-primary">{% if item.id|default %}{{ 'save'|trans|capitalize }}{% elseif type|default %}{{ 'add'|trans|capitalize }}{% endif %}</button>
+    </div>
+</form>
