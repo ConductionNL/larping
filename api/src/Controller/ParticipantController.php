@@ -31,6 +31,21 @@ class ParticipantController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
+        $variables['items'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'people'])['hydra:member'];
+        $variables['pathToSingular'] = 'app_participant_participant';
+        $variables['typePlural'] = 'participants';
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/{id}")
+     * @Template
+     */
+    public function participantAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
+    {
+        $variables = [];
+        $variables['item'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'people', 'id'=>$id]);
 
         return $variables;
     }

@@ -81,6 +81,10 @@
         <source>about this</source>
         <target>over deze</target>
       </trans-unit>
+      <trans-unit id="nh2h0sz" resname="no description">
+        <source>no description</source>
+        <target>geen beschrijving</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
