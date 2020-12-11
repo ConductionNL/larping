@@ -32,6 +32,8 @@ class OrganizationController extends AbstractController
     {
         $variables = [];
         $variables['items'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
+        $variables['pathToSingular'] = 'app_organization_organization';
+        $variables['typePlural'] = 'organizations';
 
         return $variables;
     }

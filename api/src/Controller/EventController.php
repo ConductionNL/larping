@@ -31,6 +31,21 @@ class EventController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
+        $variables['items'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        $variables['pathToSingular'] = 'app_event_event';
+        $variables['typePlural'] = 'events';
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/{id}")
+     * @Template
+     */
+    public function eventAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
+    {
+        $variables = [];
+        $variables['item'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id'=>$id]);
 
         return $variables;
     }
