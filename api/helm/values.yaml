@@ -15,7 +15,7 @@ settings:
   repro: https://github.com/ConductionNL/larping
   demo: dev.larping.eu
   container: https://hub.docker.com/repository/docker/conduction/larping-php
-  domain: zuid-drecht.nl
+  domain: larping.eu
   subdomain: false
   subpath: 
   subpathRouting: true
@@ -152,6 +152,6 @@ resources: {}
 
 commonground:
     eherkenning:
-        location: https://zuid-drecht.nl/eherkenning
+        location: https://larping.eu/eherkenning
     digispoof:
-        location: https://zuid-drecht.nl/digispoof
+        location: https://larping.eu/digispoof
