@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-md navbar-dark">
+    <div class="container">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="dashboard-user.html">
+                        <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="message-users.html">
+                        <i class="fa fa-envelope" aria-hidden="true"></i> Messages <span class="badge badge-success">8</span> </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ path('app_dashboard_organizations') }}">
+                        <i class="fa fa-building" aria-hidden="true"></i>{{ 'organizations'|trans|capitalize }}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ path('app_dashboard_participants') }}">
+                        <i class="fa fa-users" aria-hidden="true"></i>{{ 'participants'|trans|capitalize }}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ path('app_dashboard_events') }}">
+                        <i class="fa fa-calendar-o" aria-hidden="true"></i>{{ 'events'|trans|capitalize }}</a>
+                </li>
+            </ul>
+
+            <form class="form-inline my-2 my-lg-0 position-relative d-none d-md-block">
+                <input class="form-control-sm" placeholder="Search" aria-label="Search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </form>
+        </div>
+    </div>
+</nav>
