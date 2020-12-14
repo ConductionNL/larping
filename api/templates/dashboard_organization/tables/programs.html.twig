@@ -1,0 +1,54 @@
+<div class="card border-light shadow-sm">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="h5">{{ 'programs'|trans|capitalize }}</h2>
+            </div>
+            <div class="col text-right">
+            {% if addPath is  defined %}
+                <button class="btn btn-primary" data-toggle="modal" data-target="#result-modal-new">{{ 'add'|trans|capitalize }}</button>
+            {% elseif not dontShowAllButton|default and dontShowAllButton != 'true'  %}
+                <a href="{{ path('app_education_tutorials') }}" class="btn btn-sm btn-secondary">{{ 'see all tutorials'|trans|capitalize }}</a>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if programs is  defined and programs|length > 0 %}
+    <div class="table-responsive">
+        <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">{{ 'name'|trans|capitalize }}</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for program in programs|slice(0, 10) %}
+                <tr>
+                    <td>{{ program.name|capitalize }}</td>
+                    <td class="float-right"></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{#    {% for result in results|slice(0, 10) %}#}
+{#        {% include 'dashboard/modals/result.html.twig' with {#}
+{#            'id': result.id,#}
+{#            'result':result#}
+{#        }%}#}
+{#    {% endfor %}#}
+    {% else %}
+
+{#    {% include 'dashboard/modals/result.html.twig' with {'id': 'new'}%}#}
+
+    <div class="card-body text-center">
+        <p>{{ 'no programs found'|trans|capitalize }}</p>
+        {% if addPath is  defined %}
+            <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add your first tutorial!'|trans|capitalize }}</a>
+        {% else %}
+        <a href="{{ path('app_education_tutorials') }}" class="btn btn-primary">{{ 'find a tutorial'|trans|capitalize }}</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
