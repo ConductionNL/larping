@@ -85,6 +85,10 @@
         <source>no description</source>
         <target>geen beschrijving</target>
       </trans-unit>
+      <trans-unit id="BATZGa6" resname="add event">
+        <source>add event</source>
+        <target>evenement toevoegen</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
