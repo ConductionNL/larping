@@ -31,7 +31,7 @@ class EventController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['items'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        $variables['items'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'])['hydra:member'];
         $variables['pathToSingular'] = 'app_event_event';
         $variables['typePlural'] = 'events';
 
@@ -45,7 +45,7 @@ class EventController extends AbstractController
     public function eventAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
         $variables = [];
-        $variables['item'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id'=>$id]);
+        $variables['item'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products', 'id'=>$id]);
 
         return $variables;
     }
