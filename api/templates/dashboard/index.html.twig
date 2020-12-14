@@ -16,459 +16,121 @@
 
             <div class="row">
                 <div class="col-lg-6">
-                    <!-- Messages -->
+                    <!-- organizations -->
                     <div class="card">
                         <div class="card-header bg-white">
-                            <span class="text-content">Messages</span>
+                            <span class="text-content">{{ 'organizations'|trans|capitalize }}</span>
                         </div>
-                        <div class="card-body px-0">
-                            <ul class="list-unstyled mb-0">
-                                <li>
-                                    <a href="#" class="media media-message">
-                                        <div class="position-relative mr-3">
-                                            <img class="rounded-circle" src="assets/img/user/user-xs-1.jpg" alt="Image">
-                                            <span class="status"></span>
-                                        </div>
-                                        <div class="media-body d-flex justify-content-between">
-                                            <div class="message-contents">
-                                                <h4 class="title">Aaren</h4>
-                                                <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque
-                                                    doloremque odio,
-                                                    eligendi delectus vitae.</p>
-                                            </div>
-
-                                            <span class="date">12 Jun</span>
-
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="media media-message">
-                                        <div class="position-relative mr-3">
-                                            <img class="rounded-circle" src="assets/img/user/user-xs-2.jpg" alt="Image">
-                                            <span class="status active"></span>
-                                        </div>
-                                        <div class="media-body d-flex justify-content-between">
-                                            <div class="message-contents">
-                                                <h4 class="title">Abby</h4>
-                                                <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque doloremque odio,
-                                                    eligendi delectus vitae.</p>
-                                            </div>
-
-                                            <span class="date">25 July</span>
-
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="media media-message">
-                                        <div class="position-relative mr-3">
-                                            <img class="rounded-circle" src="assets/img/user/user-xs-3.jpg" alt="Image">
-                                            <span class="status"></span>
-                                        </div>
-                                        <div class="media-body d-flex justify-content-between">
-                                            <div class="message-contents">
-                                                <h4 class="title">Abriel</h4>
-                                                <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque
-                                                    doloremque odio,
-                                                    eligendi delectus vitae.</p>
-                                            </div>
-
-                                            <span class="date">09 Feb</span>
-
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="media media-message">
-                                        <div class="position-relative mr-3">
-                                            <img class="rounded-circle" src="assets/img/user/user-1.jpg" alt="Image">
-                                            <span class="status active"></span>
-                                        </div>
-
-                                        <div class="media-body d-flex justify-content-between">
-                                            <div class="message-contents">
-                                                <h4 class="title">Emma</h4>
-                                                <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque
-                                                    doloremque odio,
-                                                    eligendi delectus vitae.</p>
-                                            </div>
-
-                                            <span class="date">05 Jan</span>
-
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="media media-message">
-                                        <div class="position-relative mr-3">
-                                            <img class="rounded-circle" src="assets/img/user/user-2.jpg" alt="Image">
-                                            <span class="status"></span>
-                                        </div>
-
-                                        <div class="media-body d-flex justify-content-between">
-                                            <div class="message-contents">
-                                                <h4 class="title">Emily</h4>
-                                                <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque
-                                                    doloremque odio,
-                                                    eligendi delectus vitae.</p>
-                                            </div>
-
-                                            <span class="date">17 Mar</span>
-
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="media media-message">
-                                        <div class="position-relative mr-3">
-                                            <img class="rounded-circle" src="assets/img/user/user-3.jpg" alt="Image">
-                                            <span class="status"></span>
-                                        </div>
-
-                                        <div class="media-body d-flex justify-content-between">
-                                            <div class="message-contents">
-                                                <h4 class="title">William</h4>
-                                                <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque
-                                                    doloremque odio,
-                                                    eligendi delectus vitae.</p>
-                                            </div>
-
-                                            <span class="date">27 May</span>
-
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="media media-message">
-                                        <div class="position-relative mr-3">
-                                            <img class="rounded-circle" src="assets/img/user/user-4.jpg" alt="Image">
-                                            <span class="status"></span>
-                                        </div>
-
-                                        <div class="media-body d-flex justify-content-between">
-                                            <div class="message-contents">
-                                                <h4 class="title">Sophia</h4>
-                                                <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque
-                                                    doloremque odio,
-                                                    eligendi delectus vitae.</p>
-                                            </div>
-
-                                            <span class="date">20 Jun</span>
-
-                                        </div>
-                                    </a>
-                                </li>
-
-                            </ul>
-
+                        <div class="card-body px-4">
+                            {% if items|default %}
+                                {% for item in items %}
+                                    <tr role="row" class="odd">
+                                        <td tabindex="0">
+                                        </td>
+                                        <td>
+                                            {{ item.name|capitalize }}
+                                        </td>
+                                        {% if item.emails.0.email|default %}
+                                            <td>
+                                                <a class="text-hover-primary text-muted"
+                                                   href="mailto:{{ item.emails.0.email }}">{{ item.emails.0.email }}</a>
+                                            </td>
+                                        {% else %}
+                                            <td style="color: lightgrey">
+                                                {{ 'no e-mail'|trans|capitalize }}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                        {{ 'no results found'|trans|capitalize }}
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                            {% endif %}
                         </div>
                         <div class="card-footer bg-white">
-                            <a href="message-users.html" class="btn btn-link p-0">All messages</a>
+                            <a href="{{ path('app_dashboard_organizations') }}" class="btn btn-link p-0">{{ 'all organizations'|trans|capitalize }}</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-6">
-                    <!-- My Bookings -->
+                    <!-- participants -->
                     <div class="card">
                         <div class="card-header bg-white">
-                            <span class="text-content">My Bookings</span>
+                            <span class="text-content">{{ 'participants'|trans|capitalize }}</span>
                         </div>
 
                         <div class="card-body p-0 table-responsive">
-                            <table class="table mb-0" style="width:100%">
+                            <table class="table mb-0" style="">
                                 <tbody>
                                 <tr>
                                     <td>
                                         <img class="img-sm rounded" src="assets/img/listing/listing-03.jpg" alt="Image">
                                     </td>
                                     <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">think Coffee</a>
+                                        <a class="text-hover-primary text-muted" href="listing-rental.html"></a>
                                     </td>
                                     <td class="text-capitalize"> Eat &amp; Drink </td>
                                     <td>
                                         <span class="badge badge-warning px-2 py-1">Pending</span>
                                     </td>
                                 </tr>
-
-                                <tr>
-                                    <td>
-                                        <img class="img-sm rounded" src="assets/img/listing/listing-5.jpg" alt="Image">
-                                    </td>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">Burger House</a>
-                                    </td>
-                                    <td class="text-capitalize"> Eat &amp; Drink </td>
-                                    <td>
-                                        <span class="badge badge-warning px-2 py-1">Pending</span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <img class="img-sm rounded" src="assets/img/listing/listing-8.jpg" alt="Image">
-                                    </td>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">Hotel Govendor</a>
-                                    </td>
-                                    <td class="text-capitalize"> Hotels </td>
-                                    <td>
-                                        <span class="badge badge-warning px-2 py-1">Pending</span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <img class="img-sm rounded" src="assets/img/listing/listing-04.jpg" alt="Image">
-                                    </td>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">Tom's Restaurant</a>
-                                        <span class="text-capitalize d-block"></span>
-                                    </td>
-                                    <td class="text-capitalize">Eat &amp; Drink</td>
-                                    <td>
-                                        <span class="badge badge-success px-2 py-1">Approved</span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <img class="img-sm rounded" src="assets/img/listing/listing-7.jpg" alt="Image">
-                                    </td>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-event.html">Sticky Band</a>
-                                    </td>
-                                    <td class="text-capitalize">Events</td>
-                                    <td>
-                                        <span class="badge badge-danger px-2 py-1">Canceled</span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <img class="img-sm rounded" src="assets/img/listing/listing-9.jpg" alt="Image">
-                                    </td>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">The Mayfair Hotel</a>
-                                    </td>
-                                    <td class="text-capitalize">Hotels</td>
-                                    <td>
-                                        <span class="badge badge-danger px-2 py-1">Canceled</span>
-                                    </td>
-                                </tr>
-
                                 </tbody>
                             </table>
                         </div>
                         <div class="card-footer bg-white">
-                            <a href="my-bookings.html" class="btn btn-link p-0">all bookings</a>
+                            <a href="{{ path('app_dashboard_participants') }}" class="btn btn-link p-0">{{ 'all participants'|trans|capitalize }}</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- My Reviews -->
+                <!-- Events -->
                 <div class="col-lg-6">
                     <div class="card">
                         <div class="card-header bg-white">
-                            <span class="text-content">My Reviews</span>
+                            <span class="text-content">{{ 'events'|trans|capitalize }}</span>
                         </div>
 
                         <div class="card-body p-0 table-responsive">
                             <table class="table mb-0" style="width:100%">
+                                {% if items|default %}
+                                    {% for item in items %}
+                                        <tr role="row" class="odd">
+                                            <td tabindex="0">
+                                            </td>
+                                            <td>
+                                                {{ item.name|capitalize }}
+                                            </td>
+                                            {% if item.emails.0.email|default %}
+                                                <td>
+                                                    <a class="text-hover-primary text-muted"
+                                                       href="mailto:{{ item.emails.0.email }}">{{ item.emails.0.email }}</a>
+                                                </td>
+                                            {% else %}
+                                                <td style="color: lightgrey">
+                                                    {{ 'no e-mail'|trans|capitalize }}
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr role="row" class="odd">
+                                        <td tabindex="0">
+                                            {{ 'no results found'|trans|capitalize }}
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
 
-                                <tbody>
-                                <tr>
-                                    <td class="text-capitalize td-title">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">The Missiisipi Hotel</a>
-                                    </td>
-                                    <td class="td-no-white-space">
-                                        <ul class="list-inline list-inline-rating">
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star-o" aria-hidden="true"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td class="td-details">Lorem ipsum dolor </td>
-                                </tr>
-
-                                <tr>
-                                    <td class="text-capitalize ">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">think Coffee</a>
-                                    </td>
-
-                                    <td class="td-no-white-space">
-                                        <ul class="list-inline list-inline-rating">
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star-o" aria-hidden="true"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-
-                                    <td class="td-details">Quisquam, saepe sint! Aspernatur
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">Sticky Band</a>
-                                    </td>
-
-                                    <td class="td-no-white-space">
-                                        <ul class="list-inline list-inline-rating">
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star-o" aria-hidden="true"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td class="td-details">Neque amet, doloremque</td>
-
-                                </tr>
-
-                                <tr>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">Hotel Govendor</a>
-                                    </td>
-                                    <td class="td-no-white-space">
-                                        <ul class="list-inline list-inline-rating">
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star-o" aria-hidden="true"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td class="td-details">Iste tempore sint odio</td>
-                                </tr>
-
-                                <tr>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">John F. Kennedy Airport</a>
-                                    </td>
-                                    <td class="td-no-white-space">
-                                        <ul class="list-inline list-inline-rating">
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star-o" aria-hidden="true"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td class="td-details">Atque maxime quo nisi </td>
-                                </tr>
-
-                                <tr>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">Water Grill</a>
-                                    </td>
-                                    <td class="td-no-white-space">
-                                        <ul class="list-inline list-inline-rating">
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star-o" aria-hidden="true"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td class="td-details">Asaepe id quas voluptas vero.</td>
-                                </tr>
-
-                                <tr>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html">The Missiisipi Hotel</a>
-                                    </td>
-                                    <td class="td-no-white-space">
-                                        <ul class="list-inline list-inline-rating">
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td class="td-details">Iusto quos dolorem voluptatum</td>
-                                </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="card-footer bg-white">
-                            <a href="my-reviews.html" class="btn btn-link p-0">My Reviews</a>
+                            <a href="{{ path('app_dashboard_events') }}" class="btn btn-link p-0">{{ 'my events'|trans|capitalize }}</a>
                         </div>
                     </div>
                 </div>
