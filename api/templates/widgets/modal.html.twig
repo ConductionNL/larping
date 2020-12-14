@@ -1,0 +1,30 @@
+<!-- Modal -->
+
+<div class="modal fade"
+     id="{% if type|default and item.id|default %}{{ type~item.id~'Modal' }}{% elseif type|default %}{{ type~'Modal' }}{% endif %}"
+     tabindex="-1"
+     aria-labelledby="{% if type|default and item.id|default %}{{ type~item.id~'Modal' }}{% elseif type|default %}{{ type~'Modal' }}{% endif %}"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"
+                    id="exampleModalLabel">{% if title|default %}{{ title }}{% else %}Modal{% endif %}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                {% if type|default %}
+                    {% if item|default %}
+                        {% include 'widgets/forms/'~type~'.html.twig' with {
+                            'item': item
+                        } %}
+                    {% else %}
+                        {% include 'widgets/forms/'~type~'.html.twig' %}
+                    {% endif %}
+                {% else %}
+                    No type given
+                {% endif %}
+        </div>
+    </div>
+</div>
