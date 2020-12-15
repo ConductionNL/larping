@@ -89,6 +89,10 @@
         <source>add event</source>
         <target>evenement toevoegen</target>
         </trans-unit>
+        <trans-unit id="BBDTGa6" resname="event">
+        <source>event</source>
+        <target>evenement</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
