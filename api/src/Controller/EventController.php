@@ -46,6 +46,10 @@ class EventController extends AbstractController
     {
         $variables = [];
         $variables['item'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products', 'id'=>$id]);
+        /*@todo remove after testing*/
+        $url = 'https://dev.larping.eu/api/v1/wrc/organizations/7b863976-0fc3-4f49-a4f7-0bf7d2f2f535';
+        $variables['sourceOrganization'] = $commonGroundService->getResource(/*$variables['item']['sourceOrganization']*/ $url);
+        $variables['contact'] = $commonGroundService->getResource($variables['sourceOrganization']['contact']);
 
         return $variables;
     }
