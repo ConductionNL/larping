@@ -1,44 +1,185 @@
-{% extends "dashboard/base.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block content %}
 
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-        <div class="btn-toolbar">
-            <button class="btn btn-primary btn-sm mr-2 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-plus mr-2"></span>{{ 'find new'|trans|capitalize }}</button>
-            <div class="dropdown-menu dashboard-dropdown dropdown-menu-left mt-2">
-                <a class="dropdown-item font-weight-bold" href="{{ path('app_education_tutorials') }}"><span class="fas fa-tasks mr-2"></span>{{ 'tutorials'|trans|capitalize }}</a>
-                <a class="dropdown-item font-weight-bold" href="{{ path('app_internship_index') }}"><span class="fas fa-cloud-upload-alt mr-2"></span>{{ 'internships'|trans|capitalize }}</a>
-                <a class="dropdown-item font-weight-bold" href="{{ path('app_challenge_index') }}"><span class="fas fa-user-shield mr-2"></span>{{ 'challenges'|trans|capitalize }}</a>
-                <a class="dropdown-item font-weight-bold" href="{{ path('app_team_index') }}"><span class="fas fa-user-shield mr-2"></span>{{ 'teams'|trans|capitalize }}</a>
-                <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item font-weight-bold" href="{{ path('app_organization_index') }}"><span class="fas fa-rocket text-danger mr-2"></span>{{ 'organization'|trans|capitalize }}</a>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 col-lg-8 col-xl-8">
+    {% include 'dashboard_menu.html.twig' %}
+
+    <section class="bg-light pt-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">Dashboard</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">Dashboard</li>
+                </ul>
+            </nav>
+
             <div class="row">
-                <div class="col-12 mb-4">
-                    {% include 'dashboard/tables/applications.html.twig' %}
+                <div class="col-lg-6">
+                    <!-- organizations -->
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'organizations'|trans|capitalize }}</span>
+                        </div>
+                        <div class="card-body px-4">
+                            {% if items|default %}
+                                {% for item in items %}
+                                    <tr role="row" class="odd">
+                                        <td tabindex="0">
+                                        </td>
+                                        <td>
+                                            {{ item.name|capitalize }}
+                                        </td>
+                                        {% if item.emails.0.email|default %}
+                                            <td>
+                                                <a class="text-hover-primary text-muted"
+                                                   href="mailto:{{ item.emails.0.email }}">{{ item.emails.0.email }}</a>
+                                            </td>
+                                        {% else %}
+                                            <td style="color: lightgrey">
+                                                {{ 'no e-mail'|trans|capitalize }}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                        {{ 'no results found'|trans|capitalize }}
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a href="{{ path('app_dashboard_organizations') }}" class="btn btn-link p-0">{{ 'all organizations'|trans|capitalize }}</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 mb-4">
-                    {% include 'dashboard/tables/propositions.html.twig' %}
+
+                <div class="col-lg-6">
+                    <!-- participants -->
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'participants'|trans|capitalize }}</span>
+                        </div>
+
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table mb-0" style="">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <img class="img-sm rounded" src="assets/img/listing/listing-03.jpg" alt="Image">
+                                    </td>
+                                    <td class="text-capitalize">
+                                        <a class="text-hover-primary text-muted" href="listing-rental.html"></a>
+                                    </td>
+                                    <td class="text-capitalize"> Eat &amp; Drink </td>
+                                    <td>
+                                        <span class="badge badge-warning px-2 py-1">Pending</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a href="{{ path('app_dashboard_participants') }}" class="btn btn-link p-0">{{ 'all participants'|trans|capitalize }}</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 mb-4">
-                    {% include 'dashboard/tables/participants.html.twig' %}
+
+                <!-- Events -->
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'events'|trans|capitalize }}</span>
+                        </div>
+
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table mb-0" style="width:100%">
+                                {% if items|default %}
+                                    {% for item in items %}
+                                        <tr role="row" class="odd">
+                                            <td tabindex="0">
+                                            </td>
+                                            <td>
+                                                {{ item.name|capitalize }}
+                                            </td>
+                                            {% if item.emails.0.email|default %}
+                                                <td>
+                                                    <a class="text-hover-primary text-muted"
+                                                       href="mailto:{{ item.emails.0.email }}">{{ item.emails.0.email }}</a>
+                                                </td>
+                                            {% else %}
+                                                <td style="color: lightgrey">
+                                                    {{ 'no e-mail'|trans|capitalize }}
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr role="row" class="odd">
+                                        <td tabindex="0">
+                                            {{ 'no results found'|trans|capitalize }}
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
+                            </table>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a href="{{ path('app_dashboard_events') }}" class="btn btn-link p-0">{{ 'my events'|trans|capitalize }}</a>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- My Favorites -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">My Favorites</span>
+                        </div>
+
+                        <div class="card-body px-0">
+                            <div class="d-flex justify-content-between align-items-center hover-bg-light px-3 py-2 rounded">
+                                <div>
+                                    <h3 class="h5 font-weight-normal mb-0">
+                                        <a class="text-dark" href="listing-reservation.html">Think Coffee</a>
+                                    </h3>
+                                    <span class="text-small">215 Terry Lane, New York</span>
+                                </div>
+                                <div class="d-flex flex-column justify-content-center align-items-end">
+                                    <ul class="list-inline list-inline-rating mb-0">
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                                        </li>
+                                    </ul>
+                                    <div class="text-small">
+                                        <i class="fa fa-heart-o primaryColor text-primary pr-1" aria-hidden="true"></i>10k
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a href="my-favourites.html" class="btn btn-link p-0">my favourites</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-        <div class="col-12 col-lg-4 col-xl-4">
-            <div class="col-12 px-0 mb-4">
-                {% include 'dashboard/widgets/events.html.twig' %}
-            </div>
-            <div class="col-12 px-0 mb-4">
-                {% include 'dashboard/widgets/position.html.twig' %}
-            </div>
-            <div class="col-12 px-0 mb-4">
-                {% include 'dashboard/widgets/teams.html.twig' %}
-            </div>
-        </div>
-    </div>
+    </section>
+
 {% endblock %}

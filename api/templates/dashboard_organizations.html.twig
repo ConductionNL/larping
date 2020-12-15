@@ -1,0 +1,66 @@
+{% include 'dashboard_menu.html.twig' %}
+
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+        <h2 class="font-weight-normal mb-4 mb-md-0">Organization</h2>
+        <ul class="list-unstyled d-flex p-0 m-0">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="dashboard-user.html">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">organization</li>
+        </ul>
+    </nav>
+
+    <!-- My Organizations -->
+    <div id="my-booking_wrapper" class="dataTables_wrapper no-footer"><table id="my-booking" class="display nowrap table-data-default dataTable no-footer dtr-inline" style="width: 100%;" role="grid">
+            <thead>
+            <tr role="row"><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 67px;">...</th>
+                <th class="" colspan="1" style="width: 149px;" rowspan="1" colspan="1">Listing</th>
+                <th class="" style="width: 72px;" rowspan="1" colspan="1">Type</th>
+                <th class="" style="width: 132px;" rowspan="1" colspan="1" >Requested Time</th>
+                <th class="" style="width: 169px;" rowspan="1" colspan="1">Booking Details</th>
+                <th class="" rowspan="1" colspan="1">Status</th>
+                <th class="" style="width: 23px;">
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr role="row" class="odd">
+                <td tabindex="0" style="">
+                    <img class="img-sm rounded">
+                </td>
+                <td class="text-capitalize" style="">
+                    <a class="text-hover-primary text-muted" href="listing-rental.html">....</a>
+                </td>
+                <td class="text-capitalize" style="">....</td>
+                <td style="">
+                    <span class="d-block">....</span>
+                </td>
+                <td style="">
+                    <span class="d-block">....</span>
+                </td>
+                <td style="">
+                    <span class="badge badge-success px-2 py-1">Approved</span>
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#">Review</a>
+                            <a class="dropdown-item" href="#">Cancel</a>
+                        </div>
+                    </div>
+                </td>
+
+            </tr></tbody>
+        </table><div class="dataTables_paginate paging_simple_numbers" id="my-booking_paginate">
+            <a class="paginate_button previous disabled" aria-controls="my-booking"
+               data-dt-idx="0" tabindex="0" id="my-booking_previous">Prev</a>
+            <span><a class="paginate_button current" aria-controls="my-booking" data-dt-idx="1" tabindex="0">1</a>
+                <a class="paginate_button " aria-controls="my-booking" data-dt-idx="2" tabindex="0">2</a></span>
+            <a class="paginate_button next" aria-controls="my-booking" data-dt-idx="3" tabindex="0" id="my-booking_next">Next</a>
+        </div>
+    </div>
+</div>

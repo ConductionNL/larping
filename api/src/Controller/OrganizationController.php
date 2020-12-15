@@ -4,14 +4,19 @@
 
 namespace App\Controller;
 
+use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * This controller handles any pages with organization(s) as main subject.
+ * The OrganizationController handles any calls about organizations.
  *
  * Class OrganizationController
  *
@@ -23,26 +28,12 @@ class OrganizationController extends AbstractController
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService, Request $request)
+    public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-        $variables['slug'] = 'organizations';
-        $variables['h1'] = 'organizations';
-        $variables['path'] = 'app_organization_index';
-        $variables['organizations'] = $commonGroundService->getResourceList(['component'=>'wrc', 'type'=>'organizations'])['hydra:member'];
-
-        // Set the organization background-color for the icons shown with every organization
-        foreach ($variables['organizations'] as &$organization) {
-            if (isset($organization['style']['css'])) {
-                preg_match('/background-color: ([#A-Za-z0-9]+)/', $organization['style']['css'], $matches);
-                $organization['backgroundColor'] = $matches;
-            }
-        }
-
-        if ($request->isMethod('POST')) {
-            $search = $request->request->all()['search'];
-
-            $variables['organizations'] = $commonGroundService->getResourceList(['component'=>'wrc', 'type'=>'organizations'], ['name'=>$search])['hydra:member'];
-        }
+        $variables = [];
+        $variables['items'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
+        $variables['pathToSingular'] = 'app_organization_organization';
+        $variables['typePlural'] = 'organizations';
 
         return $variables;
     }
@@ -51,16 +42,10 @@ class OrganizationController extends AbstractController
      * @Route("/{id}")
      * @Template
      */
-    public function organizationAction(CommonGroundService $commonGroundService, Request $request, $id)
+    public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component'=>'wrc', 'type'=>'organizations', 'id'=>$id]);
-        $variables['challenges'] = $commonGroundService->getResourceList(['component'=>'chrc', 'type'=>'tenders'], ['submitters'=>$variables['organization']['@id']])['hydra:member'];
-        $variables['jobPostings'] = $commonGroundService->getResourceList(['component'=>'mrc', 'type'=>'job_postings'], ['hiringOrganization'=>$variables['organization']['@id']])['hydra:member'];
-        $variables['courses'] = $commonGroundService->getResourceList(['component'=>'edu', 'type'=>'courses'], ['organization'=>$variables['organization']['@id']])['hydra:member'];
-//        $variables['programs'] = $commonGroundService->getResourceList(['component'=>'edu', 'type'=>'programs'], ['provider'=>$variables['organization']['@id']])['hydra:member'];
-
-        $variables['h1'] = $variables['organization']['name'];
-        $variables['slug'] = $variables['organization']['name'];
+        $variables = [];
+        $variables['item'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id'=>$id]);
 
         return $variables;
     }

@@ -2,299 +2,402 @@
 
 {% block content %}
 
-    <!-- The header -->
-    <section class="section-header pb-10 pb-lg-11 mb-4 mb-lg-6 bg-primary text-white">
+    <section class="py-7 pt-md-9 pb-md-8">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 text-center mb-4 mb-lg-5">
-                    <h1 class="display-2 font-weight-extreme mb-4">{{ organization.name }}</h1>
-                    <p class="lead">{{ organization.description }}</p>
-
-                    {% if organization.contact|default and commonground_resource(organization.contact).socials['0']|default %}
-                        {% set socials = commonground_resource(organization.contact).socials['0'] %}
-                        <div class="d-flex flex-column flex-lg-row justify-content-center">
-                            {% if socials.website|default %}
-                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
-                                    <a href="{{ socials.website }}">
-                                        <i class="fa fa-globe"></i>
-                                        <span>Website</span>
-                                    </a>
-                                </span>
-                            {% endif %}
-                            {% if socials.twitter|default %}
-                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
-                                    <a href="{{ socials.twitter }}">
-                                        <i class="fa fa-twitter"></i>
-                                        <span>Twitter</span>
-                                    </a>
-                                </span>
-                            {% endif %}
-                            {% if socials.facebook|default %}
-                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
-                                    <a href="{{ socials.facebook }}">
-                                        <i class="fa fa-facebook-f"></i>
-                                        <span>Facebook</span>
-                                    </a>
-                                </span>
-                            {% endif %}
-                            {% if socials.instagram|default %}
-                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
-                                    <a href="{{ socials.instagram }}">
-                                        <i class="fa fa-instagram"></i>
-                                        <span>Instagram</span>
-                                    </a>
-                                </span>
-                            {% endif %}
-                            {% if socials.linkedin|default %}
-                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
-                                    <a href="{{ socials.linkedin }}">
-                                        <i class="fa fa-linkedin-square"></i>
-                                        <span>Linkedin</span>
-                                    </a>
-                                </span>
-                            {% endif %}
-                            {% if socials.github|default %}
-                                <span class="mx-lg-2 mb-3 mb-lg-0 h6">
-                                    <a href="{{ socials.github }}">
-                                        <i class="fa fa-github"></i>
-                                        <span>Github</span>
-                                    </a>
-                                </span>
-                            {% endif %}
+            <div class="row">
+                <div class="col-9">
+                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ item.name }}</h1>
+                </div>
+                <div class="col-3 float-right">
+                    <!-- Breadcrumb -->
+                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
+                        <ul class="list-unstyled d-flex p-0 m-0">
+                            <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
+                            </li>
+                            <li class="breadcrumb-item active"
+                                aria-current="page">{{ item.name }}</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="mb-2 mb-lg-0">
+                        {% if item.emails.0.email|default %}
+                            <p class="text-muted mb-1"><i
+                                    class="fa fa-mail-forward text-primary mr-1"></i>{{ item.emails.0.email }}
+                            </p>
+                        {% endif %}
+                        {% if item.phonenumbers.0.phonenumber|default %}
+                            <p class="text-muted mb-1"><i
+                                    class="fa fa-phone text-primary mr-1"></i> {{ item.phonenumbers.0.phonenumber }}
+                            </p>
+                        {% endif %}
+                        <div class="d-flex align-items-center">
+                            <ul class="list-inline list-inline-rating mr-2">
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </li>
+                            </ul>
+                            <span class="d-inline-block mr-2">(5 Reviews)</span>
+                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
+                                    data-original-title="Favourite this listing">
+                                <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
+                                <span>5 k</span>
+                            </button>
                         </div>
-                        <br>
-                    {% endif %}
-
-                    <div class="d-flex flex-column flex-lg-row justify-content-center">
-                        <span class="h5 mb-3 mb-lg-0">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span class="ml-3">
-                                {% if organization.contact|default and commonground_resource(organization.contact).adresses['0']|default %}
-                                    {% set address = commonground_resource(organization.contact).adresses['0'] %}
-                                    {% if address.street|default %}{{ address.street }}{% endif %}
-                                    {% if address.houseNumber|default %}{{ address.houseNumber }}{% endif %}
-                                    {% if address.houseNumberSuffix|default %}{{ address.houseNumberSuffix }}{% endif %}
-                                    {% if address.postalCode|default %}{{ address.postalCode }}{% endif %}
-                                    {% if address.locality|default %}{{ address.locality }}{% endif %}
-                                {% else %}
-                                    {{ 'no contact info'|trans|capitalize }}
-                                {% endif %}
-                            </span>
-                        </span>
-                        <span class="ml-lg-5 mb-3 mb-lg-0 h5">
-                            <i class="fas fa-briefcase"></i>
-                            <span class="ml-3">
-                                {% if jobPostings is defined and jobPostings is not empty %}{{ jobPostings|length }}{% else %}0{% endif %}
-                            </span>
-                        </span>
-                        <span class="ml-lg-5 mb-3 mb-lg-0 h5">
-                            <i class="fas fa-bullseye-arrow"></i>
-                            <span class="ml-3">
-                                {% if challenges is defined and challenges is not empty %}{{ challenges|length }}{% else %}0{% endif %}
-                            </span>
-                        </span>
-                        <span class="ml-lg-5 mb-3 mb-lg-0 h5">
-                            <i class="fas fa-file-alt"></i>
-                            <span class="ml-3">
-                                {% if courses is defined and courses is not empty %}{{ courses|length }} {% else %}0{% endif %}
-                            </span>
-                        </span>
                     </div>
                 </div>
-                <div class="col col-12 text-center"><a href="{{ path('app_education_tutorials') }}" class="btn btn-secondary text-white animate-up-2 mr-3"><i class="fas fa-arrow-left mr-2"></i>{{'all organizations'|trans|capitalize}}</a></div>
+                <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
+                    <a href="#" class="btn btn-primary">Write a review</a>
+                </div>
             </div>
+
         </div>
-        <div class="pattern bottom"></div>
     </section>
 
-    <!-- The tutorial -->
-    <article class="section section-lg pt-0">
-        <div class="container mt-n8 mt-lg-n11 z-2">
-            <div class="row justify-content-center">
-                <div class="col">
-                    <div class="card shadow-soft border-light p-4 p-md-5">
-                        <div class="card-body">{{ organization.description }}</div>
+    <section class="pb-4  pb-md-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-lg-8">
+                    <!-- About -->
+                    <div class="single-listing-content mb-6">
+                        {% if item.description|default %}
+                            <h3 class="font-weight-normal mb-6">{{ 'about this'|trans|capitalize~' '~'organization'|trans }}</h3>
+                            <p class="mb-6">{{ item.description }}</p>
+                        {% endif %}
+                        <!-- Hours -->
+                        <div class="mb-6">
+                            <h4 class="font-weight-normal mb-4">Hours</h4>
+                            <p class="mb-1">LUNCH - MONDAY – FRIDAY: 11:30am-3pm</p>
+                            <p class="mb-1">ALL DAY MENU - MONDAY – FRIDAY: 3pm-5:30pm</p>
+                            <p class="mb-1">DINNER - MONDAY – SUNDAY: 5:30pm-11pm</p>
+                            <p class="mb-1">BRUNCH - 10am-3pm</p>
+                        </div>
+
+                        <!-- Departments at this Store -->
+                        <div class="mb-6">
+                            <h4 class="font-weight-normal mb-4">Services</h4>
+                            <p class="mb-1">Counter Service</p>
+                            <p class="mb-1">Table Service</p>
+                            <p class="mb-1">Buffet Service</p>
+                            <p class="mb-1">Self Service</p>
+                            <p class="mb-1">Gueridon Service</p>
+                        </div>
+
+                        <!-- Departments at this Store -->
+                        <div class="mb-6">
+                            <h4 class="font-weight-normal mb-4">Seating</h4>
+                            <p class="mb-1">55 Guests in our Main Dining Room</p>
+                            <p class="mb-1">16 Guests in our Garden Room</p>
+                        </div>
+
                     </div>
+
+                    <hr>
+
+                    <!-- Features -->
+                    <div class="my-6">
+                        <h3 class="font-weight-normal mb-6">Features</h3>
+                        <ul class="list-unstyled mb-7">
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-wifi mr-2" aria-hidden="true"></i>High Speed Wifi
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-car mr-2" aria-hidden="true"></i>Street Parking
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-glass mr-2" aria-hidden="true"></i>Alcohol
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-pagelines mr-2" aria-hidden="true"></i>Vegetarian
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-cube mr-2" aria-hidden="true"></i>Reservations
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-check-circle-o mr-2" aria-hidden="true"></i> Pets Friendly
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-credit-card mr-2" aria-hidden="true"></i>Accept Credit Card
+                            </li>
+                        </ul>
+                        <hr>
+                    </div>
+
+                    <!-- Added By -->
+                    <div>
+                        <h3 class="font-weight-normal mb-6">Added By </h3>
+                        <div class="media mb-7">
+                            <div class="media-img">
+                                <img src="assets/img/user/user-xs-4.jpg" class="mr-3 media-object rounded-circle"
+                                     alt="Image User">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading">Adam Smith</h5>
+                                <div class="d-flex flex-column flex-lg-row align-items-lg-center">
+                                    <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
+
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-phone" aria-hidden="true"></i>
+                                            <span class="ml-2">+55 654 545 122</span>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                            <span class="ml-2">example.com</span>
+                                        </li>
+
+                                    </ul>
+
+                                    <ul class="list-inline list-inline-icon ml-lg-auto">
+                                        <li class="list-inline-item">
+                                            <a class="mr-2" href="#">
+                                                <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a class="mr-2" href="#">
+                                                <i class="fa fa-twitter" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a class="mr-2" href="#">
+                                                <i class="fa fa-instagram" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                    </div>
+
+                    <!-- Reviews -->
+                    <div class="my-6">
+                        <h3 class="font-weight-normal mb-6">Reviews (3)</h3>
+                        <div class="media mb-3">
+                            <div class="media-img">
+                                <img src="assets/img/user/user-xs-1.jpg" class="mr-3 media-object rounded-circle"
+                                     alt="Image User">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading">Aaren</h5>
+                                <ul class="list-inline list-inline-rating">
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                </ul>
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                                    laudan totam rem ape
+                                    riam,</p>
+
+                                <!-- Reply Section -->
+                                <div class="reply-wrapper">
+                                    <a class="d-inline-block mb-2 btn-reply" href="javascript:0">Reply</a>
+                                    <form class="form-reply my-3">
+                                        <textarea class="form-control mb-6" rows="3"
+                                                  placeholder="Enter your comment"></textarea>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="media mb-3">
+                            <div class="media-img">
+                                <img src="assets/img/user/user-xs-2.jpg" class="mr-3 media-object rounded-circle"
+                                     alt="Image User">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading">Abby</h5>
+                                <ul class="list-inline list-inline-rating">
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                    </li>
+                                </ul>
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                                    lauda totam rem ape riam,
+                                </p>
+
+                                <p class="bg-light p-4 rounded">Nam illo asperiores architecto fuga corrupti.
+                                    Voluptates, assumenda. Repellendus,
+                                    dicta voluptatum. Voluptatibus eos voluptatum, consequuntur rerum voluptas
+                                    reiciendis et quo deleniti illum
+                                    nihil</p>
+                            </div>
+                        </div>
+                        <div class="media mb-3">
+                            <div class="media-img">
+                                <img src="assets/img/user/user-xs-3.jpg" class="mr-3 media-object rounded-circle"
+                                     alt="Image User">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading">Abriel</h5>
+                                <ul class="list-inline list-inline-rating">
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                    </li>
+                                </ul>
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                                    laudan totam rem ape
+                                    riam,</p>
+
+                                <p class="bg-light p-4 rounded">Nam illo asperiores architecto fuga corrupti.
+                                    Voluptates, assumenda. Repellendus,
+                                    dicta
+                                    voluptatum. Voluptatibus eos voluptatum, consequuntur rerum voluptas reiciendis et
+                                    quo deleniti illum nihil</p>
+
+                            </div>
+                        </div>
+
+                        <hr>
+                    </div>
+
+                    <!-- Add Review -->
+                    <div class="my-6" id="add-review">
+                        <h3 class="font-weight-normal mb-6"> Add Review </h3>
+                        <span class="star add-rating-default pl-0 mb-6 jq-ry-container" style="width: 100px;"><div
+                                class="jq-ry-group-wrapper"><div class="jq-ry-normal-group jq-ry-group"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg></div><div
+                                    class="jq-ry-rated-group jq-ry-group" style="width: 0%;"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
+                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg></div></div></span>
+                        <form>
+                            <div class="form-check form-check-inline mb-6 mr-lg-7">
+                                <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
+                                       id="inlineRadio1" value="option1" checked="">
+                                <label class="form-check-label" for="inlineRadio1">
+                                    <div class="media media-xs align-items-center">
+                                        <img src="assets/img/user/user-xs-3.jpg"
+                                             class="mr-2 media-object rounded-circle" alt="Image User">
+                                        <div class="media-body">
+                                            <h5 class="media-heading mb-0">William</h5>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline mb-6">
+                                <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
+                                       id="inlineRadio2" value="option2">
+                                <label class="form-check-label" for="inlineRadio2">
+                                    <div class="media media-xs align-items-center">
+                                        <img src="assets/img/user/avatar-01.png"
+                                             class="mr-2 media-object rounded-circle border" alt="Image User">
+                                        <div class="media-body">
+                                            <h5 class="media-heading mb-0">Anonymous</h5>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-group mb-6">
+                                <textarea class="form-control" rows="6" placeholder="Enter Your Comment"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary text-uppercase"> Send Review</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!--======= Sidebar =======-->
+                <div class="col-md-5 col-lg-4 pl-xl-8">
+                    <!-- Single listing Map -->
+                    {% include 'widgets/single_listing_map.html.twig' %}
+
+                    <!-- Make Online Reservations -->
+                    {% include 'widgets/select_and_book.html.twig' %}
+
+                    <!-- Opening Hours -->
+                    {% include 'widgets/business_hours.html.twig' %}
+
+                    <!-- You may also like  -->
+                    {% include 'widgets/you_may_like.html.twig' %}
                 </div>
             </div>
         </div>
-    </article>
+    </section>
 
-    {#  Challenges  #}
-    {% if challenges|default %}
-        <section class="section section-lg pt-0">
-            <div class="container">
-                <div class="row justify-content-center mb-4">
-                    <div class="col-12 col-lg-10">
-                        <h2 class=" mb-3 text-center">{{ 'challenges'|trans|capitalize }}</h2>
-                        <p class="lead text-center">{{ 'some challenges from this organziation might be interesting for you'|trans|capitalize~'.' }}</p>
-                    </div>
-                </div>
-                <div class="row justify-content-center">
-                    {% if challenges|default %}
-                        {% for chal in challenges|slice(0, 5) %}
-                            <div class="col-12 col-lg-10 mb-4">
-                                <div class="card bg-white border-light shadow-soft">
-                                    <div class="card-body p-4 pt-lg-4 pb-lg-3">
-                                        <div class="row">
-                                            <div class="col-12 col-md-6 mb-4 mb-lg-0">
-                                                <h3 class="mb-3">{{ chal.name|capitalize }}</h3>
-                                                {% if chal.description|default %}
-                                                    <p class="text-gray mb-4">
-                                                        {{ chal.description|capitalize }}
-                                                    </p>
-                                                {% endif %}
-                                                <div class="d-flex">
-                                                    {#<a href="#" class="stretched-link">#}<i
-                                                        class="fas fa-map-marker-alt"></i><span
-                                                        class="h6 text-sm ml-2">{{ 'Sillicon Valley, CA'|trans|capitalize }}</span>{#</a>#}
-
-                                                    {% if chal.budget|default %}
-                                                        <span class="ml-4"><i
-                                                                class="fas fa-money-bill text-secondary"></i>
-                                                    <span class="h6 text-sm ml-2">&euro; {{ chal.budget~',-' }}</span>
-                                                </span>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="col-12 col-md-6 d-flex align-items-center justify-content-md-end">
-                                                <a href="{{ path('app_challenge_challenge', {id: chal.id}) }}"
-                                                   class="btn btn-secondary mr-3 animate-up-2 m-0">{{ 'apply'|trans|capitalize }}</a>
-                                                <a href="{{ path('app_challenge_challenge', {id: chal.id}) }}"
-                                                   class="btn btn-primary animate-up-2 m-0"><i
-                                                        class="fas fa-clipboard-list mr-2"></i>{{ 'view'|trans|capitalize }}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-
-                </div>
-            </div>
-        </section>
-    {% endif %}
-
-
-    {#  Programs  #}
-    {% if programs|default %}
-        <section class="section section-lg pt-0">
-            <div class="container">
-                <div class="row justify-content-center mb-4">
-                    <div class="col-12 col-lg-10">
-                        <h2 class=" mb-3 text-center">{{ 'programs'|trans|capitalize }}</h2>
-                        <p class="lead text-center">{{ 'some programs from this organziation might be interesting for you'|trans|capitalize~'.' }}</p>
-                    </div>
-                </div>
-                <div class="row justify-content-center">
-
-                    {% if programs|default %}
-                        {% for prog in programs|slice(0, 5) %}
-                            <div class="col-12 col-lg-10 mb-4">
-                                <div class="card bg-white border-light shadow-soft">
-                                    <div class="card-body p-4 pt-lg-4 pb-lg-3">
-                                        <div class="row">
-                                            <div class="col-12 col-md-6 mb-4 mb-lg-0">
-                                                <h3 class="mb-3">{{ prog.name|capitalize }}</h3>
-                                                {% if prog.description|default %}
-                                                    <p class="text-gray mb-4">
-                                                        {{ prog.description|capitalize }}
-                                                    </p>
-                                                {% endif %}
-                                                <div class="d-flex">
-                                                    {#<a href="#" class="stretched-link">#}<i
-                                                        class="fas fa-map-marker-alt"></i><span
-                                                        class="h6 text-sm ml-2">{{ 'Sillicon Valley, CA'|trans|capitalize }}</span>{#</a>#}
-
-                                                    {#                                                {% if chal.budget|default %}#}
-                                                    {#                                                <span class="ml-4"><i class="fas fa-money-bill text-secondary"></i>#}
-                                                    {#                                                    <span class="h6 text-sm ml-2">&euro; {{ chal.budget~',-' }}</span>#}
-                                                    {#                                                </span>#}
-                                                    {#                                                {% endif %}#}
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="col-12 col-md-6 d-flex align-items-center justify-content-md-end">
-                                                <a href="{{ path('app_education_program', {id: prog.id}) }}"
-                                                   class="btn btn-secondary mr-3 animate-up-2 m-0">{{ 'apply'|trans|capitalize }}</a>
-                                                <a href="{{ path('app_education_program', {id: prog.id}) }}"
-                                                   class="btn btn-primary animate-up-2 m-0"><i
-                                                        class="fas fa-clipboard-list mr-2"></i>{{ 'view'|trans|capitalize }}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-
-                </div>
-            </div>
-        </section>
-    {% endif %}
-
-
-
-    {#  Job postings  #}
-    {% if jobPostings|default %}
-        <section class="section section-lg pt-0">
-            <div class="container">
-                <div class="row justify-content-center mb-4">
-                    <div class="col-12 col-lg-10">
-                        <h2 class=" mb-3 text-center">{{ 'vacancies'|trans|capitalize }}</h2>
-                        <p class="lead text-center">{{ 'some vacancies from this organziation might be interesting for you'|trans|capitalize~'.' }}</p>
-                    </div>
-                </div>
-                <div class="row justify-content-center">
-
-                    {% if jobPostings|default %}
-                        {% for job in jobPostings|slice(0, 5) %}
-                            <div class="col-12 col-lg-10 mb-4">
-                                <div class="card bg-white border-light shadow-soft">
-                                    <div class="card-body p-4 pt-lg-4 pb-lg-3">
-                                        <div class="row">
-                                            <div class="col-12 col-md-6 mb-4 mb-lg-0">
-                                                <h3 class="mb-3">{{ job.name|capitalize }}</h3>
-                                                {% if job.description|default %}
-                                                    <p class="text-gray mb-4">
-                                                        {{ job.description|capitalize }}
-                                                    </p>
-                                                {% endif %}
-                                                <div class="d-flex">
-                                                    {#<a href="#" class="stretched-link">#}<i
-                                                        class="fas fa-map-marker-alt"></i><span
-                                                        class="h6 text-sm ml-2">{{ 'Sillicon Valley, CA'|trans|capitalize }}</span>{#</a>#}
-
-                                                    {% if job.standardHours|default and job.employmentType|default %}
-                                                        <span class="ml-4"><i class="fas fa-clock text-secondary"></i>
-                                                                                                        <span
-                                                                                                            class="h6 text-sm ml-2">{{ job.employmentType|capitalize~' '~job.standardHours~' '~'hours'|trans }}</span>
-                                                                                                    </span>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="col-12 col-md-6 d-flex align-items-center justify-content-md-end">
-                                                <a href="{{ path('app_internship_position', {id: job.id}) }}#apply"
-                                                   class="btn btn-secondary mr-3 animate-up-2 m-0">{{ 'apply'|trans|capitalize }}</a>
-                                                <a href="{{ path('app_internship_position', {id: job.id}) }}"
-                                                   class="btn btn-primary animate-up-2 m-0"><i
-                                                        class="fas fa-clipboard-list mr-2"></i>{{ 'view'|trans|capitalize }}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-
-                </div>
-            </div>
-        </section>
-    {% endif %}
 {% endblock %}

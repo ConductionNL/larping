@@ -1,142 +1,99 @@
-<!--
-
-=========================================================
-* Rocket - Startup Bootstrap Template
-=========================================================
-
-* Product Page: https://themes.getbootstrap.com/product/rocket/
-* Copyright 2020 Themesberg (https://www.themesberg.com)
-* License (https://themes.getbootstrap.com/licenses/)
-
-* Coded by https://themesberg.com
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
--->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- Primary Meta Tags -->
-    <title>
-        {% if application|default %}
-            {% if slug is defined and slug is not empty %}
-                {{ slug|capitalize }} |
-            {% endif %}
-            {{ application['name'] }}
-        {% elseif app_name|default %}
-            {% if slug is defined and slug is not empty %}
-                {{ slug|capitalize }} |
-            {% endif %}
-            {{ app_name|capitalize }}
-        {% else %}
-            Stage platform
-        {% endif %}
-    </title>
+
+    <!-- SITE TITTLE -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="title" content="Conduction - Stage Platform">
-    <meta name="author" content="Conduction">
-    <meta name="description"
-          content="Conduction - Stage Platform">
-    <meta name="keywords"
-          content="bootstrap, bootstrap template, saas website template, saas bootstrap template, saas bootstrap 4 template, saas bootstrap theme, saas bootstrap 4 theme, dashboard, saas dashboard, themesberg"/>
-    <link rel="canonical" href="https://themes.getbootstrap.com/product/rocket/">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Larping</title>
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://demo.themesberg.com/rocket">
-    <meta property="og:title" content="Conduction - Stage Platform">
-    <meta property="og:description"
-          content="Conduction - Stage Platform">
-    <meta property="og:image"
-          content="">
+    <!-- PLUGINS CSS STYLE -->
+    <link href="/bundles/listy/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/listtyicons/style.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/menuzord/css/menuzord.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/map/css/map.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/selectric/selectric.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/dzsparallaxer/dzsparallaxer.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/owl-carousel//bundles/listy/owl.carousel.min.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/owl-carousel//bundles/listy/owl.theme.default.min.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/revolution/css/settings.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/map/css/map.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/rateyo/jquery.rateyo.min.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/daterangepicker/daterangepicker.css" rel="stylesheet">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://demo.themesberg.com/rocket">
-    <meta property="twitter:title" content="Rocket - Bootstrap Startup Dashboard Template">
-    <meta property="twitter:description"
-          content="Conduction - Stage Platform">
-    <meta property="twitter:image"
-          content="https://themesberg.s3.us-east-2.amazonaws.com/public/products/rocket/rocket-preview.jpg">
+    <link href="/bundles/listy/plugins/fancybox/jquery.fancybox.min.css" rel="stylesheet">
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="120x120" href="data:image;base64,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">
-    <link rel="icon" type="image/png" sizes="32x32" href="data:image;base64,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">
-    <link rel="icon" type="image/png" sizes="16x16" href="data:image;base64,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">
-    <link rel="manifest" href="data:image;base64,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">
-    <link rel="mask-icon" href="data:image;base64,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">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="theme-color" content="#ffffff">
 
-    <!-- Fontawesome -->
-    <script src="https://kit.fontawesome.com/27aca7094d.js" crossorigin="anonymous"></script>
+    <!-- GOOGLE FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Muli:200,300,400,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
 
-    <!-- Prism -->
-    <link type="text/css" href="/bundles/rocket/vendor/prismjs/themes/prism.css" rel="stylesheet">
+    <!-- CUSTOM CSS -->
+    <link href="/bundles/listy/css/style.css" rel="stylesheet" id="option_style">
 
-    <!-- VectorMap -->
-    <link rel="stylesheet" href="/bundles/rocket/vendor/jqvmap/dist/jqvmap.min.css">
+    <!-- <link rel="stylesheet" href="/bundles/listy/css/default.css" id="option_color"> -->
 
-    <!-- Rocket CSS -->
-    <link type="text/css" href="/bundles/rocket/css/rocket.css" rel="stylesheet">
+    <!-- FAVICON -->
+    <link href="/bundles/listy/img/favicon.png" rel="shortcut icon">
 
-    <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="/css/custom.css" rel="stylesheet">
 
-    <!-- Core -->
-    <script src="/bundles/rocket/vendor/jquery/dist/jquery.min.js"></script>
+
 </head>
 
-<body>
-<header class="header-global">
-    {% if solidMenu is defined %}
-        {% include 'menu.html.twig' with {
-            'solidMenu': solidMenu
-        } %}
-    {% else %}
-        {% include 'menu.html.twig' %}
-    {% endif %}
-</header>
+<body id="body" class="up-scroll">
 
-<main>
-
-    <div class="preloader bg-soft flex-column justify-content-center align-items-center">
-        <img class="loader-element" src="/bundles/rocket/assets/img/brand/dark.svg" height="50" alt="Rocket logo">
+<!-- Preloader -->
+<div id="preloader" class="smooth-loader-wrapper">
+    <div class="smooth-loader">
+        <div class="loader1">
+            <div class="loader-target">
+                <div class="loader-target-main"></div>
+                <div class="loader-target-inner"></div>
+            </div>
+        </div>
     </div>
+</div>
+
+<div class="main-wrapper">
+
+    {% include 'header.html.twig' %}
 
     {% block content %}
 
     {% endblock %}
 
+</div> <!-- element wrapper ends -->
 
-    {% include 'footer.html.twig' %}
+{% include 'footer.html.twig' %}
 
-</main>
+<!-- JAVASCRIPTS -->
 
-<!-- Core -->
-<script src="/bundles/rocket/vendor/popper.js/dist/umd/popper.min.js"></script>
-<script src="/bundles/rocket/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/bundles/rocket/vendor/headroom.js/dist/headroom.min.js"></script>
-
-<!-- Vendor JS -->
-<script src="/bundles/rocket/vendor/countup.js/dist/countUp.min.js"></script>
-<script src="/bundles/rocket/vendor/jquery-countdown/dist/jquery.countdown.min.js"></script>
-<script src="/bundles/rocket/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
-<script src="/bundles/rocket/vendor/prismjs/prism.js"></script>
-
-<!-- Chartist -->
-<script src="/bundles/rocket/vendor/chartist/dist/chartist.min.js"></script>
-<script src="/bundles/rocket/vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
-
-<!-- Vector Maps -->
-<script src="/bundles/rocket/vendor/jqvmap/dist/jquery.vmap.min.js"></script>
-<script src="/bundles/rocket/vendor/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-
-<!-- Rocket JS -->
-<script src="/bundles/rocket/assets/js/rocket.js"></script>
-
+<script src="/bundles/listy/plugins/jquery/jquery-3.4.1.min.js"></script>
+<script src="/bundles/listy/plugins/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="/bundles/listy/plugins/menuzord/js/menuzord.js"></script>
+<script src="/bundles/listy/plugins/selectric/jquery.selectric.min.js"></script>
+<script src="/bundles/listy/plugins/dzsparallaxer/dzsparallaxer.js"></script>
+<script src="/bundles/listy/plugins/dzsparallaxer/dzsparallaxer.js"></script>
+<script src="/bundles/listy/plugins/isotope/isotope.pkgd.min.js"></script>
+<script src="/bundles/listy/plugins/revolution/js/jquery.themepunch.tools.min.js"></script>
+<script src="/bundles/listy/plugins/revolution/js/jquery.themepunch.revolution.min.js"></script>
+<script src="/bundles/listy/plugins/smoothscroll/SmoothScroll.js"></script>
+<script src="/bundles/listy/plugins/owl-carousel/owl.carousel.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDU79W1lu5f6PIiuMqNfT1C6M0e_lq1ECY"></script>
+<script src="/bundles/listy/plugins/map/js/markerclusterer.js"></script>
+<script src="/bundles/listy/plugins/map/js/rich-marker.js"></script>
+<script src="/bundles/listy/plugins/map/js/infobox_packed.js"></script>
+<script src="/bundles/listy/js/map.js"></script>
+<script src="/bundles/listy/js/listty.js"></script>
 </body>
 </html>
+
