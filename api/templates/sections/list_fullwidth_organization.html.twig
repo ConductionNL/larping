@@ -9,7 +9,6 @@
                     <div class="card-list-img">
                         <img class="listing-img" src="https://picsum.photos/370/250" alt="things-4">
                     </div>
-
                 </div>
                 <div class="col-md-8 col-xl-9">
                     <div class="card-body p-0">
@@ -26,16 +25,36 @@
                         <br>
                     </div>
                     <span class="d-block mb-4 listing-address">215 Terry Lane, New York</span>
-
-                    <span class="d-block mb-4 listing-address">{{ item.description }}</span>
-                    <span class="d-block mb-2 listing-address">{{ item.price }}</span>
-                    <span class="d-block mb-2 listing-address">[[datum]]</span>
-                    <span class="d-block mb-2 listing-address">[[organizatie]]</span>
+                    <div class="d-flex align-items-center">
+                        <ul class="list-inline list-inline-rating mr-2">
+                            <li class="list-inline-item">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                        </ul>
+                        <span class="d-inline-block mr-2" style="color: black">(5 Reviews)</span>
+                        <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Favourite this listing">
+                            <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
+                            <span style="color: black">8 k</span>
+                        </button>
+                    </div>
                     <div>
                         <a href="{{ path(pathToSingular, {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
                     </div>
                 </div>
             </div>
         </div>
+
     {% endfor %}
 {% endif %}
