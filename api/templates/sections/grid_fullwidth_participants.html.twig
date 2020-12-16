@@ -11,10 +11,33 @@
                         <img class="card-img rounded-0" src="https://picsum.photos/300/200"
                              alt="Card image cap">
                         <div class="card-img-overlay">
-                            <span class="d-block mb-2 listing-address" style="color: white">[[datum]]</span>
+                            <div class="d-flex align-items-center">
+                                <ul class="list-inline list-inline-rating mr-2">
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </li>
+                                </ul>
+                                <span class="d-inline-block mr-2" style="color: white">(5 Reviews)</span>
+                                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Favourite this listing">
+                                    <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
+                                    <span style="color: white">8 k</span>
+                                </button>
+                            </div>
                             <h3>
                                 <a href="{{ path(pathToSingular, {'id': item.id}) }}">
-                                    {{ item.name|capitalize }}  <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                    {{ item.name|capitalize }}
                                 </a>
                             </h3>
                             {% if item.description|default %}
@@ -24,7 +47,6 @@
                             {% endif %}
                         </div>
                     </div>
-
                     <div class="card-footer bg-transparent">
                         <ul class="list-unstyled d-flex mb-0 py-2">
                             <li>
@@ -46,5 +68,4 @@
 
         {% endfor %}
     {% endif %}
-
 </div>
