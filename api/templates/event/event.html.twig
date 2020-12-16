@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
-                    <a href="#" class="btn btn-primary">Write a review</a>
+                    <a href="#add-review" class="btn btn-primary">Write a review</a>
                 </div>
             </div>
 
@@ -174,46 +174,18 @@
 
                     <!-- Reviews -->
                     <div class="my-6">
-                        <h3 class="font-weight-normal mb-6">Reviews (3)</h3>
+                        <h3 class="font-weight-normal mb-6">{{'reviews'|trans|capitalize}} ({{ reviews|length }})</h3>
+                        {% for rev in reviews %}
                         <div class="media mb-3">
                             <div class="media-img">
                                 <img src="assets/img/user/user-xs-1.jpg" class="mr-3 media-object rounded-circle" alt="Image User">
                             </div>
                             <div class="media-body">
-                                <h5 class="media-heading">Aaren</h5>
-                                <ul class="list-inline list-inline-rating">
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                </ul>
-                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                    laudan totam rem ape
-                                    riam,</p>
-
-                                <!-- Reply Section -->
-                                <div class="reply-wrapper">
-                                    <a class="d-inline-block mb-2 btn-reply" href="javascript:0">Reply</a>
-                                    <form class="form-reply my-3">
-                                        <textarea class="form-control mb-6" rows="3"
-                                                  placeholder="Enter your comment"></textarea>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </form>
-                                </div>
-
+                                <h5 class="media-heading">{{ commonground_resource(rev.author).givenName }}</h5>
+                                <p>{{ rev.review }}</p>
                             </div>
                         </div>
+                        {% endfor %}
                         <hr>
                     </div>
 
@@ -221,9 +193,9 @@
                     <div class="my-6" id="add-review">
                         <h3 class="font-weight-normal mb-6"> Add Review </h3>
                         {% if app.user %}
-                        <form>
+                        <form action="{{ path('app_event_event', {id: item.id}) }}" method="post">
                             <div class="form-check form-check-inline mb-6 mr-lg-7">
-                                <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
+                                <input class="form-check-input mr-2" type="radio" name=""
                                        id="inlineRadio1" value="option1" checked="">
                                 <label class="form-check-label" for="inlineRadio1">
                                     <div class="media media-xs align-items-center">
@@ -236,7 +208,7 @@
                                 </label>
                             </div>
                             <div class="form-group mb-6">
-                                <textarea class="form-control" rows="6" placeholder="Enter Your Comment"></textarea>
+                                <textarea class="form-control" rows="6" placeholder="Enter Your Comment" name="review"></textarea>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary text-uppercase"> Send Review</button>
@@ -245,7 +217,7 @@
                         {% else %}
                         <div>
                             <h2>{{ 'you need to be logged in to place a review'|trans|capitalize }}</h2>
-                            <button class="btn-primary">
+                            <button class="btn btn-primary">
                                 <a class="mt-2 text-center text-white" href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }}</a>
                             </button>
                         </div>
