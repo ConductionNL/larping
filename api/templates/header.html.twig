@@ -15,17 +15,14 @@
                         <h2 style="color:#2196F3;" class="m-0">LARPING</h2>
                     </a>
                     <div class="float-right btn-wrapper">
-                        <a class="btn btn-outline-primary" href="add-listings.html">+ <span>{{ 'add larp'|trans|capitalize }}</span></a>
+                        <a class="btn btn-outline-primary" href="{{ path('app_user_idvault') }}"><span>{{ 'login'|trans|capitalize }}</span></a>
                     </div>
                     <ul class="menuzord-menu menuzord-right">
                         <li class="active">
-                            <a href="javascript:0">Home</a>
-                            <ul class="dropdown">
-                                <li><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
-                                <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a></li>
-                                <li><a href="{{ path('app_participant_index') }}">{{ 'participants'|trans|capitalize }}</a></li>
-                                <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
-                            </ul>
+                            <a href="{{ path('app_default_index') }}">Home</a>
+                            <a href="{{ path('app_organization_index') }}" style="color: black">{{ 'organizations'|trans|capitalize }}</a>
+                            <a href="{{ path('app_event_index') }}" style="color: black">{{ 'events'|trans|capitalize }}</a>
+                            <a href="{{ path('app_dashboard_index') }}" style="color: black">{{ 'dashboard'|trans|capitalize }}</a>
                         </li>
 {#                        <li class="">#}
 {#                            <a href="javascript:0">Listing</a>#}
@@ -152,67 +149,7 @@
 {#                        <li class="">#}
 {#                            <a href="blog.html">Blog</a>#}
 {#                        </li>#}
-                        <li class="">
-                            <a href="javascript:0">Admin</a>
-                            <ul class="dropdown">
-                                <li>
-                                    <a href="javascript:0">Dashboard</a>
-                                    <ul class="dropdown">
-                                        <li><a href="{{ path('app_dashboard_index') }}">Dashboard</a></li>
-                                        <li><a href="{{ path('app_dashboard_organizations') }}">{{ 'all'|trans|capitalize~' '~'organizations'|trans }}</a></li>
-                                        <li><a href="{{ path('app_dashboard_participants') }}">{{ 'all'|trans|capitalize~' '~'participants'|trans }}</a></li>
-                                        <li><a href="{{ path('app_dashboard_events') }}">{{ 'all'|trans|capitalize~' '~'events'|trans }}</a></li>
-                                    </ul>
-                                </li>
-                                {% if app.user|default %}
-                                    <li>
-                                        <a href="javascript:0">User Admin</a>
-                                        <ul class="dropdown">
-                                            <li><a href="dashboard-user.html">Dashboard</a></li>
-                                            <li><a href="my-bookings.html">My Booking</a></li>
-                                            <li><a href="my-favourites.html">My Favourites</a></li>
-                                            <li><a href="my-reviews.html">My reviews</a></li>
-                                            <li><a href="profile-user.html">My Profile</a></li>
-                                            <li><a href="message-users.html">My Messages</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:0">List Admin</a>
-                                        <ul class="dropdown">
-                                            <li><a href="dashboard-list-admin.html">Dashboard</a></li>
-                                            <li><a href="my-listings.html">My Listings</a></li>
-                                            <li><a href="add-listings.html">Add Listings</a></li>
-                                            <li><a href="edit-listings.html">Edit Listings</a></li>
-                                            <li><a href="admin-booking-requests.html">Admin Booking</a></li>
-                                            <li><a href="admin-reviews.html">Admin Reviews</a></li>
-                                            <li><a href="earnings.html">Earnings</a></li>
-                                            <li><a href="withdrawal-balance.html">Withdraw</a></li>
-                                            <li><a href="payment-process.html">Payment</a></li>
-                                            <li><a href="profile-list-admin.html">My Profile</a></li>
-                                            <li><a href="messages-list-admin.html">My Messages</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:0">Site Admin</a>
-                                        <ul class="dropdown">
-                                            <li><a href="dashboard-stie-admin.html">Dashboard</a></li>
-                                            <li><a href="admin-listings.html">Admin Listings</a></li>
-                                            <li><a href="user-list-owners.html">List Owners</a></li>
-                                            <li><a href="user-generals.html">General Users</a></li>
-                                            <li><a href="profile-site-admin.html">My Profile</a></li>
-                                        </ul>
-                                    </li>
-                                {% else %}
-                                    <li><a href="{{ path('app_user_idvault') }}">Login</a></li>
-                                    <li>
-                                        <a href="{{ path('app_user_idvault') }}">{{ 'create account'|trans|capitalize }}</a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </li>
-
                     </ul>
-
                 </div>
             </div>
         </nav>
