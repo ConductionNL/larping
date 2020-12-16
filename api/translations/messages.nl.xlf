@@ -93,6 +93,14 @@
         <source>event</source>
         <target>evenement</target>
         </trans-unit>
+        <trans-unit id="BAHZTa6" resname="event start">
+        <source>event start</source>
+        <target>evenement start</target>
+        </trans-unit>
+        <trans-unit id="BTTTTa6" resname="about">
+         <source>about</source>
+         <target>over</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
