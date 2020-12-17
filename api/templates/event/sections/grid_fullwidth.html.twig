@@ -4,6 +4,9 @@
         {% for item in items %}
 
             {% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id']})['hydra:member']|length %}
+            {% if app.user|default %}
+                {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id'], 'author':app.user.person})['hydra:member'][0] %}
+            {% endif %}
 
             <div class="col-md-6 col-lg-4">
                 <div class="card rounded-0 card-hover-overlay">
@@ -11,7 +14,8 @@
                         <img class="card-img rounded-0" src="https://picsum.photos/300/200"
                              alt="Card image cap">
                         <div class="card-img-overlay">
-                            <span class="d-block mb-2 listing-address" style="color: white">{{ item.duration|date("d-m-Y") }}</span>
+                            <span class="d-block mb-2 listing-address"
+                                  style="color: white">{{ item.duration|date("d-m-Y") }}</span>
                             <h3>
                                 <a href="{{ path(pathToSingular, {'id': item.id}) }}">
                                     {{ item.name|capitalize }}
@@ -28,9 +32,10 @@
                     <div class="card-footer bg-transparent">
                         <ul class="list-unstyled d-flex mb-0 py-2">
                             <li>
-                                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top"
+                                <button class="btn-like px-2" onclick="likeItem(this)" data-toggle="tooltip"
+                                        data-placement="top"
                                         title=""
-                                        data-original-title="Favourite this listing">
+                                        data-original-title="Favourite this listing" value="{{ item['@id'] }}">
                                     <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
                                     <span>{{ likes }}</span>
                                 </button>
