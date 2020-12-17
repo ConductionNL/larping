@@ -19,10 +19,13 @@
                     </div>
                     <ul class="menuzord-menu menuzord-right">
                         <li class="active">
-                            <a href="{{ path('app_default_index') }}">Home</a>
-                            <a href="{{ path('app_organization_index') }}" style="color: black">{{ 'organizations'|trans|capitalize }}</a>
-                            <a href="{{ path('app_event_index') }}" style="color: black">{{ 'events'|trans|capitalize }}</a>
-                            <a href="{{ path('app_dashboard_index') }}" style="color: black">{{ 'dashboard'|trans|capitalize }}</a>
+                            <a href="javascript:0">Home</a>
+                            <ul class="dropdown">
+                                <li><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                                <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a></li>
+                                <li><a href="{{ path('app_participant_index') }}">{{ 'participants'|trans|capitalize }}</a></li>
+                                <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
+                            </ul>
                         </li>
 {#                        <li class="">#}
 {#                            <a href="javascript:0">Listing</a>#}
