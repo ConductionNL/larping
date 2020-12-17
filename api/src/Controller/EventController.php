@@ -57,8 +57,8 @@ class EventController extends AbstractController
         // Lets see if there is a post to procces
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
-            $resource['organization'] = $variables['item']['sourceOrganization'];
-            $resource['resource'] = $variables['item']['@id'];
+            $resource['organization'] = $variables['event']['organization'];
+            $resource['resource'] = $variables['event']['@id'];
             $resource['author'] = $this->getUser()->getPerson();
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
