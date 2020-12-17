@@ -51,7 +51,7 @@ class EventController extends AbstractController
         }
 
         //get reviews of this event
-        $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['item']['@id']])['hydra:member'];
+        $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['event']['@id']])['hydra:member'];
 
         //add review
         // Lets see if there is a post to procces
