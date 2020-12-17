@@ -101,6 +101,10 @@
          <source>about</source>
          <target>over</target>
          </trans-unit>
+         <trans-unit id="MMAGTa6" resname="features">
+         <source>features</source>
+         <target>eigenschappen</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
