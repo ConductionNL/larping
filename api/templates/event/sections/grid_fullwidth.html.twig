@@ -14,8 +14,6 @@
                         <img class="card-img rounded-0" src="https://picsum.photos/300/200"
                              alt="Card image cap">
                         <div class="card-img-overlay">
-                            <span class="d-block mb-2 listing-address"
-                                  style="color: white">{{ item.duration|date("d-m-Y") }}</span>
                             <h3>
                                 <a href="{{ path(pathToSingular, {'id': item.id}) }}">
                                     {{ item.name|capitalize }}

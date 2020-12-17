@@ -18,9 +18,11 @@
                     {% if not app.user|default %}
                         <div class="float-right btn-wrapper">
                             <a class="btn btn-outline-primary"
-                               href="{{ path('app_user_idvault') }}"><span>{{ 'login'|trans|capitalize }}</span></a>
+                               href="{{ path('app_user_idvault', {'backUrl':path(app.request.attributes.get('_route'),
+                                   app.request.attributes.get('_route_params'))}) }}"><span>{{ 'login'|trans|capitalize }}</span></a>
                         </div>
                     {% endif %}
+
                     <ul class="menuzord-menu menuzord-right">
                         {#                        <li class="active">#}
                         {#                            <a href="javascript:0">Home</a>#}
@@ -35,6 +37,7 @@
                         {% if app.user|default %}
                             <li><a href="{{ path('app_dashboard_index') }}" style="color: black">Dashboard</a></li>
                         {% endif %}
+
                         {#                        <li class="">#}
                         {#                            <a href="javascript:0">Listing</a>#}
                         {#                            <div class="megamenu">#}
@@ -160,6 +163,94 @@
                         {#                        <li class="">#}
                         {#                            <a href="blog.html">Blog</a>#}
                         {#                        </li>#}
+
+                        {% if app.user|default %}
+
+                            {% if app.user.person|default %}
+                                {% set person = commonground_resource(app.user.person) %}
+                            {% endif %}
+
+                            <div class="menu-right">
+                                <div class="notification">
+                                    {% set order = app.session.get('order') %}
+                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                                       data-display="static" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                        <span class="badge">
+                                {% if order.items|default %}{{ order.items|length }}{% else %}0{% endif %}</span>
+                                    </a>
+
+                                    {% if order.items|default %}
+                                        <ul class="dropdown-menu">
+                                            {% for item in order.items %}
+                                                {% set offer = commonground_resource(item.offer) %}
+                                                <li>
+                                                    <a href="{{ path('app_dashboard_index') }}">
+                                                        <div class="media media-xs align-items-center">
+                                                            <div class="media-body">
+                                                                <span class="font-weight-bold">{{ offer.name }}</span>
+                                                                <p class="mb-1">{{ item.quantity }}</p>
+                                                                <p class="mb-1">&euro; {{ item.price }},-</p>
+                                                                {#                                                    <em class="small">15min ago</em>#}
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                            <li>
+                                                <a href="{{ path('app_order_index') }}">
+                                                    See all
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                                <div class="avatar">
+                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                                       aria-haspopup="true" data-display="static" aria-expanded="false">
+                                        {% if person.personalPhoto|default %}
+                                            {% set photo = commonground_resource(person.personalPhoto) %}
+                                            {% if photo.base64|default %}
+                                                <img class="avatar-img" src="{{ photo.base64 }}" alt="Image">
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if person|default %}
+                                            <span class="avatar-name">{{ person.name }}
+                                        <span class="small"
+                                              style="text-transform: none">{{ app.user.username|lower }}</span>
+                                        </span>
+                                        {% else %}
+                                            <span class="avatar-name">{{ app.user.name }}</span>
+                                        {% endif %}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="d-flex flex-wrap align-items-center"
+                                               href="">
+                                                <i class="fa fa-user mr-2" aria-hidden="true"></i>
+                                                <span>My Profile</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="d-flex flex-wrap align-items-center" href="">
+                                                <i class="fa fa-envelope mr-2" aria-hidden="true"></i>
+                                                <span>Messages</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="d-flex flex-wrap align-items-center" href="#">
+                                                <i class="fa fa-diamond mr-2" aria-hidden="true"></i>
+                                                <span>Activity</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        {% endif %}
+
                     </ul>
                 </div>
             </div>
