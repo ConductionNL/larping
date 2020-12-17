@@ -93,13 +93,21 @@
         <source>event</source>
         <target>evenement</target>
         </trans-unit>
-        <trans-unit id="BAHZTa6" resname="event start">
-        <source>event start</source>
-        <target>evenement start</target>
+        <trans-unit id="BAHZTa6" resname="startdate">
+        <source>startdate</source>
+        <target>startdatum</target>
+        </trans-unit>
+        <trans-unit id="Lmwaab2" resname="enddate">
+        <source>enddate</source>
+        <target>einddatum</target>
         </trans-unit>
         <trans-unit id="BTTTTa6" resname="about">
          <source>about</source>
          <target>over</target>
+         </trans-unit>
+        <trans-unit id="GBasf1x" resname="by">
+         <source>by</source>
+         <target>door</target>
          </trans-unit>
     </body>
   </file>

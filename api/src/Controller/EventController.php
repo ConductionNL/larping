@@ -31,7 +31,7 @@ class EventController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['items'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'])['hydra:member'];
+        $variables['items'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['pathToSingular'] = 'app_event_event';
         $variables['typePlural'] = 'events';
 
@@ -45,19 +45,20 @@ class EventController extends AbstractController
     public function eventAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
         $variables = [];
-        $variables['item'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products', 'id'=>$id]);
-        $variables['sourceOrganization'] = $commonGroundService->getResource($variables['item']['sourceOrganization']);
-        $variables['contact'] = $commonGroundService->getResource($variables['sourceOrganization']['contact']);
+        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+        if (isset($variables['event']['resource']) && strpos($variables['event']['resource'], '/pdc/products/')) {
+            $variables['product'] = $commonGroundService->getResource($variables['event']['resource']);
+        }
 
         //get reviews of this event
-        $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['item']['@id']])['hydra:member'];
+        $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['event']['@id']])['hydra:member'];
 
         //add review
         // Lets see if there is a post to procces
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
-            $resource['organization'] = $variables['item']['sourceOrganization'];
-            $resource['resource'] = $variables['item']['@id'];
+            $resource['organization'] = $variables['event']['organization'];
+            $resource['resource'] = $variables['event']['@id'];
             $resource['author'] = $this->getUser()->getPerson();
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
