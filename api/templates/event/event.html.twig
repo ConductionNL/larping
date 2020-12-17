@@ -108,6 +108,42 @@
                         <hr>
                     </div>
 
+                    <!-- Offers -->
+                    {% if product.offers|default %}
+                        <div class="my-6">
+                            <h3 class="font-weight-normal mb-6">{{ 'offers'|trans|capitalize }}</h3>
+                            <form action="{{ path(path, {id: event.id}) }}" method="post">
+                                <div class="row">
+                                    <div class="form-group col-8">
+                                        <label for="offerInput">{{ 'offer'|trans|capitalize }}</label>
+                                        <select id="offerInput" class="form-control" name="offer" required>
+                                            <option
+                                                value="">{{ 'select an'|trans|capitalize~' '~'offer'|trans }}</option>
+                                            {% for offer in product.offers %}
+                                                <option value="{{ offer['@id'] }}">{{ offer.name }}
+                                                    &euro; {{ offer.price }},-
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-4">
+                                        <label for="quantityInput">{{ 'quantity'|trans|capitalize }}</label>
+                                        <input value="1" class="form-control" name="quantity" type="number"
+                                               id="quantityInput">
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="makeOrder" value="true">
+                                <button type="submit"
+                                        class="btn btn-primary btn-block">{{ 'add to cart and pay'|trans|capitalize }}</button>
+
+                                {#                                <button type="submit"#}
+                                {#                                        class="btn btn-primary btn-block">{{ 'add to cart'|trans|capitalize }}</button>#}
+                            </form>
+                            <hr>
+                        </div>
+                    {% endif %}
+
                     <!-- Added by -->
                     <div>
                         <h3 class="font-weight-normal mb-6">Added By </h3>
@@ -208,7 +244,7 @@
                     <div class="my-6" id="add-review">
                         <h3 class="font-weight-normal mb-6"> Add Review </h3>
                         {% if app.user %}
-                            <form action="{{ path('app_event_event', {id: item.id}) }}" method="post">
+                            <form action="{{ path(path, {id: event.id}) }}" method="post">
                                 <div class="form-check form-check-inline mb-6 mr-lg-7">
                                     <input class="form-check-input mr-2" type="radio" name=""
                                            id="inlineRadio1" value="option1" checked="">
@@ -222,10 +258,11 @@
                                         </div>
                                     </label>
                                     <div class="form-group mb-6">
-                                        <textarea class="form-control" rows="6"
+                                        <textarea name="message" class="form-control" rows="6"
                                                   placeholder="Enter Your Comment"></textarea>
                                     </div>
                                     <div class="form-group">
+                                        <input type="hidden" name="addReview" value="true">
                                         <button type="submit" class="btn btn-primary text-uppercase"> Send Review
                                         </button>
                                     </div>
@@ -248,7 +285,11 @@
                 <!--======= Sidebar =======-->
                 <div class="col-md-5 col-lg-4 pl-xl-8">
                     <!-- Single listing Map -->
-                    {% include 'widgets/single_listing_map.html.twig' %}
+                    {% if event.location|default %}
+                        {% include 'widgets/single_listing_map.html.twig' with {
+                            'location': event.location
+                        } %}
+                    {% endif %}
 
                     <!-- You may also like  -->
                     {% include 'widgets/you_may_like.html.twig' %}
