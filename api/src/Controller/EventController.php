@@ -49,10 +49,20 @@ class EventController extends AbstractController
         if (isset($variables['event']['resource']) && strpos($variables['event']['resource'], '/pdc/products/')) {
             $variables['product'] = $commonGroundService->getResource($variables['event']['resource']);
         }
-//        /*@todo remove after testing*/
-//        $url = 'https://dev.larping.eu/api/v1/wrc/organizations/7b863976-0fc3-4f49-a4f7-0bf7d2f2f535';
-//        $variables['sourceOrganization'] = $commonGroundService->getResource(/*$variables['item']['sourceOrganization']*/ $url);
-//        $variables['contact'] = $commonGroundService->getResource($variables['sourceOrganization']['contact']);
+
+        //get reviews of this event
+        $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['item']['@id']])['hydra:member'];
+
+        //add review
+        // Lets see if there is a post to procces
+        if ($request->isMethod('POST')) {
+            $resource = $request->request->all();
+            $resource['organization'] = $variables['item']['sourceOrganization'];
+            $resource['resource'] = $variables['item']['@id'];
+            $resource['author'] = $this->getUser()->getPerson();
+            // Save to the commonground component
+            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+        }
 
         return $variables;
     }
