@@ -132,9 +132,49 @@ class DashboardController extends AbstractController
     public function eventsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
         $variables = [];
+        $variables = [];
+        $variables['type'] = 'events';
+
+        if ($request->isMethod('POST')) {
+            $resource = $request->request->all();
+
+            // Check if org has name (required)
+            if ($resource['events']['name']) {
+                // Make or save email
+                if ($resource['email']['email']) {
+                    if (!isset($resource['email']['name'])) {
+                        $resource['email']['name'] = 'Email';
+                    }
+                    $email = $commonGroundService->saveResource($resource['email'], ['component' => 'arc', 'type' => 'emails']);
+                }
+                // Make or save telephone
+                if ($resource['telephone']['telephone']) {
+                    if (!isset($resource['telephone']['name'])) {
+                        $resource['telephone']['name'] = 'Telephone';
+                    }
+                    $telephone = $commonGroundService->saveResource($resource['telephone'], ['component' => 'arc', 'type' => 'telephones']);
+                }
+                // If we have a email add it to the org
+                if (isset($email)) {
+                    $resource['events']['emails'][0] = '/emails/'.$email['id'];
+                }
+                // If we have a telephone add it to the org
+                if (isset($telephone)) {
+                    $resource['events']['telephones'][0] = '/telephones/'.$telephone['id'];
+                }
+
+                // Save organization
+                $org = $commonGroundService->saveResource($resource['events'], ['component' => 'arc', 'type' => 'events']);
+            }
+
+        }
+
+        $variables['items'] = $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
+        
 
         return $variables;
     }
+
 
     /**
      * @Route("/events/{id}")
