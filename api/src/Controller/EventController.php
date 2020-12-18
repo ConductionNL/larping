@@ -65,7 +65,7 @@ class EventController extends AbstractController
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
         }
 
-        // Make order
+        // Make order in session
         if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' && $request->request->get('offer') &&
             $request->request->get('quantity') != 0) {
             $resource = $request->request->all();

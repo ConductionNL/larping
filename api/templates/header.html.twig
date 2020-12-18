@@ -164,48 +164,47 @@
                         {#                            <a href="blog.html">Blog</a>#}
                         {#                        </li>#}
 
-                        {% if app.user|default %}
+                        <div class="menu-right">
 
-                            {% if app.user.person|default %}
-                                {% set person = commonground_resource(app.user.person) %}
-                            {% endif %}
-
-                            <div class="menu-right">
-                                <div class="notification">
-                                    {% set order = app.session.get('order') %}
-                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                                       data-display="static" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                        <span class="badge">
+                            <div class="notification">
+                                {% set order = app.session.get('order') %}
+                                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                                   data-display="static" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    <span class="badge">
                                 {% if order.items|default %}{{ order.items|length }}{% else %}0{% endif %}</span>
-                                    </a>
-
-                                    {% if order.items|default %}
-                                        <ul class="dropdown-menu">
-                                            {% for item in order.items %}
-                                                {% set offer = commonground_resource(item.offer) %}
-                                                <li>
-                                                    <a href="{{ path('app_dashboard_index') }}">
-                                                        <div class="media media-xs align-items-center">
-                                                            <div class="media-body">
-                                                                <span class="font-weight-bold">{{ offer.name }}</span>
-                                                                <p class="mb-1">{{ item.quantity }}</p>
-                                                                <p class="mb-1">&euro; {{ item.price }},-</p>
-                                                                {#                                                    <em class="small">15min ago</em>#}
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            {% endfor %}
+                                </a>
+                                {% if order.items|default %}
+                                    <ul class="dropdown-menu">
+                                        {% for item in order.items %}
+                                            {% set offer = commonground_resource(item.offer) %}
                                             <li>
-                                                <a href="{{ path('app_order_index') }}">
-                                                    See all
+                                                <a href="{{ path('app_dashboard_index') }}">
+                                                    <div class="media media-xs align-items-center">
+                                                        <div class="media-body">
+                                                            <span class="font-weight-bold">{{ offer.name }}</span>
+                                                            <p class="mb-1">{{ item.quantity }}</p>
+                                                            <p class="mb-1">&euro; {{ item.price }},-</p>
+                                                            {#                                                    <em class="small">15min ago</em>#}
+                                                        </div>
+                                                    </div>
                                                 </a>
                                             </li>
+                                        {% endfor %}
+                                        <li>
+                                            <a href="{{ path('app_order_index') }}">
+                                                See all
+                                            </a>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                            </div>
 
-                                        </ul>
-                                    {% endif %}
-                                </div>
+
+                            {% if app.user|default %}
+                                {% if app.user.person|default %}
+                                    {% set person = commonground_resource(app.user.person) %}
+                                {% endif %}
                                 <div class="avatar">
                                     <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                                        aria-haspopup="true" data-display="static" aria-expanded="false">
@@ -245,12 +244,10 @@
                                             </a>
                                         </li>
                                     </ul>
-
                                 </div>
-                            </div>
+                            {% endif %}
 
-                        {% endif %}
-
+                        </div>
                     </ul>
                 </div>
             </div>
