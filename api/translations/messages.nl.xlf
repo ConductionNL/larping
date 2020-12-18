@@ -133,6 +133,14 @@
          <source>pay</source>
          <target>afrekenen</target>
          </trans-unit>
+        <trans-unit id="uBwn1aC" resname="remove">
+         <source>remove</source>
+         <target>verwijder</target>
+         </trans-unit>
+        <trans-unit id="Mn1bav4" resname="you have to be logged in to continue">
+         <source>you have to be logged in to continue</source>
+         <target>je moet ingelogd zijn om verder te gaan</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
