@@ -83,27 +83,18 @@
                     <div class="my-6">
                         <h3 class="font-weight-normal mb-6">Features</h3>
                         <ul class="list-unstyled mb-7">
+                            {% if event.categories is defined and event.categories is not empty %}
+                            {% for categories in event.categories %}
                             <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-wifi mr-2" aria-hidden="true"></i>High Speed Wifi
+                                <i class="fa fa-check mr-2" aria-hidden="true"></i>
+                                {{ commonground_resource(categories).name }}
                             </li>
+                            {% endfor %}
+                            {% else %}
                             <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-car mr-2" aria-hidden="true"></i>Street Parking
+                                {{ 'no features found'|trans|capitalize }}
                             </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-glass mr-2" aria-hidden="true"></i>Alcohol
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-pagelines mr-2" aria-hidden="true"></i>Vegetarian
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-cube mr-2" aria-hidden="true"></i>Reservations
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-check-circle-o mr-2" aria-hidden="true"></i> Pets Friendly
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-credit-card mr-2" aria-hidden="true"></i>Accept Credit Card
-                            </li>
+                            {% endif %}
                         </ul>
                         <hr>
                     </div>
@@ -246,26 +237,22 @@
                         {% if app.user %}
                             <form action="{{ path(path, {id: event.id}) }}" method="post">
                                 <div class="form-check form-check-inline mb-6 mr-lg-7">
-                                    <input class="form-check-input mr-2" type="radio" name=""
-                                           id="inlineRadio1" value="option1" checked="">
+                                    <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked="">
                                     <label class="form-check-label" for="inlineRadio1">
                                         <div class="media media-xs align-items-center">
-                                            <img src="assets/img/user/user-xs-3.jpg"
-                                                 class="mr-2 media-object rounded-circle" alt="Image User">
+                                            <img src="assets/img/user/user-xs-3.jpg" class="mr-2 media-object rounded-circle" alt="Image User">
                                             <div class="media-body">
                                                 <h5 class="media-heading mb-0">{{ app.user.name }}</h5>
                                             </div>
                                         </div>
                                     </label>
-                                    <div class="form-group mb-6">
-                                        <textarea name="message" class="form-control" rows="6"
-                                                  placeholder="Enter Your Comment"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="hidden" name="addReview" value="true">
-                                        <button type="submit" class="btn btn-primary text-uppercase"> Send Review
-                                        </button>
-                                    </div>
+                                </div>
+                                <div class="form-group mb-6">
+                                    <textarea class="form-control" rows="6" placeholder="Enter Your Comment"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" name="addReview" value="true">
+                                    <button type="submit" class="btn btn-primary text-uppercase"> Send Review </button>
                                 </div>
                             </form>
                         {% else %}
@@ -282,6 +269,7 @@
 
                 </div>
 
+
                 <!--======= Sidebar =======-->
                 <div class="col-md-5 col-lg-4 pl-xl-8">
                     <!-- Single listing Map -->
@@ -292,10 +280,13 @@
                     {% endif %}
 
                     <!-- You may also like  -->
+                    <h5>{{ 'other events you might like'|trans|capitalize }}</h5>
                     {% include 'widgets/you_may_like.html.twig' %}
                 </div>
             </div>
         </div>
     </section>
+
+
 
 {% endblock %}
