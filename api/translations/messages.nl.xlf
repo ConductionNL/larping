@@ -93,6 +93,46 @@
         <source>event</source>
         <target>evenement</target>
         </trans-unit>
+        <trans-unit id="BAHZTa6" resname="startdate">
+        <source>startdate</source>
+        <target>startdatum</target>
+        </trans-unit>
+        <trans-unit id="Lmwaab2" resname="enddate">
+        <source>enddate</source>
+        <target>einddatum</target>
+        </trans-unit>
+        <trans-unit id="BTTTTa6" resname="about">
+         <source>about</source>
+         <target>over</target>
+         </trans-unit>
+        <trans-unit id="GBasf1x" resname="by">
+         <source>by</source>
+         <target>door</target>
+         </trans-unit>
+        <trans-unit id="Jnb1asZ" resname="select an">
+         <source>select an</source>
+         <target>selecteer een</target>
+         </trans-unit>
+        <trans-unit id="Unb1ahT" resname="offers">
+         <source>offers</source>
+         <target>aanbiedingen</target>
+         </trans-unit>
+        <trans-unit id="O109oas" resname="quantity">
+         <source>quantity</source>
+         <target>hoeveelheid</target>
+         </trans-unit>
+        <trans-unit id="GAsf1Zq" resname="offer">
+         <source>offer</source>
+         <target>aanbod</target>
+         </trans-unit>
+        <trans-unit id="UBn1asw" resname="shopping cart">
+         <source>shopping cart</source>
+         <target>winkelmand</target>
+         </trans-unit>
+        <trans-unit id="OsHbnw1" resname="pay">
+         <source>pay</source>
+         <target>afrekenen</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>

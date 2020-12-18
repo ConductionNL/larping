@@ -29,7 +29,7 @@
 
                     <span class="d-block mb-4 listing-address">{{ item.description }}</span>
                     <span class="d-block mb-2 listing-address">{{ item.price }}</span>
-                    <span class="d-block mb-2 listing-address">[[datum]]</span>
+                    <span class="d-block mb-2 listing-address">{{ item.duration|date("d-m-Y") }}</span>
                     <span class="d-block mb-2 listing-address">[[organizatie]]</span>
                     <div>
                         <a href="{{ path(pathToSingular, {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
