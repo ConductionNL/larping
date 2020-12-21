@@ -24,11 +24,13 @@
                                     style="width: 188px;" aria-label="Listing: activate to sort column ascending">
                                     {{ 'name'|trans|capitalize }}
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="my-booking" rowspan="1" colspan="1"
+                                <th class="sorting  text-center" tabindex="0" aria-controls="my-booking" rowspan="1"
+                                    colspan="1"
                                     style="width: 95px;" aria-label="Type: activate to sort column ascending">
                                     {{ 'quantity'|trans|capitalize }}
                                 </th>
-                                <th class="sorting_asc" tabindex="0" aria-controls="my-booking" rowspan="1" colspan="1"
+                                <th class="sorting_asc text-center" tabindex="0" aria-controls="my-booking" rowspan="1"
+                                    colspan="1"
                                     style="width: 167px;" aria-sort="ascending"
                                     aria-label="Requested Time: activate to sort column descending">
                                     {{ 'price'|trans|capitalize }}
@@ -39,6 +41,7 @@
                             </thead>
                             <tbody>
                             {% if order.items|default and order.items > 0 %}
+                                {% set sum = 0 %}
                                 {% for item in order.items %}
                                     {% set offer = commonground_resource(item.offer) %}
                                     <tr role="row" class="odd">
@@ -46,11 +49,12 @@
                                             <a class="text-hover-primary text-muted"
                                                href="{% if item.path|default %}{{ item.path }}{% endif %}">{{ offer.name|capitalize }}</a>
                                         </td>
-                                        <td class="text-capitalize">
+                                        <td class="text-capitalize text-center">
                                             {% if item.price|default %}
                                                 {{ item.quantity }}
                                             {% endif %}</td>
-                                        <td>
+                                        <td class=" text-center">
+                                            <div></div>
                                             {% if item.price|default %}
                                                 &euro; {{ item.price }},-
                                             {% endif %}
@@ -74,7 +78,22 @@
                                         </td>
 
                                     </tr>
+                                    {% set sum = sum + item.price %}
                                 {% endfor %}
+                                <tr role="row" class="odd">
+                                    <td>
+                                        <b>{{ 'sum'|trans|capitalize }}:</b>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td class="text-center pt-0">
+                                        <div class="text-center pt-4 mx-auto" style="width: 50%;border-top: 1px solid grey">
+                                            <b>&euro; {{ sum }}.00,-</b>
+                                        </div>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
                             {% else %}
                                 <tr role="row" class="odd">
                                     <td class="text-capitalize" style="color: lightgrey">
@@ -94,7 +113,7 @@
                         <div class="row justify-content-center">
                             <div class="col-md-7 col-lg-6 col-xl-5">
                                 <div class="mb-6">
-                                    {% if app.user|default %}
+                                    {% if app.user|default and order|default %}
                                         <form action="{{ path('app_order_index') }}" method="post">
                                             <button type="submit" name="makeOrder" value="true"
                                                     class="btn btn-lg btn-primary btn-block">{{ 'pay'|trans|capitalize }}</button>
@@ -102,7 +121,7 @@
                                     {% else %}
                                         <a href="{{ path('app_user_idvault', {'backUrl':path(app.request.attributes.get('_route'),
                                             app.request.attributes.get('_route_params'))}) }}"
-                                           class="btn btn-lg btn-primary btn-block">{{ 'login'|trans|capitalize }}</a>
+                                           class="btn btn-lg btn-primary btn-block mb-2">{{ 'login'|trans|capitalize }}</a>
                                         <p style="color: grey"
                                            class="text-center">{{ 'you have to be logged in to continue'|trans|capitalize }}</p>
                                     {% endif %}

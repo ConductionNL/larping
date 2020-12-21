@@ -141,6 +141,10 @@
          <source>you have to be logged in to continue</source>
          <target>je moet ingelogd zijn om verder te gaan</target>
          </trans-unit>
+        <trans-unit id="Oa2nnba" resname="sum">
+         <source>sum</source>
+         <target>totaal</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
