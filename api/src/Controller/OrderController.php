@@ -38,6 +38,11 @@ class OrderController extends AbstractController
             $variables['order'] = $session->get('order');
         }
 
+        // Make order
+        if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' && $this->getUser()) {
+
+        }
+
         return $variables;
     }
 }
