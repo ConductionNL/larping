@@ -86,11 +86,9 @@ class OrderController extends AbstractController
             } else {
                 $object['redirectUrl'] = 'http://localhost/order/payment';
             }
-            var_dump($object['redirectUrl']);
 
             $object = $commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
 
-            var_dump($object['paymentUrl']);
             if (isset($object['paymentUrl']) && strpos($object['paymentUrl'], 'https://www.mollie.com') !== false) {
                 $session->set('invoice', $object);
                 header("Location: " . $object['paymentUrl']);
