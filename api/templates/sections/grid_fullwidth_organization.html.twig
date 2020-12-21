@@ -4,39 +4,39 @@
         {% for item in items %}
 
             {% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id']})['hydra:member']|length %}
+            {% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':item['@id']})['hydra:member'] %}
 
             <div class="col-md-6 col-lg-4">
                 <div class="card rounded-0 card-hover-overlay">
                     <div class="position-relative">
-                        <img class="card-img rounded-0" src="https://picsum.photos/300/200"
+                        <img class="card-img rounded-0"
+                            {% for organizations in organizations %}
+                                {% if organizations is defined and organizations['name'] == item['name'] %}
+                                    {% if organizations.style %}
+                                        src="{{ organizations.style.favicon.base64 }}"
+                                        {% else %}
+                                            src="https://picsum.photos/200"
+                                    {% endif %}
+                                    alt="organization logo"
+                                {% endif %}
+                            {% endfor %}
                              alt="Card image cap">
                         <div class="card-img-overlay">
                             <div class="d-flex align-items-center">
                                 <ul class="list-inline list-inline-rating mr-2">
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
+                                    {#*/@todo make stars dynamic#}
                                     <li class="list-inline-item">
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                     </li>
                                 </ul>
-                                <span class="d-inline-block mr-2" style="color: white">(5 Reviews)</span>
-                                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Favourite this listing">
+                                <span class="d-inline-block mr-2" style="color: white">({{ reviews|length }} Reviews)</span>
+                                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Favourite this organisation" style="z-index: 2">
                                     <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
-                                    <span style="color: white">8 k</span>
+                                    <span style="color: white">{{ likes }}</span>
                                 </button>
                             </div>
                             <h3>
-                                <a href="{{ path(pathToSingular, {'id': item.id}) }}">
+                                <a href="{{ path(pathToSingular, {'id': item.id}) }}" class="stretched-link">
                                     {{ item.name|capitalize }}
                                 </a>
                             </h3>
@@ -51,10 +51,9 @@
                         <ul class="list-unstyled d-flex mb-0 py-2">
                             <li>
                                 <button class="btn-like px-2" data-toggle="tooltip" data-placement="top"
-                                        title=""
-                                        data-original-title="Favourite this listing">
+                                        title="" style="z-index: 2"
+                                        data-original-title="Favourite this organisation">
                                     <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
-                                    <span>{{ likes }}</span>
                                 </button>
                             </li>
                             <li class="ml-auto">

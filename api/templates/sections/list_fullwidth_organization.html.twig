@@ -2,12 +2,22 @@
     {% for item in items %}
 
         {% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id']})['hydra:member']|length %}
+        {% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':item['@id']})['hydra:member'] %}
 
         <div class="card card-list card-listing" data-lat="-33.922125" data-lag="151.159277" data-id="1">
             <div class="row">
                 <div class="col-md-4 col-xl-3">
                     <div class="card-list-img">
-                        <img class="listing-img" src="https://picsum.photos/370/250" alt="things-4">
+                        <img class="listing-img"
+                             {% for organizations in organizations %}
+                            {% if organizations is defined and organizations['name'] == item['name'] %}
+                                {% if organizations.style %}
+                                     src="{{ organizations.style.favicon.base64 }}"
+                                {% endif %}
+                                alt="organization logo"
+                            {% endif %}
+                                 {% endfor %}
+                        >
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-9">
@@ -16,32 +26,34 @@
                             <h3 class="card-title listing-title mb-0">
                                 <a href="{{ path(pathToSingular, {'id': item.id}) }}">{{ item.name }}</a>
                             </h3>
-                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
+                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" style="z-index: 2"
                                     data-original-title="Favourite this organisation">
                                 <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
-                                <span>{{ likes }}</span>
                             </button>
                         </div>
                         <br>
                     </div>
+                    {% if item.description|default %}
+                        <span class="d-block mb-4 listing-address">{{ item.description|slice(0, 135) }}</span>
+                    {% else %}
+                        <span class="d-block mb-4 listing-address">{{ 'no description'|trans|capitalize }}</span>
+                    {% endif %}
                     <span class="d-block mb-4 listing-address">{{ item.description }}</span>
                     <div class="d-flex align-items-center">
+                        {#*/@todo make stars dynamic#}
                         <ul class="list-inline list-inline-rating mr-2">
-                            {% set test = 10 %}
-                            {% for i in test  %}
                             <li class="list-inline-item">
                                 <i class="fa fa-star" aria-hidden="true"></i>
                             </li>
-                                {% endfor %}
                         </ul>
-                        <span class="d-inline-block mr-2" style="color: black">(5 Reviews)</span>
-                        <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Favourite this listing">
+                        <span class="d-inline-block mr-2" style="color: black">{{ 'reviews'|trans|capitalize }} ({{ reviews|length }})</span>
+                        <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Favourite this organization" style="z-index: 2">
                             <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
-                            <span style="color: black">8 k</span>
+                            <span style="color: black">{{ likes }}</span>
                         </button>
                     </div>
                     <div>
-                        <a href="{{ path(pathToSingular, {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                        <a class="stretched-link" href="{{ path(pathToSingular, {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
                     </div>
                 </div>
             </div>
