@@ -4,8 +4,9 @@
         {% for item in items %}
 
             {% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id']})['hydra:member']|length %}
+
             {% if app.user|default %}
-                {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id'], 'author':app.user.person})['hydra:member'][0] %}
+                {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id'], 'author':app.user.person})['hydra:member'] %}
             {% endif %}
 
             <div class="col-md-6 col-lg-4">
