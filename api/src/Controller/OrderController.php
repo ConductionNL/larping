@@ -37,7 +37,7 @@ class OrderController extends AbstractController
         if ($session->get('order')) {
             $variables['order'] = $session->get('order');
 
-            if (!isset($variables['order']['@id'])) {
+            if (!isset($variables['order']['@id']) && $this->getUser()) {
                 $person = $commonGroundService->getResource($this->getUser()->getPerson());
 
                 if (isset($variables['order']['items'][0])) {
@@ -84,15 +84,16 @@ class OrderController extends AbstractController
             if ($_ENV['APP_ENV'] != 'dev') {
                 $object['redirectUrl'] = 'https://larping.eu/order/payment';
             } else {
-                $object['redirectUrl'] = 'localhost/order/payment';
+                $object['redirectUrl'] = 'http://localhost/order/payment';
             }
+            var_dump($object['redirectUrl']);
 
             $object = $commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
 
             var_dump($object['paymentUrl']);
-            if(isset($object['paymentUrl']) && strpos($object['paymentUrl'], 'https://www.mollie.com') !== false) {
+            if (isset($object['paymentUrl']) && strpos($object['paymentUrl'], 'https://www.mollie.com') !== false) {
                 $session->set('invoice', $object);
-                header("Location: ".$object['paymentUrl']);
+                header("Location: " . $object['paymentUrl']);
                 die;
             }
         }
@@ -104,9 +105,9 @@ class OrderController extends AbstractController
      * @Route("/payment")
      * @Template
      */
-    public function paymentAction(Session $session, CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params, $id)
+    public function paymentAction(Session $session, CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-        if($session->get('invoice')) {
+        if ($session->get('invoice')) {
             $variables['invoice'] = $session->get('invoice');
         } else {
             return $this->redirectToRoute('app_order_index');
