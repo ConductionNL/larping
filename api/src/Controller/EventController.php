@@ -63,6 +63,11 @@ class EventController extends AbstractController
             $resource['author'] = $this->getUser()->getPerson();
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+
+            //make rating of the review
+            $rating =[ 'review' =>'/reviews/'.$variables['review']['id'], 'ratingValue' => (int)$resource['ratingValue'] ];
+            $variables['rating'] = $commonGroundService->saveResource($rating, ['component' => 'rc', 'type' => 'ratings']);
+
         }
 
         // Make order in session
