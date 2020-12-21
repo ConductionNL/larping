@@ -19,7 +19,13 @@
                         <div class="float-right btn-wrapper">
                             <a class="btn btn-outline-primary"
                                href="{{ path('app_user_idvault', {'backUrl':path(app.request.attributes.get('_route'),
-                                   app.request.attributes.get('_route_params'))}) }}"><span>{{ 'login'|trans|capitalize }}</span></a>
+                                   app.request.attributes.get('_route_params'))}) }}"><span>{{ 'login'|trans|capitalize }}</span>
+                            </a>
+
+                            <a class="btn btn-secondary"
+                               href="{{ path('app_user_idvault', {'backUrl':path(app.request.attributes.get('_route'),
+                                   app.request.attributes.get('_route_params'))}) }}"><span>{{ 'register'|trans|capitalize }}</span>
+                            </a>
                         </div>
                     {% endif %}
 
