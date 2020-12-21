@@ -202,6 +202,16 @@
                                             </a>
                                         </li>
                                     </ul>
+                                    {% else %}
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <div class="media media-xs align-items-center">
+                                                <div class="media-body">
+                                                    <span class="font-weight-bold mb-1">{{ 'no products selected'|trans|capitalize }}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 {% endif %}
                             </div>
 
