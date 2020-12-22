@@ -2,12 +2,78 @@
 
 {% block content %}
 
-    <section class="py-7 py-md-10">
+    <p style="font-size: large; text-align: center">Er zit nog een foutje in het bc om de geüpdatet status op te halen,
+        daarom dat ik even de 2 scenarios laat zien</p>
+
+    <section class="py-7 py-md-10 bg-light ">
         <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card">
+                        <div class="bg-success text-center py-4">
+                            <h2 class="text-white mb-0 h4">{{ 'payment succeeded'|trans|capitalize }}</h2>
+                        </div>
+                        <div class="card-body p-7">
+                            <p class="mb-0 text-center"><a href="#"
+                                                           class="link">{{ 'view invoice'|trans|capitalize }}</a></p>
 
-            {{ invoice.name }}
-
+                            {#                          Get website from owner of the   #}
+                            {% if invoice.order|default %}
+                                {% set order = commonground_resource(invoice.order) %}
+                                {% if order.organization|default %}
+                                    {% set organization = commonground_resource(order.organization) %}
+                                    {% if organization.contact|default %}
+                                        {% set contact = commonground_resource(organization.contact) %}
+                                        {% if contact.socials.0|default and contact.socials.0.website|default %}
+                                            <p class="mb-0 text-center">{{ 'go to the'|trans|capitalize }} <a
+                                                    href="{{ path('app_default_index') }}"
+                                                    class="link text-center">{{ 'website'|trans }}</a> {{ 'of the supplier of your bought product'|trans }}
+                                                .</p>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-transparent text-center py-3">
+                            <p class="mb-0">Back to <a href="{{ path('app_default_index') }}" class="link">home</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+
+    <section class="py-7 py-md-10 bg-light ">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card">
+                        <div class="bg-danger text-center py-4">
+                            <h2 class="text-white mb-0 h4">{{ 'payment failed'|trans|capitalize }}</h2>
+                        </div>
+                        <div class="card-body p-7">
+                            <p class="mb-2 text-center">{{ 'payment expired'|trans|capitalize }}</p>
+                            <p class="mb-2 text-center">{{ 'payment aborted'|trans|capitalize }}</p>
+                            <p class="mb-2 text-center">{{ 'unknown error'|trans|capitalize }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent text-center py-3">
+                            <p class="mb-0"><a href="#"
+                                               class="link">{{ 'try again'|trans|capitalize }}</a> {{ 'or'|trans }} <a
+                                    href="{{ path('app_order_index') }}"
+                                    class="link">{{ 'view order'|trans }}</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {#    <section class="py-7 py-md-10">#}
+    {#        <div class="container">#}
+
+    {#            {{ dump(invoice) }}#}
+
+    {#        </div>#}
+    {#    </section>#}
 
 {% endblock %}

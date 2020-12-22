@@ -90,7 +90,7 @@ class OrderController extends AbstractController
             $object = $commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
 
             if (isset($object['paymentUrl']) && strpos($object['paymentUrl'], 'https://www.mollie.com') !== false) {
-                $session->set('invoice', $object);
+                $session->set('invoice@id', $object['@id']);
                 header("Location: " . $object['paymentUrl']);
                 die;
             }
@@ -106,8 +106,18 @@ class OrderController extends AbstractController
     public function paymentAction(Session $session, CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         if ($session->get('invoice')) {
-            $variables['invoice'] = $session->get('invoice');
-            $session->set('order', null);
+            $variables['invoice'] = $commonGroundService->getResource($session->get('invoice@id'));
+
+
+            // Get invoice with updated status from mollie
+//            $object['id'] = $variables['invoice']['id'];
+//            $variables['invoice'] = $commonGroundService->saveResource($object, ['component'=>'bc', 'type'=>'status']);
+//            var_dump($variables['invoice']);
+//            die;
+            // Empty session order when order is paid
+            if (isset($variables['invoice']) && $variables['invoice'] == 'paid') {
+                $session->set('order', null);
+            }
         } else {
             return $this->redirectToRoute('app_order_index');
         }
