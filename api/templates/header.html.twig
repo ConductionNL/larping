@@ -22,7 +22,7 @@
                                    app.request.attributes.get('_route_params'))}) }}"><span>{{ 'login'|trans|capitalize }}</span>
                             </a>
 
-                            <a class="btn btn-secondary"
+                            <a class="btn btn-outline-primary"
                                href="{{ path('app_user_idvault', {'backUrl':path(app.request.attributes.get('_route'),
                                    app.request.attributes.get('_route_params'))}) }}"><span>{{ 'register'|trans|capitalize }}</span>
                             </a>
@@ -33,9 +33,6 @@
                         <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
                         <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
                         </li>
-                        {% if app.user|default %}
-                            <li><a href="{{ path('app_dashboard_index') }}" style="color: black">Dashboard</a></li>
-                        {% endif %}
 
                         <div class="menu-right">
 
@@ -112,12 +109,8 @@
                                     {% set person = commonground_resource(app.user.person) %}
                                 {% endif %}
                                 <div class="avatar">
-                                    <div class="user-avatar avatar mr-4 dropdown-toggle" data-toggle="dropdown"
-                                         aria-expanded="false" id="userDropdown">
-                                        <img {% if person.personalPhoto is defined and person.personalPhoto is not empty %}
-                                            src="{{ person.personalPhoto }}" {% else %}
-                                            src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"
-                                            {% endif %}class=" card-img-top rounded-circle border-white">
+                                    <div class="avatar-img mr-4" data-toggle="dropdown" aria-expanded="false"  id="userDropdown" >
+                                        <img style="height: 50%; width: 75%" {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}class=" card-img-top rounded-circle border-white">
                                     </div>
                                     {#                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"#}
                                     {#                                       aria-haspopup="true" data-display="static" aria-expanded="false">#}
@@ -139,21 +132,28 @@
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="d-flex flex-wrap align-items-center"
-                                               href="">
-                                                <i class="fa fa-user mr-2" aria-hidden="true"></i>
-                                                <span>My Profile</span>
+                                               href="{{ path('app_dashboard_index') }}">
+                                                <i class="fa fa-tachometer mr-2" aria-hidden="true"></i>
+                                                <span>{{ 'dashboard'|trans|capitalize }}</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="d-flex flex-wrap align-items-center" href="">
-                                                <i class="fa fa-envelope mr-2" aria-hidden="true"></i>
-                                                <span>Messages</span>
+                                            <a class="d-flex flex-wrap align-items-center"
+                                               href="{{ path('app_dashboard_events') }}">
+                                                <i class="fa fa-calendar-o mr-2" aria-hidden="true"></i>
+                                                <span>{{ 'events'|trans|capitalize }}</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="d-flex flex-wrap align-items-center" href="#">
-                                                <i class="fa fa-diamond mr-2" aria-hidden="true"></i>
-                                                <span>Activity</span>
+                                            <a class="d-flex flex-wrap align-items-center" href="{{ path('app_dashboard_participants') }}">
+                                                <i class="fa fa-users mr-2" aria-hidden="true"></i>
+                                                <span>{{ 'participants'|trans|capitalize }}</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="d-flex flex-wrap align-items-center" href="{{ path('app_dashboard_organizations') }}">
+                                                <i class="fa fa-building mr-2" aria-hidden="true"></i>
+                                                <span>{{ 'organizations'|trans|capitalize }}</span>
                                             </a>
                                         </li>
                                     </ul>
