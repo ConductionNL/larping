@@ -115,6 +115,14 @@
                                 <div class="mb-6">
                                     {% if app.user|default and order|default %}
                                         <form action="{{ path('app_order_index') }}" method="post">
+                                            <div class="form-group mb-3 text-center">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input required type="checkbox">
+                                                        I agree to the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a>.
+                                                    </label>
+                                                </div>
+                                            </div>
                                             <button type="submit" name="makeOrder" value="true"
                                                     class="btn btn-lg btn-primary btn-block">{{ 'pay'|trans|capitalize }}</button>
                                         </form>

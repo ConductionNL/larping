@@ -30,141 +30,9 @@
                     {% endif %}
 
                     <ul class="menuzord-menu menuzord-right">
-                        {#                        <li class="active">#}
-                        {#                            <a href="javascript:0">Home</a>#}
-                        {#                            <ul class="dropdown">#}
-                        {#                                <li><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>#}
-                        {#                            </ul>#}
-                        {#                        </li>#}
                         <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
                         <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
                         </li>
-
-                        {#                        <li class="">#}
-                        {#                            <a href="javascript:0">Listing</a>#}
-                        {#                            <div class="megamenu">#}
-                        {#                                <div class="megamenu-row">#}
-                        {#                                    <div class="col4">#}
-                        {#                                        <ul class="list-unstyled">#}
-                        {#                                            <li>#}
-                        {#                                                <h5 class="heading">#}
-                        {#                                                    <i class="fa fa-map mr-2 text-primary" aria-hidden="true"></i>#}
-                        {#                                                    Half Screen Map#}
-                        {#                                                </h5>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listings-half-screen-map-list.html"> List Layout </a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listings-half-screen-map-grid.html"> Grid Layout </a>#}
-                        {#                                            </li>#}
-                        {#                                        </ul>#}
-                        {#                                        <ul class="list-unstyled">#}
-                        {#                                            <li>#}
-                        {#                                                <h5 class="heading">#}
-                        {#                                                    <i class="fa fa-address-book mr-2 text-primary"#}
-                        {#                                                       aria-hidden="true"></i>#}
-                        {#                                                    Listing Without Map#}
-                        {#                                                </h5>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-grid-right-sidebar-without-map.html">Grid Right#}
-                        {#                                                    Sidebar</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-grid-fullwidth-without-map.html">Grid Fullwidth</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-list-right-sidebar-without-map.html">List Right#}
-                        {#                                                    Sidebar</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-list-fullwidth-without-map.html">List Fullwidth</a>#}
-                        {#                                            </li>#}
-                        {#                                        </ul>#}
-                        {#                                    </div>#}
-                        {#                                    <div class="col4">#}
-                        {#                                        <ul class="list-unstyled">#}
-                        {#                                            <li>#}
-                        {#                                                <h5 class="heading">#}
-                        {#                                                    <i class="fa fa-th-large text-primary mr-2" aria-hidden="true"></i>#}
-                        {#                                                    Listing Grid#}
-                        {#                                                </h5>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-grid-left-sidebar.html">Left Sidebar</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-grid-right-sidebar.html">Right Sidebar</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-grid-fullwidth.html">Fullwidth</a>#}
-                        {#                                            </li>#}
-                        {#                                        </ul>#}
-                        {#                                        <ul class="list-unstyled">#}
-                        {#                                            <li>#}
-                        {#                                                <h5 class="heading">#}
-                        {#                                                    <i class="fa fa-th-list text-primary mr-2" aria-hidden="true"></i>#}
-                        {#                                                    Listing List#}
-                        {#                                                </h5>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-list-left-sidebar.html"> Left Sidebar</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-list-right-sidebar.html"> Right Sidebar</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-list-fullwidth.html"> Fullwidth</a>#}
-                        {#                                            </li>#}
-                        {#                                        </ul>#}
-                        {#                                    </div>#}
-                        {#                                    <div class="col4">#}
-                        {#                                        <ul class="list-unstyled">#}
-                        {#                                            <li>#}
-                        {#                                                <h5 class="heading">#}
-                        {#                                                    <i class="fa fa-file-text text-primary mr-2" aria-hidden="true"></i>#}
-                        {#                                                    Single Listing#}
-                        {#                                                </h5>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-store.html">Store Listing</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-vendor.html">Vendor Listing</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-event.html">Event Listing </a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-rental.html">Rental Listing </a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-reservation.html">Reservation Listing</a>#}
-                        {#                                            </li>#}
-                        {#                                            <li>#}
-                        {#                                                <a href="listing-service.html">Service Listing </a>#}
-                        {#                                            </li>#}
-                        {#                                        </ul>#}
-                        {#                                    </div>#}
-                        {#                                </div>#}
-                        {#                            </div>#}
-                        {#                        </li>#}
-                        {#                        <li class="">#}
-                        {#                            <a href="javascript:0">Pages</a>#}
-                        {#                            <ul class="dropdown">#}
-                        {#                                <li><a href="contact-us.html">Contact Us</a></li>#}
-                        {#                                <li><a href="terms-of-services.html">Terms and Conditions</a></li>#}
-                        {#                                <li><a href="pricing-table.html">Pricing Table</a></li>#}
-                        {#                                <li><a href="how-it-works.html">How It Works</a></li>#}
-                        {#                                <li><a href="user-profile.html">User Profile</a></li>#}
-                        {#                                <li><a href="comming-soon.html">Coming Soon</a></li>#}
-                        {#                                <li><a href="404.html">404 Page</a></li>#}
-                        {#                            </ul>#}
-                        {#                        </li>#}
-                        {#                        <li class="">#}
-                        {#                            <a href="blog.html">Blog</a>#}
-                        {#                        </li>#}
 
                         <div class="menu-right">
 
@@ -177,34 +45,57 @@
                                 {% if order.items|default %}{{ order.items|length }}{% else %}0{% endif %}</span>
                                 </a>
                                 {% if order.items|default %}
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu" style="min-width: 350px; right: -149px">
+                                        {% set sum = 0 %}
                                         {% for item in order.items %}
+                                            {% set sum = sum + item.price %}
                                             {% set offer = commonground_resource(item.offer) %}
                                             <li>
                                                 <a href="{{ path('app_dashboard_index') }}">
                                                     <div class="media media-xs align-items-center">
                                                         <div class="media-body">
-                                                            <span class="font-weight-bold">{{ offer.name }}</span>
-                                                            <p class="mb-1">{{ item.quantity }}</p>
-                                                            <p class="mb-1">&euro; {{ item.price }},-</p>
-                                                            {#                                                    <em class="small">15min ago</em>#}
+                                                            <div class="d-flex justify-content-between">
+                                                                <span class="font-weight-bold">{{ offer.name }}</span>
+                                                                <b class="mb-1 text-right">&euro; {{ item.price }},-</b>
+                                                            </div>
+                                                            <p class="mb-1 mt-n2"
+                                                               style="font-size: smaller">{{ item.quantity }} {% if item.quantity > 1 %}items{% else %}item{% endif %}</p>
                                                         </div>
                                                     </div>
                                                 </a>
                                             </li>
                                         {% endfor %}
-                                        <li>
-                                            <a href="{{ path('app_order_index') }}">
-                                                See all
+                                        <li style="border-top: 1px solid #e5e5e5">
+                                            <div style="display: block;padding-left: 1rem;padding-right: 1rem;
+                                            padding-top: 0.5rem;padding-bottom: 0.5rem;color: #848484;
+                                            text-decoration: none;">
+                                                <div class="media media-xs align-items-center">
+                                                    <div class="media-body">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span
+                                                                class="font-weight-bold">{{ 'sum'|trans|capitalize }}:</span>
+                                                            <b class="mb-1 text-right"
+                                                               style="color: black">&euro; {{ sum }},-</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li style="margin-top: 0">
+                                            <a href="{{ path('app_order_index') }}" style="border-top: none; font-size: medium;text-transform: none" class="btn btn-small text-right" >
+                                                {{ 'view order'|trans|capitalize }}
                                             </a>
                                         </li>
                                     </ul>
-                                    {% else %}
+                                {% else %}
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <div class="media media-xs align-items-center">
-                                                <div class="media-body">
-                                                    <span class="font-weight-bold mb-1">{{ 'no products selected'|trans|capitalize }}</span>
+                                            <div>
+                                                <div class="media media-xs align-items-center">
+                                                    <div class="media-body  mb-3 text-center">
+                                                        <span
+                                                            class="font-weight-bold">{{ 'no products selected'|trans|capitalize }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>
@@ -221,23 +112,23 @@
                                     <div class="avatar-img mr-4" data-toggle="dropdown" aria-expanded="false"  id="userDropdown" >
                                         <img style="height: 50%; width: 75%" {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}class=" card-img-top rounded-circle border-white">
                                     </div>
-{#                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"#}
-{#                                       aria-haspopup="true" data-display="static" aria-expanded="false">#}
-{#                                        {% if person.personalPhoto|default %}#}
-{#                                            {% set photo = commonground_resource(person.personalPhoto) %}#}
-{#                                            {% if photo.base64|default %}#}
-{#                                                <img class="avatar-img" src="{{ photo.base64 }}" alt="Image">#}
-{#                                            {% endif %}#}
-{#                                        {% endif %}#}
-{#                                        {% if person|default %}#}
-{#                                            <span class="avatar-name">{{ person.name }}#}
-{#                                        <span class="small"#}
-{#                                              style="text-transform: none">{{ app.user.username|lower }}</span>#}
-{#                                        </span>#}
-{#                                        {% else %}#}
-{#                                            <span class="avatar-name">{{ app.user.name }}</span>#}
-{#                                        {% endif %}#}
-{#                                    </a>#}
+                                    {#                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"#}
+                                    {#                                       aria-haspopup="true" data-display="static" aria-expanded="false">#}
+                                    {#                                        {% if person.personalPhoto|default %}#}
+                                    {#                                            {% set photo = commonground_resource(person.personalPhoto) %}#}
+                                    {#                                            {% if photo.base64|default %}#}
+                                    {#                                                <img class="avatar-img" src="{{ photo.base64 }}" alt="Image">#}
+                                    {#                                            {% endif %}#}
+                                    {#                                        {% endif %}#}
+                                    {#                                        {% if person|default %}#}
+                                    {#                                            <span class="avatar-name">{{ person.name }}#}
+                                    {#                                        <span class="small"#}
+                                    {#                                              style="text-transform: none">{{ app.user.username|lower }}</span>#}
+                                    {#                                        </span>#}
+                                    {#                                        {% else %}#}
+                                    {#                                            <span class="avatar-name">{{ app.user.name }}</span>#}
+                                    {#                                        {% endif %}#}
+                                    {#                                    </a>#}
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="d-flex flex-wrap align-items-center"
