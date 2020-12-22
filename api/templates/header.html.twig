@@ -19,7 +19,13 @@
                         <div class="float-right btn-wrapper">
                             <a class="btn btn-outline-primary"
                                href="{{ path('app_user_idvault', {'backUrl':path(app.request.attributes.get('_route'),
-                                   app.request.attributes.get('_route_params'))}) }}"><span>{{ 'login'|trans|capitalize }}</span></a>
+                                   app.request.attributes.get('_route_params'))}) }}"><span>{{ 'login'|trans|capitalize }}</span>
+                            </a>
+
+                            <a class="btn btn-secondary"
+                               href="{{ path('app_user_idvault', {'backUrl':path(app.request.attributes.get('_route'),
+                                   app.request.attributes.get('_route_params'))}) }}"><span>{{ 'register'|trans|capitalize }}</span>
+                            </a>
                         </div>
                     {% endif %}
 
@@ -30,10 +36,9 @@
                         {#                                <li><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>#}
                         {#                            </ul>#}
                         {#                        </li>#}
+                        <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
                         <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
                         </li>
-                        <li><a href="{{ path('app_participant_index') }}">{{ 'participants'|trans|capitalize }}</a></li>
-                        <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
                         {% if app.user|default %}
                             <li><a href="{{ path('app_dashboard_index') }}" style="color: black">Dashboard</a></li>
                         {% endif %}
@@ -197,6 +202,16 @@
                                             </a>
                                         </li>
                                     </ul>
+                                    {% else %}
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <div class="media media-xs align-items-center">
+                                                <div class="media-body">
+                                                    <span class="font-weight-bold mb-1">{{ 'no products selected'|trans|capitalize }}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 {% endif %}
                             </div>
 
@@ -206,23 +221,26 @@
                                     {% set person = commonground_resource(app.user.person) %}
                                 {% endif %}
                                 <div class="avatar">
-                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                                       aria-haspopup="true" data-display="static" aria-expanded="false">
-                                        {% if person.personalPhoto|default %}
-                                            {% set photo = commonground_resource(person.personalPhoto) %}
-                                            {% if photo.base64|default %}
-                                                <img class="avatar-img" src="{{ photo.base64 }}" alt="Image">
-                                            {% endif %}
-                                        {% endif %}
-                                        {% if person|default %}
-                                            <span class="avatar-name">{{ person.name }}
-                                        <span class="small"
-                                              style="text-transform: none">{{ app.user.username|lower }}</span>
-                                        </span>
-                                        {% else %}
-                                            <span class="avatar-name">{{ app.user.name }}</span>
-                                        {% endif %}
-                                    </a>
+                                    <div class="user-avatar avatar mr-4 dropdown-toggle" data-toggle="dropdown" aria-expanded="false"  id="userDropdown">
+                                        <img {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}class=" card-img-top rounded-circle border-white">
+                                    </div>
+{#                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"#}
+{#                                       aria-haspopup="true" data-display="static" aria-expanded="false">#}
+{#                                        {% if person.personalPhoto|default %}#}
+{#                                            {% set photo = commonground_resource(person.personalPhoto) %}#}
+{#                                            {% if photo.base64|default %}#}
+{#                                                <img class="avatar-img" src="{{ photo.base64 }}" alt="Image">#}
+{#                                            {% endif %}#}
+{#                                        {% endif %}#}
+{#                                        {% if person|default %}#}
+{#                                            <span class="avatar-name">{{ person.name }}#}
+{#                                        <span class="small"#}
+{#                                              style="text-transform: none">{{ app.user.username|lower }}</span>#}
+{#                                        </span>#}
+{#                                        {% else %}#}
+{#                                            <span class="avatar-name">{{ app.user.name }}</span>#}
+{#                                        {% endif %}#}
+{#                                    </a>#}
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="d-flex flex-wrap align-items-center"
