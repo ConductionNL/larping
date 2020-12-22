@@ -179,7 +179,7 @@ class DashboardController extends AbstractController
 
         }
 
-        $variables['events'] = $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
+        $variables['items'] = $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
 
 
         return $variables;

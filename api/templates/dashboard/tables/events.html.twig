@@ -12,6 +12,9 @@
             </div>
         </div>
     </div>
+    {% if items is defined and items|length > 0 %}
+        {% set events = items %}
+    {% endif %}
     {% if events is  defined and events|length > 0 %}
     <div class="table-responsive">
         <table class="table align-items-center table-flush">
