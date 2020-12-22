@@ -84,7 +84,7 @@ class OrderController extends AbstractController
             if ($_ENV['APP_ENV'] != 'dev') {
                 $object['redirectUrl'] = 'https://larping.eu/order/payment';
             } else {
-                $object['redirectUrl'] = 'http://localhost/order/payment';
+                $object['redirectUrl'] = 'https://dev.larping.eu/order/payment';
             }
 
             $object = $commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
@@ -107,6 +107,7 @@ class OrderController extends AbstractController
     {
         if ($session->get('invoice')) {
             $variables['invoice'] = $session->get('invoice');
+            $session->set('order', null);
         } else {
             return $this->redirectToRoute('app_order_index');
         }
