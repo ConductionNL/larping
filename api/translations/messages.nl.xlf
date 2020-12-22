@@ -145,6 +145,10 @@
          <source>sum</source>
          <target>totaal</target>
          </trans-unit>
+        <trans-unit id="oAwj1zx" resname="price">
+         <source>price</source>
+         <target>prijs</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
