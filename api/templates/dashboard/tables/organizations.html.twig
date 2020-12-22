@@ -4,14 +4,17 @@
             <div class="col">
                 <h2 class="h5">{{ 'organisations'|trans|capitalize }}</h2></div>
             <div class="col-3 text-right">
-                {% if addPath is  defined %}
-                    <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add'|trans|capitalize }}</a>
+                {% if items is  defined %}
+                    <a href="" data-toggle="modal" data-target="#{{ type~'Modal' }}" class="btn btn-success btn-sm mr-2">{{ 'add organization'|trans|capitalize }}</a>
                     {% else %}
                         <a href="{{ path('app_organization_index') }}" class="btn btn-sm btn-secondary">{{ 'see all organizations'|trans|capitalize }}</a>
                 {% endif %}
             </div>
         </div>
     </div>
+    {% if items is defined and items|length > 0 %}
+        {% set organizations = items %}
+    {% endif %}
     {% if organizations is  defined and organizations|length > 0 %}
     <div class="table-responsive">
         <table class="table align-items-center table-flush">
