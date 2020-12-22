@@ -149,6 +149,10 @@
          <source>price</source>
          <target>prijs</target>
          </trans-unit>
+        <trans-unit id="7hAB2a9" resname="view order">
+         <source>view order</source>
+         <target>bekijk bestelling</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>

@@ -107,6 +107,7 @@ class OrderController extends AbstractController
     {
         if ($session->get('invoice')) {
             $variables['invoice'] = $session->get('invoice');
+            $session->set('order', null);
         } else {
             return $this->redirectToRoute('app_order_index');
         }
