@@ -4,8 +4,8 @@
             <div class="col">
                 <h2 class="h5">{{ 'events'|trans|capitalize }}</h2></div>
             <div class="col text-right">
-                {% if addPath is  defined %}
-                    <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add'|trans|capitalize }}</a>
+                {% if items is defined and items|length > 0%}
+                    <a href="" data-toggle="modal" data-target="{{ type~'Modal' }}" class="btn btn-success btn-sm mr-2">{{ 'add event'|trans|capitalize }}</a>
                 {% else %}
                     <a href="{{ path('app_event_index') }}" class="btn btn-sm btn-secondary">{{ 'see all events'|trans|capitalize }}</a>
                 {% endif %}
@@ -68,8 +68,8 @@
     {% else %}
     <div class="card-body  text-center">
         <p>{{ 'no events found'|trans|capitalize }}</p>
-        {% if addPath is  defined %}
-        <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add your first event!'|trans|capitalize }}</a>
+        {% if items is  defined %}
+            <a href="" data-toggle="modal" data-target="{{ type~'Modal' }}" class="btn btn-success btn-sm mr-2">{{ 'add your first event'|trans|capitalize }}</a>
         {% else %}
         <a href="{{ path('app_event_index') }}" class="btn btn-primary">{{ 'find a event'|trans|capitalize }}</a>
         {% endif %}
