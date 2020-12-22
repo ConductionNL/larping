@@ -1,0 +1,43 @@
+<div class="card border-light shadow-sm">
+    <div class="card-header primary">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="h5">{{ 'favorites'|trans|capitalize }}</h2></div>
+        </div>
+    </div>
+    {% if likes is  defined and likes|length > 0 %}
+        <div class="table-responsive table-primary">
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">{{ 'organization'|trans|capitalize }}</th>
+                    <th scope="col">{{ 'resource'|trans|capitalize }}</th>
+                    <th scope="col">{{ 'author'|trans|capitalize }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for like in likes|slice(0, 10) %}
+                    <tr>
+                        <th>{{ commonground_resource(like.organization).name }}</th>
+                        <td>
+                            <span class="h5 mb-3 mb-lg-0">
+                                <i class="fas fa-heart"></i>
+                                <span class="ml-3">{{ commonground_resource(like.resource).name }}</span>
+                            </span>
+                        <td>
+                            <span class="h5 mb-3 mb-lg-0">
+                                <i class="fas fa-user"></i>
+                                <span class="ml-3">{{ like.author }}</span>
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="card-body  text-center">
+            <p>{{ 'no favorites found'|trans|capitalize }}</p>
+        </div>
+    {% endif %}
+</div>
