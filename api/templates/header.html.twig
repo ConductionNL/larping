@@ -39,9 +39,6 @@
                         <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
                         <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
                         </li>
-                        {% if app.user|default %}
-                            <li><a href="{{ path('app_dashboard_index') }}" style="color: black">Dashboard</a></li>
-                        {% endif %}
 
                         {#                        <li class="">#}
                         {#                            <a href="javascript:0">Listing</a>#}
@@ -244,21 +241,28 @@
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="d-flex flex-wrap align-items-center"
-                                               href="">
-                                                <i class="fa fa-user mr-2" aria-hidden="true"></i>
-                                                <span>My Profile</span>
+                                               href="{{ path('app_dashboard_index') }}">
+                                                <i class="fa fa-tachometer mr-2" aria-hidden="true"></i>
+                                                <span>{{ 'dashboard'|trans|capitalize }}</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="d-flex flex-wrap align-items-center" href="">
-                                                <i class="fa fa-envelope mr-2" aria-hidden="true"></i>
-                                                <span>Messages</span>
+                                            <a class="d-flex flex-wrap align-items-center"
+                                               href="{{ path('app_dashboard_events') }}">
+                                                <i class="fa fa-calendar-o mr-2" aria-hidden="true"></i>
+                                                <span>{{ 'events'|trans|capitalize }}</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="d-flex flex-wrap align-items-center" href="#">
-                                                <i class="fa fa-diamond mr-2" aria-hidden="true"></i>
-                                                <span>Activity</span>
+                                            <a class="d-flex flex-wrap align-items-center" href="{{ path('app_dashboard_participants') }}">
+                                                <i class="fa fa-users mr-2" aria-hidden="true"></i>
+                                                <span>{{ 'participants'|trans|capitalize }}</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="d-flex flex-wrap align-items-center" href="{{ path('app_dashboard_organizations') }}">
+                                                <i class="fa fa-building mr-2" aria-hidden="true"></i>
+                                                <span>{{ 'organizations'|trans|capitalize }}</span>
                                             </a>
                                         </li>
                                     </ul>

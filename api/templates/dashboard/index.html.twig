@@ -9,7 +9,7 @@
             <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
                 <h2 class="font-weight-normal mb-4 mb-md-0">Dashboard</h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
                     <li class="breadcrumb-item">Dashboard</li>
                 </ul>
             </nav>
@@ -17,120 +17,17 @@
             <div class="row">
                 <div class="col-lg-6">
                     <!-- organizations -->
-                    <div class="card">
-                        <div class="card-header bg-white">
-                            <span class="text-content">{{ 'organizations'|trans|capitalize }}</span>
-                        </div>
-                        <div class="card-body px-4">
-                            {% if items|default %}
-                                {% for item in items %}
-                                    <tr role="row" class="odd">
-                                        <td tabindex="0">
-                                        </td>
-                                        <td>
-                                            {{ item.name|capitalize }}
-                                        </td>
-                                        {% if item.emails.0.email|default %}
-                                            <td>
-                                                <a class="text-hover-primary text-muted"
-                                                   href="mailto:{{ item.emails.0.email }}">{{ item.emails.0.email }}</a>
-                                            </td>
-                                        {% else %}
-                                            <td style="color: lightgrey">
-                                                {{ 'no e-mail'|trans|capitalize }}
-                                            </td>
-                                        {% endif %}
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
-                                        {{ 'no results found'|trans|capitalize }}
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                            {% endif %}
-                        </div>
-                        <div class="card-footer bg-white">
-                            <a href="{{ path('app_dashboard_organizations') }}" class="btn btn-link p-0">{{ 'all organizations'|trans|capitalize }}</a>
-                        </div>
-                    </div>
+                    {% include 'dashboard/tables/organizations.html.twig' %}
                 </div>
 
                 <div class="col-lg-6">
                     <!-- participants -->
-                    <div class="card">
-                        <div class="card-header bg-white">
-                            <span class="text-content">{{ 'participants'|trans|capitalize }}</span>
-                        </div>
-
-                        <div class="card-body p-0 table-responsive">
-                            <table class="table mb-0" style="">
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <img class="img-sm rounded" src="assets/img/listing/listing-03.jpg" alt="Image">
-                                    </td>
-                                    <td class="text-capitalize">
-                                        <a class="text-hover-primary text-muted" href="listing-rental.html"></a>
-                                    </td>
-                                    <td class="text-capitalize"> Eat &amp; Drink </td>
-                                    <td>
-                                        <span class="badge badge-warning px-2 py-1">Pending</span>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="card-footer bg-white">
-                            <a href="{{ path('app_dashboard_participants') }}" class="btn btn-link p-0">{{ 'all participants'|trans|capitalize }}</a>
-                        </div>
-                    </div>
+                    {% include 'dashboard/tables/participants.html.twig' %}
                 </div>
 
                 <!-- Events -->
                 <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header bg-white">
-                            <span class="text-content">{{ 'events'|trans|capitalize }}</span>
-                        </div>
-
-                        <div class="card-body p-0 table-responsive">
-                            <table class="table mb-0" style="width:100%">
-                                {% if items|default %}
-                                    {% for item in items %}
-                                        <tr role="row" class="odd">
-                                            <td tabindex="0">
-                                            </td>
-                                            <td>
-                                                {{ item.name|capitalize }}
-                                            </td>
-                                            {% if item.emails.0.email|default %}
-                                                <td>
-                                                    <a class="text-hover-primary text-muted"
-                                                       href="mailto:{{ item.emails.0.email }}">{{ item.emails.0.email }}</a>
-                                                </td>
-                                            {% else %}
-                                                <td style="color: lightgrey">
-                                                    {{ 'no e-mail'|trans|capitalize }}
-                                                </td>
-                                            {% endif %}
-                                        </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr role="row" class="odd">
-                                        <td tabindex="0">
-                                            {{ 'no results found'|trans|capitalize }}
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                {% endif %}
-                            </table>
-                        </div>
-                        <div class="card-footer bg-white">
-                            <a href="{{ path('app_dashboard_events') }}" class="btn btn-link p-0">{{ 'my events'|trans|capitalize }}</a>
-                        </div>
-                    </div>
+                    {% include 'dashboard/tables/events.html.twig' %}
                 </div>
 
                 <!-- My Favorites -->

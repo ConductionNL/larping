@@ -2,45 +2,45 @@
     <div class="card-header">
         <div class="row align-items-center">
             <div class="col">
-                <h2 class="h5">{{ 'teams'|trans|capitalize }}</h2></div>
-            <div class="col text-right">
+                <h2 class="h5">{{ 'organisations'|trans|capitalize }}</h2></div>
+            <div class="col-3 text-right">
                 {% if addPath is  defined %}
                     <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add'|trans|capitalize }}</a>
-                {% else %}
-                    <a href="{{ path('app_team_index') }}" class="btn btn-sm btn-secondary">{{ 'see all teams'|trans|capitalize }}</a>
+                    {% else %}
+                        <a href="{{ path('app_organization_index') }}" class="btn btn-sm btn-secondary">{{ 'see all organizations'|trans|capitalize }}</a>
                 {% endif %}
             </div>
         </div>
     </div>
-    {% if teams is  defined and teams|length > 0 %}
+    {% if organizations is  defined and organizations|length > 0 %}
     <div class="table-responsive">
         <table class="table align-items-center table-flush">
             <thead class="thead-light">
             <tr>
                 <th scope="col">{{ 'name'|trans|capitalize }}</th>
-                <th scope="col">{{ 'participants'|trans|capitalize }}</th>
+                <th scope="col">{{ 'email'|trans|capitalize }}</th>
                 <th scope="col">{{ 'details'|trans|capitalize }}</th>
             </tr>
             </thead>
             <tbody>
-            {% for team in teams|slice(0, 10) %}
+            {% for organization in organizations|slice(0, 10) %}
                 <tr>
-                    <th>{{ team.name }}</th>
+                    <th>{{ organization.name }}</th>
                     <td>
-                        {% if team.participants|default %}
+                        {% if organization.emails[0]|default %}
                             <span class="h5 mb-3 mb-lg-0">
                                 <i class="fas fa-user-tie text-secondary"></i>
-                                <span class="ml-3">{{ team.participants|length }}</span>
+                                <span class="ml-3">{{ organization.emails[0].email }}</span>
                             </span>
                         {% else %}
                             <span class="h5 mb-3 mb-lg-0">
                                 <i class="fas fa-user-tie text-secondary"></i>
-                                <span class="ml-3">0</span>
+                                <span class="ml-3">{{ 'no email found'|trans|capitalize }}</span>
                             </span>
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('app_team_team', {id: team.id}) }}" class="btn btn-primary">{{ 'view'|trans|capitalize }}</a>
+                        <a href="{{ path('app_dashboard_organization', {id: organization.id}) }}" class="btn btn-primary">{{ 'view'|trans|capitalize }}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -49,11 +49,11 @@
     </div>
     {% else %}
     <div class="card-body  text-center">
-        <p>{{ 'no teams found'|trans|capitalize }}</p>
+        <p>{{ 'no organizations found'|trans|capitalize }}</p>
         {% if addPath is  defined %}
-        <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add your first team!'|trans|capitalize }}</a>
+        <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add your first organization'|trans|capitalize }}</a>
         {% else %}
-        <a href="{{ path('app_team_index') }}" class="btn btn-primary">{{ 'find a team'|trans|capitalize }}</a>
+        <a href="{{ path('app_organization_index') }}" class="btn btn-primary">{{ 'find a organization'|trans|capitalize }}</a>
         {% endif %}
     </div>
     {% endif %}
