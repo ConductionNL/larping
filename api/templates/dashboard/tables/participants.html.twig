@@ -26,7 +26,7 @@
             <tbody>
             {% for participant in participants|slice(0, 10) %}
                 <tr>
-                    <th>{{ participant.name }}</th>
+                    <td><span class="h6 mb-3 mb-lg0">{{ participant.name }}</span></td>
                     <td>
                         {% if participant.emails[0]|default  %}
                         {{ participant.emails[0].email }}

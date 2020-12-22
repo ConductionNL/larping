@@ -27,7 +27,7 @@
             <tbody>
             {% for event in events|slice(0, 10) %}
                 <tr>
-                    <th>{{ event.name }}</th>
+                    <td><span class="h6 mb-3 mb-lg0"> {{ event.name }}</span></td>
                     <td>
                         {% if event.location|default %}
                             <span class="h5 mb-3 mb-lg-0">
