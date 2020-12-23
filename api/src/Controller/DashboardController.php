@@ -116,6 +116,7 @@ class DashboardController extends AbstractController
             if ($org['contact'] == $variables['item']['@id']){
                 $variables['wrcorganization'] = $org;
             }else{
+                $variables['wrcorganization'] = [];
                 $variables['wrcorganization']['rsin'] = " ";
                 $variables['wrcorganization']['chamberOfComerce'] = " ";
                 $variables['wrcorganization']['name'] = $variables['item']['name'];
