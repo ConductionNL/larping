@@ -149,9 +149,57 @@
          <source>price</source>
          <target>prijs</target>
          </trans-unit>
-        <trans-unit id="7hAB2a9" resname="view order">
-         <source>view order</source>
-         <target>bekijk bestelling</target>
+        <trans-unit id="7hAB2a9" resname="view your order">
+         <source>view your order</source>
+         <target>bekijk uw bestelling</target>
+         </trans-unit>
+        <trans-unit id="8aHb12A" resname="payment succeeded">
+         <source>payment succeeded</source>
+         <target>betaling gelukt</target>
+         </trans-unit>
+        <trans-unit id="kaJnas1" resname="payment failed">
+         <source>payment failed</source>
+         <target>betaling mislukt</target>
+         </trans-unit>
+        <trans-unit id="Ab12asd" resname="view your">
+         <source>view your</source>
+         <target>bekijk uw</target>
+         </trans-unit>
+        <trans-unit id="oNw123s" resname="invoice">
+         <source>invoice</source>
+         <target>factuur</target>
+         </trans-unit>
+        <trans-unit id="UAHb191" resname="back to the">
+         <source>back to the</source>
+         <target>terug naar de</target>
+         </trans-unit>
+        <trans-unit id="98Nwe15" resname="page">
+         <source>page</source>
+         <target>pagina</target>
+         </trans-unit>
+        <trans-unit id="79aJSdn" resname="try again">
+         <source>try again</source>
+         <target>probeer het opnieuw</target>
+         </trans-unit>
+        <trans-unit id="l2a9nXz" resname="or">
+         <source>or</source>
+         <target>of</target>
+         </trans-unit>
+        <trans-unit id="Osd8129" resname="payment is open, you can still retry paying">
+         <source>payment is open, you can still retry paying</source>
+         <target>betaling staat open, u kunt nog proberen te betalen</target>
+         </trans-unit>
+        <trans-unit id="ubN213S" resname="payment is expired">
+         <source>payment is expired</source>
+         <target>betaling is niet meer geldig</target>
+         </trans-unit>
+        <trans-unit id="oj325bG" resname="unknown error">
+         <source>unknown error</source>
+         <target>onbekende fout</target>
+         </trans-unit>
+        <trans-unit id="uB5235s" resname="payment has been aborted">
+         <source>payment has been aborted</source>
+         <target>betaling is geannuleerd</target>
          </trans-unit>
     </body>
   </file>
