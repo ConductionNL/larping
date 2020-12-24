@@ -80,6 +80,18 @@ class DashboardController extends AbstractController
 
                 // Save organization
                 $org = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
+
+                //get url of new $org to make wrc organization
+                $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $org['id']]);
+
+                //make wrc organization
+                $wrcOrg['rsin'] = "";
+                $wrcOrg['chamberOfComerce'] = "";
+                $wrcOrg['name'] = $org['name'];
+                $wrcOrg['description'] = $org['description'];
+                $wrcOrg['contact'] = $orgUrl;
+
+                $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations']);
             }
 
         }
@@ -109,7 +121,17 @@ class DashboardController extends AbstractController
 
         $variables['item'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
         $variables['wrcorganization'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])["hydra:member"];
-        
+
+        foreach ($variables['wrcorganization'] as $org){
+            if ($org['contact'] == $variables['item']['@self']){
+                $variables['wrcorganization'] = $org;
+            }
+        }
+
+        if ($request->isMethod('POST')) {
+            $resource = $request->request->all();
+           
+        }
 
         return $variables;
     }

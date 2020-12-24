@@ -33,6 +33,14 @@
                                         required>
                                     </div>
                                 </div>
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="profilepic">{{ 'organization picture'|trans|capitalize }}</label>
+                                        <input class="form-control" type="file" name="base64">
+                                    </div>
+
+                                </div>
                             </div>
 
                             <div class="row">
@@ -143,6 +151,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <button type="submit" class="btn btn-primary">{{ 'save changes'|trans|capitalize }}</button>
                         </form>
                     </div>
                 </div>
