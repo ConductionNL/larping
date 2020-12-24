@@ -141,19 +141,19 @@
                                             <a class="d-flex flex-wrap align-items-center"
                                                href="{{ path('app_dashboard_events') }}">
                                                 <i class="fa fa-calendar-o mr-2" aria-hidden="true"></i>
-                                                <span>{{ 'events'|trans|capitalize }}</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="d-flex flex-wrap align-items-center" href="{{ path('app_dashboard_participants') }}">
-                                                <i class="fa fa-users mr-2" aria-hidden="true"></i>
-                                                <span>{{ 'participants'|trans|capitalize }}</span>
+                                                <span>{{ 'my events'|trans|capitalize }}</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a class="d-flex flex-wrap align-items-center" href="{{ path('app_dashboard_organizations') }}">
                                                 <i class="fa fa-building mr-2" aria-hidden="true"></i>
-                                                <span>{{ 'organizations'|trans|capitalize }}</span>
+                                                <span style="font-size: 13px!important;">{{ 'my organizations'|trans|capitalize }}</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="d-flex flex-wrap align-items-center" href="{{ path('app_user_logout') }}">
+                                                <i class="fa fa-user mr-2" aria-hidden="true"></i>
+                                                <span class="text-small">{{ 'logout'|trans|capitalize }}</span>
                                             </a>
                                         </li>
                                     </ul>

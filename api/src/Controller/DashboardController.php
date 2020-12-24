@@ -109,23 +109,7 @@ class DashboardController extends AbstractController
 
         $variables['item'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
         $variables['wrcorganization'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])["hydra:member"];
-
-        //Check if cc organization has wrc organization if not make one
-        /*@todo have this checked by other developer before using*/
-        foreach ($variables['wrcorganization'] as $org){
-            if ($org['contact'] == $variables['item']['@id']){
-                $variables['wrcorganization'] = $org;
-            }else{
-                $variables['wrcorganization'] = [];
-                $variables['wrcorganization']['rsin'] = " ";
-                $variables['wrcorganization']['chamberOfComerce'] = " ";
-                $variables['wrcorganization']['name'] = $variables['item']['name'];
-                $variables['wrcorganization']['description'] = $variables['item']['description'];
-                $variables['wrcorganization']['contact'] = $variables['item']['@id'];
-
-                // $newOrg = $commonGroundService->saveResource($variables['wrcorganization'], ['component' => 'wrc', 'type' => 'organizations']);
-            }
-        }
+        
 
         return $variables;
     }
