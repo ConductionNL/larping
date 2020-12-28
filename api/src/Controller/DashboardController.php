@@ -44,7 +44,7 @@ class DashboardController extends AbstractController
      * @Route("/organizations")
      * @Template
      */
-    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
@@ -81,6 +81,11 @@ class DashboardController extends AbstractController
                 // Save organization
                 $org = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
 
+                //send mail to user for new organization
+                $data = [];
+                $data['organization'] = $org;
+                $mailingService->sendMail('mails/new_organization.html.twig', 'no-reply@conduction.nl', 'mark@conduction.nl', 'welcome', $data);
+
                 //get url of new $org to make wrc organization
                 $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $org['id']]);
 
@@ -92,6 +97,8 @@ class DashboardController extends AbstractController
                 $wrcOrg['contact'] = $orgUrl;
 
                 $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations']);
+
+
             }
 
         }
@@ -130,7 +137,7 @@ class DashboardController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
-           
+
         }
 
         return $variables;
