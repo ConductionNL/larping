@@ -44,7 +44,7 @@ class DashboardController extends AbstractController
      * @Route("/organizations")
      * @Template
      */
-    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
@@ -65,7 +65,7 @@ class DashboardController extends AbstractController
                 // Make or save telephone
                 if ($resource['telephone']['telephone']) {
                     if (!isset($resource['telephone']['name'])) {
-                        $resource['telephone']['name'] = 'Telephone';
+                        $resource['telephone']['name'] = 'Main telephone';
                     }
                     $telephone = $commonGroundService->saveResource($resource['telephone'], ['component' => 'cc', 'type' => 'telephones']);
                 }
@@ -80,6 +80,25 @@ class DashboardController extends AbstractController
 
                 // Save organization
                 $org = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
+
+                //send mail to user for new organization
+                $data = [];
+                $data['organization'] = $org;
+                $mailingService->sendMail('mails/new_organization.html.twig', 'no-reply@conduction.nl', 'mark@conduction.nl', 'welcome', $data);
+
+                //get url of new $org to make wrc organization
+                $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $org['id']]);
+
+                //make wrc organization
+                $wrcOrg['rsin'] = "";
+                $wrcOrg['chamberOfComerce'] = "";
+                $wrcOrg['name'] = $org['name'];
+                $wrcOrg['description'] = $org['description'];
+                $wrcOrg['contact'] = $orgUrl;
+
+                $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations']);
+
+
             }
 
         }
@@ -99,13 +118,27 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/organizations/{id}")
+     * @Route("/organization/{id}")
      * @Template
      */
     public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+
+        $variables['item'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+        $variables['wrcorganization'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])["hydra:member"];
+
+        foreach ($variables['wrcorganization'] as $org){
+            if ($org['contact'] == $variables['item']['@self']){
+                $variables['wrcorganization'] = $org;
+            }
+        }
+
+        if ($request->isMethod('POST')) {
+            $resource = $request->request->all();
+
+        }
 
         return $variables;
     }
