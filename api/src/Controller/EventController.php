@@ -5,6 +5,7 @@
 namespace App\Controller;
 
 use App\Service\MailingService;
+use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,7 +43,7 @@ class EventController extends AbstractController
      * @Route("/{id}")
      * @Template
      */
-    public function eventAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
+    public function eventAction(Session $session, Request $request, CommonGroundService $commonGroundService, ShoppingService $ss, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
         $variables = [];
         $variables['path'] = 'app_event_event';
@@ -65,41 +66,19 @@ class EventController extends AbstractController
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
 
             //make rating of the review
-            $rating =[ 'review' =>'/reviews/'.$variables['review']['id'], 'ratingValue' => (int)$resource['ratingValue'] ];
+            $rating = ['review' => '/reviews/' . $variables['review']['id'], 'ratingValue' => (int)$resource['ratingValue']];
             $variables['rating'] = $commonGroundService->saveResource($rating, ['component' => 'rc', 'type' => 'ratings']);
 
         }
 
         // Make order in session
-        if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' && $request->request->get('offer') &&
-            $request->request->get('quantity') != 0) {
+        if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' &&
+            $request->request->get('offers')) {
+
             $resource = $request->request->all();
 
-            // If no quantity is given set it to 1
-            if (!$resource['quantity']) {
-                $resource['quantity'] = 1;
-            }
-
-            // Check if we already have an order in the session
-            if ($session->get('order')) {
-                $order = $session->get('order');
-            } else {
-                $order = [];
-            }
-
-            // Get offer object
-            $offer = $commonGroundService->getResource($resource['offer']);
-
-            // Add offer
-            $order['items'][] = [
-                'offer' => $resource['offer'],
-                'quantity' => $resource['quantity'],
-                'path' => '/events/'.$variables['event']['id'],
-                'price' => $offer['price'] * $resource['quantity']
-            ];
-
-            // Set order in the session
-            $session->set('order', $order);
+            // Add offers to session
+            $order = $ss->addItemsToCart($resource['offers']);
 
             return $this->redirectToRoute('app_order_index');
         }
