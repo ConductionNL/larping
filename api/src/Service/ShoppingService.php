@@ -47,9 +47,11 @@ class ShoppingService
                 $offer['quantity'] = 1;
             }
             if (!$offer['quantity'] == 0 && isset($offer['@id']) && isset($offer['path'])) {
-                if (isset($order)) {
+                if (isset($order) && isset($order['items'])) {
                     $isAlreadyInCart = $this->checkIfInCart($offer, $order);
                     $order = $this->session->get('order');
+                } else {
+                    $isAlreadyInCart = false;
                 }
                 if ($isAlreadyInCart !== true) {
                     $actualOffer = $this->commonGroundService->getResource($offer['@id']);
