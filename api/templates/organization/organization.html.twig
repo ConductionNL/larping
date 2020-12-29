@@ -4,7 +4,7 @@
     <section class="pt-7 pb-4 pt-md-9 pb-md-8">
         <div class="container">
             <div class="row">
-                <div class="col-md-7 col-lg-8">
+                <div class="col-md-12 col-lg-12">
                     <div class="single-listing-content mb-6">
                         <h3 class="font-weight-normal mb-6">{{'about'|trans|capitalize}} {{ item.name }}</h3>
                         <p class="mb-6">
@@ -14,6 +14,20 @@
                                 {{ 'no description found'|trans|capitalize }}
                             {% endif %}
                         </p>
+                        <!-- Socials -->
+                        <ul class="list-group list-group-horizontal">
+                            {% if item.socials|default %}
+                                <ul class="list-unstyled mb-6">
+                                    {% for socials in item.socials %}
+                                    <li class="d-inline-block mr-4 mb-2">
+                                        <i class="{% if socials.type == 'website' %}fa fa-globe {% else %}
+                                        fa fa-{{ socials.type }}{% endif %} mr-2" aria-hidden="true"></i>
+                                        <a href="{{ socials.url }}">{{ socials.name }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </ul>
                     </div>
 
                     <hr>
@@ -22,7 +36,7 @@
                         <h3 class="font-weight-normal mb-4">{{ 'events from this organization'|trans|capitalize }}</h3>
                         <div class="row">
                             {% for event in events %}
-                            <div class="col-md-12 col-lg-4">
+                            <div class="col-md-4 col-lg-4">
                                 <div class="card rounded-0 card-hover-overlay">
                                     <div class="position-relative">
                                         <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
@@ -63,8 +77,10 @@
                                     <h5 class="media-heading">{{ commonground_resource(rev.author).givenName }}</h5>
                                     <p>{{ rev.review }}</p>
                                 </div>
-                                {% if rev.author == app.user.person %}
-                                <a class="btn btn-danger btn-sm" href="#" role="button">Delete review</a>
+                                {% if app.user %}
+                                    {% if rev.author == app.user.person %}
+                                    <a class="btn btn-danger btn-sm" href="#" role="button">Delete review</a>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         {% endfor %}
@@ -114,15 +130,7 @@
                 </div>
 
                 <!--======= Sidebar =======-->
-                <div class="col-md-5 col-lg-4 pl-xl-8">
-
-                    <!-- Single listing Map -->
-                    {% if item.adresses|default %}
-                        {% include 'widgets/single_listing_map.html.twig' with {
-                            'location': item.adresses['0'].street
-                        } %}
-                    {% endif %}
-                </div>
+{#                <div class="col-md-5 col-lg-4 pl-xl-8"></div>#}
             </div>
         </div>
     </section>
