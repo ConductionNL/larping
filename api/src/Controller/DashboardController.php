@@ -78,26 +78,27 @@ class DashboardController extends AbstractController
                     $resource['organization']['telephones'][0] = '/telephones/'.$telephone['id'];
                 }
 
-                // Save organization
-                $org = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
-
-                //send mail to user for new organization
-                $data = [];
-                $data['organization'] = $org;
-                $mailingService->sendMail('mails/new_organization.html.twig', 'no-reply@conduction.nl', 'mark@conduction.nl', 'welcome', $data);
-
-                //get url of new $org to make wrc organization
-                $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $org['id']]);
-
                 //make wrc organization
                 $wrcOrg['rsin'] = "";
                 $wrcOrg['chamberOfComerce'] = "";
-                $wrcOrg['name'] = $org['name'];
-                $wrcOrg['description'] = $org['description'];
-                $wrcOrg['contact'] = $orgUrl;
-
+                $wrcOrg['name'] = $resource['organization']['name'];
+                $wrcOrg['description'] = $resource['organization']['description'];
                 $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations']);
+                //get url of new $org to make cc organization
+                $orgUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $org['id']]);
 
+                $resource['organization']['sourceOrganization'] = $orgUrl;
+                // Save organization
+                $ccorg = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
+                
+                $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $ccorg['id']]);
+                $wrcOrg['contact'] = $orgUrl;
+                //save contact
+                $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations', 'id' => $org['id']]);
+                //send mail to user for new organization
+                $data = [];
+                $data['organization'] = $wrcOrg;
+                $mailingService->sendMail('emails/new_organization.html.twig', 'no-reply@conduction.nl', 'mark@conduction.nl', 'welcome', $data);
 
             }
 
