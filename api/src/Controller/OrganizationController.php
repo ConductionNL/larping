@@ -58,6 +58,24 @@ class OrganizationController extends AbstractController
         $wrcUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $variables['wrcOrg']['id']]);
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $wrcUrl])['hydra:member'];
 
+        // Add review
+        if ($request->isMethod('POST') && $request->request->get('addReview') == 'true') {
+            $resource = $request->request->all();
+
+
+            $resource['organization'] = $variables['item']['@id'];
+            $resource['resource'] = $variables['item']['@id'];
+            $resource['author'] = $this->getUser()->getPerson();
+            // Save to the commonground component
+            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+
+            /*@todo make sure ratings work before using*/
+            //make rating of the review
+            //$rating = ['review' => '/reviews/' . $variables['review']['id'], 'ratingValue' => (int)$resource['ratingValue']];
+            //$variables['rating'] = $commonGroundService->saveResource($rating, ['component' => 'rc', 'type' => 'ratings']);
+
+        }
+
         return $variables;
     }
 }

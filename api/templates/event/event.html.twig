@@ -262,13 +262,14 @@
                     <div class="my-6" id="add-review">
                         <h3 class="font-weight-normal mb-6"> Add Review </h3>
                         {% if app.user %}
+                            {% set person = commonground_resource(app.user.person) %}
                             <form action="{{ path(path, {id: event.id}) }}" method="post">
                                 <div class="form-check form-check-inline mb-6 mr-lg-7">
                                     <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
                                            id="inlineRadio1" value="option1" checked="">
                                     <label class="form-check-label" for="inlineRadio1">
                                         <div class="media media-xs align-items-center">
-                                            <img src="assets/img/user/user-xs-3.jpg"
+                                            <img {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}
                                                  class="mr-2 media-object rounded-circle" alt="Image User">
                                             <div class="media-body">
                                                 <h5 class="media-heading mb-0">{{ app.user.name }}</h5>
@@ -278,10 +279,10 @@
                                 </div>
                                 <div class="form-group">
                                     {#*/@todo make test rating form element#}
-                                    <label class="form-text"
-                                           for="ratingValue">{{ 'from 1/5 how would you rate this event?'|trans|capitalize }}</label>
-                                    <input class="form-control-sm col-1" type="text" id="ratingValue"
-                                           name="ratingValue">
+{#                                    <label class="form-text"#}
+{#                                           for="ratingValue">{{ 'from 1/5 how would you rate this event?'|trans|capitalize }}</label>#}
+{#                                    <input class="form-control-sm col-1" type="text" id="ratingValue"#}
+{#                                           name="ratingValue">#}
                                 </div>
                                 <div class="form-group mb-6">
                                     <textarea class="form-control" rows="6" placeholder="Enter Your Comment"
