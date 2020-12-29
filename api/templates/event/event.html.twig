@@ -260,9 +260,9 @@
 
                     <!-- Add Review -->
                     <div class="my-6" id="add-review">
-                        <h3 class="font-weight-normal mb-6"> Add Review </h3>
                         {% if app.user %}
                             {% set person = commonground_resource(app.user.person) %}
+                            <h3 class="font-weight-normal mb-6"> Add Review </h3>
                             <form action="{{ path(path, {id: event.id}) }}" method="post">
                                 <div class="form-check form-check-inline mb-6 mr-lg-7">
                                     <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
