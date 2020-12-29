@@ -65,9 +65,10 @@ class EventController extends AbstractController
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
 
+            /*@todo make sure ratings work before using*/
             //make rating of the review
-            $rating = ['review' => '/reviews/' . $variables['review']['id'], 'ratingValue' => (int)$resource['ratingValue']];
-            $variables['rating'] = $commonGroundService->saveResource($rating, ['component' => 'rc', 'type' => 'ratings']);
+            //$rating = ['review' => '/reviews/' . $variables['review']['id'], 'ratingValue' => (int)$resource['ratingValue']];
+            //$variables['rating'] = $commonGroundService->saveResource($rating, ['component' => 'rc', 'type' => 'ratings']);
 
         }
 

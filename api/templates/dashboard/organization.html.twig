@@ -48,9 +48,9 @@
                                     {% set socials = item.socials %}
                                     <div class="form-group">
                                         <label for="website">{{ 'website'|trans|capitalize }}</label>
-                                        <input class="form-control" id="website" name="website" type="text"
-                                        {% if socials.website|default %}
-                                            value="{{ socials.website }}"
+                                        <input class="form-control" id="website" name="socials[]" type="text"
+                                        {% if socials[0]|default %}
+                                            value="{{ socials[0].url }}"
                                         {% else %}
                                             placeholder="{{ 'enter your website'|trans|capitalize }}"
                                         {% endif %}
@@ -58,9 +58,9 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="facebook">{{ 'facebook' }}</label>
-                                        <input class="form-control" id="facebook" name="facebook" type="text"
-                                            {% if socials.website|default %}
-                                                value="{{ socials.website }}"
+                                        <input class="form-control" id="facebook" name="socials[]" type="text"
+                                            {% if socials[1]|default %}
+                                                value="{{ socials[1].url }}"
                                             {% else %}
                                                 placeholder="{{ 'enter your facebook'|trans|capitalize }}"
                                             {% endif %}
@@ -70,19 +70,19 @@
                                 <div class="col-3">
                                     <div class="form-group">
                                         <label for="twitter">{{ 'twitter' }}</label>
-                                        <input class="form-control" id="twitter" name="twitter" type="text"
-                                            {% if socials.website|default %}
-                                                value="{{ socials.website }}"
+                                        <input class="form-control" id="twitter" name="socials[]" type="text"
+                                            {% if socials[2]|default %}
+                                                value="{{ socials[2].url }}"
                                             {% else %}
-                                                placeholder="{{ 'enter your website'|trans|capitalize }}"
+                                                placeholder="{{ 'enter your twitter'|trans|capitalize }}"
                                             {% endif %}
                                         >
                                     </div>
                                     <div class="form-group">
                                         <label for="instagram">{{ 'instagram' }}</label>
-                                        <input class="form-control" id="instagram" name="instagram" type="text"
-                                            {% if socials.website|default %}
-                                                value="{{ socials.website }}"
+                                        <input class="form-control" id="instagram" name="socials[]" type="text"
+                                            {% if socials[3]|default %}
+                                                value="{{ socials[3].url }}"
                                             {% else %}
                                                 placeholder="{{ 'enter your instagram'|trans|capitalize }}"
                                             {% endif %}
@@ -165,7 +165,7 @@
             const input = document.createElement('input');
 
             input.setAttribute('type', 'text');
-            input.setAttribute('class', "form-control");
+            input.setAttribute('class', "form-control mb-2");
             input.setAttribute('name', id);
             input.setAttribute('id', id);
 
