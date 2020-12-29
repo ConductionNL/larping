@@ -90,18 +90,16 @@ class DashboardController extends AbstractController
                 $resource['organization']['sourceOrganization'] = $orgUrl;
                 // Save organization
                 $ccorg = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
-                
+
                 $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $ccorg['id']]);
                 $wrcOrg['contact'] = $orgUrl;
                 //save contact
                 $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations', 'id' => $org['id']]);
                 //send mail to user for new organization
                 $data = [];
-                $data['organization'] = $wrcOrg;
-                $mailingService->sendMail('emails/new_organization.html.twig', 'no-reply@conduction.nl', 'mark@conduction.nl', 'welcome', $data);
-
+                $data['organization'] = $org;
+                $mailingService->sendMail('emails/new_organization.html.twig', 'no-reply@conduction.nl', $this->getUser()->getUsername(), 'welcome', $data);
             }
-
         }
 
         $variables['items'] = $commonGroundService->getResourceList(['component'=>'cc', 'type'=>'organizations'])['hydra:member'];
@@ -135,10 +133,34 @@ class DashboardController extends AbstractController
                 $variables['wrcorganization'] = $org;
             }
         }
-
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
+            if (isset($resource['socials'])){
 
+                $resource['socials'][0] = [
+                    'name' => 'website van '.$resource['name'],
+                    'type' => 'website',
+                    'url' => $resource['socials'][0]
+                ];
+
+                $resource['socials'][1] = [
+                    'name' => 'facebook van '.$resource['name'],
+                    'type' => 'facebook',
+                    'url' => $resource['socials'][1]
+                ];
+
+                $resource['socials'][2] = [
+                    'name' => 'twitter van '.$resource['name'],
+                    'type' => 'twitter',
+                    'url' => $resource['socials'][2]
+                ];
+
+                $resource['socials'][3] = [
+                    'name' => 'instagram van '.$resource['name'],
+                    'type' => 'instagram',
+                    'url' => $resource['socials'][3]
+                ];
+            }
         }
 
         return $variables;
