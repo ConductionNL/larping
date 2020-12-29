@@ -133,10 +133,34 @@ class DashboardController extends AbstractController
                 $variables['wrcorganization'] = $org;
             }
         }
-
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
+            if (isset($resource['socials'])){
 
+                $resource['socials'][0] = [
+                    'name' => 'website van '.$resource['name'],
+                    'type' => 'website',
+                    'url' => $resource['socials'][0]
+                ];
+
+                $resource['socials'][1] = [
+                    'name' => 'facebook van '.$resource['name'],
+                    'type' => 'facebook',
+                    'url' => $resource['socials'][1]
+                ];
+
+                $resource['socials'][2] = [
+                    'name' => 'twitter van '.$resource['name'],
+                    'type' => 'twitter',
+                    'url' => $resource['socials'][2]
+                ];
+
+                $resource['socials'][3] = [
+                    'name' => 'instagram van '.$resource['name'],
+                    'type' => 'instagram',
+                    'url' => $resource['socials'][3]
+                ];
+            }
         }
 
         return $variables;
