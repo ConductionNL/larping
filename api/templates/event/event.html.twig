@@ -5,13 +5,11 @@
     {% if event.organization|default %}
         {% set organization = commonground_resource(event.organization) %}
     {% endif %}
-    <section class="py-7 pt-md-9 pb-md-8">
+    <section class="py-7 pt-md-9 pb-md-8 ">
         <div class="container">
             <div class="row">
-                <div class="col-9">
+                <div class="col-md-7 col-lg-8">
                     <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ event.name }}</h1>
-                </div>
-                <div class="col-5 float-right">
                     <!-- Breadcrumb -->
                     <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
                         <ul class="list-unstyled d-flex p-0 m-0">
@@ -23,10 +21,6 @@
                                 aria-current="page">{{ event.name }}</li>
                         </ul>
                     </nav>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8">
                     <div class="mb-2 mb-lg-0">
                         {#                        {% if product.emails.0.email|default %}#}
                         {#                            <p class="text-muted mb-1"><i#}
@@ -40,11 +34,6 @@
                         {#                        {% endif %}#}
                         <div class="d-flex align-items-center">
                             <ul class="list-inline mr-2">
-                                {% if organization|default %}
-                                    <li class="list-inline-item">
-                                        {{ 'by'|trans|capitalize }} - {{ organization.name }}
-                                    </li><br>
-                                {% endif %}
                                 {% if event.startDate|default %}
                                     <li class="list-inline-item">
                                         {{ 'startdate'|trans|capitalize }}: {{ event.startDate|date("d-m-Y") }}
@@ -58,19 +47,6 @@
                             </ul>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
-                    <a href="#add-review" class="btn btn-primary">Write a review</a>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <section class="pb-4  pb-md-8">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-7 col-lg-8">
                     <!-- About -->
                     <div class="single-listing-content mb-6">
                         {% if event.description|default %}
@@ -84,16 +60,16 @@
                         <h3 class="font-weight-normal mb-6">{{ 'features'|trans|capitalize }}</h3>
                         <ul class="list-unstyled mb-7">
                             {% if event.categories is defined and event.categories is not empty %}
-                            {% for categories in event.categories %}
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-check mr-2" aria-hidden="true"></i>
-                                {{ commonground_resource(categories).name }}
-                            </li>
-                            {% endfor %}
+                                {% for categories in event.categories %}
+                                    <li class="d-inline-block mr-4 mb-2">
+                                        <i class="fa fa-check mr-2" aria-hidden="true"></i>
+                                        {{ commonground_resource(categories).name }}
+                                    </li>
+                                {% endfor %}
                             {% else %}
-                            <li class="d-inline-block mr-4 mb-2">
-                                {{ 'no features found'|trans|capitalize }}
-                            </li>
+                                <li class="d-inline-block mr-4 mb-2">
+                                    {{ 'no features found'|trans|capitalize }}
+                                </li>
                             {% endif %}
                         </ul>
                         <hr>
@@ -104,10 +80,62 @@
                         <div class="my-6">
                             <h3 class="font-weight-normal mb-6">{{ 'offers'|trans|capitalize }}</h3>
                             <form action="{{ path(path, {id: event.id}) }}" method="post">
+
+                                {% if product.prerequisiteProducts|default %}
+                                    {% if app.user|default and app.user.person|default %}
+                                        {% set paidInvoices = commonground_resource_list({'component':'bc','type':'invoices'}, {'status':'paid','customer':app.user.person}) %}
+                                    {% endif %}
+                                    <p style="color: indianred">{{ 'there are other products needed before you can buy this product'|capitalize|trans }}:</p>
+                                    {% set counter = 1 %}
+                                    {% for product in product.prerequisiteProducts %}
+                                        {% if paidInvoices|default %}
+                                            {% for inv in paidInvoices %}
+                                                {% if inv.items|default %}
+                                                    {% for itm in inv.items %}
+                                                        {% if itm.offer|default %}
+                                                            {% set offer = commonground_resource(itm.offer) %}
+                                                            {% if offer.products|default %}
+                                                                {% for prod in offer.products %}
+                                                                    {% if prod['@id'] == product['@id'] %}
+                                                                        {% set thisProdIsOwned = 'true' %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% if not thisProdIsOwned|default or thisProdIsOwned != 'false' %}
+                                            {% set product = commonground_resource(product['@id']) %}
+                                            {% set counter = counter + 1 %}
+                                            <div class="form-group p-3"
+                                                 style="border-radius: 6px;background: rgba(205,92,92,0.4)">
+                                                <label for="offerInput"
+                                                       style="color: white">{{ product.name|capitalize }}</label>
+                                                <select id="offerInput" class="form-control"
+                                                        name="offers[{{ counter }}][@id]" required>
+                                                    <option
+                                                        value="">{{ 'select an'|trans|capitalize~' '~'offer'|trans }}</option>
+                                                    {% for offer in product.offers %}
+                                                        <option value="{{ offer['@id'] }}">{{ offer.name }}
+                                                            &euro; {{ offer.price }},-
+                                                        </option>
+                                                        <input name="offers[{{ counter }}][path]" type="hidden"
+                                                               value="/events/{{ event.id }}">
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        {% endif %}
+                                        {% set thisProdIsOwned = 'false' %}
+                                    {% endfor %}
+                                {% endif %}
+
                                 <div class="row">
                                     <div class="form-group col-8">
                                         <label for="offerInput">{{ 'offer'|trans|capitalize }}</label>
-                                        <select id="offerInput" class="form-control" name="offer" required>
+                                        <select id="offerInput" class="form-control" name="offers[0][@id]" required>
                                             <option
                                                 value="">{{ 'select an'|trans|capitalize~' '~'offer'|trans }}</option>
                                             {% for offer in product.offers %}
@@ -116,10 +144,12 @@
                                                 </option>
                                             {% endfor %}
                                         </select>
+                                        <input name="offers[0][path]" type="hidden" value="/events/{{ event.id }}">
                                     </div>
                                     <div class="form-group col-4">
                                         <label for="quantityInput">{{ 'quantity'|trans|capitalize }}</label>
-                                        <input value="1" class="form-control" name="quantity" type="number"
+                                        <input min="1" value="1" class="form-control" name="offers[0][quantity]"
+                                               type="number"
                                                id="quantityInput">
                                     </div>
                                 </div>
@@ -233,27 +263,37 @@
 
                     <!-- Add Review -->
                     <div class="my-6" id="add-review">
-                        <h3 class="font-weight-normal mb-6"> Add Review </h3>
                         {% if app.user %}
+                            {% set person = commonground_resource(app.user.person) %}
+                            <h3 class="font-weight-normal mb-6"> Add Review </h3>
                             <form action="{{ path(path, {id: event.id}) }}" method="post">
                                 <div class="form-check form-check-inline mb-6 mr-lg-7">
-                                    <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked="">
+                                    <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
+                                           id="inlineRadio1" value="option1" checked="">
                                     <label class="form-check-label" for="inlineRadio1">
                                         <div class="media media-xs align-items-center">
-                                            <img src="assets/img/user/user-xs-3.jpg" class="mr-2 media-object rounded-circle" alt="Image User">
+                                            <img {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}
+                                                 class="mr-2 media-object rounded-circle" alt="Image User">
                                             <div class="media-body">
                                                 <h5 class="media-heading mb-0">{{ app.user.name }}</h5>
                                             </div>
                                         </div>
                                     </label>
+                                </div>
+                                <div class="form-group">
                                     {#*/@todo make test rating form element#}
+{#                                    <label class="form-text"#}
+{#                                           for="ratingValue">{{ 'from 1/5 how would you rate this event?'|trans|capitalize }}</label>#}
+{#                                    <input class="form-control-sm col-1" type="text" id="ratingValue"#}
+{#                                           name="ratingValue">#}
                                 </div>
                                 <div class="form-group mb-6">
-                                    <textarea class="form-control" rows="6" placeholder="Enter Your Comment"></textarea>
+                                    <textarea class="form-control" rows="6" placeholder="Enter Your Comment"
+                                              name="review"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <input type="hidden" name="addReview" value="true">
-                                    <button type="submit" class="btn btn-primary text-uppercase"> Send Review </button>
+                                    <button type="submit" class="btn btn-primary text-uppercase"> Send Review</button>
                                 </div>
                             </form>
                         {% else %}
@@ -287,7 +327,5 @@
             </div>
         </div>
     </section>
-
-
 
 {% endblock %}

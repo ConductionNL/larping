@@ -33,6 +33,10 @@ class DashboardController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
 
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'people'])['hydra:member'];
+        $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
         return $variables;
     }
 
@@ -40,7 +44,7 @@ class DashboardController extends AbstractController
      * @Route("/organizations")
      * @Template
      */
-    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
@@ -61,7 +65,7 @@ class DashboardController extends AbstractController
                 // Make or save telephone
                 if ($resource['telephone']['telephone']) {
                     if (!isset($resource['telephone']['name'])) {
-                        $resource['telephone']['name'] = 'Telephone';
+                        $resource['telephone']['name'] = 'Main telephone';
                     }
                     $telephone = $commonGroundService->saveResource($resource['telephone'], ['component' => 'cc', 'type' => 'telephones']);
                 }
@@ -74,10 +78,28 @@ class DashboardController extends AbstractController
                     $resource['organization']['telephones'][0] = '/telephones/'.$telephone['id'];
                 }
 
-                // Save organization
-                $org = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
-            }
+                //make wrc organization
+                $wrcOrg['rsin'] = "";
+                $wrcOrg['chamberOfComerce'] = "";
+                $wrcOrg['name'] = $resource['organization']['name'];
+                $wrcOrg['description'] = $resource['organization']['description'];
+                $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations']);
+                //get url of new $org to make cc organization
+                $orgUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $org['id']]);
 
+                $resource['organization']['sourceOrganization'] = $orgUrl;
+                // Save organization
+                $ccorg = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
+
+                $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $ccorg['id']]);
+                $wrcOrg['contact'] = $orgUrl;
+                //save contact
+                $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations', 'id' => $org['id']]);
+                //send mail to user for new organization
+                $data = [];
+                $data['organization'] = $org;
+                $mailingService->sendMail('emails/new_organization.html.twig', 'no-reply@conduction.nl', $this->getUser()->getUsername(), 'welcome', $data);
+            }
         }
 
         $variables['items'] = $commonGroundService->getResourceList(['component'=>'cc', 'type'=>'organizations'])['hydra:member'];
@@ -95,13 +117,51 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/organizations/{id}")
+     * @Route("/organization/{id}")
      * @Template
      */
     public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+
+        $variables['item'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+        $variables['wrcorganization'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])["hydra:member"];
+
+        foreach ($variables['wrcorganization'] as $org){
+            if ($org['contact'] == $variables['item']['@self']){
+                $variables['wrcorganization'] = $org;
+            }
+        }
+        if ($request->isMethod('POST')) {
+            $resource = $request->request->all();
+            if (isset($resource['socials'])){
+
+                $resource['socials'][0] = [
+                    'name' => 'website van '.$resource['name'],
+                    'type' => 'website',
+                    'url' => $resource['socials'][0]
+                ];
+
+                $resource['socials'][1] = [
+                    'name' => 'facebook van '.$resource['name'],
+                    'type' => 'facebook',
+                    'url' => $resource['socials'][1]
+                ];
+
+                $resource['socials'][2] = [
+                    'name' => 'twitter van '.$resource['name'],
+                    'type' => 'twitter',
+                    'url' => $resource['socials'][2]
+                ];
+
+                $resource['socials'][3] = [
+                    'name' => 'instagram van '.$resource['name'],
+                    'type' => 'instagram',
+                    'url' => $resource['socials'][3]
+                ];
+            }
+        }
 
         return $variables;
     }
@@ -176,7 +236,7 @@ class DashboardController extends AbstractController
         }
 
         $variables['items'] = $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
-        
+
 
         return $variables;
     }

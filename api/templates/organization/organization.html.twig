@@ -1,64 +1,136 @@
 {% extends "base.html.twig" %}
 {% block content %}
 
-    <section class="py-7 pt-md-9 pb-md-8">
+    <section class="pt-7 pb-4 pt-md-9 pb-md-8">
         <div class="container">
             <div class="row">
-                <div class="col-9">
-                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ item.name }}</h1>
-                </div>
-                <div class="col-3 float-right">
-                    <!-- Breadcrumb -->
-                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
-                        <ul class="list-unstyled d-flex p-0 m-0">
-                            <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a
-                                    href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
-                            </li>
-                            <li class="breadcrumb-item active"
-                                aria-current="page">{{ item.name }}</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="mb-2 mb-lg-0">
-                        {% if item.emails.0.email|default %}
-                            <p class="text-muted mb-1"><i
-                                    class="fa fa-mail-forward text-primary mr-1"></i>{{ item.emails.0.email }}
-                            </p>
-                        {% endif %}
-                        {% if item.phonenumbers.0.phonenumber|default %}
-                            <p class="text-muted mb-1"><i
-                                    class="fa fa-phone text-primary mr-1"></i> {{ item.phonenumbers.0.phonenumber }}
-                            </p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <section class="pb-4  pb-md-8">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-7 col-lg-8">
-                    <!-- About -->
+                <div class="col-md-12 col-lg-12">
                     <div class="single-listing-content mb-6">
-                        {% if item.description|default %}
-                            <h3 class="font-weight-normal mb-6">{{ 'about this'|trans|capitalize~' '~'organization'|trans }}</h3>
-                            <p class="mb-6">{{ item.description }}
-                        {% else %}
-                            <p>{{ 'no description found'|trans|capitalize }}.</p>
-                        {% endif %}
+                        <h3 class="font-weight-normal mb-6">{{'about'|trans|capitalize}} {{ item.name }}</h3>
+                        <p class="mb-6">
+                            {% if item.description|default %}
+                                {{ item.description }}
+                            {% else %}
+                                {{ 'no description found'|trans|capitalize }}
+                            {% endif %}
+                        </p>
+                        <!-- Socials -->
+                        <ul class="list-group list-group-horizontal">
+                            {% if item.socials|default %}
+                                <ul class="list-unstyled mb-6">
+                                    {% for socials in item.socials %}
+                                    <li class="d-inline-block mr-4 mb-2">
+                                        <i class="{% if socials.type == 'website' %}fa fa-globe {% else %}
+                                        fa fa-{{ socials.type }}{% endif %} mr-2" aria-hidden="true"></i>
+                                        <a href="{{ socials.url }}">{{ socials.name }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </ul>
                     </div>
+
                     <hr>
-                    <h3 class="mb-4 font-weight-normal">{{ 'events from this organization'|trans|capitalize }}</h3>
-                    <!-- events from this organization  -->
-                    {% include 'widgets/you_may_like.html.twig' %}
+
+                     <div>
+                        <h3 class="font-weight-normal mb-4">{{ 'events from this organization'|trans|capitalize }}</h3>
+                        <div class="row">
+                            {% for event in events %}
+                            <div class="col-md-4 col-lg-4">
+                                <div class="card rounded-0 card-hover-overlay">
+                                    <div class="position-relative">
+                                        <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
+                                        <div class="card-img-overlay">
+                                            <h3>
+                                                <a href="{{ path('app_event_event', {id: event.id}) }}">
+                                                    {{ event.name }}
+                                                </a>
+                                            </h3>
+                                            <p style="color:lightgrey">{{ event.description }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-footer bg-transparent">
+                                        <ul class="list-unstyled d-flex mb-0 py-2">
+                                            <li>
+                                                <a class="px-2 stretched-link" href="{{ path('app_event_event', {id: event.id}) }}">Bekijken</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <hr>
+                    <!-- Reviews -->
+                    <div class="my-6">
+                        <h3 class="font-weight-normal mb-6">{{ 'reviews'|trans|capitalize }} ({{ reviews|length }})</h3>
+                        {% for rev in reviews %}
+                            <div class="media mb-3">
+                                <div class="media-img">
+                                    <img src="assets/img/user/user-xs-1.jpg" class="mr-3 media-object rounded-circle"
+                                         alt="Image User">
+                                </div>
+                                <div class="media-body">
+                                    <h5 class="media-heading">{{ commonground_resource(rev.author).givenName }}</h5>
+                                    <p>{{ rev.review }}</p>
+                                </div>
+                                {% if app.user %}
+                                    {% if rev.author == app.user.person %}
+                                    <a class="btn btn-danger btn-sm" href="#" role="button">Delete review</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Add Review -->
+                    <div class="my-6" id="add-review">
+                        {% if app.user %}
+                            {% set person = commonground_resource(app.user.person) %}
+                            <h3 class="font-weight-normal mb-6"> Add Review </h3>
+                            <form action="{{ path('app_organization_organization', {id: item.id}) }}" method="post">
+                                <div class="form-check form-check-inline mb-6 mr-lg-7">
+                                    <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked="">
+                                    <label class="form-check-label" for="inlineRadio1">
+                                        <div class="media media-xs align-items-center">
+                                            <img {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}class="mr-2 media-object rounded-circle" alt="Image User">
+                                            <div class="media-body">
+                                                <h5 class="media-heading mb-0">{{ app.user.name }}</h5>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    {#*/@todo make rating elements work #}
+{#                                    <label class="form-text" for="ratingValue">{{ 'from 1/5 how would you rate this organization?'|trans|capitalize }}</label>#}
+{#                                    <input class="form-control-sm col-1" type="text" id="ratingValue" name="ratingValue">#}
+                                </div>
+                                <div class="form-group mb-6">
+                                    <textarea class="form-control" rows="6" placeholder="Enter Your Comment" name="review"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" name="addReview" value="true">
+                                    <button type="submit" class="btn btn-primary text-uppercase"> Send Review </button>
+                                </div>
+                            </form>
+                        {% else %}
+                            <div>
+                                <h2>{{ 'you need to be logged in to place a review'|trans|capitalize }}</h2>
+                                <button class="btn btn-primary">
+                                    <a class="mt-2 text-center text-white"
+                                       href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }}</a>
+                                </button>
+                            </div>
+                        {% endif %}
+
+                    </div>
+
                 </div>
+
+                <!--======= Sidebar =======-->
+{#                <div class="col-md-5 col-lg-4 pl-xl-8"></div>#}
             </div>
         </div>
     </section>

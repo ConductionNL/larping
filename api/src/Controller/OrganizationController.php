@@ -32,6 +32,7 @@ class OrganizationController extends AbstractController
     {
         $variables = [];
         $variables['items'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
         $variables['pathToSingular'] = 'app_organization_organization';
         $variables['typePlural'] = 'organizations';
 
@@ -46,8 +47,34 @@ class OrganizationController extends AbstractController
     {
         $variables = [];
         $variables['item'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id'=>$id]);
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization'=>$variables['item']['@id']])['hydra:member'];
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'],['resource' => $variables['item']['@id']])['hydra:member'];
+        $variables['wrcOrg'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])["hydra:member"];
+
+        foreach ($variables['wrcOrg'] as $org){
+            if ($org['contact'] == $variables['item']['@self']){
+                $variables['wrcOrg'] = $org;
+            }
+        }
+        $wrcUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $variables['wrcOrg']['id']]);
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $wrcUrl])['hydra:member'];
+
+        // Add review
+        if ($request->isMethod('POST') && $request->request->get('addReview') == 'true') {
+            $resource = $request->request->all();
+
+
+            $resource['organization'] = $variables['item']['@id'];
+            $resource['resource'] = $variables['item']['@id'];
+            $resource['author'] = $this->getUser()->getPerson();
+            // Save to the commonground component
+            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+
+            /*@todo make sure ratings work before using*/
+            //make rating of the review
+            //$rating = ['review' => '/reviews/' . $variables['review']['id'], 'ratingValue' => (int)$resource['ratingValue']];
+            //$variables['rating'] = $commonGroundService->saveResource($rating, ['component' => 'rc', 'type' => 'ratings']);
+
+        }
 
         return $variables;
     }
