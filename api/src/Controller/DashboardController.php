@@ -36,7 +36,7 @@ class DashboardController extends AbstractController
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['participants'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'people'])['hydra:member'];
-        $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
+        //$variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
         return $variables;
     }
 
@@ -133,34 +133,88 @@ class DashboardController extends AbstractController
                 $variables['wrcorganization'] = $org;
             }
         }
+
         if ($request->isMethod('POST')) {
-            $resource = $request->request->all();
-            if (isset($resource['socials'])){
+            $rest['name'] = $request->get('name');
+            $rest['description'] = $request->get('description');
 
-                $resource['socials'][0] = [
-                    'name' => 'website van '.$resource['name'],
-                    'type' => 'website',
-                    'url' => $resource['socials'][0]
-                ];
+            $organization = $variables['wrcorganization'];
+            $organization['name'] = $rest['name'];
+            $organization['description'] = $rest['description'];
 
-                $resource['socials'][1] = [
-                    'name' => 'facebook van '.$resource['name'],
-                    'type' => 'facebook',
-                    'url' => $resource['socials'][1]
-                ];
+            if (!empty($resource['socials'])){
+                $resource['socials'] = $request->get('socials');
 
-                $resource['socials'][2] = [
-                    'name' => 'twitter van '.$resource['name'],
-                    'type' => 'twitter',
-                    'url' => $resource['socials'][2]
-                ];
+                if (!empty($resource['socials'][0])) {
+                    $resource['socials'][0] = [
+                        'name' => 'website van ' . $resource['name'],
+                        'type' => 'website',
+                        'url' => $resource['socials'][0]
+                    ];
+                    $commonGroundService->saveResource($resource['socials'][0], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+                }
 
-                $resource['socials'][3] = [
-                    'name' => 'instagram van '.$resource['name'],
-                    'type' => 'instagram',
-                    'url' => $resource['socials'][3]
-                ];
+                if (!empty($resource['socials'][1])) {
+                    $resource['socials'][1] = [
+                        'name' => 'facebook van ' . $rest['name'],
+                        'type' => 'facebook',
+                        'url' => $resource['socials'][1]
+                    ];
+                    $commonGroundService->saveResource($resource['socials'][1], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+                }
+
+                if (!empty($resource['socials'][2])) {
+                    $resource['socials'][2] = [
+                        'name' => 'twitter van ' . $rest['name'],
+                        'type' => 'twitter',
+                        'url' => $resource['socials'][2]
+                    ];
+                    $commonGroundService->saveResource($resource['socials'][2], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+                }
+
+                if (!empty($resource['socials'][3])) {
+                    $resource['socials'][3] = [
+                        'name' => 'instagram van ' . $rest['name'],
+                        'type' => 'instagram',
+                        'url' => $resource['socials'][3]
+                    ];
+                    $commonGroundService->saveResource($resource['socials'][3], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+                }
             }
+//            $resource['telephones'] = $request->get('telephones');
+//            if (!empty($resource['telephones'])){
+//                $resource['telephones'] = [
+//                        'name' => 'telephone for '.$rest['name'],
+//                        'telephone' => $resource['telephones'][0]
+//                    ];
+//                $commonGroundService->saveResource($resource['telephones'], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+//            }
+//
+//            $resource['emails'] = $request->get('emails');
+//            if (!empty($resource['emails'])){
+//                    $resource['emails'] = [
+//                      'name' => 'email for '.$rest['name'],
+//                      'email' => $resource['emails'][0]
+//                    ];
+//                $commonGroundService->saveResource($resource['emails'], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+//            }
+
+
+            //fill in all required fields for a style
+            $organization['style']['name'] = 'style for'.$request->get('name');
+            $organization['style']['description'] = 'style for'.$request->get('name');
+            $organization['style']['favicon']['name'] = 'style for'.$request->get('name');
+            $organization['style']['favicon']['description'] = 'style for'.$request->get('name');
+            //get profile pic
+            if (isset($_FILES['logo']) && $_FILES['logo']['error'] !== 4) {
+                $path = $_FILES['logo']['tmp_name'];
+                $type = filetype($_FILES['logo']['tmp_name']);
+                $data = file_get_contents($path);
+                $organization['style']['favicon']['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+            }
+            $url = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
+            $commonGroundService->saveResource($organization, $url);
+
         }
 
         return $variables;

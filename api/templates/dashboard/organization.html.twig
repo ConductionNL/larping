@@ -19,7 +19,7 @@
                     <div class="card card-body bg-white border-light shadow-sm mb-4">
                         <h5 class="h5 mb-40">{{ 'my organization'|trans|capitalize }}</h5>
 
-                        <form action="{{ path('app_dashboard_organization', {'id': item.id }) }}" method="post">
+                        <form action="{{ path('app_dashboard_organization', {'id': item.id }) }}" method="post" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
@@ -37,7 +37,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="profilepic">{{ 'organization picture'|trans|capitalize }}</label>
-                                        <input class="form-control" type="file" name="base64">
+                                        <input class="form-control" type="file" name="logo">
                                     </div>
 
                                 </div>
