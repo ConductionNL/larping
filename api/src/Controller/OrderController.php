@@ -35,18 +35,19 @@ class OrderController extends AbstractController
     public function indexAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $ss, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['order'] = $session->get('order');
 
         if ($this->getUser() && $this->getUser()->getPerson()) {
             $person = $this->getUser()->getPerson();
-            $order = $ss->makeOrder($person);
+            $variables['order'] = $ss->makeOrder($person);
+        } else {
+            $variables['order'] = $session->get('order');
         }
 
         if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' && isset($order) &&
             $this->getUser()) {
-            $ss->redirectToMollie($order);
+            $ss->redirectToMollie($variables['order']);
         }
-        
+
         return $variables;
     }
 
@@ -71,9 +72,9 @@ class OrderController extends AbstractController
         if ($session->get('invoice@id')) {
             $variables['invoice'] = $commonGroundService->getResource($session->get('invoice@id'));
 
-
             // Get invoice with updated status from mollie
             $object['target'] = $variables['invoice']['id'];
+
             $variables['invoice'] = $commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'status']);
 
             // Empty session order when order is paid
