@@ -89,25 +89,10 @@
                                     {% set counter = 1 %}
                                     {% for product in product.prerequisiteProducts %}
                                         {% if paidInvoices|default %}
-                                            {% for inv in paidInvoices %}
-                                                {% if inv.items|default %}
-                                                    {% for itm in inv.items %}
-                                                        {% if itm.offer|default %}
-                                                            {% set offer = commonground_resource(itm.offer) %}
-                                                            {% if offer.products|default %}
-                                                                {% for prod in offer.products %}
-                                                                    {% if prod['@id'] == product['@id'] %}
-                                                                        {% set thisProdIsOwned = 'true' %}
-                                                                    {% endif %}
-                                                                {% endfor %}
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% endif %}
-                                            {% endfor %}
+                                            {% set ownsThisProduct = owns_this_product(paidInvoices, product) %}
                                         {% endif %}
 
-                                        {% if not thisProdIsOwned|default or thisProdIsOwned != 'false' %}
+                                        {% if not ownsThisProduct|default or ownsThisProduct != false %}
                                             {% set product = commonground_resource(product['@id']) %}
                                             {% set counter = counter + 1 %}
                                             <div class="form-group p-3"
