@@ -31,16 +31,24 @@
                 <div class="ml-md-auto d-flex align-items-center justify-content-between">
                     <div class="select-bg-transparent select-border">
                         <div class="selectric-wrapper selectric-select-location">
-                            <div class="selectric-hide-select">
-                                <select class="select-location" tabindex="-1">
-                                    <option>Popular</option>
-                                    <option>Nearest</option>
-                                    <option>Recent</option>
-                                </select>
-                            </div>
-                            <div class="selectric"><span class="label">Popular</span>
-                                <div class="arrow-button"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
-                            </div>
+{#                            <div class="selectric">#}
+{#                                <select class="select-location" style="text-align: center">#}
+{#                                    <option>Popular</option>#}
+{#                                    <option>Nearest</option>#}
+{#                                    <option>Recent</option>#}
+{#                                </select>#}
+{#                            </div>#}
+                              <div class="selectric">
+                             <span class="label">Popular</span>
+                             <div class="arrow-button">
+                             <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                 <select class="select-location" style="text-align: center">
+                                     <option>Popular</option>
+                                     <option>Nearest</option>
+                                     <option>Recent</option>
+                                 </select>
+                             </div>
+                              </div>
                             <div class="selectric-items" tabindex="-1">
                                 <div class="selectric-scroll">
                                     <ul>
@@ -100,6 +108,18 @@
                 switchToGridA.classList.toggle("active");
             }
         }
+
+        // Cache the target element
+        var $selectValue = $('#select_value').find('strong');
+
+        // Get initial value
+        $selectValue.text($('#get_value').val());
+
+        // Initialize Selectric and bind to 'change' event
+        $('#get_value').selectric().on('change', function () {
+            $selectValue.text($(this).val());
+        });
+
     </script>
 
 {% endblock %}

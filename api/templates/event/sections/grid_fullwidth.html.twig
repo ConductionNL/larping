@@ -30,25 +30,22 @@
                             </div>
                         </div>
 
-
-
-                        <div class="card-footer bg-transparent">
-                            <ul class="list-unstyled d-flex mb-0 py-2">
-                                <li>
-                                    <button class="btn-like px-2" onclick="likeItem(this)" data-toggle="tooltip"
-                                            data-placement="top"
-                                            title=""
-                                            data-original-title="Favourite this listing" value="{{ item['@id'] }}">
-                                        <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
-                                        <span id="{{ item.id }}">{{ likes }}</span>
-                                    </button>
-                                </li>
-                                <li class="ml-auto">
-                                    <a class="px-2"
-                                       href="{{ path(pathToSingular, {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="card-footer bg-transparent">
+                        <ul class="list-unstyled d-flex mb-0 py-2">
+                            <li>
+                                <button class="btn-like px-2" onclick="likeItem(this)" data-toggle="tooltip"
+                                        data-placement="top"
+                                        title=""
+                                        data-original-title="Favourite this listing" value="{{ item['@id'] }}">
+                                    <i {% if isLiked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
+                                    <span id="{{ item['id'] }}">{{ likes }}</span>
+                                </button>
+                            </li>
+                            <li class="ml-auto">
+                                <a class="px-2"
+                                   href="{{ path(pathToSingular, {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                            </li>
+                        </ul>
                     </div>
                 </a>
             </div>
