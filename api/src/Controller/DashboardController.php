@@ -67,8 +67,10 @@ class DashboardController extends AbstractController
             $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $variables['organizations']['id']]);
             $item['contact'] = $orgUrl;
             $variables['items'][] = $commonGroundService->saveResource($item, ['component' => 'wrc', 'type' => 'organizations']);
+
+            /*@todo de ingelogde gebruiker toevoegen aan de organisatie */
         }
-        
+
         return $variables;
     }
 
