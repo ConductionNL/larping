@@ -252,39 +252,21 @@ class DashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
-        $variables = [];
-        $variables['type'] = 'events';
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'], ['persons' => $this->getUser()->getPerson()])['hydra:member'];
+        $variables['type'] = 'event';
+
 
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
 
             // Check if org has name (required)
             if ($resource['events']['name']) {
-                // Make or save email
-                if ($resource['email']['email']) {
-                    if (!isset($resource['email']['name'])) {
-                        $resource['email']['name'] = 'Email';
-                    }
-                    $email = $commonGroundService->saveResource($resource['email'], ['component' => 'arc', 'type' => 'emails']);
-                }
-                // Make or save telephone
-                if ($resource['telephone']['telephone']) {
-                    if (!isset($resource['telephone']['name'])) {
-                        $resource['telephone']['name'] = 'Telephone';
-                    }
-                    $telephone = $commonGroundService->saveResource($resource['telephone'], ['component' => 'arc', 'type' => 'telephones']);
-                }
-                // If we have a email add it to the org
-                if (isset($email)) {
-                    $resource['events']['emails'][0] = '/emails/'.$email['id'];
-                }
-                // If we have a telephone add it to the org
-                if (isset($telephone)) {
-                    $resource['events']['telephones'][0] = '/telephones/'.$telephone['id'];
-                }
-
-                // Save organization
-                $org = $commonGroundService->saveResource($resource['events'], ['component' => 'arc', 'type' => 'events']);
+                $resource['events']['priority'] = (int) $resource['events']['priority'];
+                //get wrc org of selected cc org
+                $wrcOrg = $commonGroundService->getResource($resource['events']['organization']);
+                $resource['events']['organization'] = $wrcOrg['sourceOrganization'];
+                // Save event
+               // $event = $commonGroundService->saveResource($resource['events'], ['component' => 'arc', 'type' => 'events']);
             }
 
         }
