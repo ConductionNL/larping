@@ -1,19 +1,22 @@
 <form action="{{ path('app_dashboard_organizations') }}" method="post">
     <div class="modal-body">
         {% if item|default %}
-            <input type="hidden" name="organization[id]" value="{{ item.id }}">
+        <input type="hidden" name="item['@id']" value="{{ item['@id'] }}">
+        {% endif %}
+        {% if organization|default %}
+            <input type="hidden" name="organization['@id']" value="{{ organization['@id'] }}">
         {% endif %}
         <div class="form-group">
             <label for="nameInput">{{ 'name'|trans }}</label>
             <input type="text" class="form-control" id="nameInput"
                    {% if item.name|default %}value="{{ item.name|capitalize }}"{% endif %}
-                   name="organization[name]"
+                   name="name"
                    required>
         </div>
         <div class="form-group">
             <label for="descriptionInput">{{ 'description'|trans|capitalize }}</label>
             <textarea class="form-control" rows="5" id="descriptionInput"
-                      name="organization[description]">{% if item.description|default %}{{ item.description }}{% endif %}</textarea>
+                      name="description">{% if item.description|default %}{{ item.description }}{% endif %}</textarea>
         </div>
 
         <br>

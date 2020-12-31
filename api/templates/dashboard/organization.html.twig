@@ -43,14 +43,16 @@
                                 </div>
                             </div>
 
+                            {% if item.contact|default %}
+                            {% set contact = commonground_resource(item.contact) %}
+                            {% endif %}
                             <div class="row">
                                 <div class="col-3">
-                                    {% set socials = item.socials %}
                                     <div class="form-group">
                                         <label for="website">{{ 'website'|trans|capitalize }}</label>
                                         <input class="form-control" id="website" name="socials[]" type="text"
-                                        {% if socials[0]|default %}
-                                            value="{{ socials[0].url }}"
+                                        {% if contact.socials[0]|default %}
+                                            value="{{ contact.socials[0].url }}"
                                         {% else %}
                                             placeholder="{{ 'enter your website'|trans|capitalize }}"
                                         {% endif %}
@@ -59,8 +61,8 @@
                                     <div class="form-group">
                                         <label for="facebook">{{ 'facebook' }}</label>
                                         <input class="form-control" id="facebook" name="socials[]" type="text"
-                                            {% if socials[1]|default %}
-                                                value="{{ socials[1].url }}"
+                                            {% if contact.socials[1]|default %}
+                                                value="{{ contact.socials[1].url }}"
                                             {% else %}
                                                 placeholder="{{ 'enter your facebook'|trans|capitalize }}"
                                             {% endif %}
@@ -71,8 +73,8 @@
                                     <div class="form-group">
                                         <label for="twitter">{{ 'twitter' }}</label>
                                         <input class="form-control" id="twitter" name="socials[]" type="text"
-                                            {% if socials[2]|default %}
-                                                value="{{ socials[2].url }}"
+                                            {% if contact.socials[2]|default %}
+                                                value="{{ contact.socials[2].url }}"
                                             {% else %}
                                                 placeholder="{{ 'enter your twitter'|trans|capitalize }}"
                                             {% endif %}
@@ -81,8 +83,8 @@
                                     <div class="form-group">
                                         <label for="instagram">{{ 'instagram' }}</label>
                                         <input class="form-control" id="instagram" name="socials[]" type="text"
-                                            {% if socials[3]|default %}
-                                                value="{{ socials[3].url }}"
+                                            {% if contact.socials[3]|default %}
+                                                value="{{ contact.socials[3].url }}"
                                             {% else %}
                                                 placeholder="{{ 'enter your instagram'|trans|capitalize }}"
                                             {% endif %}
@@ -115,8 +117,8 @@
                                             <strong>{{ 'press the blue button to add more phone numbers'|trans|capitalize }}</strong>
                                         </label>
                                         <div class="form-inline">
-                                            {% if item.telephones is defined and item.telephones is not empty %}
-                                                {% for numbers in item.telephones %}
+                                            {% if contact.telephones is defined and contact.telephones is not empty %}
+                                                {% for numbers in contact.telephones %}
                                                     <input class="form-control" name="telephones[]" type="text" id="phones" value="{{ numbers.telephone }}">
                                                 {% endfor %}
                                             {% else %}
@@ -137,8 +139,8 @@
                                             <strong>{{ 'press the blue button to add more emails'|trans|capitalize }}</strong>
                                         </label>
                                         <div class="form-inline">
-                                            {% if item.emails is defined and item.emails is not empty %}
-                                                {% for emails in item.emails %}
+                                            {% if contact.emails is defined and contact.emails is not empty %}
+                                                {% for emails in contact.emails %}
                                                     <input class="form-control" name="emails[]" type="text" id="emails" value="{{ emails.email }}">
                                                 {% endfor %}
                                             {% else %}
