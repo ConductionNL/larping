@@ -48,70 +48,28 @@ class DashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+        $variables['items'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
         $variables['type'] = 'organization';
 
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
+            $resource['rsin'] = "";
+            $resource['chamberOfComerce'] = "";
 
-            // Check if org has name (required)
-            if ($resource['organization']['name']) {
-                // Make or save email
-                if ($resource['email']['email']) {
-                    if (!isset($resource['email']['name'])) {
-                        $resource['email']['name'] = 'Email';
-                    }
-                    $email = $commonGroundService->saveResource($resource['email'], ['component' => 'cc', 'type' => 'emails']);
-                }
-                // Make or save telephone
-                if ($resource['telephone']['telephone']) {
-                    if (!isset($resource['telephone']['name'])) {
-                        $resource['telephone']['name'] = 'Main telephone';
-                    }
-                    $telephone = $commonGroundService->saveResource($resource['telephone'], ['component' => 'cc', 'type' => 'telephones']);
-                }
-                // If we have a email add it to the org
-                if (isset($email)) {
-                    $resource['organization']['emails'][0] = '/emails/'.$email['id'];
-                }
-                // If we have a telephone add it to the org
-                if (isset($telephone)) {
-                    $resource['organization']['telephones'][0] = '/telephones/'.$telephone['id'];
-                }
+            // Update to the commonground component
+            $item = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
 
-                //make wrc organization
-                $wrcOrg['rsin'] = "";
-                $wrcOrg['chamberOfComerce'] = "";
-                $wrcOrg['name'] = $resource['organization']['name'];
-                $wrcOrg['description'] = $resource['organization']['description'];
-                $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations']);
-                //get url of new $org to make cc organization
-                $orgUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $org['id']]);
+//          get url of new organization to make cc organization
+            $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $item['id']]);
+            $resource['sourceOrganization'] = $organizationUrl;
+            $variables['organizations'] = $commonGroundService->saveResource($resource, ['component' => 'cc', 'type' => 'organizations']);
+            $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $variables['organizations']['id']]);
+            $item['contact'] = $orgUrl;
+            $variables['items'][] = $commonGroundService->saveResource($item, ['component' => 'wrc', 'type' => 'organizations']);
 
-                $resource['organization']['sourceOrganization'] = $orgUrl;
-                // Save organization
-                $ccorg = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
-
-                $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $ccorg['id']]);
-                $wrcOrg['contact'] = $orgUrl;
-                //save contact
-                $org = $commonGroundService->saveResource($wrcOrg, ['component' => 'wrc', 'type' => 'organizations', 'id' => $org['id']]);
-                //send mail to user for new organization
-                $data = [];
-                $data['organization'] = $org;
-                $mailingService->sendMail('emails/new_organization.html.twig', 'no-reply@conduction.nl', $this->getUser()->getUsername(), 'welcome', $data);
-            }
+            /*@todo de ingelogde gebruiker toevoegen aan de organisatie */
         }
-
-        $variables['items'] = $commonGroundService->getResourceList(['component'=>'cc', 'type'=>'organizations'])['hydra:member'];
-        $variables['items'][] = [
-            'id' => 'randomuuid',
-            'name' => 'Conduction',
-            'emails' => [
-                0 => [
-                    'email' => 'info@conduction.nl'
-                ]
-            ]
-        ];
 
         return $variables;
     }
@@ -125,13 +83,9 @@ class DashboardController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
 
-        $variables['item'] = $commonGroundService->getResource(['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
-        $variables['wrcorganization'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])["hydra:member"];
-
-        foreach ($variables['wrcorganization'] as $org){
-            if ($org['contact'] == $variables['item']['@self']){
-                $variables['wrcorganization'] = $org;
-            }
+        $variables['item'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
+        if ($variables['item']['contact']) {
+            $variables['organization'] = $commonGroundService->getResource($variables['item']['contact']);
         }
 
         if ($request->isMethod('POST')) {
@@ -218,6 +172,20 @@ class DashboardController extends AbstractController
         }
 
         return $variables;
+
+//            //fill in all required fields for a style
+//            $organization['style']['name'] = 'style for'.$request->get('name');
+//            $organization['style']['description'] = 'style for'.$request->get('name');
+//            $organization['style']['favicon']['name'] = 'style for'.$request->get('name');
+//            $organization['style']['favicon']['description'] = 'style for'.$request->get('name');
+//            //get profile pic
+//            if (isset($_FILES['logo']) && $_FILES['logo']['error'] !== 4) {
+//                $path = $_FILES['logo']['tmp_name'];
+//                $type = filetype($_FILES['logo']['tmp_name']);
+//                $data = file_get_contents($path);
+//                $organization['style']['favicon']['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+//            }
+//
     }
 
     /**

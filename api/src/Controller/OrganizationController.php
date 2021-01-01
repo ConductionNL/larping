@@ -31,10 +31,17 @@ class OrganizationController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['items'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
+
+        $variables['items'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'], ['order[name]'=>'desc'])['hydra:member'];
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
         $variables['pathToSingular'] = 'app_organization_organization';
         $variables['typePlural'] = 'organizations';
+
+        foreach ($variables['items'] as &$item) {
+            $url = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id'=> $item['id']]);
+            $item['ratings'] = $commonGroundService->getResourceList(['component'=>'rc', 'type'=>'ratings'], [ 'resource' => $url])['hydra:member'];
+            $item['likes'] = $commonGroundService->getResourceList(['component'=>'rc', 'type'=>'likes'], [ 'resource' => $url])['hydra:member'];
+        }
 
         return $variables;
     }
