@@ -7,18 +7,20 @@
         <div class="card card-list card-listing" data-lat="-33.922125" data-lag="151.159277" data-id="1">
             <div class="row">
                 <div class="col-md-4 col-xl-3">
+                    <a href="{{ path(pathToSingular, {'id': item.id}) }}" class="stretched-link">
                     <div class="card-list-img">
-                        <img class="listing-img"
-                             {% for organizations in organizations %}
-                            {% if organizations is defined and organizations['name'] == item['name'] %}
-                                {% if organizations.style %}
-                                     src="{{ organizations.style.favicon.base64 }}"
+                            <img class="listing-img stretched-link"
+                                 {% for organizations in organizations %}
+                                {% if organizations is defined and organizations['name'] == item['name'] %}
+                                    {% if organizations.style %}
+                                         src="{{ organizations.style.favicon.base64 }}"
+                                    {% endif %}
+                                    alt="organization logo"
                                 {% endif %}
-                                alt="organization logo"
-                            {% endif %}
-                                 {% endfor %}
-                        >
+                                     {% endfor %}
+                            >
                     </div>
+                    </a>
                 </div>
                 <div class="col-md-8 col-xl-9">
                     <div class="card-body p-0">

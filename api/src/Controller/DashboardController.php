@@ -89,14 +89,86 @@ class DashboardController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
-            $resource = $request->request->all();
+            $rest['name'] = $request->get('name');
+            $rest['description'] = $request->get('description');
 
-            // Add the post data to the already aquired resource data
-            $resource = array_merge($variables['item'], $resource);
+            $organization = $variables['wrcorganization'];
+            $organization['name'] = $rest['name'];
+            $organization['description'] = $rest['description'];
 
-            // Update to the commonground component
-            $variables['item'] = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
-            $variables['organization'] = $commonGroundService->saveResource($resource, ['component' => 'cc', 'type' => 'organizations']);
+            if (!empty($resource['socials'])){
+                $resource['socials'] = $request->get('socials');
+
+                if (!empty($resource['socials'][0])) {
+                    $resource['socials'][0] = [
+                        'name' => 'website van ' . $resource['name'],
+                        'type' => 'website',
+                        'url' => $resource['socials'][0]
+                    ];
+                    $commonGroundService->saveResource($resource['socials'][0], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+                }
+
+                if (!empty($resource['socials'][1])) {
+                    $resource['socials'][1] = [
+                        'name' => 'facebook van ' . $rest['name'],
+                        'type' => 'facebook',
+                        'url' => $resource['socials'][1]
+                    ];
+                    $commonGroundService->saveResource($resource['socials'][1], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+                }
+
+                if (!empty($resource['socials'][2])) {
+                    $resource['socials'][2] = [
+                        'name' => 'twitter van ' . $rest['name'],
+                        'type' => 'twitter',
+                        'url' => $resource['socials'][2]
+                    ];
+                    $commonGroundService->saveResource($resource['socials'][2], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+                }
+
+                if (!empty($resource['socials'][3])) {
+                    $resource['socials'][3] = [
+                        'name' => 'instagram van ' . $rest['name'],
+                        'type' => 'instagram',
+                        'url' => $resource['socials'][3]
+                    ];
+                    $commonGroundService->saveResource($resource['socials'][3], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+                }
+            }
+//            $resource['telephones'] = $request->get('telephones');
+//            if (!empty($resource['telephones'])){
+//                $resource['telephones'] = [
+//                        'name' => 'telephone for '.$rest['name'],
+//                        'telephone' => $resource['telephones'][0]
+//                    ];
+//                $commonGroundService->saveResource($resource['telephones'], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+//            }
+//
+//            $resource['emails'] = $request->get('emails');
+//            if (!empty($resource['emails'])){
+//                    $resource['emails'] = [
+//                      'name' => 'email for '.$rest['name'],
+//                      'email' => $resource['emails'][0]
+//                    ];
+//                $commonGroundService->saveResource($resource['emails'], ['component' => 'cc', 'type' => 'organizations', 'id' => $id]);
+//            }
+
+
+            //fill in all required fields for a style
+            $organization['style']['name'] = 'style for'.$request->get('name');
+            $organization['style']['description'] = 'style for'.$request->get('name');
+            $organization['style']['favicon']['name'] = 'style for'.$request->get('name');
+            $organization['style']['favicon']['description'] = 'style for'.$request->get('name');
+            //get profile pic
+            if (isset($_FILES['logo']) && $_FILES['logo']['error'] !== 4) {
+                $path = $_FILES['logo']['tmp_name'];
+                $type = filetype($_FILES['logo']['tmp_name']);
+                $data = file_get_contents($path);
+                $organization['style']['favicon']['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+            }
+            $url = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
+            $commonGroundService->saveResource($organization, $url);
+
         }
 
         return $variables;
@@ -148,39 +220,21 @@ class DashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
-        $variables = [];
-        $variables['type'] = 'events';
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'], ['persons' => $this->getUser()->getPerson()])['hydra:member'];
+        $variables['type'] = 'event';
+
 
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
 
             // Check if org has name (required)
             if ($resource['events']['name']) {
-                // Make or save email
-                if ($resource['email']['email']) {
-                    if (!isset($resource['email']['name'])) {
-                        $resource['email']['name'] = 'Email';
-                    }
-                    $email = $commonGroundService->saveResource($resource['email'], ['component' => 'arc', 'type' => 'emails']);
-                }
-                // Make or save telephone
-                if ($resource['telephone']['telephone']) {
-                    if (!isset($resource['telephone']['name'])) {
-                        $resource['telephone']['name'] = 'Telephone';
-                    }
-                    $telephone = $commonGroundService->saveResource($resource['telephone'], ['component' => 'arc', 'type' => 'telephones']);
-                }
-                // If we have a email add it to the org
-                if (isset($email)) {
-                    $resource['events']['emails'][0] = '/emails/'.$email['id'];
-                }
-                // If we have a telephone add it to the org
-                if (isset($telephone)) {
-                    $resource['events']['telephones'][0] = '/telephones/'.$telephone['id'];
-                }
-
-                // Save organization
-                $org = $commonGroundService->saveResource($resource['events'], ['component' => 'arc', 'type' => 'events']);
+                $resource['events']['priority'] = (int) $resource['events']['priority'];
+                //get wrc org of selected cc org
+                $wrcOrg = $commonGroundService->getResource($resource['events']['organization']);
+                $resource['events']['organization'] = $wrcOrg['sourceOrganization'];
+                // Save event
+               // $event = $commonGroundService->saveResource($resource['events'], ['component' => 'arc', 'type' => 'events']);
             }
 
         }
