@@ -109,7 +109,7 @@
                                     {% set person = commonground_resource(app.user.person) %}
                                 {% endif %}
                                 <div class="avatar">
-                                    <div class="avatar-img mr-4" data-toggle="dropdown" aria-expanded="false"  id="userDropdown" >
+                                    <div class="avatar-img mr-4" data-toggle="dropdown" aria-expanded="false"  id="userDropdown" role="button" >
                                         <img style="height: 50%; width: 75%" {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}class=" card-img-top rounded-circle border-white">
                                     </div>
                                     {#                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"#}

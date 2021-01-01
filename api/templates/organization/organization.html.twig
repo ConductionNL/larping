@@ -117,8 +117,8 @@
                             </form>
                         {% else %}
                             <div>
-                                <h2>{{ 'you need to be logged in to place a review'|trans|capitalize }}</h2>
-                                <button class="btn btn-primary">
+                                <h3>{{ 'you need to be logged in to place a review'|trans|capitalize }}</h3>
+                                <button class="btn btn-primary btn-block">
                                     <a class="mt-2 text-center text-white"
                                        href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }}</a>
                                 </button>
