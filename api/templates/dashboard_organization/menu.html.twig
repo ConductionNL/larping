@@ -2,12 +2,17 @@
     <div class="container">
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>asd
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
 
+            {% if app.user.organization|default %}
+                <i class="fa fa-building"></i> {{ commonground_resource(app.user.organization).name }}
+            {% else %}
+                {{ 'no organization selected'|trans|capitalize }}
+            {% endif %}
+            <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ path('app_dashboard_index') }}">
                         <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard </a>

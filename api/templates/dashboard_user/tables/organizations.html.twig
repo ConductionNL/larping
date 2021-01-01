@@ -46,7 +46,8 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('app_dashboard_organization', {id: item.id}) }}" class="btn btn-primary">{{ 'view'|trans|capitalize }}</a>
+                        <a href="{{ path('app_organization_organization', {id: item.id}) }}" class="btn btn-primary">{{ 'view'|trans|capitalize }}</a>
+                        <a href="{{ path('app_dashboard_switchorganization', {id: item.id}) }}" class="btn btn-primary">{{ 'manage'|trans|capitalize }}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -56,11 +57,7 @@
     {% else %}
     <div class="card-body  text-center">
         <p>{{ 'no organizations found'|trans|capitalize }}</p>
-        {% if addPath is  defined %}
-        <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add your first organization'|trans|capitalize }}</a>
-        {% else %}
         <a href="{{ path('app_organization_index') }}" class="btn btn-primary">{{ 'find a organization'|trans|capitalize }}</a>
-        {% endif %}
     </div>
     {% endif %}
 </div>

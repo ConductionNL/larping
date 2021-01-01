@@ -58,7 +58,7 @@
                             {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('app_dashboard_event', {id: event.id}) }}" class="btn btn-primary">{{ 'view'|trans|capitalize }}</a>
+
                     </td>
                 </tr>
             {% endfor %}
@@ -68,11 +68,7 @@
     {% else %}
     <div class="card-body  text-center">
         <p>{{ 'no events found'|trans|capitalize }}</p>
-        {% if items is  defined %}
-            <a href="" data-toggle="modal" data-target="{{ type~'Modal' }}" class="btn btn-success btn-sm mr-2">{{ 'add your first event'|trans|capitalize }}</a>
-        {% else %}
         <a href="{{ path('app_event_index') }}" class="btn btn-primary">{{ 'find a event'|trans|capitalize }}</a>
-        {% endif %}
     </div>
     {% endif %}
 </div>

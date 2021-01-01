@@ -1,7 +1,9 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    {% include 'dashboard_menu.html.twig' %}
+
+    {% include 'dashboard_user/menu.html.twig' %}
+
     <section class="pb-8 pt-5 bg-light height100vh">
         <div class="container">
             <!-- Breadcrumb -->
@@ -15,7 +17,7 @@
                 </ul>
             </nav>
             <!-- My Bookings -->
-            {% include 'dashboard/tables/organizations.html.twig' %}
+            {% include 'dashboard_user/tables/organizations.html.twig' %}
         </div>
     </section>
 
