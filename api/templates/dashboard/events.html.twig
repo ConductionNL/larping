@@ -22,9 +22,9 @@
         </div>
     </section>
 {#@todo make event modal #}
-    
-{#    {% include 'widgets/modal.html.twig' with {#}
-{#        'title': 'add organization'|trans|capitalize,#}
-{#        'type': type#}
-{#    } %}#}
+
+    {% include 'widgets/modal.html.twig' with {
+        'title': 'add event'|trans|capitalize,
+        'type': type
+    } %}
 {% endblock %}

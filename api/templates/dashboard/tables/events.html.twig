@@ -5,7 +5,7 @@
                 <h2 class="h5">{{ 'events'|trans|capitalize }}</h2></div>
             <div class="col text-right">
                 {% if items is defined and items|length > 0%}
-                    <a href="" data-toggle="modal" data-target="{{ type~'Modal' }}" class="btn btn-success btn-sm mr-2">{{ 'add event'|trans|capitalize }}</a>
+                    <a href="" data-toggle="modal" data-target="#{{ type~'Modal' }}" class="btn btn-success btn-sm mr-2">{{ 'add event'|trans|capitalize }}</a>
                 {% else %}
                     <a href="{{ path('app_event_index') }}" class="btn btn-sm btn-secondary">{{ 'see all events'|trans|capitalize }}</a>
                 {% endif %}
