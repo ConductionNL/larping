@@ -1,0 +1,76 @@
+
+{% if events is  defined and events|length > 0 %}
+<table id="events" class="display nowrap table" style="width:100%">
+    <thead>
+    <tr>
+        <th>Image</th>
+        <th>Listing</th>
+        <th>Type</th>
+        <th>Requested Time</th>
+        <th>Requested By</th>
+        <th>Booking Details</th>
+        <th>Status</th>
+        <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#EventModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+    <tr>
+        <td>
+            <img class="img-sm rounded" src="assets/img/listing/listing-03.jpg" alt="Image">
+        </td>
+        <td class="text-capitalize">
+            <a class="text-hover-primary text-muted" href="listing-rental.html">think Coffee</a>
+        </td>
+        <td class="text-capitalize">Eat & Drink</td>
+        <td>
+            <span class="d-block">01 Aug 19</span>
+            <span class="d-block">11.00 PM</span>
+        </td>
+        <td>
+            <div class="media media-xs align-items-center">
+                <img class="rounded-circle mr-3" src="assets/img/user/user-xs-2.jpg" alt="Image">
+                <div class="media-body">
+                    <a class="text-muted font-weight-bold text-hover-primary" href="user-profile.html">Abby</a>
+                </div>
+            </div>
+        </td>
+        <td>
+            <span class="d-block ">08 Aug 2019, 4:30 PM</span>
+            <div class="text-capitalize"> 5 Persons </div>
+        </td>
+        <td>
+            <span class="badge badge-warning px-2 py-1">Pending</span>
+        </td>
+        <td>
+            <div class="dropdown">
+                <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#">Edit</a>
+                    <a class="dropdown-item" href="#">Cancel</a>
+                </div>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="card border-light shadow-sm">
+    <div class="card-body text-center">
+        <p>{{ 'no events found'|trans|capitalize }}</p>
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#EventModalAdd">{{ 'add your first event'|trans|capitalize }}!</a>
+    </div>
+</div>
+{% endif %}
+
+{% include 'dashboard_organization/modals/event.html.twig' %}
+
+{% for event in events %}
+    {% include 'dashboard_organization/modals/event.html.twig' with {'resource': event} %}
+{% endfor %}
+
+

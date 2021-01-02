@@ -7,26 +7,37 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-            {% if app.user.organization|default %}
-                <i class="fa fa-building"></i> {{ commonground_resource(app.user.organization).name }}
-            {% else %}
-                {{ 'no organization selected'|trans|capitalize }}
-            {% endif %}
+            <i class="fa fa-building mr-1"></i> {{ organization.name }}
+
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ path('app_dashboard_index') }}">
+                    <a class="nav-link active" href="{{ path('app_dashboardorganization_index') }}">
                         <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard </a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ path('app_dashboard_organizations') }}">
-                        <i class="fa fa-building" aria-hidden="true"></i>{{ 'organizations'|trans|capitalize }}</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fa fa-list-ul" aria-hidden="true"></i> Sales
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                       <a class="dropdown-item"href="{{ path('app_dashboardorganization_events', {organization: organization.id}) }}">{{ 'events'|trans|capitalize }}</a>
+                       <a class="dropdown-item"href="{{ path('app_dashboardorganization_products', {organization: organization.id}) }}">{{ 'products'|trans|capitalize }}</a>
+                       <a class="dropdown-item"href="{{ path('app_dashboardorganization_orders', {organization: organization.id}) }}">{{ 'orders'|trans|capitalize }}</a>
+                       <a class="dropdown-item"href="{{ path('app_dashboardorganization_customers', {organization: organization.id}) }}">{{ 'customers'|trans|capitalize }}</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fa fa-list-ul" aria-hidden="true"></i> {{ 'gameplay'|trans|capitalize }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_skills', {organization: organization.id}) }}">{{ 'skills'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_items', {organization: organization.id}) }}">{{ 'items'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_conditions', {organization: organization.id}) }}">{{ 'conditions'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_storylines', {organization: organization.id}) }}">{{ 'storyline'|trans|capitalize }}</a>
+                    </div>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ path('app_dashboard_events') }}">
-                        <i class="fa fa-calendar-o" aria-hidden="true"></i>{{ 'events'|trans|capitalize }}</a>
-                </li>
+
             </ul>
 
             <form class="form-inline my-2 my-lg-0 position-relative d-none d-md-block">

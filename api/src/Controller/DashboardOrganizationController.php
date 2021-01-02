@@ -88,13 +88,13 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/{organization}/tickets")
+     * @Route("/{organization}/customers")
      * @Template
      */
-    public function ticketsAction(CommonGroundService $commonGroundService, $organization)
+    public function customersAction(CommonGroundService $commonGroundService, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['tickets'] = [];
+        $variables['customers'] = [];
 
         return $variables;
     }
@@ -160,13 +160,13 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/{organization}/results")
+     * @Route("/{organization}/earnings")
      * @Template
      */
-    public function resultsAction(CommonGroundService $commonGroundService, $organization)
+    public function earningsAction(CommonGroundService $commonGroundService, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['results'] = [];
+        $variables['earnings'] = [];
 
         return $variables;
     }
