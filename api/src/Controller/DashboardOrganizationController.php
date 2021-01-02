@@ -35,8 +35,7 @@ class DashboardOrganizationController extends AbstractController
 
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
-        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'people'])['hydra:member'];
-        //$variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
+
         return $variables;
     }
 
@@ -44,7 +43,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/organization")
      * @Template
      */
-    public function organizationAction(CommonGroundService $commonGroundService, $organization)
+    public function organizationAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
 
@@ -55,10 +54,19 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/events")
      * @Template
      */
-    public function eventsAction(CommonGroundService $commonGroundService, $organization)
+    public function eventsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['events'] = [];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $organization])['hydra:member'];
+
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            $event = $request->request->all();
+            // Set the current organization as owner
+            $event['organization'] = $variables['organization']['@id'];
+            // Save the resource
+            $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
+        }
 
         return $variables;
     }
@@ -67,10 +75,19 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/products")
      * @Template
      */
-    public function productsAction(CommonGroundService $commonGroundService, $organization)
+    public function productsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['products'] = [];
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $organization])['hydra:member'];
+
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            $product = $request->request->all();
+            // Set the current organization as owner
+            $product['organization'] = $variables['organization']['@id'];
+            // Save the resource
+            $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
+        }
 
         return $variables;
     }
@@ -79,10 +96,19 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/orders")
      * @Template
      */
-    public function ordersAction(CommonGroundService $commonGroundService, $organization)
+    public function ordersAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['orders'] = [];
+        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organization])['hydra:member'];
+
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            $order = $request->request->all();
+            // Set the current organization as owner
+            $order['organization'] = $variables['organization']['@id'];
+            // Save the resource
+            $commonGroundService->saveResource($order, ['component' => 'orc', 'type' => 'orders', 'id' => false]);
+        }
 
         return $variables;
     }
@@ -91,7 +117,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/customers")
      * @Template
      */
-    public function customersAction(CommonGroundService $commonGroundService, $organization)
+    public function customersAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['customers'] = [];
@@ -103,7 +129,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/members")
      * @Template
      */
-    public function membersAction(CommonGroundService $commonGroundService, $organization)
+    public function membersAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['members'] = [];
@@ -115,7 +141,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/mailings")
      * @Template
      */
-    public function mailingsAction(CommonGroundService $commonGroundService, $organization)
+    public function mailingsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['mailings'] = [];
@@ -127,7 +153,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/reviews")
      * @Template
      */
-    public function reviewsAction(CommonGroundService $commonGroundService, $organization)
+    public function reviewsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['reviews'] = [];
@@ -139,7 +165,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/balance")
      * @Template
      */
-    public function balanceAction(CommonGroundService $commonGroundService, $organization)
+    public function balanceAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['acounts'] = [];
@@ -151,7 +177,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/reservations")
      * @Template
      */
-    public function reservationsAction(CommonGroundService $commonGroundService, $organization)
+    public function reservationsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['reservations'] = [];
@@ -163,7 +189,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/earnings")
      * @Template
      */
-    public function earningsAction(CommonGroundService $commonGroundService, $organization)
+    public function earningsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['earnings'] = [];
@@ -175,7 +201,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/characters")
      * @Template
      */
-    public function charactersAction(CommonGroundService $commonGroundService, $organization)
+    public function charactersAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['characters'] = [];
@@ -187,7 +213,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/skills")
      * @Template
      */
-    public function skillsAction(CommonGroundService $commonGroundService, $organization)
+    public function skillsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['skills'] = [];
@@ -199,7 +225,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/items")
      * @Template
      */
-    public function itemsAction(CommonGroundService $commonGroundService, $organization)
+    public function itemsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['items'] = [];
@@ -211,7 +237,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/conditions")
      * @Template
      */
-    public function conditionsAction(CommonGroundService $commonGroundService, $organization)
+    public function conditionsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['conditions'] = [];
@@ -223,7 +249,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/{organization}/storylines")
      * @Template
      */
-    public function storylinesAction(CommonGroundService $commonGroundService, $organization)
+    public function storylinesAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['storylines'] = [];
