@@ -1,4 +1,4 @@
-<form action="{{ path('app_dashboard_events') }}" method="post" id="event">
+<form action="{{ path('app_dashboardorganization_events') }}" method="post" id="event">
     <input type="hidden" name="events[priority]" value="9">
     <div class="modal-body">
         <div class="form-group">
@@ -29,7 +29,7 @@
             </select>
         </div>
 
-        <div class="row col-12">
+        <div class="row">
             <div class="form-group col-6">
                 <label for="startdateInput">{{ 'start-date'|trans|capitalize }}</label>
                 <input class="form-control" name="events[startDate]" type="datetime-local" id="startdateInput" placeholder="yyyy-mm-dd">
