@@ -57,7 +57,7 @@ class DashboardOrganizationController extends AbstractController
     public function eventsAction(CommonGroundService $commonGroundService, Request $request, $organization)
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $organization])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
@@ -79,6 +79,8 @@ class DashboardOrganizationController extends AbstractController
     {
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $organization])['hydra:member'];
+        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $organization])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
@@ -109,6 +111,19 @@ class DashboardOrganizationController extends AbstractController
             // Save the resource
             $commonGroundService->saveResource($order, ['component' => 'orc', 'type' => 'orders', 'id' => false]);
         }
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/{organization}/offers")
+     * @Template
+     */
+    public function offersAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    {
+        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $organization])['hydra:member'];
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $organization])['hydra:member'];
 
         return $variables;
     }

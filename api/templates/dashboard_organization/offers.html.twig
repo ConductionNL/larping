@@ -8,17 +8,17 @@
         <div class="container">
             <!-- Breadcrumb -->
             <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
-                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'members'|trans|capitalize }}</h2>
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'offers'|trans|capitalize }}</h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
                     <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_dashboard_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item active"
-                        aria-current="page">{{ 'members'|trans|capitalize }}</li>
+                        aria-current="page">{{ 'offers'|trans|capitalize }}</li>
                 </ul>
             </nav>
 
             <!-- events -->
-            {%  include 'dashboard_organization/tables/members.html.twig' %}
+            {%  include 'dashboard_organization/tables/offers.html.twig' %}
         </div>
     </section>
 

@@ -1,13 +1,12 @@
+{% extends "dashboard_organization/modals/modal.html.twig" %}
 
 {% if resource is defined %}
     {% set  id = resource['id'] %}
-    {% set  type = 'Event' %}
+    {% set  type = 'Member' %}
 {% else %}
     {% set  id = 'Add' %}
-    {% set  type = 'Event' %}
+    {% set  type = 'Member' %}
 {% endif %}
-
-{% extends "dashboard_organization/modals/modal.html.twig" %}
 
 {% block body %}
     <form id="{{ type }}Form{{ id }}" method="post">
