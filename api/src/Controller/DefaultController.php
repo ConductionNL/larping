@@ -34,9 +34,9 @@ class DefaultController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['events'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events']);
-        $variables['groups'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'groups']);
-
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        $variables['groups'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'groups'])['hydra:member'];
+        //$variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations'])['hydra:member'];
 
         return $variables;
     }
