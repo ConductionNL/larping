@@ -81,7 +81,7 @@
                                         </td>
 
                                     </tr>
-                                    {% set sum = sum + item.price %}
+                                    {% set sum = sum + (item.price * item.quantity) %}
                                 {% endfor %}
                                 <tr role="row" class="odd">
                                     <td>
@@ -91,7 +91,7 @@
                                     </td>
                                     <td class="text-center pt-0">
                                         <div class="text-center pt-4 mx-auto"
-                                             style="width: 50%;border-top: 1px solid grey">
+                                             style="width: 99%;border-top: 1px solid grey">
                                             <b>&euro; {{ sum }}.00,-</b>
                                         </div>
                                     </td>
