@@ -57,18 +57,33 @@ class DashboardUserController extends AbstractController
             $resource['rsin'] = "";
             $resource['chamberOfComerce'] = "";
 
+            // Als de organisatie nieuw is moeten we wat meer doen
+            $new = false;
+            if(!array_key_exists('@id',$resource) || !$resource['@id'] ){
+                $new = true;
+                // Contact aanmaken
+                $resource['sourceOrganization'] = $params->get('organization');
+                $contact = $commonGroundService->saveResource($resource, ['component' => 'cc', 'type' => 'organizations']);
+                $resource['contact'] =$contact['@id'];
+
+            }
+
             // Update to the commonground component
-            $item = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
+            $organization = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
 
-//          get url of new organization to make cc organization
-            $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $item['id']]);
-            $resource['sourceOrganization'] = $organizationUrl;
-            $variables['organizations'] = $commonGroundService->saveResource($resource, ['component' => 'cc', 'type' => 'organizations']);
-            $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $variables['organizations']['id']]);
-            $item['contact'] = $orgUrl;
-            $variables['items'][] = $commonGroundService->saveResource($item, ['component' => 'wrc', 'type' => 'organizations']);
+            if($new){
+                /*@todo de ingelogde gebruiker toevoegen aan de organisatie */
+                $group = ['organization'=>$organization['@id'],'name'=>'members'];
+                $group = $commonGroundService->saveResource($group, ['component' => 'uc', 'type' => 'groups']);
 
-            /*@todo de ingelogde gebruiker toevoegen aan de organisatie */
+                // Make an admin group
+                $group = ['organization'=>$organization['@id'],'name'=>'admin','parent'=>$group['id']];
+                $group = $commonGroundService->saveResource($group, ['component' => 'uc', 'type' => 'groups']);
+
+                // Ad the current user to the admin group
+                $member = ['user'=>$this->getUser()->getId(),'group'=>$group['id']];
+                $member = $commonGroundService->saveResource($member, ['component' => 'uc', 'type' => 'members']);
+            }
         }
 
         return $variables;
