@@ -6,19 +6,19 @@
             <div class="row">
                 <div class="col-md-12 col-lg-12">
                     <div class="single-listing-content mb-6">
-                        <h3 class="font-weight-normal mb-6">{{'about'|trans|capitalize}} {{ item.name }}</h3>
+                        <h3 class="font-weight-normal mb-6">{{'about'|trans|capitalize}} {{ organization.name }}</h3>
                         <p class="mb-6">
-                            {% if item.description|default %}
-                                {{ item.description }}
+                            {% if organization.description|default %}
+                                {{ organization.description }}
                             {% else %}
                                 {{ 'no description found'|trans|capitalize }}
                             {% endif %}
                         </p>
                         <!-- Socials -->
                         <ul class="list-group list-group-horizontal">
-                            {% if item.socials|default %}
+                            {% if contact.socials|default %}
                                 <ul class="list-unstyled mb-6">
-                                    {% for socials in item.socials %}
+                                    {%  for socials in contact.socials %}
                                     <li class="d-inline-block mr-4 mb-2">
                                         <i class="{% if socials.type == 'website' %}fa fa-globe {% else %}
                                         fa fa-{{ socials.type }}{% endif %} mr-2" aria-hidden="true"></i>
@@ -90,7 +90,8 @@
                         {% if app.user %}
                             {% set person = commonground_resource(app.user.person) %}
                             <h3 class="font-weight-normal mb-6"> Add Review </h3>
-                            <form action="{{ path('app_organization_organization', {id: item.id}) }}" method="post">
+                            <form action="{{ path('app_organization_organization', {id: organization.id}) }}" method="post">
+                                 <input type="hidden" id="@type" name="@type" value="review">
                                 <div class="form-check form-check-inline mb-6 mr-lg-7">
                                     <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked="">
                                     <label class="form-check-label" for="inlineRadio1">
