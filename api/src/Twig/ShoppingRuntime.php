@@ -24,8 +24,8 @@ class ShoppingRuntime implements RuntimeExtensionInterface
         $this->router = $router;
     }
 
-    public function ownsThisProduct($paidInvoices, $product)
+    public function ownsThisProduct($product)
     {
-        return $this->ss->ownsThisProduct($paidInvoices, $product);
+        return $this->ss->ownsThisProduct($product);
     }
 }
