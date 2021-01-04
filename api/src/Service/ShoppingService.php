@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Security;
 
 class ShoppingService
 {
@@ -22,7 +23,14 @@ class ShoppingService
     private $commonGroundService;
     private $requestService;
 
-    public function __construct(ParameterBagInterface $params, CacheInterface $cache, SessionInterface $session, FlashBagInterface $flash, RequestStack $requestStack, CommonGroundService $commonGroundService)
+    public function __construct(
+        ParameterBagInterface $params,
+        CacheInterface $cache,
+        SessionInterface $session,
+        FlashBagInterface $flash,
+        RequestStack $requestStack,
+        CommonGroundService $commonGroundService,
+        Security $security)
     {
         $this->params = $params;
         $this->cash = $cache;
@@ -30,6 +38,7 @@ class ShoppingService
         $this->flash = $flash;
         $this->request = $requestStack->getCurrentRequest();
         $this->commonGroundService = $commonGroundService;
+        $this->security = $security;
     }
 
     public function makeOrder($person)
@@ -96,6 +105,8 @@ class ShoppingService
             $object['redirectUrl'] = 'https://dev.larping.eu/order/payment';
         }
 
+        $object['redirectUrl'] = 'https://localhost/order/payment';
+
         $object = $this->commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
 
         if (isset($object['paymentUrl']) && strpos($object['paymentUrl'], 'https://www.mollie.com') !== false) {
@@ -116,11 +127,6 @@ class ShoppingService
         }
 
         foreach ($items as $offer) {
-            if (isset($order['items']) && $order['items'] > 0) {
-                foreach ($order['items'] as $existingItem) {
-
-                }
-            }
             if (!isset($offer['quantity']) || !$offer['quantity']) {
                 $offer['quantity'] = 1;
             }
@@ -133,11 +139,13 @@ class ShoppingService
                 }
 
                 $actualOffer = $this->commonGroundService->getResource($offer['@id']);
+
+                // Add item to cart
                 $order['items'][] = [
                     'offer' => $offer['@id'],
                     'quantity' => $offer['quantity'],
                     'path' => '/events/' . $offer['path'],
-                    'price' => $actualOffer['price'] * $offer['quantity'],
+                    'price' => $actualOffer['price'],
 //                    'id' => basename($offer['@id']) . PHP_EOL
                 ];
             }
@@ -153,15 +161,18 @@ class ShoppingService
     {
         foreach ($order['items'] as $key => $item) {
             if ($offer['@id'] == $item['offer']) {
+
                 $actualOffer = $this->commonGroundService->getResource($offer['@id']);
                 $item['quantity'] += $offer['quantity'];
-                if (isset($item['@id'])) {
+                if (isset($item['@id']) && isset($order['@id'])) {
                     $item = $this->commonGroundService->saveResource($item, ['component' => 'orc', 'type' => 'order_items']);
+                    $order = $this->commonGroundService->getResource($order['@id']);
+                } else {
+                    $order['items'][$key] = $item;
+                    $order['items'][$key]['price'] = $actualOffer['price'] * $item['quantity'];
                 }
-                $order['items'][$key] = $item;
-                $order['items'][$key]['price'] = $actualOffer['price'] * $item['quantity'];
-                $this->session->set('order', $order);
 
+                $this->session->set('order', $order);
                 return true;
             }
         }
@@ -189,21 +200,37 @@ class ShoppingService
         return $order;
     }
 
-    public function ownsThisProduct($paidInvoices, $product)
+    public function ownsThisProduct($product)
     {
         $thisProductIsOwned = false;
-        foreach ($paidInvoices as $inv) {
-            if (isset($inv['items']) and count($inv['items']) > 0) {
-                foreach ($inv['items'] as $itm) {
-                    if (isset($itm['offer'])) {
-                        $offer = $this->commonGroundService->getResource($itm['offer']);
-                        if (isset($offer['products']) and count($offer['products']) > 0) {
-                            foreach ($offer['products'] as $prod) {
-                                if ($prod['@id'] == $product['@id']) {
-                                    $thisProductIsOwned = true;
-                                }
+
+        // Checks if required product is in session order
+        $order = $this->session->get('order');
+        if (isset($order['items']) && count($order['items']) > 0) {
+            foreach ($order['items'] as $item) {
+                if (isset($item['offer'])) {
+                    $offer = $this->commonGroundService->getResource($item['offer']);
+
+                    if (isset($offer['products']) && count($offer['products']) > 0) {
+                        foreach ($offer['products'] as $ownedProduct) {
+                            if ($product['id'] == $ownedProduct['id']) {
+                                $thisProductIsOwned = true;
+                                return $thisProductIsOwned;
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        // Checks if required product is in array of owned products | Needs to be logged in
+        if ($thisProductIsOwned == false && $this->security->getUser() && $this->security->getUser()->getPerson()) {
+            // Fetches owned products
+            $ownedProducts = $this->getOwnedProducts($this->security->getUser()->getPerson());
+            if (isset($ownedProducts) && count($ownedProducts) > 0) {
+                foreach ($ownedProducts as $ownedProduct) {
+                    if ($ownedProduct['id'] == $product['id']) {
+                        $thisProductIsOwned = true;
                     }
                 }
             }
@@ -212,14 +239,41 @@ class ShoppingService
         return $thisProductIsOwned;
     }
 
-    function getUserProducts()
+    function getOwnedProducts($person)
     {
-        $result = [];
-        $orderItems = [];
-        foreach ($orderItems as $item) {
-            $offer = $this->commongroundservice->getResource($item['offer']);
-            $result = array_merge($result, $offer['products']);
+        $orders = $this->commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['customer' => $person]);
+        $orderItemIds = [];
+        $ownedProducts = [];
+        // Get all order items of the given person
+        foreach ($orders as $order) {
+            if (isset($order['items']) && count($order['items']) > 0) {
+                foreach ($order['items'] as $item) {
+                    if (!in_array($item['id'], $orderItemIds)) {
+                        $orderItems[] = $item;
+                        $orderItemIds[] = $item['id'];
+                    }
+                }
+            }
         }
-        return $result;
+
+
+        // Get all ownedProducts of the given person
+        $productIds = [];
+        if (isset($orderItems) && count($orderItems) > 0) {
+            foreach ($orderItems as $item) {
+                if (isset($item['offer'])) {
+                    $offer = $this->commonGroundService->getResource($item['offer']);
+                    if (isset($offer['products']) && count($offer['products']) > 0)
+                        foreach ($offer['products'] as $product) {
+                            if (!in_array($product['id'], $productIds)) {
+                                $ownedProducts[] = $product;
+                                $productIds[] = $product['id'];
+                            }
+                        }
+                }
+            }
+        }
+
+        return $ownedProducts;
     }
 }
