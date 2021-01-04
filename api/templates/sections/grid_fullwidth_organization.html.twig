@@ -4,9 +4,12 @@
         {% for item in items %}
 
             {% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id']})['hydra:member']|length %}
+            {% if app.user|default %}
+                {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id'], 'author':app.user.person})['hydra:member'] %}
+            {% endif %}
             {% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':item['@id']})['hydra:member'] %}
 
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4" id="organization">
                 <div class="card rounded-0 card-hover-overlay">
                     <div class="position-relative">
                         <img class="card-img rounded-0"
@@ -30,10 +33,6 @@
                                     </li>
                                 </ul>
                                 <span class="d-inline-block mr-2" style="color: white">({{ reviews|length }} Reviews)</span>
-                                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Favourite this organisation" style="z-index: 2">
-                                    <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
-                                    <span style="color: white">{{ likes }}</span>
-                                </button>
                             </div>
                             <h3>
                                 <a href="{{ path(pathToSingular, {'id': item.id}) }}" class="stretched-link">
@@ -50,10 +49,9 @@
                     <div class="card-footer bg-transparent">
                         <ul class="list-unstyled d-flex mb-0 py-2">
                             <li>
-                                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top"
-                                        title="" style="z-index: 2"
-                                        data-original-title="Favourite this organisation">
-                                    <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
+                                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" onclick="likeItem(this)" value="{{ item['@id'] }}" data-original-title="Favourite this organisation" style="z-index: 2">
+                                    <i {% if isLiked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
+                                    <span id="{{ item['id'] }}">{{ likes }}</span>
                                 </button>
                             </li>
                             <li class="ml-auto">

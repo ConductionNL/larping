@@ -4,7 +4,7 @@
             <div class="col">
                 <h2 class="h5">{{ 'my organisations'|trans|capitalize }}</h2></div>
             <div class="col-3 text-right">
-                {% if items is  defined %}
+                {% if items is defined %}
                     <a href="" data-toggle="modal" data-target="#{{ type~'Modal' }}" class="btn btn-success btn-sm mr-2 w-50">{{ 'add organization'|trans|capitalize }}</a>
                     {% else %}
                         <a href="{{ path('app_organization_index') }}" class="btn btn-sm btn-secondary">{{ 'see all organizations'|trans|capitalize }}</a>
@@ -12,10 +12,10 @@
             </div>
         </div>
     </div>
-    {% if items is defined and items|length > 0 %}
-        {% set organizations = items %}
-    {% endif %}
-    {% if organizations is  defined and organizations|length > 0 %}
+{#    {% if items is defined and items|length > 0 %}#}
+{#        {% set organizations = items %}#}
+{#    {% endif %}#}
+    {% if items is  defined and items|length > 0 %}
     <div class="table-responsive">
         <table class="table align-items-center table-flush">
             <thead class="thead-light">
@@ -26,15 +26,18 @@
             </tr>
             </thead>
             <tbody>
-            {% for organization in organizations|slice(0, 10) %}
+            {% for item in items %}
                 <tr>
-                    <td><span class="h6 mb-3 mb-lg0">{{ organization.name }}</span></td>
+                    <td><span class="h6 mb-3 mb-lg0">{{ item.name }}</span></td>
                     <td>
-                        {% if organization.emails[0]|default %}
+                        {% if item.contact|default and commonground_resource(item.contact).emails|default %}
+                            {% set contact = commonground_resource(item.contact) %}
+                            {% for emails in contact.emails %}
                             <span class="h5 mb-3 mb-lg-0">
                                 <i class="fas fa-user-tie text-secondary"></i>
-                                <span class="ml-3">{{ organization.emails[0].email }}</span>
+                                <span class="ml-3">{{ emails.email }}</span>
                             </span>
+                            {% endfor %}
                         {% else %}
                             <span class="h5 mb-3 mb-lg-0">
                                 <i class="fas fa-user-tie text-secondary"></i>
@@ -43,7 +46,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('app_dashboard_organization', {id: organization.id}) }}" class="btn btn-primary">{{ 'view'|trans|capitalize }}</a>
+                        <a href="{{ path('app_dashboard_organization', {id: item.id}) }}" class="btn btn-primary">{{ 'view'|trans|capitalize }}</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -31,27 +31,25 @@
                 <div class="ml-md-auto d-flex align-items-center justify-content-between">
                     <div class="select-bg-transparent select-border">
                         <div class="selectric-wrapper selectric-select-location">
-                            <div class="selectric-hide-select">
-                                <select class="select-location" tabindex="-1">
-                                    <option>Popular</option>
-                                    <option>Nearest</option>
-                                    <option>Recent</option>
+                            <div class="selectric-select">
+                                <select class="select-location" style="text-align: center">
+                                    <option>{{ 'sort'|trans|capitalize }}</option>
+                                    <option>{{ 'likes'|trans|capitalize }}</option>
+                                    <option>{{ 'rating'|trans|capitalize }}</option>
+                                    <option>{{ 'alphabet'|trans|capitalize }}</option>
                                 </select>
-                            </div>
-                            <div class="selectric"><span class="label">Popular</span>
-                                <div class="arrow-button"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
                             </div>
                             <div class="selectric-items" tabindex="-1">
                                 <div class="selectric-scroll">
                                     <ul>
-                                        <li data-index="0" class="selected">Popular</li>
-                                        <li data-index="1" class="">Nearest</li>
-                                        <li data-index="2" class="last">Recent</li>
+                                        <li data-index="0" class="selected">{{ 'likes'|trans|capitalize }}</li>
+                                        <li data-index="1" class="">{{ 'rating'|trans|capitalize }}</li>
+                                        <li data-index="2" class="last">{{ 'alphabet'|trans|capitalize }}</li>
                                     </ul>
                                 </div>
                             </div>
-                            <input class="selectric-input" tabindex="0">
                         </div>
+                        <input class="selectric-input" tabindex="0">
                     </div>
                     <div class="icons">
                         <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">
@@ -101,29 +99,6 @@
             }
         }
 
-        // function likeItem(button) {
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "/like",
-        //         data: {
-        //             resource: button.value
-        //         },
-        //         dataType: "json",
-        //         success: function(response) {
-        //
-        //             updateLikeCounter(id);
-        //             console.log(response);
-        //         }
-        //     });
-        // }
-        //
-        // function updateLikeCounter(id) {
-        //     let counter = document.getElementById(id);
-        //     // Bereken counter.innerText naar int
-        //     likes = likes + 1;
-        //     counter.innerText = likes;
-        //
-        // }
     </script>
 
 {% endblock %}
