@@ -25,182 +25,31 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class DashboardController extends AbstractController
 {
     /**
+     * Lets catch any users lost in routes
+     *
      * @Route("/")
-     * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    public function indexAction()
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $variables = [];
-
-        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
-        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'people'])['hydra:member'];
-        //$variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
-        return $variables;
+        return $this->redirectToRoute('app_dashboarduser_index');
     }
 
     /**
-     * @Route("/organizations")
-     * @Template
+     * Method  for switching the organization on a user session
+     *
+     * @Route("/switch-organization/{id}")
      */
-    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function switchOrganizationAction(CommonGroundService $commonGroundService, $id)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $variables = [];
-        $variables['items'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
-        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
-        $variables['type'] = 'organization';
+        $organization = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
 
-        if ($request->isMethod('POST')) {
-            $resource = $request->request->all();
-            $resource['rsin'] = "";
-            $resource['chamberOfComerce'] = "";
+        //@todo Het ophalen van de user voor een @id is natuurlijk knude
+        $user = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()], true, false, true, false, false)['hydra:member'][0];
+        $user['organization'] = $organization['@id'];
+        unset($user['userGroups']);
 
-            // Update to the commonground component
-            $item = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
+        $commonGroundService->saveResource(['organization'=>$organization['@id']], ['component' => 'uc', 'type' => 'users', 'id' => $user['id']]);
 
-//          get url of new organization to make cc organization
-            $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $item['id']]);
-            $resource['sourceOrganization'] = $organizationUrl;
-            $variables['organizations'] = $commonGroundService->saveResource($resource, ['component' => 'cc', 'type' => 'organizations']);
-            $orgUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $variables['organizations']['id']]);
-            $item['contact'] = $orgUrl;
-            $variables['items'][] = $commonGroundService->saveResource($item, ['component' => 'wrc', 'type' => 'organizations']);
-
-            /*@todo de ingelogde gebruiker toevoegen aan de organisatie */
-        }
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/organization/{id}")
-     * @Template
-     */
-    public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $variables = [];
-
-        $variables['item'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
-        if ($variables['item']['contact']) {
-            $variables['organization'] = $commonGroundService->getResource($variables['item']['contact']);
-        }
-
-        if ($request->isMethod('POST')) {
-            $resource = $request->request->all();
-
-            // Add the post data to the already aquired resource data
-            $resource = array_merge($variables['item'], $resource);
-
-            // Update to the commonground component
-            $variables['item'] = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
-            $variables['organization'] = $commonGroundService->saveResource($resource, ['component' => 'cc', 'type' => 'organizations']);
-        }
-
-        return $variables;
-
-//            //fill in all required fields for a style
-//            $organization['style']['name'] = 'style for'.$request->get('name');
-//            $organization['style']['description'] = 'style for'.$request->get('name');
-//            $organization['style']['favicon']['name'] = 'style for'.$request->get('name');
-//            $organization['style']['favicon']['description'] = 'style for'.$request->get('name');
-//            //get profile pic
-//            if (isset($_FILES['logo']) && $_FILES['logo']['error'] !== 4) {
-//                $path = $_FILES['logo']['tmp_name'];
-//                $type = filetype($_FILES['logo']['tmp_name']);
-//                $data = file_get_contents($path);
-//                $organization['style']['favicon']['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
-//            }
-//
-    }
-
-    /**
-     * @Route("/participants")
-     * @Template
-     */
-    public function participantsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $variables = [];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/participants/{id}")
-     * @Template
-     */
-    public function participantAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $variables = [];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/events")
-     * @Template
-     */
-    public function eventsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $variables = [];
-        $variables = [];
-        $variables['type'] = 'events';
-
-        if ($request->isMethod('POST')) {
-            $resource = $request->request->all();
-
-            // Check if org has name (required)
-            if ($resource['events']['name']) {
-                // Make or save email
-                if ($resource['email']['email']) {
-                    if (!isset($resource['email']['name'])) {
-                        $resource['email']['name'] = 'Email';
-                    }
-                    $email = $commonGroundService->saveResource($resource['email'], ['component' => 'arc', 'type' => 'emails']);
-                }
-                // Make or save telephone
-                if ($resource['telephone']['telephone']) {
-                    if (!isset($resource['telephone']['name'])) {
-                        $resource['telephone']['name'] = 'Telephone';
-                    }
-                    $telephone = $commonGroundService->saveResource($resource['telephone'], ['component' => 'arc', 'type' => 'telephones']);
-                }
-                // If we have a email add it to the org
-                if (isset($email)) {
-                    $resource['events']['emails'][0] = '/emails/'.$email['id'];
-                }
-                // If we have a telephone add it to the org
-                if (isset($telephone)) {
-                    $resource['events']['telephones'][0] = '/telephones/'.$telephone['id'];
-                }
-
-                // Save organization
-                $org = $commonGroundService->saveResource($resource['events'], ['component' => 'arc', 'type' => 'events']);
-            }
-
-        }
-
-        $variables['items'] = $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
-
-
-        return $variables;
-    }
-
-
-    /**
-     * @Route("/events/{id}")
-     * @Template
-     */
-    public function eventAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $variables = [];
-
-        return $variables;
+        return $this->redirectToRoute('app_dashboardorganization_index', ['id' => $id]);
     }
 }
