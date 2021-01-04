@@ -201,6 +201,14 @@
          <source>payment has been aborted</source>
          <target>betaling is geannuleerd</target>
          </trans-unit>
+         <trans-unit id="uBBB13S" resname="start date">
+         <source>start date</source>
+         <target>start datum</target>
+         </trans-unit>
+         <trans-unit id="oMmMMbG" resname="end date">
+         <source>end date</source>
+         <target>eind datum</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
