@@ -14,7 +14,7 @@
             </a>
             {% if not app.user|default %}
                 <div class="float-right btn-wrapper">
-                    <a class="btn btn-outline-primary"
+                    <a class="btn btn-primary"
                        href="{{ path('app_user_idvault', {'backUrl':path(app.request.attributes.get('_route'),
                            app.request.attributes.get('_route_params'))}) }}"><span>{{ 'login'|trans|capitalize }}</span>
                     </a>

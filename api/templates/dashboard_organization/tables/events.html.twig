@@ -9,9 +9,6 @@
         <th>{{ 'location'|trans|capitalize }}</th>
         <th>{{ 'tickets'|trans|capitalize }}</th>
         <th>{{ 'sales'|trans|capitalize }}</th>
-
-
-
         <th>Status</th>
         <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#EventModalAdd">{{ 'add'|trans|capitalize }}</button></th>
     </tr>
@@ -48,8 +45,10 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#EventModal{{ event.id }}">Edit</a>
-                    <a class="dropdown-item" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">Open event page</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#EventModal{{ event.id }}">{{ 'edit'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="#">Participants</a>
+                    <a class="dropdown-item" href="#">Cancel</a>
+                    <a class="dropdown-item" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
                 </div>
             </div>
         </td>
