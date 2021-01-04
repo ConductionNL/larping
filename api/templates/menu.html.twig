@@ -149,7 +149,7 @@
                             <ul class="dropdown-menu" style="min-width: 350px; right: -149px">
                                 {% set sum = 0 %}
                                 {% for item in order.items %}
-                                    {% set sum = sum + item.price %}
+                                    {% set sum = sum + item.price * item.quantity %}
                                     {% set offer = commonground_resource(item.offer) %}
                                     <li>
                                         <a href="{{ path('app_dashboard_index') }}">
@@ -183,7 +183,9 @@
                                     </div>
                                 </li>
                                 <li style="margin-top: 0">
-                                    <a href="{{ path('app_order_index') }}" style="border-top: none; font-size: medium;text-transform: none" class="btn btn-small text-right" >
+                                    <a href="{{ path('app_order_index') }}"
+                                       style="border-top: none; font-size: medium;text-transform: none"
+                                       class="btn btn-small text-right">
                                         {{ 'view order'|trans|capitalize }}
                                     </a>
                                 </li>
@@ -210,8 +212,13 @@
                             {% set person = commonground_resource(app.user.person) %}
                         {% endif %}
                         <div class="avatar">
-                            <div class="avatar-img mr-4" data-toggle="dropdown" aria-expanded="false"  id="userDropdown" role="button" >
-                                <img style="height: 50%; width: 75%" {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}class=" card-img-top rounded-circle border-white">
+                            <div class="avatar-img mr-4" data-toggle="dropdown" aria-expanded="false" id="userDropdown"
+                                 role="button">
+                                <img
+                                    style="height: 50%; width: 75%" {% if person.personalPhoto is defined and person.personalPhoto is not empty %}
+                                    src="{{ person.personalPhoto }}" {% else %}
+                                    src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"
+                                    {% endif %}class=" card-img-top rounded-circle border-white">
                             </div>
                             {#                                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"#}
                             {#                                       aria-haspopup="true" data-display="static" aria-expanded="false">#}
@@ -246,9 +253,11 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="d-flex flex-wrap align-items-center" href="{{ path('app_dashboarduser_organizations') }}">
+                                    <a class="d-flex flex-wrap align-items-center"
+                                       href="{{ path('app_dashboarduser_organizations') }}">
                                         <i class="fa fa-building mr-2" aria-hidden="true"></i>
-                                        <span style="font-size: 13px!important;">{{ 'my organizations'|trans|capitalize }}</span>
+                                        <span
+                                            style="font-size: 13px!important;">{{ 'my organizations'|trans|capitalize }}</span>
                                     </a>
                                 </li>
                                 <li>
