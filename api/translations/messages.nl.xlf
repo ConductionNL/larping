@@ -5,6 +5,202 @@
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
     <body>
+      <trans-unit id="91nabW2" resname="create account">
+        <source>aanmelden</source>
+        <target>aanmelden</target>
+      </trans-unit>
+      <trans-unit id="Uhb21B2" resname="organizations">
+        <source>organizations</source>
+        <target>organisaties</target>
+      </trans-unit>
+      <trans-unit id="P1zoaw0" resname="organization">
+        <source>organization</source>
+        <target>organisatie</target>
+      </trans-unit>
+      <trans-unit id="K21lMa6" resname="participants">
+        <source>participants</source>
+        <target>deelnemers</target>
+      </trans-unit>
+      <trans-unit id="m91H32p" resname="events">
+        <source>events</source>
+        <target>evenementen</target>
+      </trans-unit>
+      <trans-unit id="H2178Ax" resname="add larp">
+        <source>add larp</source>
+        <target>larp toevoegen</target>
+      </trans-unit>
+      <trans-unit id="U122n1a" resname="add">
+        <source>add</source>
+        <target>aanmaken</target>
+      </trans-unit>
+      <trans-unit id="j21nmAr" resname="all">
+        <source>all</source>
+        <target>alle</target>
+      </trans-unit>
+      <trans-unit id="U81janb" resname="view">
+        <source>view</source>
+        <target>bekijken</target>
+      </trans-unit>
+      <trans-unit id="N18nzx1" resname="cancel">
+        <source>cancel</source>
+        <target>annuleren</target>
+      </trans-unit>
+      <trans-unit id="J213Ba2" resname="close">
+        <source>close</source>
+        <target>sluiten</target>
+      </trans-unit>
+      <trans-unit id="b2n1maz" resname="no e-mail">
+        <source>no e-mail</source>
+        <target>geen e-mail</target>
+      </trans-unit>
+      <trans-unit id="On1bas2" resname="no results found">
+        <source>no results found</source>
+        <target>geen resultaten gevonden</target>
+      </trans-unit>
+      <trans-unit id="Uh12ap0" resname="save">
+        <source>save</source>
+        <target>opslaan</target>
+      </trans-unit>
+      <trans-unit id="oUI109s" resname="phone number">
+        <source>phone number</source>
+        <target>telefoonnummer</target>
+      </trans-unit>
+      <trans-unit id="Hb21asd" resname="add organization">
+        <source>add organization</source>
+        <target>organisatie toevoegen</target>
+      </trans-unit>
+      <trans-unit id="opAbn12" resname="we found">
+        <source>we found</source>
+        <target>we hebben</target>
+      </trans-unit>
+      <trans-unit id="Aknn124" resname="results for">
+        <source>results for</source>
+        <target>resultaten gevonden voor</target>
+      </trans-unit>
+      <trans-unit id="unBnawa" resname="about this">
+        <source>about this</source>
+        <target>over deze</target>
+      </trans-unit>
+      <trans-unit id="nh2h0sz" resname="no description">
+        <source>no description</source>
+        <target>geen beschrijving</target>
+      </trans-unit>
+      <trans-unit id="BATZGa6" resname="add event">
+        <source>add event</source>
+        <target>evenement toevoegen</target>
+        </trans-unit>
+        <trans-unit id="BBDTGa6" resname="event">
+        <source>event</source>
+        <target>evenement</target>
+        </trans-unit>
+        <trans-unit id="BAHZTa6" resname="startdate">
+        <source>startdate</source>
+        <target>startdatum</target>
+        </trans-unit>
+        <trans-unit id="Lmwaab2" resname="enddate">
+        <source>enddate</source>
+        <target>einddatum</target>
+        </trans-unit>
+        <trans-unit id="BTTTTa6" resname="about">
+         <source>about</source>
+         <target>over</target>
+         </trans-unit>
+        <trans-unit id="GBasf1x" resname="by">
+         <source>by</source>
+         <target>door</target>
+         </trans-unit>
+        <trans-unit id="Jnb1asZ" resname="select an">
+         <source>select an</source>
+         <target>selecteer een</target>
+         </trans-unit>
+        <trans-unit id="Unb1ahT" resname="offers">
+         <source>offers</source>
+         <target>aanbiedingen</target>
+         </trans-unit>
+        <trans-unit id="O109oas" resname="quantity">
+         <source>quantity</source>
+         <target>hoeveelheid</target>
+         </trans-unit>
+        <trans-unit id="GAsf1Zq" resname="offer">
+         <source>offer</source>
+         <target>aanbod</target>
+         </trans-unit>
+        <trans-unit id="UBn1asw" resname="shopping cart">
+         <source>shopping cart</source>
+         <target>winkelmand</target>
+         </trans-unit>
+        <trans-unit id="OsHbnw1" resname="pay">
+         <source>pay</source>
+         <target>afrekenen</target>
+         </trans-unit>
+        <trans-unit id="uBwn1aC" resname="remove">
+         <source>remove</source>
+         <target>verwijder</target>
+         </trans-unit>
+        <trans-unit id="Mn1bav4" resname="you have to be logged in to continue">
+         <source>you have to be logged in to continue</source>
+         <target>je moet ingelogd zijn om verder te gaan</target>
+         </trans-unit>
+        <trans-unit id="Oa2nnba" resname="sum">
+         <source>sum</source>
+         <target>totaal</target>
+         </trans-unit>
+        <trans-unit id="oAwj1zx" resname="price">
+         <source>price</source>
+         <target>prijs</target>
+         </trans-unit>
+        <trans-unit id="7hAB2a9" resname="view your order">
+         <source>view your order</source>
+         <target>bekijk uw bestelling</target>
+         </trans-unit>
+        <trans-unit id="8aHb12A" resname="payment succeeded">
+         <source>payment succeeded</source>
+         <target>betaling gelukt</target>
+         </trans-unit>
+        <trans-unit id="kaJnas1" resname="payment failed">
+         <source>payment failed</source>
+         <target>betaling mislukt</target>
+         </trans-unit>
+        <trans-unit id="Ab12asd" resname="view your">
+         <source>view your</source>
+         <target>bekijk uw</target>
+         </trans-unit>
+        <trans-unit id="oNw123s" resname="invoice">
+         <source>invoice</source>
+         <target>factuur</target>
+         </trans-unit>
+        <trans-unit id="UAHb191" resname="back to the">
+         <source>back to the</source>
+         <target>terug naar de</target>
+         </trans-unit>
+        <trans-unit id="98Nwe15" resname="page">
+         <source>page</source>
+         <target>pagina</target>
+         </trans-unit>
+        <trans-unit id="79aJSdn" resname="try again">
+         <source>try again</source>
+         <target>probeer het opnieuw</target>
+         </trans-unit>
+        <trans-unit id="l2a9nXz" resname="or">
+         <source>or</source>
+         <target>of</target>
+         </trans-unit>
+        <trans-unit id="Osd8129" resname="payment is open, you can still retry paying">
+         <source>payment is open, you can still retry paying</source>
+         <target>betaling staat open, u kunt nog proberen te betalen</target>
+         </trans-unit>
+        <trans-unit id="ubN213S" resname="payment is expired">
+         <source>payment is expired</source>
+         <target>betaling is niet meer geldig</target>
+         </trans-unit>
+        <trans-unit id="oj325bG" resname="unknown error">
+         <source>unknown error</source>
+         <target>onbekende fout</target>
+         </trans-unit>
+        <trans-unit id="uB5235s" resname="payment has been aborted">
+         <source>payment has been aborted</source>
+         <target>betaling is geannuleerd</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>

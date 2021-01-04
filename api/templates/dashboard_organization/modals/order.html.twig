@@ -1,0 +1,14 @@
+{% extends "dashboard_organization/modals/modal.html.twig" %}
+
+{% if resource is defined %}
+    {% set  id = resource['id'] %}
+    {% set  type = 'Order' %}
+{% else %}
+    {% set  id = 'Add' %}
+    {% set  type = 'Order' %}
+{% endif %}
+
+{% block body %}
+<form id="{{ type }}Form{{ id }}" method="post">
+</form>
+{% endblock %}

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56929f9e4a7751f5a34361230700b580",
+    "content-hash": "cab477452a7fffb0eb174764869dc6cb",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -685,12 +685,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/CommonGroundBundle.git",
-                "reference": "fa4b5cc53fd2e741b8f271a8648f78fdd343a760"
+                "reference": "51a3aabc30386206305bc5783fa7eb9893432065"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/fa4b5cc53fd2e741b8f271a8648f78fdd343a760",
-                "reference": "fa4b5cc53fd2e741b8f271a8648f78fdd343a760",
+                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/51a3aabc30386206305bc5783fa7eb9893432065",
+                "reference": "51a3aabc30386206305bc5783fa7eb9893432065",
                 "shasum": ""
             },
             "require": {
@@ -768,7 +768,58 @@
                 "postcode",
                 "rsin"
             ],
-            "time": "2020-11-26T08:12:27+00:00"
+            "time": "2020-12-23T12:31:49+00:00"
+        },
+        {
+            "name": "conduction/id-vault-php",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ConductionNL/id-vault-php.git",
+                "reference": "077f23f295925ba8663ddd895e4876fcf6b5b890"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/077f23f295925ba8663ddd895e4876fcf6b5b890",
+                "reference": "077f23f295925ba8663ddd895e4876fcf6b5b890",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.3",
+                "php": "^7.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Conduction\\IdVaultApi\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gino Kok",
+                    "email": "gino@conduction.nl"
+                },
+                {
+                    "name": "Conduction",
+                    "homepage": "https://conduction.nl"
+                }
+            ],
+            "description": "Library for ID-Vault functionality",
+            "homepage": "https://conduction.nl",
+            "keywords": [
+                "ID-Vault",
+                "common ground",
+                "commonground",
+                "conduction"
+            ],
+            "time": "2020-12-23T15:46:44+00:00"
         },
         {
             "name": "conduction/idvaultbundle",
@@ -776,18 +827,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/IdVaultBundle.git",
-                "reference": "a77e1c671626ab15c3f991010743af7f19908c17"
+                "reference": "e7da45143f65667441a00373e94f5c3247f0f93a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/a77e1c671626ab15c3f991010743af7f19908c17",
-                "reference": "a77e1c671626ab15c3f991010743af7f19908c17",
+                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/e7da45143f65667441a00373e94f5c3247f0f93a",
+                "reference": "e7da45143f65667441a00373e94f5c3247f0f93a",
                 "shasum": ""
             },
             "require": {
                 "conduction/commongroundbundle": "dev-master || dev-symfony51",
-                "guzzlehttp/guzzle": "^6.3",
-                "php": "^7.1.3"
+                "conduction/id-vault-php": "dev-main",
+                "php": "^7.4.0",
+                "symfony/event-dispatcher": "^5.0"
             },
             "type": "library",
             "autoload": {
@@ -820,7 +872,7 @@
                 "commonground",
                 "conduction"
             ],
-            "time": "2020-12-03T18:06:09+00:00"
+            "time": "2020-12-23T15:46:28+00:00"
         },
         {
             "name": "conduction/listybundle",
@@ -10679,7 +10731,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "conduction/balancebundle": 20,
         "conduction/commongroundbundle": 20,
