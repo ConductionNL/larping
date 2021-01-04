@@ -78,8 +78,8 @@ class ShoppingService
                             $orderItem['order'] = '/orders/' . $order['id'];
                         }
 
-                        if (isset($orderItem['@id'])) {
-                            $orderItem = $this->commonGroundService->saveResource($orderItem, ['component' => 'orc', 'type' => 'order_items', 'id' => $orderItem['id']]);
+                        if (isset($item['@id'])) {
+                            $item = $this->commonGroundService->saveResource($item, ['component' => 'orc', 'type' => 'order_items', 'id' => $item['id']]);
                         } else {
                             $orderItem = $this->commonGroundService->saveResource($orderItem, ['component' => 'orc', 'type' => 'order_items']);
                         }
@@ -161,6 +161,9 @@ class ShoppingService
             if ($offer['@id'] == $item['offer']) {
                 $actualOffer = $this->commonGroundService->getResource($offer['@id']);
                 $item['quantity'] += $offer['quantity'];
+                if (isset($item['@id'])) {
+                    $item = $this->commonGroundService->saveResource($item, ['component'=>'orc', 'type'=>'order_items']);
+                }
                 $order['items'][$key] = $item;
                 $order['items'][$key]['price'] = $actualOffer['price'] * $item['quantity'];
                 $this->session->set('order', $order);

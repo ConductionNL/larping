@@ -1,0 +1,58 @@
+{% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id']})['hydra:member']|length %}
+{% if app.user|default %}
+    {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id'], 'author':app.user.person})['hydra:member'] %}
+{% endif %}
+{% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':item['@id']})['hydra:member'] %}
+
+
+<div class="card rounded-0 card-hover-overlay">
+    <div class="position-relative">
+        <img class="card-img rounded-0"
+            {% for organizations in organizations %}
+                {% if organizations is defined and organizations['name'] == item['name'] %}
+                    {% if organizations.style %}
+                        src="{{ organizations.style.favicon.base64 }}"
+                    {% else %}
+                        src="https://picsum.photos/200"
+                    {% endif %}
+                    alt="organization logo"
+                {% endif %}
+            {% endfor %}
+             alt="Card image cap">
+        <div class="card-img-overlay">
+            <div class="d-flex align-items-center">
+                <ul class="list-inline list-inline-rating mr-2">
+                    {#*/@todo make stars dynamic#}
+                    <li class="list-inline-item">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    </li>
+                </ul>
+                <span class="d-inline-block mr-2" style="color: white">({{ reviews|length }} Reviews)</span>
+            </div>
+            <h3>
+                <a href="{{ path(pathToSingular, {'id': item.id}) }}" class="stretched-link">
+                    {{ item.name|capitalize }}
+                </a>
+            </h3>
+            {% if item.description|default %}
+                <p class="text-white">{{ item.description|slice(0, 135) }}</p>
+            {% else %}
+                <p style="color:lightgrey">{{ 'no description'|trans|capitalize }}</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card-footer bg-transparent">
+        <ul class="list-unstyled d-flex mb-0 py-2">
+            <li>
+                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" onclick="likeItem(this)" value="{{ item['@id'] }}" data-original-title="Favourite this organisation" style="z-index: 2">
+                    <i {% if isLiked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
+                    <span id="{{ item['id'] }}">{{ likes }}</span>
+                </button>
+            </li>
+            <li class="ml-auto">
+                <a class="px-2"
+                   href="{{ path(pathToSingular, {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
+            </li>
+        </ul>
+    </div>
+</div>
