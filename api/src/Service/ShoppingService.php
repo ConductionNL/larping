@@ -105,7 +105,8 @@ class ShoppingService
             $object['redirectUrl'] = 'https://dev.larping.eu/order/payment';
         }
 
-        $object['redirectUrl'] = 'https://localhost/order/payment';
+        // Only enable on localhost ! Dont forget to disable before pushing !
+//        $object['redirectUrl'] = 'https://localhost/order/payment';
 
         $object = $this->commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
 
