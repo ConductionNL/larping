@@ -34,6 +34,9 @@ class DefaultController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        $variables['groups'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'groups'])['hydra:member'];
+        //$variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations'])['hydra:member'];
 
         return $variables;
     }
@@ -73,13 +76,19 @@ class DefaultController extends AbstractController
     public function likeAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         if ($this->getUser() && $request->isMethod('POST')) {
-            $like['author'] = $this->getUser()->getPerson();
-            $like['resource'] = $request->request->get('resource');
-            $like['organization'] = 'https://test.com';
-            $like = $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
-
-
-            return new JsonResponse(array('data' => 'succes'));
+            $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $request->get('resource'), 'author' => $this->getUser()->getPerson()])['hydra:member'];
+            if (count($likes) > 0) {
+                $like = $likes[0];
+                // Delete this existing like
+                $commonGroundService->deleteResource($like);
+                return new JsonResponse(array('data' => 'unliked'));
+            }else {
+                $like['author'] = $this->getUser()->getPerson();
+                $like['resource'] = $request->get('resource');
+                $like['organization'] = 'https://test.com';
+                $like = $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
+                return new JsonResponse(array('data' => 'liked'));
+            }
         } else {
             return new JsonResponse(array('data' => 'you are not logged in'));
         }
