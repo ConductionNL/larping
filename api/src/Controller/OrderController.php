@@ -43,7 +43,7 @@ class OrderController extends AbstractController
             $variables['order'] = $session->get('order');
         }
 
-        if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' && isset($order) &&
+        if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' && isset($variables['order']) &&
             $this->getUser()) {
             $ss->redirectToMollie($variables['order']);
         }

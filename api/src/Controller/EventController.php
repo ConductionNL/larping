@@ -49,7 +49,7 @@ class EventController extends AbstractController
         $variables['path'] = 'app_event_event';
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['event']['@id']])['hydra:member'];
-        $variables['groups'] = $commonGroundService->getResource(['component' => 'pds', 'type' => 'groups']);
+        $variables['groups'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'groups']);
 
         /* deze is wat wierd */
         if (isset($variables['event']['resource']) && strpos($variables['event']['resource'], '/pdc/products/')) {
