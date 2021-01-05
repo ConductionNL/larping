@@ -27,8 +27,8 @@
             {% endif %}
 
             <ul class="menuzord-menu menuzord-right">
-                <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
                 <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a></li>
+                <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
 
                 <li class="">
                     {% if app.user.organization is defined and app.user.organization is not empty %}
@@ -45,7 +45,7 @@
                                             </h5>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_organization', {organization: organization.id}) }}">{{ 'edit'|trans|capitalize }} </a>
+                                            <a href="{{ path('app_dashboardorganization_index') }}">{{ 'edit'|trans|capitalize }} </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
@@ -59,16 +59,16 @@
                                             </h5>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_events', {organization: organization.id}) }}">{{ 'events'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_events') }}">{{ 'events'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_products', {organization: organization.id}) }}">{{ 'products'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_products') }}">{{ 'products'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_offers', {organization: organization.id}) }}">{{ 'offers'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_offers') }}">{{ 'offers'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_orders', {organization: organization.id}) }}">{{ 'orders'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_orders') }}">{{ 'orders'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -81,13 +81,13 @@
                                             </h5>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_members', {organization: organization.id}) }}">{{ 'members'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_members') }}">{{ 'members'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_mailings', {organization: organization.id}) }}">{{ 'mailing'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_mailings') }}">{{ 'mailing'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_reviews', {organization: organization.id}) }}">{{ 'reviews'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_reviews') }}">{{ 'reviews'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
                                     <ul class="list-unstyled">
@@ -98,13 +98,13 @@
                                             </h5>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_balance', {organization: organization.id}) }}">{{ 'balance'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_balance') }}">{{ 'balance'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_reservations', {organization: organization.id}) }}">{{ 'reservations'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_reservations') }}">{{ 'reservations'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_earnings', {organization: organization.id}) }}">{{ 'earnings'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_earnings') }}">{{ 'earnings'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -117,19 +117,19 @@
                                             </h5>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_characters', {organization: organization.id}) }}">{{ 'characters'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_characters') }}">{{ 'characters'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_skills', {organization: organization.id}) }}">{{ 'skills'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_skills') }}">{{ 'skills'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_items', {organization: organization.id}) }}">{{ 'items'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_items') }}">{{ 'items'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_conditions', {organization: organization.id}) }}">{{ 'conditions'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_conditions') }}">{{ 'conditions'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_storylines', {organization: organization.id}) }}">{{ 'storyline'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_storylines') }}">{{ 'storylines'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -249,6 +249,14 @@
                                 </li>
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
+                                       href="{{ path('app_dashboarduser_organizations') }}">
+                                        <i class="fa fa-building mr-2" aria-hidden="true"></i>
+                                        <span
+                                            style="font-size: 13px!important;">{{ 'my organizations'|trans|capitalize }}</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_events') }}">
                                         <i class="fa fa-calendar-o mr-2" aria-hidden="true"></i>
                                         <span>{{ 'my events'|trans|capitalize }}</span>
@@ -256,10 +264,16 @@
                                 </li>
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
-                                       href="{{ path('app_dashboarduser_organizations') }}">
-                                        <i class="fa fa-building mr-2" aria-hidden="true"></i>
-                                        <span
-                                            style="font-size: 13px!important;">{{ 'my organizations'|trans|capitalize }}</span>
+                                       href="{{ path('app_dashboarduser_characters') }}">
+                                        <i class="fa fa-calendar-o mr-2" aria-hidden="true"></i>
+                                        <span>{{ 'my characters'|trans|capitalize }}</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="d-flex flex-wrap align-items-center"
+                                       href="{{ path('app_dashboarduser_favorites') }}">
+                                        <i class="fa fa-calendar-o mr-2" aria-hidden="true"></i>
+                                        <span>{{ 'my favorites'|trans|capitalize }}</span>
                                     </a>
                                 </li>
                                 <li>

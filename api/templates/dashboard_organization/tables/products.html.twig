@@ -1,6 +1,6 @@
 
-{% if products|length > 0 %}
-    <table id="events" class="display nowrap table" style="width:100%">
+{% if products|default and  products|length > 0 %}
+    <table id="products" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
             <th>{{ 'image'|trans|capitalize }}</th>

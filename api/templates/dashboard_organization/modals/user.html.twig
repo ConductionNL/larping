@@ -2,10 +2,10 @@
 
 {% if resource is defined %}
     {% set  id = resource['id'] %}
-    {% set  type = 'Offer' %}
+    {% set  type = 'User' %}
 {% else %}
     {% set  id = 'Add' %}
-    {% set  type = 'Offer' %}
+    {% set  type = 'User' %}
 {% endif %}
 
 {% block body %}
@@ -19,18 +19,6 @@
     <div class="form-group">
         <label for="description">{{ 'description'|trans|capitalize }}</label>
         <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
-    </div>
-    <div class="form-group">
-        <label for="name">{{ 'price'|trans|capitalize }}*</label>
-        <input type="text" class="form-control" id="price" name="price" {% if resource.price is defined %}value="{{ resource.price|capitalize }}"{% endif %} required>
-    </div>
-    <div class="form-group">
-        <label for="description">{{ 'products'|trans|capitalize }}</label>
-        <select class="form-control multiple" multiple aria-label="{{ 'the products included in this offer'|trans|capitalize }}">
-            {% for product in products %}
-                <option value="{{ product.id }}">{{ product.name }}</option>
-            {% endfor %}
-        </select>
     </div>
 </form>
 {% endblock %}

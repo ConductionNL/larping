@@ -1,0 +1,46 @@
+
+{% if characters|default and characters|length > 0 %}
+<table id="events" class="display nowrap table" style="width:100%">
+    <thead class="thead-light">
+    <tr>
+        <th>{{ 'name'|trans|capitalize }}</th>
+        <th>{{ 'organization'|trans|capitalize }}</th>
+        <th>Status</th>
+        <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#CharacterModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for character in characters %}
+    <tr>
+        <td>{{ character.name }}</td>
+        <td>{{ commonground_resource(character.organiztion).name }}</td>
+        <td>
+            <span class="badge badge-warning px-2 py-1">Deceased</span>
+        </td>
+        <td>
+            <div class="dropdown">
+                <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#CharacterModal{{ character.id }}">{{ 'edit'|trans|capitalize }}</a>
+                    </div>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="card-body  text-center">
+    <p>{{ 'no characters found'|trans|capitalize }}</p>
+    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#CharacterModalAdd">{{ 'add a character'|trans|capitalize }}</a>
+</div>
+{% endif %}
+
+{% include 'dashboard_user/modals/characters.html.twig' %}
+
+{% for character in characters %}
+    {% include 'dashboard_user/modals/characters.html.twig' with {'resource': character} %}
+{% endfor %}

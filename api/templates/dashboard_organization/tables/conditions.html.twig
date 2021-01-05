@@ -1,0 +1,45 @@
+{% if conditions|default and  conditions|length > 0 %}
+    <table id="products" class="display nowrap table" style="width:100%">
+        <thead>
+        <tr>
+            <th>{{ 'name'|trans|capitalize }}</th>
+            <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ConditionModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for condition in conditions %}
+            <tr>
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" >{{ condition.name }}</a>
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ConditionModal{{ skill.id }}">Edit</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card border-light shadow-sm">
+        <div class="card-body text-center">
+            <p>{{ 'no conditions found'|trans|capitalize }}</p>
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ConditionModalAdd">{{ 'add your first condition'|trans|capitalize }}!</a>
+        </div>
+    </div>
+{% endif %}
+
+{% include 'dashboard_organization/modals/condition.html.twig' %}
+
+{% for condition in conditions %}
+    {% include 'dashboard_organization/modals/condition.html.twig' with {'resource': condition} %}
+{% endfor %}
+
+
