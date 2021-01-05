@@ -255,11 +255,9 @@
                     <div class="my-6" id="add-review">
                         {% if app.user %}
                             {% set person = commonground_resource(app.user.person) %}
-                            <h3 class="font-weight-normal mb-6"> Add Review </h3>
+                            <h3 class="font-weight-normal mb-6"> {{ 'submit review'|trans|capitalize }} </h3>
                             <form action="{{ path(path, {id: event.id}) }}" method="post">
                                 <div class="form-check form-check-inline mb-6 mr-lg-7">
-                                    <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio1" value="option1" checked="">
                                     <label class="form-check-label" for="inlineRadio1">
                                         <div class="media media-xs align-items-center">
                                             <img {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif %}
@@ -278,12 +276,12 @@
                                     {#                                           name="ratingValue">#}
                                 </div>
                                 <div class="form-group mb-6">
-                                    <textarea class="form-control" rows="6" placeholder="Enter Your Comment"
+                                    <textarea class="form-control" rows="6" placeholder="{{ 'enter your review'|trans|capitalize }}"
                                               name="review"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <input type="hidden" name="addReview" value="true">
-                                    <button type="submit" class="btn btn-primary text-uppercase"> Send Review</button>
+                                    <button type="submit" class="btn btn-primary text-uppercase"> {{ 'send review'|trans|capitalize }}</button>
                                 </div>
                             </form>
                         {% else %}

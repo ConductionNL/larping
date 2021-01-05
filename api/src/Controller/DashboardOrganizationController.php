@@ -64,8 +64,29 @@ class DashboardOrganizationController extends AbstractController
             $event = $request->request->all();
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
+            $event['status'] = 'pending';
             // Save the resource
             $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
+        }
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/{organization}/event/{id}")
+     * @Template
+     */
+    public function eventAction(CommonGroundService $commonGroundService, Request $request, $organization, $id)
+    {
+        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
+        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', ])['hydra:member'];
+
+
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            $event = $request->request->all();
+
         }
 
         return $variables;
