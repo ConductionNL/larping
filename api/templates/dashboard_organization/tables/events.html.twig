@@ -47,6 +47,7 @@
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#EventModal{{ event.id }}">{{ 'edit'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="#">Participants</a>
+                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_event', {organization: organization.id, id: event.id}) }}">{{ 'config'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="#">Cancel</a>
                     <a class="dropdown-item" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
                 </div>

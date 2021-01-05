@@ -73,6 +73,26 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
+     * @Route("/{organization}/event/{id}")
+     * @Template
+     */
+    public function eventAction(CommonGroundService $commonGroundService, Request $request, $organization, $id)
+    {
+        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
+        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', ])['hydra:member'];
+
+
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            $event = $request->request->all();
+
+        }
+
+        return $variables;
+    }
+
+    /**
      * @Route("/{organization}/products")
      * @Template
      */
