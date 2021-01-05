@@ -22,9 +22,10 @@
             <tr>
                 <th scope="col">{{ 'name'|trans|capitalize }}</th>
                 <th scope="col">{{ 'location'|trans|capitalize }}</th>
-                <th scope="col">{{ 'attendees'|trans|capitalize }}</th>
+                <th scope="col">{{ 'participants'|trans|capitalize }}</th>
                 <th scope="col">{{ 'details'|trans|capitalize }}</th>
-
+                <th scope="col">{{ 'start date'|trans|capitalize }}</th>
+                <th scope="col">{{ 'end date'|trans|capitalize }}</th>
             </tr>
             </thead>
             <tbody>
@@ -58,7 +59,19 @@
                             {% endif %}
                     </td>
                     <td>
-
+                        ...
+                    </td>
+                    <td>
+                         <span class="h5 mb-3 mb-lg-0">
+                                <i class="fas fa-user-tie text-small"></i>
+                                <span class="ml-3">{{ event.startDate }}</span>
+                            </span>
+                    </td>
+                    <td>
+                        <span class="h5 mb-3 mb-lg-0">
+                                <i class="fas fa-user-tie text-small"></i>
+                                <span class="ml-3">{{ event.endDate }}</span>
+                            </span>
                     </td>
                 </tr>
             {% endfor %}
