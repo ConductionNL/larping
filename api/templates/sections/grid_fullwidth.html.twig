@@ -1,0 +1,50 @@
+<div class="row">
+
+    {% if items|default %}
+        {% for item in items %}
+
+            {% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id']})['hydra:member']|length %}
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card rounded-0 card-hover-overlay">
+                    <div class="position-relative">
+                        <img class="card-img rounded-0" src="https://picsum.photos/300/200"
+                             alt="Card image cap">
+                        <div class="card-img-overlay">
+                            <span class="d-block mb-2 listing-address" style="color: white">{{ item.duration|date("d-m-Y") }}</span>
+                            <h3>
+                                <a href="{{ path(pathToSingular, {'id': item.id}) }}">
+                                    {{ item.name|capitalize }}
+                                </a>
+                            </h3>
+                            {% if item.description|default %}
+                                <p class="text-white">{{ item.description|slice(0, 135) }}</p>
+                            {% else %}
+                                <p style="color:lightgrey">{{ 'no description'|trans|capitalize }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-transparent">
+                        <ul class="list-unstyled d-flex mb-0 py-2">
+                            <li>
+                                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top"
+                                        title=""
+                                        data-original-title="Favourite this listing">
+                                    <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
+                                    <span>{{ likes }}</span>
+                                </button>
+                            </li>
+                            <li class="ml-auto">
+                                <a class="px-2"
+                                   href="{{ path(pathToSingular, {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    {% endif %}
+
+</div>

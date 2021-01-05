@@ -9,5 +9,6 @@ services:
     #Twig\Extensions\DateExtension: null
     #Twig\Extensions\IntlExtension: null
     #Twig\Extensions\TextExtension: null
+    App\Twig\ShoppingExtension: null
     Twig\Extension\StringLoaderExtension: null
 

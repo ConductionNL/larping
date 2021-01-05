@@ -1,144 +1,178 @@
-{% extends "dashboard/base.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block content %}
-    <!-- breadcrumbs -->
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-        <div class="d-block mb-4 mb-md-0">
-            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
-                <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
-                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}"><span
-                                class="fas fa-home"></span></a></li>
-                    <li class="breadcrumb-item"><a
-                            href="{{ path('app_dashboard_index') }}">{{ 'Dashboard'|trans|capitalize }}</a></li>
-                    <li class="breadcrumb-item"><a
-                            href="{{ path('app_dashboarduser_organizations') }}">{{ 'organizations'|trans|capitalize }}</a>
-                    </li>
-                    <li class="breadcrumb-item active">{{ 'organization'|trans|capitalize }}</li>
-                </ol>
+    {% include 'dashboard_organization/menu.html.twig' %}
+    <section class="pb-8 pt-5 bg-light height100vh">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_dashboard_index') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_dashboard_organizations') }}">{{ 'my organizations'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
+                </ul>
             </nav>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-12 col-md-6 col-lg-4 mb-4">
-            {% if account is defined %}
-                {% include 'dashboard_user/widgets/balance.html.twig' %}
-            {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <!-- left collum -->
-        <div class="col-12 col-xl-8">
-            <div class="card card-body bg-white border-light shadow-sm mb-4">
-                {% if cluster is defined and cluster is not null %}
-                <form
-                    method="post"
-                    action="{% if item.id|default %}{{ path(path, {cluster: cluster.id, id: item.id}) }}{% else %}{{ path(path, {cluster: cluster.id, id: 'new'}) }}{% endif %}">
-                    {% else %}
-                    <form
-                        method="post"
-                        action="{% if item.id|default %}{{ path(path, {id: item.id}) }}{% else %}{{ path(path, {id: 'new'}) }}{% endif %}">
-                        {% endif %}
+            <div class="row">
+                <div class="col-12 col-xl-12">
+                    <div class="card card-body bg-white border-light shadow-sm mb-4">
+                        <h5 class="h5 mb-40">{{ 'my organization'|trans|capitalize }}</h5>
 
-                        <div class="page-inner">
+                        <form action="{{ path('app_dashboard_organization', {'id': item.id }) }}" method="post" enctype="multipart/form-data">
                             <div class="row">
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h1 class="d-inline-block">{{ item.name|capitalize }}</h1>
-                                            <button class="d-inline-block float-right btn btn-primary"
-                                                    type="submit">{{ 'save'|trans|capitalize }}</button>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="name">{{ 'name'|trans|capitalize }} <span class="text-danger">*</span></label>
+                                        <input class="form-control" id="name" type="text" name="name"
+                                        {% if item.name is defined %}
+                                        value="{{ item.name }}"
+                                        {% else %}
+                                        placeholder="{{ 'name of your organization'|trans|capitalize }}"
+                                        {% endif %}
+                                        required>
+                                    </div>
+                                </div>
 
-                                            <div class="row">
-                                                <div class="col-md-12 mb-3">
-                                                    <div class="form-group">
-                                                        <label for="nameInput">{{ 'name'|trans|capitalize }} *</label>
-                                                        <input class="form-control" name="name" id="nameInput"
-                                                               {% if item.name|default and item.name != "New" %}value="{{ item.name|capitalize }}"{% endif %}
-                                                               required>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="profilepic">{{ 'organization picture'|trans|capitalize }}</label>
+                                        <input class="form-control" type="file" name="logo">
+                                    </div>
 
-                                            <div class="row">
-                                                <div class="col-md-12 mb-3">
-                                                    <div class="form-group">
-                                                        <label
-                                                            for="descInput">{{ 'description'|trans|capitalize }}</label>
-                                                        <textarea class="form-control" name="description"
-                                                                  id="descInput">{% if item.description|default %}{{ item.description|capitalize }}{% endif %}</textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                </div>
+                            </div>
 
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <div class="form-group">
-                                                        <label
-                                                            for="cocInput">{{ 'chamber of commerce'|trans|capitalize }}</label>
-                                                        <input class="form-control" id="cocInput" type="number"
-                                                               name="chamberOfComerce"
-                                                               {% if item.chamberOfComerce|default %}value="{{ item.chamberOfComerce }}"{% endif %}>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <div class="form-group">
-                                                        <label
-                                                            for="rsinInput">{{ 'social service number (rsin)'|trans|capitalize }}</label>
-                                                        <input class="form-control" id="rsinInput" type="number"
-                                                               name="rsin"
-                                                               {% if item.rsin|default %}value="{{ item.rsin }}"{% endif %}>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12 col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="postalCode">{{ 'administration contact'|trans|capitalize }}</label>
-                                                        <select class="form-control" name="administrationContact" id="administrationContact">
-                                                            {% for user in users %}
-                                                                {% set userUrl = commonground_cleanurl({'component': 'uc', 'type': 'users', 'id': user.id}) %}
-                                                                <option {% if organization.administrationContact is defined and organization.administrationContact == userUrl %} selected {% endif %} value="{{ user['id'] }}">{{ commonground_resource(user.person).name }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="postalCode">{{ 'privacy contact'|trans|capitalize }}</label>
-                                                        <select class="form-control" name="privacyContact" id="privacyContact">
-                                                            {% for user in users %}
-                                                                {% set userUrl = commonground_cleanurl({'component': 'uc', 'type': 'users', 'id': user.id}) %}
-                                                                <option {% if organization.privacyContact is defined and organization.privacyContact == userUrl %} selected {% endif %} value="{{ user['id'] }}">{{ commonground_resource(user.person).name }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12 col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="postalCode">{{ 'technical contact'|trans|capitalize }}</label>
-                                                        <select class="form-control" name="technicalContact" id="technicalContact">
-                                                            {% for user in users %}
-                                                                {% set userUrl = commonground_cleanurl({'component': 'uc', 'type': 'users', 'id': user.id}) %}
-                                                                <option {% if organization.technicalContact is defined and organization.technicalContact == userUrl %} selected {% endif %} value="{{ user['id'] }}">{{ commonground_resource(user.person).name }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
+                            {% if item.contact|default %}
+                            {% set contact = commonground_resource(item.contact) %}
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label for="website">{{ 'website'|trans|capitalize }}</label>
+                                        <input class="form-control" id="website" name="socials[]" type="text"
+                                        {% if contact.socials[0]|default %}
+                                            value="{{ contact.socials[0].url }}"
+                                        {% else %}
+                                            placeholder="{{ 'enter your website'|trans|capitalize }}"
+                                        {% endif %}
+                                        >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="facebook">{{ 'facebook' }}</label>
+                                        <input class="form-control" id="facebook" name="socials[]" type="text"
+                                            {% if contact.socials[1]|default %}
+                                                value="{{ contact.socials[1].url }}"
+                                            {% else %}
+                                                placeholder="{{ 'enter your facebook'|trans|capitalize }}"
+                                            {% endif %}
+                                        >
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label for="twitter">{{ 'twitter' }}</label>
+                                        <input class="form-control" id="twitter" name="socials[]" type="text"
+                                            {% if contact.socials[2]|default %}
+                                                value="{{ contact.socials[2].url }}"
+                                            {% else %}
+                                                placeholder="{{ 'enter your twitter'|trans|capitalize }}"
+                                            {% endif %}
+                                        >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="instagram">{{ 'instagram' }}</label>
+                                        <input class="form-control" id="instagram" name="socials[]" type="text"
+                                            {% if contact.socials[3]|default %}
+                                                value="{{ contact.socials[3].url }}"
+                                            {% else %}
+                                                placeholder="{{ 'enter your instagram'|trans|capitalize }}"
+                                            {% endif %}
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group mt-5">
+                                        <label for="description">{{ 'description'|trans|capitalize }}<span class="text-danger">*</span></label>
+                                        {% if item.description is defined and item.description is not empty %}
+                                            <textarea class="form-control" id="description" name="description"
+                                                      rows="3" cols="6"
+                                            >{{ item.description }}</textarea>
+                                        {% else %}
+                                            <textarea class="form-control" id="description" name="description"
+                                                      placeholder="{{ 'description of your organization'|trans|capitalize }}"
+                                                      rows="3" cols="6"
+                                            ></textarea>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="form-group" id="telephones[]">
+                                        <label for="phones">
+                                            {{ 'telephone numbers connected to your organization'|trans|capitalize }}
+                                            <br>
+                                            <strong>{{ 'press the blue button to add more phone numbers'|trans|capitalize }}</strong>
+                                        </label>
+                                        <div class="form-inline">
+                                            {% if contact.telephones is defined and contact.telephones is not empty %}
+                                                {% for numbers in contact.telephones %}
+                                                    <input class="form-control" name="telephones[]" type="text" id="phones" value="{{ numbers.telephone }}">
+                                                {% endfor %}
+                                            {% else %}
+                                                <input class="form-control" name="telephones[]" id="phones" type="text" placeholder="{{ 'add phone number'|trans|capitalize }}">
+                                            {% endif %}
+                                            <button type="button" class="form-control btn btn-sm btn-primary" onclick="addItem('telephones[]');">
+                                                &#43;
+                                            </button>
                                         </div>
-                                        <div class="col-12">
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="form-group" id="emails[]">
+                                        <label for="emails">
+                                            {{ 'email addresses connected to your organization'|trans|capitalize }}
+                                            <br>
+                                            <strong>{{ 'press the blue button to add more emails'|trans|capitalize }}</strong>
+                                        </label>
+                                        <div class="form-inline">
+                                            {% if contact.emails is defined and contact.emails is not empty %}
+                                                {% for emails in contact.emails %}
+                                                    <input class="form-control" name="emails[]" type="text" id="emails" value="{{ emails.email }}">
+                                                {% endfor %}
+                                            {% else %}
+                                                <input class="form-control" name="emails[]" id="emails" type="text" placeholder="{{ 'add email'|trans|capitalize }}">
+                                            {% endif %}
+                                            <button type="button" class="form-control btn btn-sm btn-primary" onclick="addItem('emails[]');">
+                                                &#43;
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </form>
+                            <button type="submit" class="btn btn-primary">{{ 'save changes'|trans|capitalize }}</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <script>
+        function addItem(id) {
+            const formDiv = document.getElementById(id);
+            const input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+            input.setAttribute('class', "form-control mb-2");
+            input.setAttribute('name', id);
+            input.setAttribute('id', id);
+
+            formDiv.appendChild(input);
+        }
+    </script>
 
 {% endblock %}

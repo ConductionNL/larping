@@ -4,14 +4,19 @@
 
 namespace App\Controller;
 
+use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * This controller handles any pages with organization(s) as main subject.
+ * The OrganizationController handles any calls about organizations.
  *
  * Class OrganizationController
  *
@@ -23,26 +28,17 @@ class OrganizationController extends AbstractController
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService, Request $request)
+    public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-        $variables['slug'] = 'organizations';
-        $variables['h1'] = 'organizations';
-        $variables['path'] = 'app_organization_index';
-        $variables['organizations'] = $commonGroundService->getResourceList(['component'=>'wrc', 'type'=>'organizations'])['hydra:member'];
+        $variables = [];
 
-        // Set the organization background-color for the icons shown with every organization
-        foreach ($variables['organizations'] as &$organization) {
-            if (isset($organization['style']['css'])) {
-                preg_match('/background-color: ([#A-Za-z0-9]+)/', $organization['style']['css'], $matches);
-                $organization['backgroundColor'] = $matches;
-            }
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+
+        foreach($variables['organizations'] as $key => $value){
+            $variables['organizations'][$key]['totals'] =  $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'item_total'],['resource' => $variables['organization']['@id']]);
         }
 
-        if ($request->isMethod('POST')) {
-            $search = $request->request->all()['search'];
 
-            $variables['organizations'] = $commonGroundService->getResourceList(['component'=>'wrc', 'type'=>'organizations'], ['name'=>$search])['hydra:member'];
-        }
 
         return $variables;
     }
@@ -51,16 +47,29 @@ class OrganizationController extends AbstractController
      * @Route("/{id}")
      * @Template
      */
-    public function organizationAction(CommonGroundService $commonGroundService, Request $request, $id)
+    public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component'=>'wrc', 'type'=>'organizations', 'id'=>$id]);
-        $variables['challenges'] = $commonGroundService->getResourceList(['component'=>'chrc', 'type'=>'tenders'], ['submitters'=>$variables['organization']['@id']])['hydra:member'];
-        $variables['jobPostings'] = $commonGroundService->getResourceList(['component'=>'mrc', 'type'=>'job_postings'], ['hiringOrganization'=>$variables['organization']['@id']])['hydra:member'];
-        $variables['courses'] = $commonGroundService->getResourceList(['component'=>'edu', 'type'=>'courses'], ['organization'=>$variables['organization']['@id']])['hydra:member'];
-//        $variables['programs'] = $commonGroundService->getResourceList(['component'=>'edu', 'type'=>'programs'], ['provider'=>$variables['organization']['@id']])['hydra:member'];
+        $variables = [];
+        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id'=>$id]);
+         if(array_key_exists('contact',$variables['organization']) && $variables['organization']['contact']){
+            $variables['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
+        }
 
-        $variables['h1'] = $variables['organization']['name'];
-        $variables['slug'] = $variables['organization']['name'];
+        $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'],['resource' => $variables['organization']['@id']])['hydra:member'];
+        $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'],['resource' => $variables['organization']['@id']])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+
+        // Add review
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'review') {
+            $resource = $request->request->all();
+
+            $resource['organization'] = $variables['organization']['@id'];
+            $resource['resource'] = $variables['organization']['@id'];
+            $resource['author'] = $this->getUser()->getPerson();
+
+            // Save to the commonground component
+            $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+        }
 
         return $variables;
     }
