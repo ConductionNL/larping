@@ -11,8 +11,9 @@
         </thead>
         <tbody>
         {% for organization in organizations %}
+            {% set organizationUrl = commonground_cleanurl({'component': 'wrc', 'type': 'organizations', 'id': organization.id}) %}
             <tr>
-                <td><span class="h6 mb-3 mb-lg0">{{ organization.name }}</span></td>
+                <td><span class="h6 mb-3 mb-lg0">{% if app.user.organization is defined and organizationUrl == app.user.organization %}<i style="color: green" class="fas fa-check-circle mr-2"></i>{% endif %} {{ organization.name }}</span></td>
                 <td>
                     {% if organization.contact|default and commonground_resource(organization.contact).emails|default %}
                         {% set contact = commonground_resource(organization.contact) %}
@@ -38,6 +39,9 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#OrganizationModal{{ organization.id }}">{{ 'edit'|trans|capitalize }}</a>
                             <a class="dropdown-item" href="{{ path('app_organization_organization', {id: organization.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
+                            <form action="{{ path('app_dashboarduser_index') }}" method="post">
+                                <button class="dropdown-item" value="{{ organization.id }}" name="organization">{{ 'set active'|trans|capitalize }}</button>
+                            </form>
                         </div>
                     </div>
                 </td>
