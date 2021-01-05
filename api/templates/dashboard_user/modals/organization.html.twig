@@ -1,4 +1,3 @@
-
 {% if resource is defined %}
     {% set  id = resource['id'] %}
     {% set  type = 'Organization' %}
@@ -11,15 +10,109 @@
 
 {% block body %}
     <form id="{{ type }}Form{{ id }}" method="post">
-        {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
-        {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
-        <div class="form-group">
-            <label for="name">{{ 'name of your product'|trans|capitalize }}*</label>
-            <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+        {% if resource['id'] is defined %}<input type="hidden" id="id" name="id"
+                                                 value="{{ resource['id'] }}">{% endif %}
+        {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id"
+                                                  value="{{ resource['@id'] }}">{% endif %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">{{ 'name of your organization'|trans|capitalize }}*</label>
+                    <input type="text" class="form-control" id="name" name="name"
+                           {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+                </div>
+            </div>
+            {% if resource.contact|default %}
+                {% set contact = commonground_resource(resource.contact) %}
+            {% endif %}
+            <div class="col-md-6">
+                <div class="form-group" id="telephones[]">
+                    <div class="form-inline">
+                        <label for="telephone">{{ 'telephone'|trans|capitalize }}</label>
+                        <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('telephones[]');" data-toggle="tooltip" data-placement="top" title="{{ 'add more phone numbers'|trans|capitalize }}"></i>
+                    </div>
+                    {% if contact.telephones is defined and contact.telephones is not empty %}
+                        {% for numbers in contact.telephones %}
+                            <input class="form-control" name="telephones[]" type="text" id="telephone" value="{{ numbers.telephone }}">
+                        {% endfor %}
+                    {% else %}
+                        <input class="form-control" name="telephones[]" id="telephone" type="text" placeholder="{{ 'add phone number'|trans|capitalize }}">
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="description">{{ 'description'|trans|capitalize }}</label>
-            <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="description">{{ 'description'|trans|capitalize }}</label>
+                    <textarea class="form-control" rows="5" id="description"
+                              name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" id="emails[]">
+                    <div class="form-inline">
+                        <label for="emails">{{ 'email'|trans|capitalize }}</label>
+                        <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('emails[]');" data-toggle="tooltip" data-placement="top" title="{{ 'add more emails'|trans|capitalize }}"></i>
+                    </div>
+                    {% if contact.emails is defined and contact.emails is not empty %}
+                        {% for emails in contact.emails %}
+                            <input class="form-control" name="emails[]" type="text" id="emails" value="{{ emails.email }}">
+                        {% endfor %}
+                    {% else %}
+                        <input class="form-control" name="emails[]" id="emails" type="text" placeholder="{{ 'add email'|trans|capitalize }}">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="addresses">{{ 'address'|trans|capitalize }}</label>
+                    <input type="text" class="form-control" id="addresses" name="addresses">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" id="socials[]">
+                    <div class="form-inline">
+                        <label for="socials">{{ 'socials'|trans|capitalize }}</label>
+                        <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('socials[]');" data-toggle="tooltip" data-placement="top" title="{{ 'add more socials'|trans|capitalize }}"></i>
+                    </div>
+                    <select class="form-control" id="socials">
+                        <option name="socials[type]">{{ 'select type'|capitalize }}</option>
+                        <option name="website">{{ 'website'|capitalize }}</option>
+                        <option name="facebook">{{ 'facebook'|capitalize }}</option>
+                        <option name="twitter">{{ 'twitter'|capitalize }}</option>
+                        <option name="instagram">{{ 'instagram'|capitalize }}</option>
+                    </select>
+                    <input class="form-control" name="socials[url]" id="socials" type="url"
+                        {% if contact.socials|default %} value="{{ contact.socials[0].url }}"
+                           {% else %}
+                           placeholder="{{ 'add url'|trans|capitalize }}"
+                           {% endif %}>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="logo">{{ 'logo'|trans|capitalize }}</label>
+                    <input type="file" class="form-control" id="logo" name="logo">
+                </div>
+            </div>
         </div>
     </form>
+    <script>
+        function addItem(id) {
+            const formDiv = document.getElementById(id);
+            const input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+            input.setAttribute('class', "form-control mb-2");
+            input.setAttribute('name', id);
+            input.setAttribute('id', id);
+
+            formDiv.appendChild(input);
+        }
+    </script>
 {% endblock %}
