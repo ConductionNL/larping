@@ -22,4 +22,8 @@
         </div>
     </section>
 
+    {% include 'widgets/modal.html.twig' with {
+        'title': 'add event'|trans|capitalize,
+        'type': type
+    } %}
 {% endblock %}

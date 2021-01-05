@@ -33,7 +33,7 @@ class DashboardUserController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
 
-        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['participants'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'people'])['hydra:member'];
         //$variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
@@ -49,7 +49,6 @@ class DashboardUserController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
-        $variables['ccOrganization'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
         $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => $params->get('app_id')]);
         $variables['type'] = 'organization';
 
@@ -57,15 +56,62 @@ class DashboardUserController extends AbstractController
             $resource = $request->request->all();
             $resource['rsin'] = "";
             $resource['chamberOfComerce'] = "";
+            // @todo person toevoegen
             $person = $commonGroundService->getResource($this->getUser()->getPerson());
-            $resource['persons'][] = $person;
+//            $resource['persons'][] = $person;
+
+            $email = [];
+            $email['name'] = 'email for '.$person['name'];
+            $email['email'] = $request->get('email');
+            if (isset($email['id'])) {
+                $commonGroundService->saveResource($email, ['component' => 'cc', 'type' => 'emails']);
+                $resource['emails'][] = '/emails/'.$email['id'];
+            } elseif (isset($email['email'])) {
+                $resource['emails'][] = $email;
+            }
+
+            $telephone = [];
+            $telephone['name'] = 'telephone for '.$person['name'];
+            $telephone['telephone'] = $request->get('telephone');
+            if (isset($telephone['id'])) {
+                $commonGroundService->saveResource($telephone, ['component' => 'cc', 'type' => 'telephones']);
+                $resource['telephones'][] = '/telephones/'.$telephone['id'];
+            } elseif (isset($telephone['telephone'])) {
+                $resource['telephones'][] = $telephone;
+            }
+
+            $address = [];
+            $address['name'] = 'address for '.$person['name'];
+            $address['street'] = $request->get('street');
+            $address['houseNumber'] = $request->get('houseNumber');
+            $address['houseNumberSuffix'] = $request->get('houseNumberSuffix');
+            $address['postalCode'] = $request->get('postalCode');
+            $address['locality'] = $request->get('locality');
+            if (isset($address['id'])) {
+                $commonGroundService->saveResource($address, ['component' => 'cc', 'type' => 'addresses']);
+                $resource['adresses'][] = '/addresses/'.$address['id'];
+            } else {
+                $resource['adresses'][] = $address;
+            }
+
+            $socials = [];
+            $socials['name'] = $request->get('type'). ' of '.$person['name'];
+            $socials['description'] = $request->get('type'). ' of '.$person['name'];
+            $socials['type'] = $request->get('type');
+            $socials['url'] = $request->get('url');
+            if (isset($twitter['id'])) {
+                $commonGroundService->saveResource($socials, ['component' => 'cc', 'type' => 'socials']);
+                $resource['socials'][] = '/socials/'.$socials['id'];
+            } else {
+                $resource['socials'][] = $socials;
+            }
 
             // Als de organisatie nieuw is moeten we wat meer doen
             $new = false;
             if(!array_key_exists('@id',$resource) || !$resource['@id'] ){
                 $new = true;
                 // Contact aanmaken
-                $resource['sourceOrganization'] = $params->get($application['organization']['@id']);
+                $resource['sourceOrganization'] = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $application['organization']['id']]);
                 $contact = $commonGroundService->saveResource($resource, ['component' => 'cc', 'type' => 'organizations']);
                 $resource['contact'] = $contact['@id'];
 
@@ -74,21 +120,21 @@ class DashboardUserController extends AbstractController
             // Update to the commonground component
             $organization = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
 
-            if($new){
-                /*@todo de ingelogde gebruiker toevoegen aan de organisatie */
-                $group = ['organization'=>$organization['@id'],'name'=>'members'];
-                $group = $commonGroundService->saveResource($group, ['component' => 'uc', 'type' => 'groups']);
+//            if($new){
+//                /*@todo de ingelogde gebruiker toevoegen aan de organisatie */
+//                $group = ['organization'=>$organization['@id'],'name'=>'members', 'description'=> $organization['name']];
+//                $group = $commonGroundService->saveResource($group, ['component' => 'uc', 'type' => 'groups']);
+//
+//                // Make an admin group
+//                $group = ['organization'=>$organization['@id'],'name'=>'admin','parent'=>'/groups/'.$group['id'], 'description'=> $organization['name']];
+//                $group = $commonGroundService->saveResource($group, ['component' => 'uc', 'type' => 'groups']);
+//
+//               // Ad the current user to the admin group
+//                $user = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()])['hydra:member'];
+//
+//            }
 
-                // Make an admin group
-                $group = ['organization'=>$organization['@id'],'name'=>'admin','parent'=>$group['id']];
-                $group = $commonGroundService->saveResource($group, ['component' => 'uc', 'type' => 'groups']);
-
-                // Ad the current user to the admin group
-                $member = ['user'=>$this->getUser()->getId(),'group'=>$group['id']];
-                $member = $commonGroundService->saveResource($member, ['component' => 'uc', 'type' => 'members']);
-            }
         }
-
         return $variables;
     }
 
@@ -174,6 +220,7 @@ class DashboardUserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+        $variables['events'] = $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'], ['persons' => $this->getUser()->getPerson()])['hydra:member'];
         $variables['type'] = 'event';
 
@@ -208,6 +255,7 @@ class DashboardUserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+        $variables['event'] = $commonGroundService->getResource(['component'=>'arc', 'type'=>'events', 'id' => $id]);
 
         return $variables;
     }
