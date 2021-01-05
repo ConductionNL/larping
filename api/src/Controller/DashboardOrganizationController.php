@@ -64,6 +64,7 @@ class DashboardOrganizationController extends AbstractController
             $event = $request->request->all();
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
+            $event['status'] = 'pending';
             // Save the resource
             $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
         }
