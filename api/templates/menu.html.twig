@@ -31,109 +31,111 @@
                 <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a></li>
 
                 <li class="">
-                    {% set organization = commonground_resource({'component':'wrc','type':'organizations','id':'0197389a-87d9-4d09-b50a-5870994c77a2'}) %}
-                    <a href="#">{{ organization.name }}</a>
-                    <div class="megamenu">
-                        <div class="megamenu-row">
-                            <div class="col4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <h5 class="heading">
-                                            <i class="fa fa-map mr-2 text-primary" aria-hidden="true"></i>
-                                            {{ organization.name }}
-                                        </h5>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_organization', {organization: organization.id}) }}">{{ 'edit'|trans|capitalize }} </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
-                                    </li>
-                                </ul>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <h5 class="heading">
-                                            <i class="fa fa-address-book mr-2 text-primary" aria-hidden="true"></i>
-                                            {{ 'sales'|trans|capitalize }}
-                                        </h5>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_events', {organization: organization.id}) }}">{{ 'events'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_products', {organization: organization.id}) }}">{{ 'products'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_offers', {organization: organization.id}) }}">{{ 'offers'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_orders', {organization: organization.id}) }}">{{ 'orders'|trans|capitalize }}</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <h5 class="heading">
-                                            <i class="fa fa-th-large text-primary mr-2" aria-hidden="true"></i>
-                                            {{ 'organizational'|trans|capitalize }}
-                                        </h5>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_members', {organization: organization.id}) }}">{{ 'members'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_mailings', {organization: organization.id}) }}">{{ 'mailing'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_reviews', {organization: organization.id}) }}">{{ 'reviews'|trans|capitalize }}</a>
-                                    </li>
-                                </ul>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <h5 class="heading">
-                                            <i class="fa fa-th-list text-primary mr-2" aria-hidden="true"></i>
-                                            {{ 'financial'|trans|capitalize }}
-                                        </h5>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_balance', {organization: organization.id}) }}">{{ 'balance'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_reservations', {organization: organization.id}) }}">{{ 'reservations'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_earnings', {organization: organization.id}) }}">{{ 'earnings'|trans|capitalize }}</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <h5 class="heading">
-                                            <i class="fa fa-file-text text-primary mr-2" aria-hidden="true"></i>
-                                            {{ 'gameplay'|trans|capitalize }}
-                                        </h5>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_characters', {organization: organization.id}) }}">{{ 'characters'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_skills', {organization: organization.id}) }}">{{ 'skills'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_items', {organization: organization.id}) }}">{{ 'items'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_conditions', {organization: organization.id}) }}">{{ 'conditions'|trans|capitalize }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_dashboardorganization_storylines', {organization: organization.id}) }}">{{ 'storyline'|trans|capitalize }}</a>
-                                    </li>
-                                </ul>
+                    {% if app.user.organization is defined and app.user.organization is not empty %}
+                        {% set organization = commonground_resource(app.user.organization) %}
+                        <a href="#">{{ organization.name }}</a>
+                        <div class="megamenu">
+                            <div class="megamenu-row">
+                                <div class="col4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <h5 class="heading">
+                                                <i class="fa fa-map mr-2 text-primary" aria-hidden="true"></i>
+                                                {{ organization.name }}
+                                            </h5>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_organization', {organization: organization.id}) }}">{{ 'edit'|trans|capitalize }} </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
+                                        </li>
+                                    </ul>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <h5 class="heading">
+                                                <i class="fa fa-address-book mr-2 text-primary" aria-hidden="true"></i>
+                                                {{ 'sales'|trans|capitalize }}
+                                            </h5>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_events', {organization: organization.id}) }}">{{ 'events'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_products', {organization: organization.id}) }}">{{ 'products'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_offers', {organization: organization.id}) }}">{{ 'offers'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_orders', {organization: organization.id}) }}">{{ 'orders'|trans|capitalize }}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <h5 class="heading">
+                                                <i class="fa fa-th-large text-primary mr-2" aria-hidden="true"></i>
+                                                {{ 'organizational'|trans|capitalize }}
+                                            </h5>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_members', {organization: organization.id}) }}">{{ 'members'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_mailings', {organization: organization.id}) }}">{{ 'mailing'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_reviews', {organization: organization.id}) }}">{{ 'reviews'|trans|capitalize }}</a>
+                                        </li>
+                                    </ul>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <h5 class="heading">
+                                                <i class="fa fa-th-list text-primary mr-2" aria-hidden="true"></i>
+                                                {{ 'financial'|trans|capitalize }}
+                                            </h5>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_balance', {organization: organization.id}) }}">{{ 'balance'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_reservations', {organization: organization.id}) }}">{{ 'reservations'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_earnings', {organization: organization.id}) }}">{{ 'earnings'|trans|capitalize }}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <h5 class="heading">
+                                                <i class="fa fa-file-text text-primary mr-2" aria-hidden="true"></i>
+                                                {{ 'gameplay'|trans|capitalize }}
+                                            </h5>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_characters', {organization: organization.id}) }}">{{ 'characters'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_skills', {organization: organization.id}) }}">{{ 'skills'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_items', {organization: organization.id}) }}">{{ 'items'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_conditions', {organization: organization.id}) }}">{{ 'conditions'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_storylines', {organization: organization.id}) }}">{{ 'storyline'|trans|capitalize }}</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </li>
 
                 <div class="menu-right">
