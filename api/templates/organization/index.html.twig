@@ -22,9 +22,9 @@
             </div>
 
             <div class="search-result-bar">
-                {% if items|default %}
-                    <p>{{ 'we found'|trans|capitalize }} <span>{{ items|length }}</span> {{ 'results for'|trans }}
-                        <span>{{ 'app_organization_index'|trans|capitalize }}</span>.</p>
+                {% if organizations|default %}
+                    <p>{{ 'we found'|trans|capitalize }} <span>{{ organizations|length }}</span> {{ 'results for'|trans }}
+                        <span>{{ 'organizations'|trans|capitalize }}</span>.</p>
                 {% else %}
                     <p>{{ 'no results found'|trans|capitalize }}.</p>
                 {% endif %}
