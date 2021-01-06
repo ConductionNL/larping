@@ -70,10 +70,10 @@ class DashboardOrganizationController extends AbstractController
         $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', ])['hydra:member'];
 
 
-        if ($request->isMethod('POST')) {
-            // Get the current resource
-            $event = $request->request->all();
-
+        //Delete event
+        if ($request->isMethod('POST') && $request->request->get('DeleteEvent') == 'true') {
+            $del = $commonGroundService->deleteResource($variables['event'], $variables['event']['@id']);
+            return $this->redirect($this->generateUrl('app_dashboardorganization_events'));
         }
 
         return $variables;
