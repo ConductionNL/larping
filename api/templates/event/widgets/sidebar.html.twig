@@ -4,19 +4,19 @@
         <label class="mb-4 h5 font-weight-normal text-dark"
                for="keywordInput">{{ 'what are you looking for'|trans|title }}?</label>
         <input type="text" class="form-control" id="keywordInput" name="filters[keywordsInput]"
-               placeholder="Enter Keyword">
+               placeholder="Enter Keyword" {% if filters.keywordsInput|default %} value="{{ filters.keywordsInput }}"  {% endif %}>
     </div>
 
     <div class="mb-6">
         <label class="mb-4 h5 font-weight-normal text-dark"
                for="locationInput">{{ 'find by location'|trans|title }}</label>
         <input type="text" class="form-control" id="locationInput" name="filters[locationInput]"
-               placeholder="Enter Location">
+               placeholder="Enter Location" {% if filters.locationInput|default %} value="{{ filters.locationInput }}" {% endif %}>
     </div>
-
 
     <div class="mb-3 text-center">
         <button type="submit" class="btn btn-primary btn-sm">{{ 'search'|trans|title }}</button>
+        <button type="button" name="resetFilters" class="btn btn-danger btn-sm">{{ 'reset'|trans|title }}</button>
     </div>
 
     <div class="mb-6">
