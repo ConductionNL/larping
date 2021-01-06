@@ -23,14 +23,16 @@ class ShoppingService
     private $commonGroundService;
     private $requestService;
 
-    public function __construct(
+    public function __construct
+    (
         ParameterBagInterface $params,
         CacheInterface $cache,
         SessionInterface $session,
         FlashBagInterface $flash,
         RequestStack $requestStack,
         CommonGroundService $commonGroundService,
-        Security $security)
+        Security $security
+    )
     {
         $this->params = $params;
         $this->cash = $cache;
@@ -48,7 +50,6 @@ class ShoppingService
 
             if (!isset($variables['order']['@id'])) {
                 $person = $this->commonGroundService->getResource($person);
-
 
                 if (isset($order['items']) && count($order['items']) > 0) {
                     $offer = $this->commonGroundService->getResource($order['items'][0]['offer']);
@@ -228,6 +229,7 @@ class ShoppingService
         if ($thisProductIsOwned == false && $this->security->getUser() && $this->security->getUser()->getPerson()) {
             // Fetches owned products
             $ownedProducts = $this->getOwnedProducts($this->security->getUser()->getPerson());
+
             if (isset($ownedProducts) && count($ownedProducts) > 0) {
                 foreach ($ownedProducts as $ownedProduct) {
                     if ($ownedProduct['id'] == $product['id']) {
@@ -242,9 +244,10 @@ class ShoppingService
 
     function getOwnedProducts($person)
     {
-        $orders = $this->commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['customer' => $person]);
+        $orders = $this->commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['customer' => $person])['hydra:member'];
         $orderItemIds = [];
         $ownedProducts = [];
+
         // Get all order items of the given person
         foreach ($orders as $order) {
             if (isset($order['items']) && count($order['items']) > 0) {
@@ -257,20 +260,20 @@ class ShoppingService
             }
         }
 
-
         // Get all ownedProducts of the given person
         $productIds = [];
         if (isset($orderItems) && count($orderItems) > 0) {
             foreach ($orderItems as $item) {
                 if (isset($item['offer'])) {
                     $offer = $this->commonGroundService->getResource($item['offer']);
-                    if (isset($offer['products']) && count($offer['products']) > 0)
+                    if (isset($offer['products']) && count($offer['products']) > 0) {
                         foreach ($offer['products'] as $product) {
                             if (!in_array($product['id'], $productIds)) {
                                 $ownedProducts[] = $product;
                                 $productIds[] = $product['id'];
                             }
                         }
+                    }
                 }
             }
         }
