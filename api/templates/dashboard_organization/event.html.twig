@@ -12,20 +12,42 @@
             <ul class="list-unstyled d-flex p-0 m-0">
                 <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
                 <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_events', {organization: organization.id}) }}">{{ 'events'|trans|capitalize }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_events') }}">{{ 'events'|trans|capitalize }}</a></li>
                 <li class="breadcrumb-item active"
                     aria-current="page">{{ event.name }}</li>
             </ul>
         </nav>
         <div class="row">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                {{ 'delete' }}
+            </button>
 
-            <table class="table">
-                <thead>
-                <tr>
-                    
-                </tr>
-                </thead>
-            </table>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">{{ 'delete event'|trans|capitalize }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ path('app_dashboardorganization_event', {id: event.id}) }}" method="post">
+                                <label for="delete">{{ 'you are about to delete'|trans|capitalize }} {{ event.name }} {{ 'are you sure?' }}</label>
+                                <div class="btn-group" id="delete">
+                                    <button type="submit" class="btn btn-danger">{{ 'delete event'|trans|capitalize }}</button>
+                                    <input type="hidden" name="DeleteEvent" value="true">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a class="btn btn-primary text-white" data-dismiss="modal">{{ 'cancel' }}</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>

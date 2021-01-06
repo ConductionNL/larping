@@ -7,7 +7,7 @@
 
             <div class="row">
                 <div class="col-8">
-                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ 'app_organization_index'|trans|capitalize }}</h1>
+                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ 'organization'|trans|capitalize }}</h1>
                 </div>
                 <div class="col-4">
                     <!-- Breadcrumb -->
@@ -15,16 +15,16 @@
                         <ul class="list-unstyled d-flex p-0 m-0">
                             <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
                             <li class="breadcrumb-item active"
-                                aria-current="page">{{ 'app_organization_index'|trans|capitalize }}</li>
+                                aria-current="page">{{ 'organization'|trans|capitalize }}</li>
                         </ul>
                     </nav>
                 </div>
             </div>
 
             <div class="search-result-bar">
-                {% if items|default %}
-                    <p>{{ 'we found'|trans|capitalize }} <span>{{ items|length }}</span> {{ 'results for'|trans }}
-                        <span>{{ 'app_organization_index'|trans|capitalize }}</span>.</p>
+                {% if organizations|default %}
+                    <p>{{ 'we found'|trans|capitalize }} <span>{{ organizations|length }}</span> {{ 'results for'|trans }}
+                        <span>{{ 'organizations'|trans|capitalize }}</span>.</p>
                 {% else %}
                     <p>{{ 'no results found'|trans|capitalize }}.</p>
                 {% endif %}
