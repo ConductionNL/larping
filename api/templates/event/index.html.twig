@@ -7,27 +7,44 @@
 
             <div class="row">
                 <div class="col-8">
-                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ 'events'|trans|capitalize }}</h1>
-                </div>
-                <div class="col-4">
-                    <!-- Breadcrumb -->
-                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1 float-right" aria-label="breadcrumb">
-                        <ul class="list-unstyled d-flex p-0 m-0">
-                            <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
-                            <li class="breadcrumb-item active"
-                                aria-current="page">{{ 'events'|trans|capitalize }}</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+
+                    <div class="row">
+                        <div class="col-8">
+                            <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ 'events'|trans|capitalize }}</h1>
+                        </div>
+                        <div class="col-4">
+                            <!-- Breadcrumb -->
+                            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1 float-right"
+                                 aria-label="breadcrumb">
+                                <ul class="list-unstyled d-flex p-0 m-0">
+                                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                                    <li class="breadcrumb-item active"
+                                        aria-current="page">{{ 'events'|trans|capitalize }}</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
 
                     <div class="search-result-bar">
                         {% if events|default %}
                             <p>{{ 'we found'|trans|capitalize }}
                                 <span>{{ events|length }}</span> {{ 'results for'|trans }}
-                                <span>{{ 'events'|trans|capitalize }}</span>.</p>
+                                <span>{{ 'events'|trans|capitalize }}</span>
+                                {% if filters|default and filters.keywordsInput|default %}
+                                {{ 'with'|trans~' '~'keywords'|trans }} <span>{{ filters.keywordsInput }}</span>
+                                {% endif %}
+                                {% if filters|default and filters.locationInput|default %}
+                                    {{ 'with'|trans~' '~'as'|trans~' '~'location'|trans }} <span>{{ filters.locationInput }}</span>
+                                {% endif %}
+                            </p>
                         {% else %}
-                            <p>{{ 'no results found'|trans|capitalize }}.</p>
+                            <p>{{ 'no results found'|trans|capitalize }}
+                            {% if filters|default and filters.keywordsInput|default %}
+                                {{ 'with keywords'|trans }} <span>{{ filters.keywordsInput }}</span>
+                            {% endif %}
+                            {% if filters|default and filters.locationInput|default %}
+                                {{ 'with as location'|trans }} <span>{{ filters.locationInput }}</span>
+                            {% endif %}.</p>
                         {% endif %}
                         <div class="ml-md-auto d-flex align-items-center justify-content-between">
                             <div class="select-bg-transparent select-border">
@@ -63,27 +80,31 @@
                         </div>
                     </div>
 
-                    <div id="gridFullwidthDiv" class="fade-in">
-                        {% for event in events %}
-                            {%  include 'cards/event.html.twig' with {'item': event}  %}
-                        {% endfor %}
-                    </div>
+{#                    <div id="gridFullwidthDiv" class="fade-in">#}
+{#                        {% for event in events %}#}
+{#                            {% include 'cards/event.html.twig' with {'item': event} %}#}
+{#                        {% endfor %}#}
+{#                    </div>#}
 
                     <div id="listFullwidthDiv" class="fade-in">
                         {% include 'event/sections/list_fullwidth.html.twig' %}
                     </div>
 
+                    <div id="gridFullwidthDiv" class="fade-in">
+                        <div class="row">
+                            {% if events|default %}
+                                {% for item in events %}
+                                    <div class="col-md-6">
+                                        {% include '/cards/event.html.twig' with {'item': item} %}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
 
-            <div id="gridFullwidthDiv" class="fade-in">
-                <div class="row">
-                    {% if items|default %}
-                        {% for item in items %}
-                            <div class="col-md-6 col-lg-4">
-                                {% include '/cards/event.html.twig' with {'item': item} %}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+                <div class="col-lg-4 pl-xl-6">
+                    {% include 'event/widgets/sidebar.html.twig' with {'path': 'app_event_index'} %}
                 </div>
             </div>
 
