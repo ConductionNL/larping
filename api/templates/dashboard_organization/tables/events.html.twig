@@ -16,7 +16,7 @@
     {% for event in events %}
     <tr>
         <td class="text-capitalize">
-            <a class="text-hover-primary text-muted" href="listing-rental.html">{{ event.name }}</a>
+            <a class="text-hover-primary text-muted" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ event.name }}</a>
         </td>
         <td>
             <span class="d-block">{{ event.startDate|date }} /</span>
@@ -42,9 +42,9 @@
 
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#EventModal{{ event.id }}">{{ 'edit'|trans|capitalize }}</a>
-                    <a class="dropdown-item" href="#">Participants</a>
                     <a class="dropdown-item" href="{{ path('app_dashboardorganization_event', {id: event.id}) }}">{{ 'config'|trans|capitalize }}</a>
-                    <a class="dropdown-item" href="#">Cancel</a>
+                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_eventparticipants', { id: event.id}) }}">{{ 'participants'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_eventtickets', { id: event.id}) }}">{{ 'tickets'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
                 </div>
             </div>
