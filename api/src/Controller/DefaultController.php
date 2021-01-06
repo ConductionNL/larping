@@ -6,10 +6,13 @@ namespace App\Controller;
 
 use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use http\Env\Response;
+use phpDocumentor\Reflection\Types\String_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,94 +33,14 @@ class DefaultController extends AbstractController
      */
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-        // On an index route we might want to filter based on user input
-        $variables['query'] = array_merge($request->query->all(), $variables['post'] = $request->request->all());
-
-        if ($this->getUser()) {
-            $person = $commonGroundService->getResource($this->getUser()->getPerson());
-            $personUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'people', 'id' => $person['id']]);
-
-            $employees = $commonGroundService->getResourceList(['component' => 'mrc', 'type' => 'employees'], ['person' => $personUrl])['hydra:member'];
-
-            if (!count($employees) > 0) {
-                $mailingService->sendMail('mails/welcome_mail.html.twig', 'no-reply@conduction.nl', $this->getUser()->getUsername(), 'Welkom op conduction.academy');
-
-                $employee = [];
-                $employee['person'] = $personUrl;
-
-                $commonGroundService->createResource($employee, ['component' => 'mrc', 'type' => 'employees']);
-
-                $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
-                $provider = $providers[0];
-
-                $users = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()])['hydra:member'];
-                $user = $users[0];
-
-                $userUrl = $commonGroundService->cleanUrl(['component' => 'uc', 'type' => 'users', 'id' => $user['id']]);
-
-                $authorizations = $commonGroundService->getResourceList(['component' => 'wac', 'type' => 'authorizations'], ['userUrl' => $userUrl, 'application' => '/applications/'.$provider['configuration']['app_id']])['hydra:member'];
-
-//                if (count($authorizations) > 0) {
-//                    $authorization = $authorizations[0];
-//
-//                    $dossier = [];
-//                    $dossier['name'] = 'employee dossier';
-//                    $dossier['description'] = 'employee dossier for '.$person['name'];
-//                    $dossier['sso'] = $this->generateUrl('app_dashboard_index');
-//                    $date = new \DateTime('now');
-//                    $date->add(new \DateInterval('P2Y'));
-//                    $dossier['expiryDate'] = $date->format('h:m Y-m-d');
-//                    $dossier['goal'] = 'have access to employee dossier';
-//                    $dossier['authorization'] = '/authorizations/'.$authorization['id'];
-//
-//                    $commonGroundService->createResource($dossier, ['component' => 'wac', 'type' => 'dossiers']);
-//                }
-            }
-        }
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/login")
-     * @Template
-     */
-    public function loginAction(CommonGroundService $commonGroundService, Request $request)
-    {
         $variables = [];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        $variables['groups'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'groups'])['hydra:member'];
+        //$variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations'])['hydra:member'];
 
         return $variables;
     }
 
-    /**
-     * @Route("/register")
-     * @Template
-     */
-    public function registerAction(CommonGroundService $commonGroundService, Request $request)
-    {
-        $variables = [];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/organization")
-     * @Template
-     */
-    public function organizationAction(CommonGroundService $commonGroundService, Request $request)
-    {
-        $variables = [];
-
-        if (!$this->getUser()) {
-            return $this->redirect($this->generateUrl('app_user_idvault').'?backUrl='.$request->getUri());
-        }
-
-        if ($request->query->get('backUrl')) {
-            $variables['backUrl'] = $request->query->get('backUrl');
-        }
-
-        return $variables;
-    }
 
     /**
      * @Route("/newsletter")
@@ -143,6 +66,31 @@ class DefaultController extends AbstractController
             return $this->redirect('http://id-vault.com/sendlist/authorize?client_id='.$provider['configuration']['app_id'].'&send_lists=8b929e53-1e16-4e59-a254-6af6b550bd08&redirect_uri='.$redirect);
         } else {
             return $this->render('500.html.twig');
+        }
+    }
+
+    /**
+     * @Route("/like")
+     * @Template
+     */
+    public function likeAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+        if ($this->getUser() && $request->isMethod('POST')) {
+            $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $request->get('resource'), 'author' => $this->getUser()->getPerson()])['hydra:member'];
+            if (count($likes) > 0) {
+                $like = $likes[0];
+                // Delete this existing like
+                $commonGroundService->deleteResource($like);
+                return new JsonResponse(array('data' => 'unliked'));
+            }else {
+                $like['author'] = $this->getUser()->getPerson();
+                $like['resource'] = $request->get('resource');
+                $like['organization'] = 'https://test.com';
+                $like = $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
+                return new JsonResponse(array('data' => 'liked'));
+            }
+        } else {
+            return new JsonResponse(array('data' => 'you are not logged in'));
         }
     }
 }

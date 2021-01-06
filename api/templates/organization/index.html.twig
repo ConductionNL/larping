@@ -2,137 +2,110 @@
 
 {% block content %}
 
-    <section class="section-header bg-primary pb-7 pb-lg-10 text-white">
+    <section class="py-7 py-md-10">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-10 text-center">
-                    <h1 class="mb-3">{{ h1|trans|capitalize }}</h1>
-                    <p class="lead px-lg-5 mb-5">{{ 'find any organization on the platform'|trans|capitalize }}.</p>
-                    <form action="{{ path(path) }}" method="post">
-                        <div class="form-group bg-white shadow-soft rounded-pill mb-4 px-3 py-2">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <div class="input-group input-group-merge shadow-none">
-                                        <div class="input-group-prepend"><span
-                                                class="input-group-text bg-transparent border-0"><i
-                                                    class="fas fa-search" aria-hidden="true"></i></span></div>
-                                        <input name="search" id="searchInput" type="text"
-                                               class="form-control border-0 form-control-flush shadow-none pb-2"
-                                               placeholder="{{ 'search for organizations'|trans|capitalize~'...' }}"
-                                               required="">
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <button type="submit" id="searchButton"
-                                            class="btn btn-block btn-primary rounded-pill">{{ 'search'|trans|capitalize }}</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+
+            <div class="row">
+                <div class="col-8">
+                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ 'app_organization_index'|trans|capitalize }}</h1>
+                </div>
+                <div class="col-4">
+                    <!-- Breadcrumb -->
+                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1 float-right" aria-label="breadcrumb">
+                        <ul class="list-unstyled d-flex p-0 m-0">
+                            <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                            <li class="breadcrumb-item active"
+                                aria-current="page">{{ 'app_organization_index'|trans|capitalize }}</li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
-        </div>
-        <div class="pattern bottom"></div>
-    </section>
 
-    <section class="section section-md pb-0">
-        <div class="container z-2 mt-n9 mt-lg-n11">
-            <div class="row">
-
-                {% if organizations|default %}
-                    {% for org in organizations %}
-
-
-                        <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-5">
-                            <div class="card bg-white border-light shadow-soft p-4 rounded">
-                                <a href="{{ path('app_organization_organization', {id: org.id}) }}" style="margin-left: auto; margin-right: auto">
-                                    <img
-                                        {% if org.style.favicon.base64 is defined and org.style.favicon.base64 is not empty %}
-                                            src="{{ org.style.favicon.base64 }}"
-                                        {% else %}
-                                            src="/bundles/rocket/assets/img/blog/image-2.jpg"
-                                        {% endif %}
-                                        alt=""
-                                        style="width: auto; height: 13rem;
-                                        {% if org.backgroundColor is defined and org.backgroundColor|length > 0 %}
-                                            background-color: {{ org.backgroundColor[1] }}
-                                        {% endif %}"
-                                    >
-                                </a>
-                                <div class="card-body p-0 pt-4">
-                                     <a
-                                        href="{{ path('app_organization_organization', {id: org.id}) }}"
-                                        class="h3">{{ org.name|capitalize }}</a>
-                                    {# Add contact person? #}
-                                    {#                                    <div class="d-flex align-items-center my-4"><img#}
-                                    {#                                            class="avatar avatar-sm rounded-circle"#}
-                                    {#                                            src="/bundles/rocket/assets/img/team/profile-picture-2.jpg"#}
-                                    {#                                            alt="">#}
-                                    {#                                        <h6 class="text-muted small ml-2 mb-0">{{ org.name }}</h6></div>#}
-                                    {#                            <div class="d-flex align-items-center my-4"><h6 class="text-muted small ml-2 mb-0">Reward: 500.00</h6></div>#}
-                                    {% if org.description|default %}
-                                        <p class="mb-0">{{ org.description }}</p>
-                                    {% endif %}
-                                    <br>
-                                    <div>
-                                         <span class="ml-lg-2 mb-3 mb-lg-0 h5"><i class="fas fa-briefcase"></i>
-                                             <span class="ml-3">
-                                                 {% set jobPostings = commonground_resource_list({'component': 'mrc', 'type': 'job_postings'}, {'organization': org['@id']})['hydra:member'] %}
-                                                 {% if jobPostings|default and jobPostings|length > 0 %}
-                                        {{ jobPostings|length }} {% else %}
-                                                     0{% endif %}</span></span>
-
-
-                                        <span class="ml-lg-5 mb-3 mb-lg-0 h5"><i class="fas fa-bullseye-arrow"></i>
-                                            <span class="ml-3">
-                                                {% set challenges = commonground_resource_list({'component': 'chrc', 'type': 'tenders'}, {'organization': org['@id']})['hydra:member'] %}
-                                                {% if challenges|default and challenges|length > 0 %}
-                                        {{ challenges|length }} {% else %}
-                                                    0{% endif %}</span></span>
-
-
-                                        <span class="ml-lg-5 mb-3 mb-lg-0 h5"><i class="fas fa-file-alt"></i>
-                                            <span class="ml-3">
-                                                {% set tutorials = commonground_resource_list({'component': 'edu', 'type': 'courses'}, {'organization': org['@id']})['hydra:member'] %}
-                                                {% if tutorials|default and tutorials|length > 0 %}
-                                        {{ tutorials|length }} {% else %}
-                                                    0{% endif %}</span></span>
-                                    </div>
+            <div class="search-result-bar">
+                {% if items|default %}
+                    <p>{{ 'we found'|trans|capitalize }} <span>{{ items|length }}</span> {{ 'results for'|trans }}
+                        <span>{{ 'app_organization_index'|trans|capitalize }}</span>.</p>
+                {% else %}
+                    <p>{{ 'no results found'|trans|capitalize }}.</p>
+                {% endif %}
+                <div class="ml-md-auto d-flex align-items-center justify-content-between">
+                    <div class="select-bg-transparent select-border">
+                        <div class="selectric-wrapper selectric-select-location">
+                            <div class="selectric-select">
+                                <select class="select-location" style="text-align: center">
+                                    <option>{{ 'sort'|trans|capitalize }}</option>
+                                    <option><a href="{{ path('app_organization_index') }}?query=likes">{{ 'likes'|trans|capitalize }}</a></option>
+                                    <option><a href="{{ path('app_organization_index') }}?query=rating">{{ 'rating'|trans|capitalize }}</a></option>
+                                    <option><a href="{{ path('app_organization_index') }}?query=alphabet">{{ 'alphabet'|trans|capitalize }}</a></option>
+                                </select>
+                            </div>
+                            <div class="selectric-items" tabindex="-1">
+                                <div class="selectric-scroll">
+                                    <ul>
+                                        <li data-index="0" class="selected">{{ 'likes'|trans|capitalize }}</li>
+                                        <li data-index="1" class="">{{ 'rating'|trans|capitalize }}</li>
+                                        <li data-index="2" class="last">{{ 'alphabet'|trans|capitalize }}</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
-
-                    {#                    <div class="d-flex justify-content-center w-100">#}
-                    {#                        <nav aria-label="Page navigation example">#}
-                    {#                            <ul class="pagination">#}
-                    {#                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>#}
-                    {#                                <li class="page-item"><a class="page-link" href="#">1</a></li>#}
-                    {#                                <li class="page-item active"><a class="page-link" href="#">2</a></li>#}
-                    {#                                <li class="page-item"><a class="page-link" href="#">3</a></li>#}
-                    {#                                <li class="page-item"><a class="page-link" href="#">4</a></li>#}
-                    {#                                <li class="page-item"><a class="page-link" href="#">5</a></li>#}
-                    {#                                <li class="page-item"><a class="page-link" href="#">Next</a></li>#}
-                    {#                            </ul>#}
-                    {#                        </nav>#}
-                    {#                    </div>#}
-
-                {% else %}
-
-                    <p>{{ 'no results found'|trans|capitalize }}</p>
-                {% endif %}
-
+                        <input class="selectric-input" tabindex="0">
+                    </div>
+                    <div class="icons">
+                        <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">
+                            <i class="fa fa-th" aria-hidden="true"></i>
+                        </a>
+                        <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">
+                            <i class="fa fa-th-list" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
+
+            <div id="gridFullwidthDiv" class="fade-in">
+                <div class="row">
+                    {% if organizations|default %}
+                        {% for organization in organizations %}
+                            <div class="col-md-6 col-lg-4" id="organization">
+                                {% include '/cards/organization.html.twig' with {'resource': organization} %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="listFullwidthDiv" class="fade-in">
+                {% include 'sections/list_fullwidth_organization.html.twig' %}
+            </div>
+
         </div>
     </section>
-    <section class="section section-lg pb-5 bg-soft">
-        <div class="container z-2">
-            <div class="row justify-content-center">
-                <div class="col-md-10 text-center">
-                    <h2 class="h1">{{ 'do you miss your organization here?'|trans|capitalize }}</h2>
-                    <p>{{ 'Dont worry, joining the comunnity and adding the your organizations unqiue value to it is a breazey. Just register and add it under organizations'|trans }}</p>
-                    <p class="lead py-4 text-gray"></p><a href="{{ path('app_user_idvault') }}" class="btn btn-lg btn-secondary animate-up-2">{{ 'aanmelden'|trans|capitalize }}</a></div>
-            </div>
-        </div>
-    </section>
+
+    <script>
+        var gridFullwidthDiv = document.getElementById('gridFullwidthDiv');
+        var listFullwidthDiv = document.getElementById('listFullwidthDiv');
+        var switchToGridA = document.getElementById('switchToGridA');
+        var switchToListA = document.getElementById('switchToListA');
+
+        listFullwidthDiv.style.display = "none";
+
+        function switchToGrid() {
+            if (gridFullwidthDiv.style.display != "block") {
+                gridFullwidthDiv.style.display = "block";
+                listFullwidthDiv.style.display = "none";
+                switchToListA.classList.toggle("active");
+                switchToGridA.classList.toggle("active");
+            }
+        }
+
+        function switchToList() {
+            if (listFullwidthDiv.style.display != "block") {
+                listFullwidthDiv.style.display = "block";
+                gridFullwidthDiv.style.display = "none";
+                switchToListA.classList.toggle("active");
+                switchToGridA.classList.toggle("active");
+            }
+        }
+    </script>
+
 {% endblock %}

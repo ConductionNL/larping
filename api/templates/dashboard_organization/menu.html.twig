@@ -1,22 +1,49 @@
-<div class="sidebar-sticky pt-4 mx-auto">
-    <div class="user-card d-flex align-items-center justify-content-between justify-content-md-center pb-4">
-        <div class="d-flex align-items-center">
-            <div class="user-avatar lg-avatar mr-4"><img src="/bundles/rocket/assets/img/team/profile-picture-3.jpg" class="card-img-top rounded-circle border-white" alt="Bonnie Green"></div>
-            <div class="d-block">
-                <h2 class="h6">Hi, Jane</h2><a href="../sign-in.html" class="btn btn-secondary btn-xs"><span class="mr-2"><span class="fas fa-sign-out-alt"></span></span>Sign Out</a></div>
-        </div>
-        <div class="collapse-close d-md-none">
-            <a href="#sidebarMenu" class="fas fa-times" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="true" aria-label="Toggle navigation"></a>
+<nav class="navbar navbar-expand-md navbar-dark">
+    <div class="container">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>asd
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <i class="fa fa-building mr-1"></i> {{ organization.name }}
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ path('app_dashboardorganization_index') }}">
+                        <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fa fa-list-ul" aria-hidden="true"></i> Sales
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                       <a class="dropdown-item"href="{{ path('app_dashboardorganization_events') }}">{{ 'events'|trans|capitalize }}</a>
+                       <a class="dropdown-item"href="{{ path('app_dashboardorganization_products') }}">{{ 'products'|trans|capitalize }}</a>
+                       <a class="dropdown-item"href="{{ path('app_dashboardorganization_offers') }}">{{ 'offers'|trans|capitalize }}</a>
+                       <a class="dropdown-item"href="{{ path('app_dashboardorganization_orders') }}">{{ 'orders'|trans|capitalize }}</a>
+                      </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fa fa-list-ul" aria-hidden="true"></i> {{ 'gameplay'|trans|capitalize }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_skills') }}">{{ 'skills'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_items') }}">{{ 'items'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_conditions') }}">{{ 'conditions'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_storylines') }}">{{ 'storyline'|trans|capitalize }}</a>
+                    </div>
+                </li>
+
+
+            </ul>
+
+            <form class="form-inline my-2 my-lg-0 position-relative d-none d-md-block">
+                <input class="form-control-sm" placeholder="Search" aria-label="Search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </form>
         </div>
     </div>
-
-    <ul class="nav flex-column mt-4">
-        <li class="nav-item active"><a href="{{ path('app_dashboard_index') }}" class="nav-link"><span class="sidebar-icon"><span class="fas fa-building"></span></span> <span>{{ 'overview'|trans|capitalize }}</span></a></li>
-        <li class="nav-item"><a href="{{ path('app_default_index') }}" class="nav-link"><span class="sidebar-icon"><img src="/bundles/rocket/assets/img/brand/light.svg" style="height: 25px; width: 25px;"></span> <span>{{ 'home'|trans|capitalize }}</span></a></li>
-        <li class="nav-item"><a href="{{ path('app_dashboard_tutorials') }}" class="nav-link d-flex align-items-center justify-content-between"><span><span class="sidebar-icon"><span class="fas fa-file-alt"></span></span>{{ 'tutorials'|trans|capitalize }}</span><span class="badge badge-md badge-danger badge-pill">4</span></a></li>
-        <li class="nav-item"><a href="{{ path('app_dashboard_challenges') }}" class="nav-link"><span class="sidebar-icon"><span class="fas fa-bullseye-arrow"></span></span> <span>{{ 'challenges'|trans|capitalize }}</span></a></li>
-        <li class="nav-item"><a href="{{ path('app_dashboard_internships') }}" class="nav-link"><span class="sidebar-icon"><span class="fas fa-briefcase"></span></span> <span>{{ 'internships'|trans|capitalize }}</span></a></li>
-        <li class="nav-item"><a href="{{ path('app_dashboard_teams') }}" class="nav-link"><span class="sidebar-icon"><span class="fas fa-users"></span></span> <span>{{ 'teams'|trans|capitalize }}</span></a></li>
-        <li class="nav-item"><a href="{{ path('app_dashboard_settings') }}" class="nav-link"><span class="sidebar-icon"><span class="fas fa-cog"></span></span> <span>{{ 'settings'|trans|capitalize }}</span></a></li>
-    </ul>
-</div>
+</nav>

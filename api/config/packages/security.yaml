@@ -3,8 +3,8 @@ security:
     providers:
         commongroundApplicationProvider:
             id: Conduction\CommonGroundBundle\Security\User\CommongroundApplicationProvider
-        commongroundProvider:
-            id: Conduction\CommonGroundBundle\Security\User\CommongroundProvider
+        idVaultProvider:
+            id: Conduction\IdVaultBundle\Security\User\IdVaultProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js|docs)/
@@ -24,18 +24,10 @@ security:
                 path: app_user_logout
                 target: app_default_index
             stateless: false
-            provider: commongroundProvider
+            provider: idVaultProvider
             guard:
                 authenticators:
-                    - Conduction\CommonGroundBundle\Security\CommongroundApplicationAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundEherkenningAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundUserAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundDigispoofAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundIdinAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundIdinLoginAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundFacebookAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundGmailAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundIdvaultAuthenticator
+                    - Conduction\IdVaultBundle\Security\IdVaultAuthenticator
                 entry_point: Conduction\CommonGroundBundle\Security\CommongroundApplicationAuthenticator
 
             # activate different ways to authenticate
