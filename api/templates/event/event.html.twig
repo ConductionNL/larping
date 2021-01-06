@@ -78,7 +78,7 @@
                     <!-- Offers -->
                     {% if product.offers|default %}
                         <div class="my-6">
-                            <h3 class="font-weight-normal mb-6">{{ 'offers'|trans|capitalize }}</h3>
+                            <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
                             <form action="{{ path(path, {id: event.id}) }}" method="post">
 
                                 {% if product.prerequisiteProducts|default %}
@@ -113,12 +113,13 @@
                                         {% else %}
                                             <div class="form-group p-3"
                                                  style="border-radius: 6px;background: rgba(144,238,144, 0.8)">
-                                                <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}:</p>
+                                                <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}
+                                                    :</p>
                                                 <label
                                                     style="color: white">{{ product.name|capitalize }}</label>
                                             </div>
                                         {% endif %}
-                                        {% set thisProdIsOwned = 'false' %}
+                                        {% set ownsThisProduct = 'false' %}
                                     {% endfor %}
                                 {% endif %}
 
@@ -276,12 +277,14 @@
                                     {#                                           name="ratingValue">#}
                                 </div>
                                 <div class="form-group mb-6">
-                                    <textarea class="form-control" rows="6" placeholder="{{ 'enter your review'|trans|capitalize }}"
+                                    <textarea class="form-control" rows="6"
+                                              placeholder="{{ 'enter your review'|trans|capitalize }}"
                                               name="review"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <input type="hidden" name="addReview" value="true">
-                                    <button type="submit" class="btn btn-primary text-uppercase"> {{ 'send review'|trans|capitalize }}</button>
+                                    <button type="submit"
+                                            class="btn btn-primary text-uppercase"> {{ 'send review'|trans|capitalize }}</button>
                                 </div>
                             </form>
                         {% else %}
