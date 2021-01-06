@@ -15,19 +15,56 @@
             </nav>
 
             <div class="row">
+                <!-- Chararacters -->
                 <div class="col-lg-6">
-                    <!-- organizations -->
-                    {% include 'dashboard_user/tables/organizations.html.twig' %}
+                    <div class="card border-light shadow-sm">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h2 class="h5">{{ 'My characters'|trans|capitalize }}</h2></div>
+                            </div>
+                        </div>
+                        {% include 'dashboard_user/tables/characters.html.twig' %}
+                    </div>
+                </div>
+
+                <!-- Organizations -->
+                <div class="col-lg-6">
+                    <div class="card border-light shadow-sm">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h2 class="h5">{{ 'My Organizations'|trans|capitalize }}</h2></div>
+                            </div>
+                        </div>
+                        {% include 'dashboard_user/tables/organizations.html.twig' %}
+                    </div>
                 </div>
 
                 <!-- Events -->
                 <div class="col-lg-6">
-                    {% include 'dashboard_user/tables/events.html.twig' %}
+                    <div class="card border-light shadow-sm">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h2 class="h5">{{ 'My events'|trans|capitalize }}</h2></div>
+                            </div>
+                        </div>
+                        {% include 'dashboard_user/tables/events.html.twig' %}
+                    </div>
                 </div>
 
                 <!-- My Favorites -->
                 <div class="col-lg-6 mb-4">
-                    {% include 'dashboard_user/tables/likes.html.twig' %}
+                    <div class="card border-light shadow-sm">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h2 class="h5">{{ 'my favorites'|trans|capitalize }}</h2></div>
+                            </div>
+                        </div>
+                        {% include 'dashboard_user/tables/favorites.html.twig' %}
+                    </div>
                 </div>
 
             </div>

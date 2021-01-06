@@ -1,87 +1,49 @@
-<div class="card border-light shadow-sm">
-    <div class="card-header">
-        <div class="row align-items-center">
-            <div class="col">
-                <h2 class="h5">{{ 'events'|trans|capitalize }}</h2></div>
-            <div class="col text-right">
-                {% if items is defined and items|length > 0%}
-                    <a href="" data-toggle="modal" data-target="#{{ type~'Modal' }}" class="btn btn-success btn-sm mr-2">{{ 'add event'|trans|capitalize }}</a>
-                {% else %}
-                    <a href="{{ path('app_event_index') }}" class="btn btn-sm btn-secondary">{{ 'see all events'|trans|capitalize }}</a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    {% if items is defined and items|length > 0 %}
-        {% set events = items %}
-    {% endif %}
-    {% if events is  defined and events|length > 0 %}
-    <div class="table-responsive">
-        <table class="table align-items-center table-flush">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col">{{ 'name'|trans|capitalize }}</th>
-                <th scope="col">{{ 'location'|trans|capitalize }}</th>
-                <th scope="col">{{ 'attendees'|trans|capitalize }}</th>
-                <th scope="col">{{ 'details'|trans|capitalize }}</th>
-                <th scope="col">{{ 'start date'|trans|capitalize }}</th>
-                <th scope="col">{{ 'end date'|trans|capitalize }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for event in events|slice(0, 10) %}
-                <tr>
-                    <td><span class="h6 mb-3 mb-lg0"> {{ event.name }}</span></td>
-                    <td>
-                        {% if event.location|default %}
-                            <span class="h5 mb-3 mb-lg-0">
-                                <i class="fas fa-user-tie text-secondary"></i>
-                                <span class="text-small">{{ event.location }}</span>
-                            </span>
-                        {% else %}
-                            <span class="h5 mb-3 mb-lg-0">
-                                <i class="fas fa-user-tie text-small"></i>
-                                <span class="ml-3">{{ 'no location found'|trans|capitalize }}</span>
-                            </span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if event.attendees|default %}
-                        <span class="h5 mb-3 mb-lg-0">
-                            <i class="fas fa-user-tie text-secondary"></i>
-                            <span class="ml-3">{{ event.attendees|length }}</span>
-                        </span>
-                        {% else %}
-                            <span class="h5 mb-3 mb-lg-0">
-                                <i class="fas fa-user-tie text-secondary"></i>
-                                <span class="ml-3">0</span>
-                            </span>
-                            {% endif %}
-                    </td>
-                    <td>
-                        ...
-                    </td>
-                    <td>
-                         <span class="h5 mb-3 mb-lg-0">
-                                <i class="fas fa-user-tie text-small"></i>
-                                <span class="ml-3">{{ event.startDate }}</span>
-                            </span>
-                    </td>
-                    <td>
-                        <span class="h5 mb-3 mb-lg-0">
-                                <i class="fas fa-user-tie text-small"></i>
-                                <span class="ml-3">{{ event.endDate }}</span>
-                            </span>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <div class="card-body  text-center">
-        <p>{{ 'no events found'|trans|capitalize }}</p>
-        <a href="{{ path('app_event_index') }}" class="btn btn-primary">{{ 'find a event'|trans|capitalize }}</a>
-    </div>
-    {% endif %}
+{% if events|default and events|length > 0 %}
+<table id="events" class="display nowrap table" style="width:100%">
+    <thead class="thead-light">
+    <tr>
+        <th>{{ 'name'|trans|capitalize }}</th>
+        <th>{{ 'date'|trans|capitalize }}</th>
+        <th>{{ 'location'|trans|capitalize }}</th>
+        <th>{{ 'participants'|trans|capitalize }}</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in events|slice(0, 10) %}
+        <tr>
+
+            <td class="text-capitalize">
+                <a class="text-hover-primary text-muted" href="listing-rental.html">{{ event.name }}</a>
+            </td>
+            <td>
+                <span class="d-block">{{ event.startDate|date }} /</span>
+                <span class="d-block">{{ event.endDate|date }}</span>
+            </td>
+            <td class="text-capitalize">{{ event.location }}</td>
+
+            <td>
+                <span class="d-block ">80 Available</span>
+                <span class="d-block ">120 Sold</span>
+            </td>
+            <td>
+                <div class="dropdown">
+                    <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                       <a class="dropdown-item" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="card-body  text-center">
+    <p>{{ 'no events found'|trans|capitalize }}</p>
+    <a href="{{ path('app_event_index') }}" class="btn btn-primary">{{ 'find a event'|trans|capitalize }}</a>
 </div>
+{% endif %}

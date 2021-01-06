@@ -1,12 +1,18 @@
+{% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':organization['@id']})['hydra:member']|length %}
+
+  {% if app.user|default %}
+      {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':organization['@id'], 'author':app.user.person})['hydra:member'] %}
+  {% endif %}
+
+{% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':organization['@id']})['hydra:member'] %}
 {% extends "base.html.twig" %}
 {% block content %}
-
     <section class="pt-7 pb-4 pt-md-9 pb-md-8">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-lg-12">
                     <div class="single-listing-content mb-6">
-                        <h3 class="font-weight-normal mb-6">{{'about'|trans|capitalize}} {{ organization.name }}</h3>
+                        <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
                         <p class="mb-6">
                             {% if organization.description|default %}
                                 {{ organization.description }}
@@ -14,125 +20,92 @@
                                 {{ 'no description found'|trans|capitalize }}
                             {% endif %}
                         </p>
+                        <!-- contact -->
+                        <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
+                            {% if contact.telephones is defined and contact.telephones is not empty %}
+                                {% for tel in contact.telephones %}
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-phone" aria-hidden="true"></i>
+                                        <span class="ml-2">{{ tel.telephone }}</span>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if contact.emails is defined and contact.emails is not empty %}
+                                {% for emails in contact.emails %}
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                                        <span class="ml-2">{{ emails.email }}</span>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
                         <!-- Socials -->
                         <ul class="list-group list-group-horizontal">
                             {% if contact.socials|default %}
                                 <ul class="list-unstyled mb-6">
-                                    {%  for socials in contact.socials %}
-                                    <li class="d-inline-block mr-4 mb-2">
-                                        <i class="{% if socials.type == 'website' %}fa fa-globe {% else %}
                                         fa fa-{{ socials.type }}{% endif %} mr-2" aria-hidden="true"></i>
-                                        <a href="{{ socials.url }}">{{ socials.name }}</a>
-                                    </li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
                         </ul>
-                    </div>
-
-                    <hr>
-
-                     <div>
-                        <h3 class="font-weight-normal mb-4">{{ 'events from this organization'|trans|capitalize }}</h3>
-                        <div class="row">
                             {% for event in events %}
-                            <div class="col-md-4 col-lg-4">
-                                <div class="card rounded-0 card-hover-overlay">
-                                    <div class="position-relative">
-                                        <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
-                                        <div class="card-img-overlay">
-                                            <h3>
-                                                <a href="{{ path('app_event_event', {id: event.id}) }}">
-                                                    {{ event.name }}
-                                                </a>
-                                            </h3>
-                                            <p style="color:lightgrey">{{ event.description }}</p>
+                                        </div>
+                                        <div class="card-footer bg-transparent">
+                                            <ul class="list-unstyled d-flex mb-0 py-2">
+                                                <li>
+                                                    <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" onclick="likeItem(this)" value="{{ event['@id'] }}" data-original-title="Favourite this organisation" style="z-index: 2">
+                                                        <i {% if isLiked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
+                                                        <span id="{{ event['id'] }}">{{ likes }}</span>
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <a class="px-2 stretched-link" href="{{ path('app_event_event', {id: event.id}) }}">Bekijken</a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
-
-                                    <div class="card-footer bg-transparent">
-                                        <ul class="list-unstyled d-flex mb-0 py-2">
-                                            <li>
-                                                <a class="px-2 stretched-link" href="{{ path('app_event_event', {id: event.id}) }}">Bekijken</a>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </div>
-                            </div>
                             {% endfor %}
                         </div>
-                    </div>
-
-                    <hr>
-                    <!-- Reviews -->
-                    <div class="my-6">
-                        <h3 class="font-weight-normal mb-6">{{ 'reviews'|trans|capitalize }} ({{ reviews|length }})</h3>
-                        {% for rev in reviews %}
-                            <div class="media mb-3">
-                                <div class="media-img">
-                                    <img src="assets/img/user/user-xs-1.jpg" class="mr-3 media-object rounded-circle"
-                                         alt="Image User">
-                                </div>
-                                <div class="media-body">
-                                    <h5 class="media-heading">{{ commonground_resource(rev.author).givenName }}</h5>
-                                    <p>{{ rev.review }}</p>
-                                </div>
-                                {% if app.user %}
-                                    {% if rev.author == app.user.person %}
-                                    <a class="btn btn-danger btn-sm" href="#" role="button">Delete review</a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <!-- Add Review -->
-                    <div class="my-6" id="add-review">
-                        {% if app.user %}
-                            {% set person = commonground_resource(app.user.person) %}
-                            <h3 class="font-weight-normal mb-6"> Add Review </h3>
-                            <form action="{{ path('app_organization_organization', {id: organization.id}) }}" method="post">
-                                 <input type="hidden" id="@type" name="@type" value="review">
-                                <div class="form-check form-check-inline mb-6 mr-lg-7">
-                                    <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked="">
-                                    <label class="form-check-label" for="inlineRadio1">
-                                        <div class="media media-xs align-items-center">
-                                            <img {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}class="mr-2 media-object rounded-circle" alt="Image User">
-                                            <div class="media-body">
-                                                <h5 class="media-heading mb-0">{{ app.user.name }}</h5>
+                                <input type="hidden" id="@type" name="@type" value="review">
                                             </div>
-                                        </div>
-                                    </label>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        {#*/@todo make rating elements work #}
+                                        {#                                    <label class="form-text" for="ratingValue">{{ 'from 1/5 how would you rate this organization?'|trans|capitalize }}</label>#}
+                                        {#                                    <input class="form-control-sm col-1" type="text" id="ratingValue" name="ratingValue">#}
+                                    </div>
+                                    <div class="form-group mb-6">
+                                        <textarea class="form-control" rows="6" placeholder="Enter Your Comment"
+                                                  name="review"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" name="addReview" value="true">
+                                        <button type="submit" class="btn btn-primary text-uppercase"> Send Review
+                                        </button>
+                                    </div>
+                                </form>
+                            {% else %}
+                                <div>
+                                    <h3>{{ 'you need to be logged in to place a review'|trans|capitalize }}</h3>
+                                    <button class="btn btn-primary btn-block">
+                                        <a class="mt-2 text-center text-white"
+                                           href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }}</a>
+                                    </button>
                                 </div>
-                                <div class="form-group">
-                                    {#*/@todo make rating elements work #}
-{#                                    <label class="form-text" for="ratingValue">{{ 'from 1/5 how would you rate this organization?'|trans|capitalize }}</label>#}
-{#                                    <input class="form-control-sm col-1" type="text" id="ratingValue" name="ratingValue">#}
                                 </div>
-                                <div class="form-group mb-6">
-                                    <textarea class="form-control" rows="6" placeholder="Enter Your Comment" name="review"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <input type="hidden" name="addReview" value="true">
-                                    <button type="submit" class="btn btn-primary text-uppercase"> Send Review </button>
-                                </div>
-                            </form>
-                        {% else %}
-                            <div>
-                                <h3>{{ 'you need to be logged in to place a review'|trans|capitalize }}</h3>
-                                <button class="btn btn-primary btn-block">
-                                    <a class="mt-2 text-center text-white"
-                                       href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }}</a>
-                                </button>
-                            </div>
-                        {% endif %}
+
+                        </div>
 
                     </div>
 
+                    <!--======= Sidebar =======-->
+                    {#                <div class="col-md-5 col-lg-4 pl-xl-8"></div>#}
                 </div>
-
                 <!--======= Sidebar =======-->
-{#                <div class="col-md-5 col-lg-4 pl-xl-8"></div>#}
             </div>
         </div>
     </section>
+
 {% endblock %}

@@ -15,19 +15,14 @@
             </nav>
 
             <div class="row">
-                <div class="col-lg-6">
-                    <!-- organizations -->
-                    {% include 'dashboard_user/tables/organizations.html.twig' %}
-                </div>
-
                 <!-- Events -->
                 <div class="col-lg-6">
-                    {% include 'dashboard_user/tables/events.html.twig' %}
+                    {% include 'dashboard_organization/tables/events.html.twig' %}
                 </div>
 
                 <!-- My Favorites -->
                 <div class="col-lg-6 mb-4">
-                    {% include 'dashboard_user/tables/likes.html.twig' %}
+                    {% include 'dashboard_organization/tables/likes.html.twig' %}
                 </div>
 
             </div>

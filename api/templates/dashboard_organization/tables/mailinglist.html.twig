@@ -1,0 +1,43 @@
+{% if mailinglitsts|default and  mailinglitsts|length > 0 %}
+    <table id="products" class="display nowrap table" style="width:100%">
+        <thead>
+        <tr>
+            <th>{{ 'name'|trans|capitalize }}</th>
+            <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#MailingListModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for mailinglitst in mailinglitsts %}
+            <tr>
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" >{{ mailing.name }}</a>
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailinglitstModal{{ mailinglitsts.id }}">Edit</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card border-light shadow-sm">
+        <div class="card-body text-center">
+            <p>{{ 'no mailinglitsts found'|trans|capitalize }}</p>
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#MailinglistModalAdd">{{ 'add your first mailinglitsts'|trans|capitalize }}!</a>
+        </div>
+    </div>
+{% endif %}
+
+{% include 'dashboard_organization/modals/mailinglist.html.twig' %}
+
+{% for mailinglist in mailinglists %}
+    {% include 'dashboard_organization/modals/mailinglist.html.twig' with {'resource': mailinglist} %}
+{% endfor %}

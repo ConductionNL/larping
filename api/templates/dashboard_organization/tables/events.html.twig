@@ -3,7 +3,6 @@
 <table id="events" class="display nowrap table" style="width:100%">
     <thead>
     <tr>
-        <th>{{ 'image'|trans|capitalize }}</th>
         <th>{{ 'name'|trans|capitalize }}</th>
         <th>{{ 'date'|trans|capitalize }}</th>
         <th>{{ 'location'|trans|capitalize }}</th>
@@ -16,9 +15,6 @@
     <tbody>
     {% for event in events %}
     <tr>
-        <td>
-            <img class="img-sm rounded" src="assets/img/listing/listing-03.jpg" alt="Image">
-        </td>
         <td class="text-capitalize">
             <a class="text-hover-primary text-muted" href="listing-rental.html">{{ event.name }}</a>
         </td>
