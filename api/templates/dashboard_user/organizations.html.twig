@@ -17,12 +17,9 @@
                 </ul>
             </nav>
             <!-- My Bookings -->
-            {% include 'dashboard_user/tables/organizations.html.twig' %}
+            <div class="card border-light shadow-sm">
+                {% include 'dashboard_user/tables/organizations.html.twig' %}
+            </div>
         </div>
     </section>
-
-    {% include 'widgets/modal.html.twig' with {
-        'title': 'add organization'|trans|capitalize,
-        'type': type
-    } %}
 {% endblock %}
