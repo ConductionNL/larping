@@ -1,10 +1,5 @@
 <!-- event card -->
-{% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id']})['hydra:member']|length %}
-
-{% if app.user|default %}
-    {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id'], 'author':app.user.person})['hydra:member'] %}
-{% endif %}
-<a href="{{ path('app_event_event', {id: item.id}) }}">
+<a href="#">
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">
             <img class="card-img rounded-0" src="https://picsum.photos/300/200"
@@ -20,24 +15,17 @@
                 {% else %}
                     <p style="color:lightgrey">{{ 'no description'|trans|capitalize }}</p>
                 {% endif %}
-                <div style="color: white">{{ item.location }}<br>{{ item.dateCreated }}
-                </div>
+                <p class="text-white">{{ item.dateCreated }}</p>
             </div>
         </div>
 
         <div class="card-footer bg-transparent">
             <ul class="list-unstyled d-flex mb-0 py-2">
                 <li>
-                    <button class="btn-like px-2" onclick="likeItem(this)" data-toggle="tooltip"
-                            data-placement="top"
-                            title=""
-                            data-original-title="Favourite this listing" value="{{ item['@id'] }}">
-                        <i {% if isLiked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
-                        <span id="{{ item['id'] }}">{{ likes }}</span>
-                    </button>
+                    {{ item.priceCurrency }} {{ item.price }}
                 </li>
                 <li class="ml-auto">
-                    <a class="px-2" href="{{ path('app_event_event', {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                    <a class="px-2" href="#">{{ 'buy'|trans|capitalize }}</a>
                 </li>
             </ul>
         </div>
