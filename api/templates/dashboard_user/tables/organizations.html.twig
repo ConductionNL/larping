@@ -1,57 +1,38 @@
 
-
-{% if organizations is  defined and organizations|length > 0 %}
-    <table id="organizations" class="display nowrap table" style="width:100%">
-        <thead class="thead-light">
-        <tr>
-            <th scope="col">{{ 'name'|trans|capitalize }}</th>
-            <th scope="col">{{ 'email'|trans|capitalize }}</th>
-            <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#OrganizationModalAdd">{{ 'add'|trans|capitalize }}</button></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for organization in organizations %}
-            <tr>
-                <td><span class="h6 mb-3 mb-lg0">{{ organization.name }}</span></td>
-                <td>
-                    {% if organization.contact|default and commonground_resource(organization.contact).emails|default %}
-                        {% set contact = commonground_resource(organization.contact) %}
-                        {% for emails in contact.emails %}
-                        <span class="h5 mb-3 mb-lg-0">
-                            <i class="fas fa-user-tie text-secondary"></i>
-                            <span class="ml-3">{{ emails.email }}</span>
-                        </span>
-                        {% endfor %}
-                    {% else %}
-                        <span class="h5 mb-3 mb-lg-0">
-                            <i class="fas fa-user-tie text-secondary"></i>
-                            <span class="ml-3">{{ 'no email found'|trans|capitalize }}</span>
-                        </span>
-                    {% endif %}
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#OrganizationModal{{ organization.id }}">{{ 'edit'|trans|capitalize }}</a>
-                            <a class="dropdown-item" href="{{ path('app_organization_organization', {id: organization.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+{% if organizations|default and organizations|length > 0 %}
+<table id="organizations" class="display nowrap table" style="width:100%">
+    <thead class="thead-light">
+    <tr>
+        <th>{{ 'name'|trans|capitalize }}</th>
+        <th>
+            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#OrganizationModalAdd">{{ 'add'|trans|capitalize }}</button>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for organization in organizations %}
+    <tr>
+        <td>{{ organization.name }} {% if app.user.organization is defined and organization['@id'] == app.user.organization %}<i style="color: green" class="fas fa-check-circle mr-2"></i>{% endif %}</td>
+        <td>
+            <div class="dropdown">
+                <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#OrganizationModal{{ organization.id }}">{{ 'edit'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="{{ path('app_dashboard_switchorganization', {id: organization.id}) }}">{{ 'admin'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="{{ path('app_organization_organization', {id: organization.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
+                </div>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% else %}
-    <div class="card border-light shadow-sm">
-        <div class="card-body text-center">
-            <p>{{ 'no organizations found'|trans|capitalize }}</p>
-            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#OrganizationModalAdd">{{ 'add your first event'|trans|capitalize }}!</a>
-        </div>
+    <div class="card-body  text-center">
+        <p>{{ 'no events found'|trans|capitalize }}</p>
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#OrganizationModalAdd">{{ 'add a organization'|trans|capitalize }}</a>
     </div>
 {% endif %}
 

@@ -201,6 +201,27 @@
          <source>payment has been aborted</source>
          <target>betaling is geannuleerd</target>
          </trans-unit>
+         <trans-unit id="uBBB13S" resname="start date">
+         <source>start date</source>
+         <target>start datum</target>
+         </trans-unit>
+         <trans-unit id="oMmMMbG" resname="end date">
+         <source>end date</source>
+         <target>eind datum</target>
+         </trans-unit>
+
+         <trans-unit id="oNAHXbG" resname="send review">
+         <source>send review</source>
+         <target>verstuur recensie</target>
+         </trans-unit>
+         <trans-unit id="uBNAYXS" resname="enter your review">
+         <source>enter your review</source>
+         <target>voer uw recensie in</target>
+         </trans-unit>
+         <trans-unit id="nayMMbG" resname="submit review">
+         <source>submit review</source>
+         <target>review versturen</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
