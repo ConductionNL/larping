@@ -50,6 +50,7 @@ class EventController extends AbstractController
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['event']['@id']])['hydra:member'];
         $variables['groups'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'groups']);
+        $variables['stats'] = ['likes'=>100,'reviews'=>5];
 
         /* deze is wat wierd */
         if (isset($variables['event']['resource']) && strpos($variables['event']['resource'], '/pdc/products/')) {
@@ -57,20 +58,16 @@ class EventController extends AbstractController
         }
 
         // Add review
-        if ($request->isMethod('POST') && $request->request->get('addReview') == 'true') {
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {
             $resource = $request->request->all();
 
 
             $resource['organization'] = $variables['event']['organization'];
             $resource['resource'] = $variables['event']['@id'];
             $resource['author'] = $this->getUser()->getPerson();
+
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
-
-            /*@todo make sure ratings work before using*/
-            //make rating of the review
-            //$rating = ['review' => '/reviews/' . $variables['review']['id'], 'ratingValue' => (int)$resource['ratingValue']];
-            //$variables['rating'] = $commonGroundService->saveResource($rating, ['component' => 'rc', 'type' => 'ratings']);
 
         }
 

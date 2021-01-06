@@ -56,19 +56,22 @@ class OrganizationController extends AbstractController
         }
 
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'],['resource' => $variables['organization']['@id']])['hydra:member'];
-        $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'],['resource' => $variables['organization']['@id']])['hydra:member'];
+        //$variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'],['resource' => $variables['organization']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['stats'] = ['likes'=>100,'reviews'=>5];
 
         // Add review
-        if ($request->isMethod('POST') && $request->request->get('@type') == 'review') {
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {
             $resource = $request->request->all();
+
 
             $resource['organization'] = $variables['organization']['@id'];
             $resource['resource'] = $variables['organization']['@id'];
             $resource['author'] = $this->getUser()->getPerson();
 
             // Save to the commonground component
-            $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+
         }
 
         return $variables;
