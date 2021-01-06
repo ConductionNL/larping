@@ -7,67 +7,79 @@
 
             <div class="row">
                 <div class="col-8">
-                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ typePlural|trans|capitalize }}</h1>
-                </div>
-                <div class="col-4">
-                    <!-- Breadcrumb -->
-                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1 float-right" aria-label="breadcrumb">
-                        <ul class="list-unstyled d-flex p-0 m-0">
-                            <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
-                            <li class="breadcrumb-item active"
-                                aria-current="page">{{ typePlural|trans|capitalize }}</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
 
-            <div class="search-result-bar">
-                {% if items|default %}
-                    <p>{{ 'we found'|trans|capitalize }} <span>{{ items|length }}</span> {{ 'results for'|trans }}
-                        <span>{{ typePlural|trans|capitalize }}</span>.</p>
-                {% else %}
-                    <p>{{ 'no results found'|trans|capitalize }}.</p>
-                {% endif %}
-                <div class="ml-md-auto d-flex align-items-center justify-content-between">
-                    <div class="select-bg-transparent select-border">
-                        <div class="selectric-wrapper selectric-select-location">
-                            <div class="selectric-select">
-                                <select class="select-location" style="text-align: center">
-                                    <option>{{ 'sort'|trans|capitalize }}</option>
-                                    <option>{{ 'likes'|trans|capitalize }}</option>
-                                    <option>{{ 'rating'|trans|capitalize }}</option>
-                                    <option>{{ 'alphabet'|trans|capitalize }}</option>
-                                </select>
-                            </div>
-                            <div class="selectric-items" tabindex="-1">
-                                <div class="selectric-scroll">
-                                    <ul>
-                                        <li data-index="0" class="selected">{{ 'likes'|trans|capitalize }}</li>
-                                        <li data-index="1" class="">{{ 'rating'|trans|capitalize }}</li>
-                                        <li data-index="2" class="last">{{ 'alphabet'|trans|capitalize }}</li>
-                                    </ul>
+                    <div class="row">
+                        <div class="col-8">
+                            <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ typePlural|trans|capitalize }}</h1>
+                        </div>
+                        <div class="col-4">
+                            <!-- Breadcrumb -->
+                            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1 float-right"
+                                 aria-label="breadcrumb">
+                                <ul class="list-unstyled d-flex p-0 m-0">
+                                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                                    <li class="breadcrumb-item active"
+                                        aria-current="page">{{ typePlural|trans|capitalize }}</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="search-result-bar">
+                        {% if items|default %}
+                            <p>{{ 'we found'|trans|capitalize }}
+                                <span>{{ items|length }}</span> {{ 'results for'|trans }}
+                                <span>{{ typePlural|trans|capitalize }}</span>.</p>
+                        {% else %}
+                            <p>{{ 'no results found'|trans|capitalize }}.</p>
+                        {% endif %}
+                        <div class="ml-md-auto d-flex align-items-center justify-content-between">
+                            <div class="select-bg-transparent select-border">
+                                <div class="selectric-wrapper selectric-select-location">
+                                    <div class="selectric-select">
+                                        <select class="select-location" style="text-align: center">
+                                            <option>{{ 'sort'|trans|capitalize }}</option>
+                                            <option>{{ 'likes'|trans|capitalize }}</option>
+                                            <option>{{ 'rating'|trans|capitalize }}</option>
+                                            <option>{{ 'alphabet'|trans|capitalize }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="selectric-items" tabindex="-1">
+                                        <div class="selectric-scroll">
+                                            <ul>
+                                                <li data-index="0" class="selected">{{ 'likes'|trans|capitalize }}</li>
+                                                <li data-index="1" class="">{{ 'rating'|trans|capitalize }}</li>
+                                                <li data-index="2" class="last">{{ 'alphabet'|trans|capitalize }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
+                                <input class="selectric-input" tabindex="0">
+                            </div>
+                            <div class="icons">
+                                <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">
+                                    <i class="fa fa-th" aria-hidden="true"></i>
+                                </a>
+                                <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">
+                                    <i class="fa fa-th-list" aria-hidden="true"></i>
+                                </a>
                             </div>
                         </div>
-                        <input class="selectric-input" tabindex="0">
                     </div>
-                    <div class="icons">
-                        <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">
-                            <i class="fa fa-th" aria-hidden="true"></i>
-                        </a>
-                        <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">
-                            <i class="fa fa-th-list" aria-hidden="true"></i>
-                        </a>
+
+                    <div id="gridFullwidthDiv" class="fade-in">
+                        {% include 'event/sections/grid_fullwidth.html.twig' %}
                     </div>
+
+                    <div id="listFullwidthDiv" class="fade-in">
+                        {% include 'event/sections/list_fullwidth.html.twig' %}
+                    </div>
+
                 </div>
-            </div>
 
-            <div id="gridFullwidthDiv" class="fade-in">
-                {% include 'event/sections/grid_fullwidth.html.twig' %}
-            </div>
-
-            <div id="listFullwidthDiv" class="fade-in">
-                {% include 'event/sections/list_fullwidth.html.twig' %}
+                <div class="col-lg-4 pl-xl-6">
+                    {% include 'event/widgets/sidebar.html.twig' %}
+                </div>
             </div>
 
         </div>
