@@ -56,7 +56,7 @@ class OrganizationController extends AbstractController
         }
 
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'],['resource' => $variables['organization']['@id']])['hydra:member'];
-        //$variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'],['resource' => $variables['organization']['@id']])['hydra:member'];
+        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['stats'] = ['likes'=>100,'reviews'=>5];
 

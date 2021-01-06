@@ -150,7 +150,7 @@
 
                     <!-- Events -->
                     {% if events is defined and events is not empty %}
-                    <div>
+                    <div id="gridFullwidthDiv" class="fade-in">
                         <h3 class="font-weight-normal mb-6">{{ 'events'|trans|capitalize }}</h3>
                         {% for event in events %}
                             {%  include 'cards/event.html.twig' with {'item': event}  %}
@@ -162,7 +162,7 @@
 
                     <!-- Offers -->
                     {% if offers is defined and offers is not empty %}
-                    <div>
+                    <div id="gridFullwidthDiv" class="fade-in">
                         <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
                         {% for offer in offers %}
                             {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
