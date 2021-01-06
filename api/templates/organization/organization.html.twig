@@ -7,105 +7,60 @@
 {% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':organization['@id']})['hydra:member'] %}
 {% extends "base.html.twig" %}
 {% block content %}
-    <section class="pt-7 pb-4 pt-md-9 pb-md-8">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-lg-12">
-                    <div class="single-listing-content mb-6">
-                        <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
-                        <p class="mb-6">
-                            {% if organization.description|default %}
-                                {{ organization.description }}
-                            {% else %}
-                                {{ 'no description found'|trans|capitalize }}
-                            {% endif %}
-                        </p>
-                        <!-- contact -->
-                        <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
-                            {% if contact.telephones is defined and contact.telephones is not empty %}
-                                {% for tel in contact.telephones %}
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-phone" aria-hidden="true"></i>
-                                        <span class="ml-2">{{ tel.telephone }}</span>
-                                    </li>
-                                {% endfor %}
-                            {% endif %}
-                            {% if contact.emails is defined and contact.emails is not empty %}
-                                {% for emails in contact.emails %}
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                                        <span class="ml-2">{{ emails.email }}</span>
-                                    </li>
-                                {% endfor %}
-                            {% endif %}
-                        </ul>
-                        <!-- Socials -->
-                        <ul class="list-group list-group-horizontal">
-                            {% if contact.socials|default %}
-                                <ul class="list-unstyled mb-6">
-                                        fa fa-{{ socials.type }}{% endif %} mr-2" aria-hidden="true"></i>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </ul>
-                            {% for event in events %}
-                                        </div>
-                                        <div class="card-footer bg-transparent">
-                                            <ul class="list-unstyled d-flex mb-0 py-2">
-                                                <li>
-                                                    <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" onclick="likeItem(this)" value="{{ event['@id'] }}" data-original-title="Favourite this organisation" style="z-index: 2">
-                                                        <i {% if isLiked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
-                                                        <span id="{{ event['id'] }}">{{ likes }}</span>
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <a class="px-2 stretched-link" href="{{ path('app_event_event', {id: event.id}) }}">Bekijken</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+<section class="pt-7 pb-4 pt-md-9 pb-md-8">
+    <div class="container">
+        <div class="row">
+            <!--======= Main =======-->
+            <div class="col-md-8 col-lg-8">
+                <div class="single-listing-content mb-6">
+                    <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
+                    <p class="mb-6">
+                        {% if organization.description|default %}
+                            {{ organization.description }}
+                        {% else %}
+                            {{ 'no description found'|trans|capitalize }}
+                        {% endif %}
+                    </p>
+                    <!-- contact -->
+                    <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
+                        {% if contact.telephones is defined and contact.telephones is not empty %}
+                            {% for tel in contact.telephones %}
+                                <li class="list-inline-item">
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                    <span class="ml-2">{{ tel.telephone }}</span>
+                                </li>
                             {% endfor %}
-                        </div>
-                                <input type="hidden" id="@type" name="@type" value="review">
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        {#*/@todo make rating elements work #}
-                                        {#                                    <label class="form-text" for="ratingValue">{{ 'from 1/5 how would you rate this organization?'|trans|capitalize }}</label>#}
-                                        {#                                    <input class="form-control-sm col-1" type="text" id="ratingValue" name="ratingValue">#}
-                                    </div>
-                                    <div class="form-group mb-6">
-                                        <textarea class="form-control" rows="6" placeholder="Enter Your Comment"
-                                                  name="review"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="hidden" name="addReview" value="true">
-                                        <button type="submit" class="btn btn-primary text-uppercase"> Send Review
-                                        </button>
-                                    </div>
-                                </form>
-                            {% else %}
-                                <div>
-                                    <h3>{{ 'you need to be logged in to place a review'|trans|capitalize }}</h3>
-                                    <button class="btn btn-primary btn-block">
-                                        <a class="mt-2 text-center text-white"
-                                           href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }}</a>
-                                    </button>
-                                </div>
-                                </div>
-
-                        </div>
+                        {% endif %}
+                        {% if contact.emails is defined and contact.emails is not empty %}
+                            {% for emails in contact.emails %}
+                                <li class="list-inline-item">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                    <span class="ml-2">{{ emails.email }}</span>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                    <!-- Socials -->
+                    <ul class="list-group list-group-horizontal">
+                        {# if contact.socials|default %}
+                            <ul class="list-unstyled mb-6">
+                                    fa fa-{{ socials.type }}{% endif %} mr-2" aria-hidden="true"></i>
+                                {% endfor %}
+                            </ul>
+                        {% endif #}
+                    </ul>
 
                     </div>
 
-                    <!--======= Sidebar =======-->
-                    {#                <div class="col-md-5 col-lg-4 pl-xl-8"></div>#}
-                </div>
-                <!--======= Sidebar =======-->
-            </div>
-        </div>
-    </section>
+
+                </div><!-- /.col single-listing-content -->
+            </div><!-- /.col -->
+            <!--======= Sidebar =======-->
+            <div class="col-md-5 col-lg-4 pl-xl-8">
+
+            </div><!-- /.col -->
+        </div> <!-- /.container -->
+    </div> <!-- /.container -->
+</section>
 
 {% endblock %}
