@@ -7,105 +7,191 @@
 {% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':organization['@id']})['hydra:member'] %}
 {% extends "base.html.twig" %}
 {% block content %}
-    <section class="pt-7 pb-4 pt-md-9 pb-md-8">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-lg-12">
-                    <div class="single-listing-content mb-6">
-                        <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
-                        <p class="mb-6">
-                            {% if organization.description|default %}
-                                {{ organization.description }}
-                            {% else %}
-                                {{ 'no description found'|trans|capitalize }}
-                            {% endif %}
-                        </p>
-                        <!-- contact -->
-                        <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
-                            {% if contact.telephones is defined and contact.telephones is not empty %}
-                                {% for tel in contact.telephones %}
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-phone" aria-hidden="true"></i>
-                                        <span class="ml-2">{{ tel.telephone }}</span>
-                                    </li>
-                                {% endfor %}
-                            {% endif %}
-                            {% if contact.emails is defined and contact.emails is not empty %}
-                                {% for emails in contact.emails %}
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                                        <span class="ml-2">{{ emails.email }}</span>
-                                    </li>
-                                {% endfor %}
-                            {% endif %}
-                        </ul>
-                        <!-- Socials -->
-                        <ul class="list-group list-group-horizontal">
-                            {% if contact.socials|default %}
-                                <ul class="list-unstyled mb-6">
-                                        fa fa-{{ socials.type }}{% endif %} mr-2" aria-hidden="true"></i>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </ul>
-                            {% for event in events %}
-                                        </div>
-                                        <div class="card-footer bg-transparent">
-                                            <ul class="list-unstyled d-flex mb-0 py-2">
-                                                <li>
-                                                    <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" onclick="likeItem(this)" value="{{ event['@id'] }}" data-original-title="Favourite this organisation" style="z-index: 2">
-                                                        <i {% if isLiked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
-                                                        <span id="{{ event['id'] }}">{{ likes }}</span>
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <a class="px-2 stretched-link" href="{{ path('app_event_event', {id: event.id}) }}">Bekijken</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                                <input type="hidden" id="@type" name="@type" value="review">
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        {#*/@todo make rating elements work #}
-                                        {#                                    <label class="form-text" for="ratingValue">{{ 'from 1/5 how would you rate this organization?'|trans|capitalize }}</label>#}
-                                        {#                                    <input class="form-control-sm col-1" type="text" id="ratingValue" name="ratingValue">#}
-                                    </div>
-                                    <div class="form-group mb-6">
-                                        <textarea class="form-control" rows="6" placeholder="Enter Your Comment"
-                                                  name="review"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="hidden" name="addReview" value="true">
-                                        <button type="submit" class="btn btn-primary text-uppercase"> Send Review
-                                        </button>
-                                    </div>
-                                </form>
-                            {% else %}
-                                <div>
-                                    <h3>{{ 'you need to be logged in to place a review'|trans|capitalize }}</h3>
-                                    <button class="btn btn-primary btn-block">
-                                        <a class="mt-2 text-center text-white"
-                                           href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }}</a>
-                                    </button>
-                                </div>
-                                </div>
 
-                        </div>
-
+<!-- ====================================
+———	LISTING SINGLE HEADING
+===================================== -->
+<section class="py-7 pt-md-9 pb-md-8">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="mb-2 mb-lg-0">
+                    <h1 class="single-listing-title">{{ organization.name }}</h1>
+                    <p class="text-muted mb-1"> <i class="fa fa-map-marker text-primary mr-1"></i> NY, USA </p>
+                    <p class="text-muted mb-1"> <i class="fa fa-phone text-primary mr-1"></i> +55 654 545 122</p>
+                    <div class="d-flex align-items-center">
+                        <ul class="list-inline list-inline-rating mr-2">
+                            <li class="list-inline-item">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                            </li>
+                        </ul>
+                        <span class="d-inline-block mr-2">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</span>
+                        <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
+                            <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
+                            <span>{{ stats.likes }}</span>
+                        </button>
                     </div>
-
-                    <!--======= Sidebar =======-->
-                    {#                <div class="col-md-5 col-lg-4 pl-xl-8"></div>#}
                 </div>
-                <!--======= Sidebar =======-->
+            </div>
+            <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
+                <a href="#add-review" class="btn btn-primary">{{ 'write a review'|trans|capitalize }}</a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- ====================================
+———	MAIN CONTENT
+===================================== -->
+<section class="pt-7 pb-4 pt-md-9 pb-md-8">
+    <div class="container">
+        <div class="row">
+            <!--======= Main =======-->
+            <div class="col-md-8 col-lg-8">
+                <div class="single-listing-content mb-6">
+                    <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
+                    {% if organization.description|default %}
+                    <p class="mb-6">{{ organization.description }}</p>
+                    {% endif %}
+                    <!-- Services -->
+                    <div class="mb-6">
+                        <h4 class="font-weight-normal mb-4">{{ 'catagories'|trans|capitalize }}</h4>
+                        <ul class="list-unstyled mb-6">
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-wifi mr-2" aria-hidden="true"></i>Wi-Fi
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-cube mr-2" aria-hidden="true"></i>Reservations
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-filter mr-2" aria-hidden="true"></i>Air Filtration
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-hand-pointer-o mr-2" aria-hidden="true"></i>Braille Coded Exits
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-briefcase mr-2" aria-hidden="true"></i>Business Center
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-glass mr-2" aria-hidden="true"></i>Free Coffee
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-car mr-2" aria-hidden="true"></i>Parking Available
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-percent mr-2" aria-hidden="true"></i>Discounted Parking
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-users mr-2" aria-hidden="true"></i>Meeting Spaces
+                            </li>
+                            <li class="d-inline-block mr-4 mb-2">
+                                <i class="fa fa-times mr-2" aria-hidden="true"></i>No Pets Allowed
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Contact By -->
+                <div>
+                    <h3 class="font-weight-normal mb-6">{{ 'contact details'|trans|capitalize }} {{ organization.name }}</h3>
+                    <div class="media mb-7">
+                        <div class="media-body">
+                            <h5 class="media-heading">{{ organization.name }}</h5>
+                            <div class="d-flex flex-column flex-lg-row align-items-lg-center">
+                                <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
+                                    {% if contact.telephones is defined and contact.telephones is not empty %}
+                                        {% for tel in contact.telephones %}
+                                            <li class="list-inline-item">
+                                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                                <span class="ml-2">{{ tel.telephone }}</span>
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if contact.emails is defined and contact.emails is not empty %}
+                                        {% for emails in contact.emails %}
+                                            <li class="list-inline-item">
+                                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                                                <span class="ml-2">{{ emails.email }}</span>
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+
+                                <ul class="list-inline list-inline-icon ml-lg-auto">
+                                    {% if contact.socials is defined and contact.socials is not empty %}
+                                        {% for social in contact.socials %}
+                                            <li class="list-inline-item">
+                                                <a class="mr-2" href="{{ social.url }}">
+                                                    <i class="fa fa-{{ social.type }}" aria-hidden="true"></i>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Events -->
+                    {% if events is defined and events is not empty %}
+                    <div id="gridFullwidthDiv" class="fade-in">
+                        <h3 class="font-weight-normal mb-6">{{ 'events'|trans|capitalize }}</h3>
+                        {% for event in events %}
+                            {%  include 'cards/event.html.twig' with {'item': event}  %}
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+                    {% endif %}
+
+                    <!-- Offers -->
+                    {% if offers is defined and offers is not empty %}
+                    <div id="gridFullwidthDiv" class="fade-in">
+                        <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
+                        {% for offer in offers %}
+                            {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Reviews -->
+                    {% if reviews is defined and reviews is not empty %}
+                    <div>
+                        <h3 class="font-weight-normal mb-6">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
+                        {%  include 'widgets/reviews.html.twig' %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Add a review -->
+                    <div id="add-review">
+                        <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
+                        {%  include 'widgets/review.html.twig' %}
+                    </div>
+
+                </div><!-- /.col single-listing-content -->
+            </div><!-- /.col -->
+            <!--======= Sidebar =======-->
+            <div class="col-md-5 col-lg-4 pl-xl-8">
+
+            </div><!-- /.col -->
+        </div> <!-- /.container -->
+    </div> <!-- /.container -->
+</section>
 
 {% endblock %}
