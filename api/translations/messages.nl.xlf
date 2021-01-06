@@ -209,7 +209,6 @@
          <source>end date</source>
          <target>eind datum</target>
          </trans-unit>
-
          <trans-unit id="oNAHXbG" resname="send review">
          <source>send review</source>
          <target>verstuur recensie</target>
@@ -221,6 +220,18 @@
          <trans-unit id="nayMMbG" resname="submit review">
          <source>submit review</source>
          <target>review versturen</target>
+         </trans-unit>
+         <trans-unit id="Uhb123S" resname="what are you looking for">
+         <source>what are you looking for</source>
+         <target>waar ben je naar op zoek</target>
+         </trans-unit>
+         <trans-unit id="V9fk1Z6" resname="find by location">
+         <source>find by location</source>
+         <target>zoek via locatie</target>
+         </trans-unit>
+         <trans-unit id="H8mw0lQ" resname="search">
+         <source>search</source>
+         <target>zoek</target>
          </trans-unit>
     </body>
   </file>

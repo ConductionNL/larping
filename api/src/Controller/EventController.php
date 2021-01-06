@@ -32,9 +32,27 @@ class EventController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['items'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+//        $variables['items'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['pathToSingular'] = 'app_event_event';
+        $variables['path'] = 'app_event_index';
         $variables['typePlural'] = 'events';
+
+        // Making sure these vars are defined
+        $filters['keywordsInput'] = '';
+        $filters['locationInput'] = '';
+
+        if ($request->isMethod('POST')) {
+            $filters = $request->request->get('filters');
+        }
+
+        // Fetching items (with filters but they can be empty)
+        $variables['items'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'],
+            [
+                'name' => $filters['keywordsInput'],
+                'description' => $filters['keywordsInput'],
+                'location' => $filters['locationInput']
+            ]
+        )['hydra:member'];
 
         return $variables;
     }
