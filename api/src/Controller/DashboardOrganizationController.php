@@ -68,10 +68,10 @@ class DashboardOrganizationController extends AbstractController
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
 
-        if ($request->isMethod('POST')) {
-            // Get the current resource
-            $event = $request->request->all();
-
+        //Delete event
+        if ($request->isMethod('POST') && $request->request->get('DeleteEvent') == 'true') {
+            $del = $commonGroundService->deleteResource($variables['event'], $variables['event']['@id']);
+            return $this->redirect($this->generateUrl('app_dashboardorganization_events'));
         }
 
         return $variables;
