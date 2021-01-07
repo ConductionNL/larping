@@ -78,21 +78,19 @@
                     <!-- Offers -->
                     {% if product.offers|default %}
                         <div class="my-6">
-                            <h3 class="font-weight-normal mb-6">{{ 'offers'|trans|capitalize }}</h3>
+                            <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
                             <form action="{{ path(path, {id: event.id}) }}" method="post">
 
                                 {% if product.prerequisiteProducts|default %}
-                                    {% if app.user|default and app.user.person|default %}
-                                        {% set paidInvoices = commonground_resource_list({'component':'bc','type':'invoices'}, {'status':'paid','customer':app.user.person}) %}
-                                    {% endif %}
-                                    <p style="color: indianred">{{ 'there are other products needed before you can buy this product'|capitalize|trans }}:</p>
+                                    <p style="color: indianred">{{ 'there are other products needed before you can buy this product'|capitalize|trans }}
+                                        :</p>
                                     {% set counter = 1 %}
                                     {% for product in product.prerequisiteProducts %}
-                                        {% if paidInvoices|default %}
-                                            {% set ownsThisProduct = owns_this_product(paidInvoices, product) %}
-                                        {% endif %}
 
-                                        {% if not ownsThisProduct|default or ownsThisProduct != false %}
+                                        {# Check if this product is owned or in session order #}
+                                        {% set ownsThisProduct = owns_this_product(product) %}
+
+                                        {% if ownsThisProduct|default and ownsThisProduct == false %}
                                             {% set product = commonground_resource(product['@id']) %}
                                             {% set counter = counter + 1 %}
                                             <div class="form-group p-3"
@@ -112,8 +110,16 @@
                                                     {% endfor %}
                                                 </select>
                                             </div>
+                                        {% else %}
+                                            <div class="form-group p-3"
+                                                 style="border-radius: 6px;background: rgba(144,238,144, 0.8)">
+                                                <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}
+                                                    :</p>
+                                                <label
+                                                    style="color: white">{{ product.name|capitalize }}</label>
+                                            </div>
                                         {% endif %}
-                                        {% set thisProdIsOwned = 'false' %}
+                                        {% set ownsThisProduct = 'false' %}
                                     {% endfor %}
                                 {% endif %}
 
@@ -152,7 +158,7 @@
 
                     <!-- Added by -->
                     <div>
-                        <h3 class="font-weight-normal mb-6">Added By </h3>
+                        <h3 class="font-weight-normal mb-6">{{ 'organized by'|trans|capitalize }}</h3>
                         <div class="media mb-7">
                             {% if organization.style.favicon.base64|default %}
                                 <div class="media-img">
@@ -229,68 +235,17 @@
                     </div>
 
                     <!-- Reviews -->
-                    <div class="my-6">
-                        <h3 class="font-weight-normal mb-6">{{ 'reviews'|trans|capitalize }} ({{ reviews|length }})</h3>
-                        {% for rev in reviews %}
-                            <div class="media mb-3">
-                                <div class="media-img">
-                                    <img src="assets/img/user/user-xs-1.jpg" class="mr-3 media-object rounded-circle"
-                                         alt="Image User">
-                                </div>
-                                <div class="media-body">
-                                    <h5 class="media-heading">{{ commonground_resource(rev.author).givenName }}</h5>
-                                    <p>{{ rev.review }}</p>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        <hr>
-                    </div>
+                    {% if reviews is defined and reviews is not empty %}
+                        <div>
+                            <h3 class="font-weight-normal mb-6">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
+                            {%  include 'widgets/reviews.html.twig' %}
+                        </div>
+                    {% endif %}
 
-                    <!-- Add Review -->
-                    <div class="my-6" id="add-review">
-                        {% if app.user %}
-                            {% set person = commonground_resource(app.user.person) %}
-                            <h3 class="font-weight-normal mb-6"> Add Review </h3>
-                            <form action="{{ path(path, {id: event.id}) }}" method="post">
-                                <div class="form-check form-check-inline mb-6 mr-lg-7">
-                                    <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
-                                           id="inlineRadio1" value="option1" checked="">
-                                    <label class="form-check-label" for="inlineRadio1">
-                                        <div class="media media-xs align-items-center">
-                                            <img {% if person.personalPhoto is defined and person.personalPhoto is not empty %} src="{{ person.personalPhoto }}" {% else %} src="https://eu.ui-avatars.com/api/?name={{ person.givenName }}+{{ person.familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"{% endif%}
-                                                 class="mr-2 media-object rounded-circle" alt="Image User">
-                                            <div class="media-body">
-                                                <h5 class="media-heading mb-0">{{ app.user.name }}</h5>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    {#*/@todo make test rating form element#}
-{#                                    <label class="form-text"#}
-{#                                           for="ratingValue">{{ 'from 1/5 how would you rate this event?'|trans|capitalize }}</label>#}
-{#                                    <input class="form-control-sm col-1" type="text" id="ratingValue"#}
-{#                                           name="ratingValue">#}
-                                </div>
-                                <div class="form-group mb-6">
-                                    <textarea class="form-control" rows="6" placeholder="Enter Your Comment"
-                                              name="review"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <input type="hidden" name="addReview" value="true">
-                                    <button type="submit" class="btn btn-primary text-uppercase"> Send Review</button>
-                                </div>
-                            </form>
-                        {% else %}
-                            <div>
-                                <h3>{{ 'you need to be logged in to place a review'|trans|capitalize }}</h3>
-                                <button class="btn btn-primary btn-block">
-                                    <a class="mt-2 text-center text-white"
-                                       href="{{ path('app_user_idvault') }}">{{ 'click here to log in'|trans|capitalize }}</a>
-                                </button>
-                            </div>
-                        {% endif %}
-
+                    <!-- Add a review -->
+                    <div id="add-review">
+                        <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
+                        {%  include 'widgets/review.html.twig' %}
                     </div>
 
                 </div>
