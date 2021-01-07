@@ -245,6 +245,34 @@
          <source>keywords</source>
          <target>trefwoorden</target>
          </trans-unit>
+         <trans-unit id="q9K2mnW" resname="my">
+         <source>my</source>
+         <target>mijn</target>
+         </trans-unit>
+         <trans-unit id="R3s2gBz" resname="favourites">
+         <source>favourites</source>
+         <target>favorieten</target>
+         </trans-unit>
+         <trans-unit id="k2mN2ba" resname="no favourites found">
+         <source>no favourites found</source>
+         <target>geen favorieten gevonden</target>
+         </trans-unit>
+         <trans-unit id="U8Uj2nS" resname="find">
+         <source>find</source>
+         <target>vind</target>
+         </trans-unit>
+         <trans-unit id="LAmn2S0" resname="a">
+         <source>a</source>
+         <target>een</target>
+         </trans-unit>
+         <trans-unit id="U7jn2SD" resname="no results found">
+         <source>no results found</source>
+         <target>geen resultaten gevonden</target>
+         </trans-unit>
+         <trans-unit id="812Basd" resname="date">
+         <source>date</source>
+         <target>datum</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
