@@ -79,8 +79,6 @@ class OrganizationController extends AbstractController
         // Shitty code but it works
         // If filter is not set or reset filters has been clicked fetch all organizations
 
-        var_dump((!isset($variables['filters']['keywordsInput']) or $variables['filters']['keywordsInput'] == ''));
-        var_dump($request->request->get('resetFilters'));
         if ((!isset($variables['filters']['keywordsInput']) or $variables['filters']['keywordsInput'] == '') or
             $request->request->get('resetFilters')) {
             $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
