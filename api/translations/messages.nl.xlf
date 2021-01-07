@@ -273,6 +273,14 @@
          <source>date</source>
          <target>datum</target>
          </trans-unit>
+         <trans-unit id="j2B214X" resname="remarks">
+         <source>remarks</source>
+         <target>opmerkingen</target>
+         </trans-unit>
+         <trans-unit id="B12as93" resname="something you want us to know">
+         <source>something you want us to know</source>
+         <target>iets wat je ons wilt laten weten</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
