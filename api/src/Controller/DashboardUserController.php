@@ -5,6 +5,7 @@
 namespace App\Controller;
 
 use App\Service\MailingService;
+use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Security\User\CommongroundUser;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -30,13 +31,13 @@ class DashboardUserController extends AbstractController
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService,  MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    public function indexAction(CommonGroundService $commonGroundService, ShoppingService $shoppingService,  MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
 
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        $variables['events'] = $shoppingService->getOwnedProducts($this->getUser()->getPerson());
         $variables['characters'] = [];// $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
         $variables['participants'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'people'])['hydra:member'];
         $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
