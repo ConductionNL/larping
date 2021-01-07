@@ -47,3 +47,9 @@
     <a href="{{ path('app_event_index') }}" class="btn btn-primary">{{ 'find a event'|trans|capitalize }}</a>
 </div>
 {% endif %}
+
+{% include 'dashboard_user/modals/event.html.twig' %}
+
+{% for event in events %}
+    {% include 'dashboard_user/modals/event.html.twig' with {'resource': event} %}
+{% endfor %}
