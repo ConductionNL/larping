@@ -15,13 +15,10 @@
                         {{ item.name|capitalize }}
                     </a>
                 </h3>
-                {% if item.description|default %}
-                    <p class="text-white">{{ item.description|slice(0, 135) }}</p>
-                {% else %}
-                    <p style="color:lightgrey">{{ 'no description'|trans|capitalize }}</p>
-                {% endif %}
-                <div style="color: white">{{ item.location }}<br>{{ item.dateCreated }}
-                </div>
+                <p class="text-white">{{ item.location }}</p>
+                <div class="far fa-calendar-alt" style="color: white" aria-hidden="true"></div>
+                    {{ item.startDate }}
+
             </div>
         </div>
 

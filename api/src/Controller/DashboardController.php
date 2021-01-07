@@ -6,6 +6,8 @@ namespace App\Controller;
 
 use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Security\User\IdVaultUser;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -14,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * The DashboardController handles any calls about administration and dashboard pages.
@@ -39,17 +42,16 @@ class DashboardController extends AbstractController
      *
      * @Route("/switch-organization/{id}")
      */
-    public function switchOrganizationAction(CommonGroundService $commonGroundService, $id)
+    public function switchOrganizationAction(CommonGroundService $commonGroundService, IdVaultService $idVaultService, $id)
     {
-        $organization = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
+        $user = $idVaultService->updateUserOrganization($id, $this->getUser()->getUsername());
+        $person = $commonGroundService->getResource($user['person']);
+        $userObject = new IdVaultUser($user['username'], $user['username'], $person['name'], null, $user['roles'], $user['person'], $user['organization'], 'id-vault');
 
-        //@todo Het ophalen van de user voor een @id is natuurlijk knude
-        $user = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()], true, false, true, false, false)['hydra:member'][0];
-        $user['organization'] = $organization['@id'];
-        unset($user['userGroups']);
+        $token = new UsernamePasswordToken($userObject, null, 'main', $userObject->getRoles());
+        $this->container->get('security.token_storage')->setToken($token);
+        $this->container->get('session')->set('_security_main', serialize($token));
 
-        $commonGroundService->saveResource(['organization'=>$organization['@id']], ['component' => 'uc', 'type' => 'users', 'id' => $user['id']]);
-
-        return $this->redirectToRoute('app_dashboardorganization_index', ['id' => $id]);
+        return $this->redirectToRoute('app_dashboardorganization_index');
     }
 }

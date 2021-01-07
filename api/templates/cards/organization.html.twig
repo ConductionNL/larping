@@ -30,11 +30,6 @@
                     {{ resource.name|capitalize }}
                 </a>
             </h3>
-            {% if resource.description|default %}
-                <p class="text-white">{{ resource.description|slice(0, 135) }}</p>
-            {% else %}
-                <p style="color:lightgrey">{{ 'no description'|trans|capitalize }}</p>
-            {% endif %}
         </div>
     </div>
     <div class="card-footer bg-transparent">

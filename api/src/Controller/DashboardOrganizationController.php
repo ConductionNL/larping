@@ -24,39 +24,26 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class DashboardOrganizationController extends AbstractController
 {
+
     /**
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService)
+    public function indexAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $variables = [];
-
-        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'])['hydra:member'];
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/organization")
+     * @Route("/events")
      * @Template
      */
-    public function organizationAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function eventsAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/{organization}/events")
-     * @Template
-     */
-    public function eventsAction(CommonGroundService $commonGroundService, Request $request, $organization)
-    {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         if ($request->isMethod('POST')) {
@@ -73,34 +60,58 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/{organization}/event/{id}")
+     * @Route("/event/{id}")
      * @Template
      */
-    public function eventAction(CommonGroundService $commonGroundService, Request $request, $organization, $id)
+    public function eventAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
-        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', ])['hydra:member'];
 
-
-        if ($request->isMethod('POST')) {
-            // Get the current resource
-            $event = $request->request->all();
-
+        //Delete event
+        if ($request->isMethod('POST') && $request->request->get('DeleteEvent') == 'true') {
+            $del = $commonGroundService->deleteResource($variables['event'], $variables['event']['@id']);
+            return $this->redirect($this->generateUrl('app_dashboardorganization_events'));
         }
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/products")
+     * @Route("/event/{id}/tickets")
      * @Template
      */
-    public function productsAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function eventTicketsAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $organization])['hydra:member'];
-        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $organization])['hydra:member'];
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
+        $variables['products'] = [];
+        $variables['offers'] = [];
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/event/{id}/participants")
+     * @Template
+     */
+    public function eventParticipantsAction(CommonGroundService $commonGroundService, Request $request, $id)
+    {
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', ])['hydra:member'];
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/products")
+     * @Template
+     */
+    public function productsAction(CommonGroundService $commonGroundService, Request $request)
+    {
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         if ($request->isMethod('POST')) {
@@ -116,13 +127,13 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/{organization}/orders")
+     * @Route("/orders")
      * @Template
      */
-    public function ordersAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function ordersAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organization])['hydra:member'];
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
@@ -137,157 +148,158 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/{organization}/offers")
+     * @Route("/offers")
      * @Template
      */
-    public function offersAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function offersAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $organization])['hydra:member'];
-        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $organization])['hydra:member'];
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/customers")
+     * @Route("/customers")
      * @Template
      */
-    public function customersAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function customersAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['customers'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/members")
+     * @Route("/members")
      * @Template
      */
-    public function membersAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function membersAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
-        $variables['members'] = [];
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['users'] = [];
+        $variables['groups'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/mailings")
+     * @Route("/mailings")
      * @Template
      */
-    public function mailingsAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function mailingsAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['mailings'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/reviews")
+     * @Route("/reviews")
      * @Template
      */
-    public function reviewsAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function reviewsAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['reviews'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/balance")
+     * @Route("/balance")
      * @Template
      */
-    public function balanceAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function balanceAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['acounts'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/reservations")
+     * @Route("/reservations")
      * @Template
      */
-    public function reservationsAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function reservationsAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['reservations'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/earnings")
+     * @Route("/earnings")
      * @Template
      */
-    public function earningsAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function earningsAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['earnings'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/characters")
+     * @Route("/characters")
      * @Template
      */
-    public function charactersAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function charactersAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['characters'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/skills")
+     * @Route("/skills")
      * @Template
      */
-    public function skillsAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function skillsAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['skills'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/items")
+     * @Route("/items")
      * @Template
      */
-    public function itemsAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function itemsAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['items'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/conditions")
+     * @Route("/conditions")
      * @Template
      */
-    public function conditionsAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function conditionsAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['conditions'] = [];
 
         return $variables;
     }
 
     /**
-     * @Route("/{organization}/storylines")
+     * @Route("/storylines")
      * @Template
      */
-    public function storylinesAction(CommonGroundService $commonGroundService, Request $request, $organization)
+    public function storylinesAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization]);
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['storylines'] = [];
 
         return $variables;

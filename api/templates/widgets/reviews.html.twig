@@ -1,0 +1,40 @@
+<!-- Reviews -->
+{% for review in reviews %}
+    <div class="media mb-3">
+        <div class="media-img">
+            <img src="/bundles/listy/img/user/user-xs-1.jpg" class="mr-3 media-object rounded-circle" alt="Image User">
+        </div>
+        <div class="media-body">
+            <h5 class="media-heading">{{ commonground_resource(review.author).givenName }}</h5>
+            <ul class="list-inline list-inline-rating">
+                <li class="list-inline-item">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                </li>
+                <li class="list-inline-item">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                </li>
+                <li class="list-inline-item">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                </li>
+                <li class="list-inline-item">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                </li>
+                <li class="list-inline-item">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                </li>
+            </ul>
+            <p>{{ review.review }}</p>
+            <!-- Reply Section -->
+            {#
+            <div class="reply-wrapper">
+                <a class="d-inline-block mb-2 btn-reply" href="javascript:0">Reply</a>
+                <form class="form-reply my-3">
+                    <textarea class="form-control mb-6" rows="3" placeholder="Enter your comment"></textarea>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            #}
+        </div>
+    </div>
+{% endfor %}
+
