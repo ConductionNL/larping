@@ -1,9 +1,7 @@
 <!-- event card -->
-{% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id']})['hydra:member']|length %}
+{% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']})['hydra:member'] %}
 
-{% if app.user|default %}
-    {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':item['@id'], 'author':app.user.person})['hydra:member'] %}
-{% endif %}
+
 <a href="{{ path('app_location_location', {id: item.id}) }}">
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">

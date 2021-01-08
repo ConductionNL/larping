@@ -14,13 +14,10 @@
                     <i class="fa fa-building mr-1"></i> {{ organization.name }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
                         <a class="dropdown-item" href="{{ path('app_dashboardorganization_index') }}">{{ 'edit'|trans|capitalize }}</a>
                         <a class="dropdown-item" href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
                     </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ path('app_dashboardorganization_index') }}">
-                        <i class="fas fa-tachometer-alt" aria-hidden="true"></i> Dashboard </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

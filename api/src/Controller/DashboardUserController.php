@@ -53,7 +53,7 @@ class DashboardUserController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
-        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => $params->get('app_id')]);
+        //$application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => $params->get('app_id')]);
         $variables['type'] = 'organization';
 
         if ($request->isMethod('POST')) {
@@ -111,6 +111,7 @@ class DashboardUserController extends AbstractController
             }
 
             // Als de organisatie nieuw is moeten we wat meer doen
+            /*
             $new = false;
             if(!array_key_exists('@id',$resource) || !$resource['@id'] ){
                 $new = true;
@@ -120,7 +121,7 @@ class DashboardUserController extends AbstractController
                 $resource['contact'] = $contact['@id'];
 
             }
-
+            */
             // Update to the commonground component
             $organization = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
 

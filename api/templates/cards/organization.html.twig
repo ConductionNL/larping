@@ -1,11 +1,5 @@
-{% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':resource['@id']})['hydra:member']|length %}
-{% if app.user|default %}
-    {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':resource['@id'], 'author':app.user.person})['hydra:member'] %}
-{% endif %}
-{% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':resource['@id']})['hydra:member'] %}
 
-
-{# set totals = commonground_resource_list({'component':'rc','type':'item_total'}, {'resource':resource['@id']})['hydra:member'] #}
+{% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']})['hydra:member'] %}
 
 <div class="card rounded-0 card-hover-overlay">
     <div class="position-relative">
@@ -17,13 +11,8 @@
                     alt="organization logo">
         <div class="card-img-overlay">
             <div class="d-flex align-items-center">
-                <ul class="list-inline list-inline-rating mr-2">
-                    {#*/@todo make stars dynamic#}
-                    <li class="list-inline-item">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                    </li>
-                </ul>
-                <span class="d-inline-block mr-2" style="color: white">(Reviews)</span>
+                {% include 'widget/rating.html.twig' with {'rating':totals.ratings} %}
+                <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} (Reviews)</span>
             </div>
             <h3>
                 <a href="{{ path('app_organization_organization', {'id': resource.id}) }}" class="stretched-link">
@@ -36,8 +25,8 @@
         <ul class="list-unstyled d-flex mb-0 py-2">
             <li>
                 <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" onclick="likeItem(this)" value="{{ resource['@id'] }}" data-original-title="Favourite this organisation" style="z-index: 2">
-                    <i {% if isLiked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
-                    <span id="{{ resource['id'] }}">{{ likes }}</span>
+                    <i {% if totals.liked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
+                    <span id="{{ resource['id'] }}">{{ totals.likes }}</span>
                 </button>
                 <i class="far fa-calendar-alt mr-2" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'upcoming events'|trans|capitalize }}"><span> {{ events|length }}</span></i>
             </li>
