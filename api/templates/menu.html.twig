@@ -29,6 +29,7 @@
             <ul class="menuzord-menu menuzord-right">
                 <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a></li>
                 <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
+                <li><a href="{{ path('app_location_index') }}">{{ 'locations'|trans|capitalize }}</a></li>
 
                 <li class="">
                     {% if app.user.organization is defined and app.user.organization is not empty %}
