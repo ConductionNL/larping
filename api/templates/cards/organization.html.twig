@@ -1,5 +1,5 @@
 
-{% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']})['hydra:member'] %}
+{% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
 
 <div class="card rounded-0 card-hover-overlay">
     <div class="position-relative">
@@ -11,7 +11,7 @@
                     alt="organization logo">
         <div class="card-img-overlay">
             <div class="d-flex align-items-center">
-                {% include 'widget/rating.html.twig' with {'rating':totals.ratings} %}
+                {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
                 <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} (Reviews)</span>
             </div>
             <h3>

@@ -49,4 +49,8 @@
     </div>
 {% endif %}
 
-{% include %}
+{% include 'dashboard_organization/modals/event.html.twig' %}
+
+{% for location in locations %}
+    {% include 'dashboard_organization/modals/event.html.twig' with {'resource': location} %}
+{% endfor %}
