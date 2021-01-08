@@ -304,4 +304,25 @@ class DashboardOrganizationController extends AbstractController
 
         return $variables;
     }
+
+    /**
+     * @Route("/locations")
+     * @Template
+     */
+    public function locationsAction(CommonGroundService $commonGroundService, Request $request)
+    {
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations'], ['place.organization' => $variables['organization']['@id']])['hydra:member'];
+
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            $location = $request->request->all();
+            // Set the current organization as owner
+            /*@todo use place for this?*/
+            // Save the resource
+            $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'accommodations']);
+        }
+
+        return $variables;
+    }
 }
