@@ -2,9 +2,10 @@
 
 {% block content %}
 
-    {% if event.organization|default %}
-        {% set organization = commonground_resource(event.organization) %}
+    {% if location.organization|default %}
+        {% set organization = commonground_resource(location.organization) %}
     {% endif %}
+
     <section class="py-7 pt-md-9 pb-md-8 ">
         <div class="container">
             <div class="row">
@@ -55,7 +56,6 @@
                         {% endif %}
                     </div>
                     <hr>
-
                     <!-- Features -->
                     <div class="my-6">
                         <h3 class="font-weight-normal mb-6">{{ 'features'|trans|capitalize }}</h3>
@@ -91,7 +91,7 @@
                                         {# Check if this product is owned or in session order #}
                                         {% set ownsThisProduct = owns_this_product(product) %}
 
-                                        {% if ownsThisProduct is not null and ownsThisProduct == false %}
+                                        {% if ownsThisProduct|default and ownsThisProduct == false %}
                                             {% set product = commonground_resource(product['@id']) %}
                                             {% set counter = counter + 1 %}
                                             <div class="form-group p-3"
@@ -155,8 +155,6 @@
                             </form>
                             <hr>
                         </div>
-
-                        <hr>
                     {% endif %}
 
                     <!-- Added by -->
@@ -245,7 +243,7 @@
                     </div>
 
                     <hr>
-                    {% endif %}
+                {% endif %}
 
                     <!-- Add a review -->
                     <div id="add-review">

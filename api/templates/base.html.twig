@@ -75,7 +75,9 @@
 
 </div> <!-- element wrapper ends -->
 
+{% if hidefooter is not defined or hidefooter is empty %}
 {% include 'footer.html.twig' %}
+{% endif %}
 
 <!-- JAVASCRIPTS -->
 

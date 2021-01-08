@@ -4,34 +4,27 @@
 
     <section class="py-7 py-md-10">
         <div class="container">
-
-
             <div class="row">
                 <div class="col-8">
-
-                    <!-- header -->
-                    <div class="row">
-                        <div class="col-8">
-                            <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ 'organization'|trans|capitalize }}</h1>
-                        </div>
-                        <div class="col-4">
-                            <!-- Breadcrumb -->
-                            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1 float-right"
-                                 aria-label="breadcrumb">
-                                <ul class="list-unstyled d-flex p-0 m-0">
-                                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
-                                    <li class="breadcrumb-item active"
-                                        aria-current="page">{{ 'organization'|trans|capitalize }}</li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-
+                     <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ 'organizations'|trans|capitalize }}</h1>
+                </div><!-- /.col -->
+                <div class="col-4">
+                <!-- Breadcrumb -->
+                <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
+                    <ul class="list-unstyled d-flex p-0 m-0">
+                        <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                        <li class="breadcrumb-item active">{{ 'organizations'|trans|capitalize }} </li>
+                    </ul>
+                </nav>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+            <!-- header -->
+            <div class="row">
+                <div class="col-8">
                     <!-- search bar -->
                     <div class="search-result-bar">
                         {% if organizations|default %}
-                            <p>{{ 'we found'|trans|capitalize }}
-                                <span>{{ organizations|length }}</span> {{ 'results for'|trans }}
+                            <p>{{ 'we found'|trans|capitalize }} <span>{{ organizations|length }}</span> {{ 'results for'|trans }}
                                 <span>{{ 'organizations'|trans|capitalize }}</span>.</p>
                         {% else %}
                             <p>{{ 'no results found'|trans|capitalize }}.</p>
@@ -42,15 +35,9 @@
                                     <div class="selectric-select">
                                         <select class="select-location" style="text-align: center">
                                             <option>{{ 'sort'|trans|capitalize }}</option>
-                                            <option><a
-                                                    href="{{ path('app_organization_index') }}?query=likes">{{ 'likes'|trans|capitalize }}</a>
-                                            </option>
-                                            <option><a
-                                                    href="{{ path('app_organization_index') }}?query=rating">{{ 'rating'|trans|capitalize }}</a>
-                                            </option>
-                                            <option><a
-                                                    href="{{ path('app_organization_index') }}?query=alphabet">{{ 'alphabet'|trans|capitalize }}</a>
-                                            </option>
+                                            <option><a href="{{ path('app_organization_index') }}?query=likes">{{ 'likes'|trans|capitalize }}</a></option>
+                                            <option><a href="{{ path('app_organization_index') }}?query=rating">{{ 'rating'|trans|capitalize }}</a></option>
+                                            <option><a href="{{ path('app_organization_index') }}?query=alphabet">{{ 'alphabet'|trans|capitalize }}</a></option>
                                         </select>
                                     </div>
                                     <div class="selectric-items" tabindex="-1">
@@ -78,30 +65,26 @@
 
                     <div id="gridFullwidthDiv" class="fade-in">
                         <div class="row">
-                            {% if organizations|default %}
-                                {% for organization in organizations %}
-                                    <div class="col-md-6" id="organization">
-                                        {% include '/cards/organization.html.twig' with {'resource': organization} %}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
+                            {% for organization in organizations %}
+                                <div class="col-md-6" id="organization">
+                                    {% include '/cards/organization.html.twig' with {'resource': organization} %}
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
 
                     <div id="listFullwidthDiv" class="fade-in">
-                        {% include 'sections/list_fullwidth_organization.html.twig' %}
-                    </div>
-
-                </div>
-
+                        {% for organization in organizations %}
+                            {% include '/cards/list/organization.html.twig' with {'item': organization} %}
+                        {% endfor %}
+                    </div><!-- /.col -->
+                </div><!-- /.col -->
 
                 <div class="col-lg-4 pl-xl-6">
-                    {% include 'widgets/sidebar.html.twig' with {'path': 'app_organization_index'} %}
-                </div>
-
-            </div>
-
-        </div>
+                    {% include '/organization/sidebar.html.twig' with {'path': 'app_event_index'} %}
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container -->
     </section>
 
     <script>
