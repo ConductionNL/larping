@@ -281,6 +281,15 @@
          <source>something you want us to know</source>
          <target>iets wat je ons wilt laten weten</target>
          </trans-unit>
+         <trans-unit id="8ub124A" resname="browse by categories">
+         <source>browse by categories</source>
+         <target>zoek in categorieën</target>
+         </trans-unit>
+         <trans-unit id="BUS612g" resname="categories">
+         <source>categories</source>
+         <target>categorieën</target>
+         </trans-unit>
+
     </body>
   </file>
 </xliff>
