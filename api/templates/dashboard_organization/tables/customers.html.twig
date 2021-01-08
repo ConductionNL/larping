@@ -66,10 +66,10 @@
     </div>
 {% endif %}
 
-{% include 'dashboard_organization/modals/event.html.twig' %}
+{% include 'dashboard_organization/modals/location.html.twig' %}
 
 {% for event in events %}
-    {% include 'dashboard_organization/modals/event.html.twig' with {'resource': event} %}
+    {% include 'dashboard_organization/modals/location.html.twig' with {'resource': event} %}
 {% endfor %}
 
 
