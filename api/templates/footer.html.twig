@@ -1,6 +1,6 @@
 <!-- footer -->
 <footer class="pt-7 pt-md-10 bg-white">
-    <div class="container">
+    <div class="{% if containerClass is defined %}{{ containerClass  }}{% else %}container{% endif %}">
         <div class="row">
             <div class="col-sm-7 col-xs-12">
 {#                <a class="d-inline-block mb-6" href="index.html">#}

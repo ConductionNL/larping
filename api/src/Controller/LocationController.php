@@ -32,8 +32,9 @@ class LocationController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService)
     {
         $variables = [];
-        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'lc']);
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations']);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories']);
+        $variables['hidefooter'] = 'hide';
 
         return $variables;
     }
