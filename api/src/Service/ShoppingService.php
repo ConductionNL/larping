@@ -62,6 +62,7 @@ class ShoppingService
                     $order['description'] = 'Order for ' . $person['name'];
                     $order['organization'] = $offer['offeredBy'];
                     $order['customer'] = $person['@id'];
+                    $order['remark'] = $this->request->get('remarks');
 
                     if (isset($order['items'])) {
                         unset($order['items']);
@@ -229,7 +230,6 @@ class ShoppingService
         if ($thisProductIsOwned == false && $this->security->getUser() && $this->security->getUser()->getPerson()) {
             // Fetches owned products
             $ownedProducts = $this->getOwnedProducts($this->security->getUser()->getPerson());
-
             if (isset($ownedProducts) && count($ownedProducts) > 0) {
                 foreach ($ownedProducts as $ownedProduct) {
                     if ($ownedProduct['id'] == $product['id']) {
@@ -238,6 +238,7 @@ class ShoppingService
                 }
             }
         }
+
 
         return $thisProductIsOwned;
     }

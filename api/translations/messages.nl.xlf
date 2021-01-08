@@ -245,6 +245,51 @@
          <source>keywords</source>
          <target>trefwoorden</target>
          </trans-unit>
+         <trans-unit id="q9K2mnW" resname="my">
+         <source>my</source>
+         <target>mijn</target>
+         </trans-unit>
+         <trans-unit id="R3s2gBz" resname="favourites">
+         <source>favourites</source>
+         <target>favorieten</target>
+         </trans-unit>
+         <trans-unit id="k2mN2ba" resname="no favourites found">
+         <source>no favourites found</source>
+         <target>geen favorieten gevonden</target>
+         </trans-unit>
+         <trans-unit id="U8Uj2nS" resname="find">
+         <source>find</source>
+         <target>vind</target>
+         </trans-unit>
+         <trans-unit id="LAmn2S0" resname="a">
+         <source>a</source>
+         <target>een</target>
+         </trans-unit>
+         <trans-unit id="U7jn2SD" resname="no results found">
+         <source>no results found</source>
+         <target>geen resultaten gevonden</target>
+         </trans-unit>
+         <trans-unit id="812Basd" resname="date">
+         <source>date</source>
+         <target>datum</target>
+         </trans-unit>
+         <trans-unit id="j2B214X" resname="remarks">
+         <source>remarks</source>
+         <target>opmerkingen</target>
+         </trans-unit>
+         <trans-unit id="B12as93" resname="something you want us to know">
+         <source>something you want us to know</source>
+         <target>iets wat je ons wilt laten weten</target>
+         </trans-unit>
+         <trans-unit id="8ub124A" resname="browse by categories">
+         <source>browse by categories</source>
+         <target>zoek in categorieën</target>
+         </trans-unit>
+         <trans-unit id="BUS612g" resname="categories">
+         <source>categories</source>
+         <target>categorieën</target>
+         </trans-unit>
+
     </body>
   </file>
 </xliff>

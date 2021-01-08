@@ -38,19 +38,21 @@ class OrderController extends AbstractController
 
         if ($this->getUser() && $this->getUser()->getPerson()) {
             $person = $this->getUser()->getPerson();
-            $variables['order'] = $ss->makeOrder($person);
+            if ($request->request->get('makeOrder') == null or $request->request->get('makeOrder') != 'true') {
+                $variables['order'] = $ss->makeOrder($person);
+            }
         } else {
             $variables['order'] = $session->get('order');
         }
 
         if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' && isset($variables['order']) &&
             $this->getUser()) {
+            $variables['order'] = $ss->makeOrder($person);
             $ss->redirectToMollie($variables['order']);
         }
 
         return $variables;
     }
-
 
     /**
      * @Route("/remove-item/{id}")

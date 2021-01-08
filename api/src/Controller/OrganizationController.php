@@ -41,7 +41,53 @@ class OrganizationController extends AbstractController
 //            $variables['organizations'][$key]['totals'] =  $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'item_total'],['resource' => $variables['organizations']['@id']]);
 //        }
 
+        if ($request->isMethod('POST')) {
+            $variables['filters'] = $request->request->get('filters');
 
+            if (!$request->request->get('resetFilters')) {
+
+                // We do 3 calls because we need to filter separately because if not it gives a empty list back if one filter doesn't find any results
+                $organizations = [];
+                if (isset($variables['filters']['keywordsInput']) && !empty($variables['filters']['keywordsInput'])) {
+                    $organizations[] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'], ['name' => $variables['filters']['keywordsInput']])['hydra:member'];
+                    $organizations[] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'], ['description' => $variables['filters']['keywordsInput']])['hydra:member'];
+                }
+//                if (isset($variables['filters']['locationInput']) && !empty($variables['filters']['locationInput'])) {
+//                    $organizations[] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'events'], ['location' => $variables['filters']['locationInput']])['hydra:member'];
+//                }
+
+                // Looping through events to remove duplicates
+                if (count($organizations) > 0) {
+                    $orgIds = [];
+                    $variables['organizations'] = [];
+                    foreach ($organizations as $key => $organization) {
+                        if (empty($organization)) {
+                            unset($organizations[$key]);
+                        }
+                        // Because of previous array merging there gets an array in a array or multiple arrays in which we need to find the actual events..
+                        if (is_array($organization) && !isset($organization['id'])) {
+                            foreach ($organization as $item) {
+                                if (isset($item['id']) && !in_array($item['id'], $orgIds)) {
+                                    $variables['organizations'][] = $item;
+                                    $orgIds[] = $item['id'];
+                                }
+                            }
+                        } elseif (isset($organization['id']) && !in_array($organization['id'], $orgIds)) {
+                            $variables['organizations'][] = $organization;
+                            $orgIds[] = $organization['id'];
+                        }
+                    }
+                }
+            }
+        }
+
+        // Shitty code but it works
+        // If filter is not set or reset filters has been clicked fetch all organizations
+
+        if ((!isset($variables['filters']['keywordsInput']) or $variables['filters']['keywordsInput'] == '') or
+            $request->request->get('resetFilters')) {
+            $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+        }
 
         return $variables;
     }
