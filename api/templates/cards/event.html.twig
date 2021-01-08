@@ -16,8 +16,7 @@
                     </a>
                 </h3>
                 <p class="text-white">{{ item.location }}</p>
-                <div class="far fa-calendar-alt" style="color: white" aria-hidden="true"></div>
-                    {{ item.startDate }}
+                <div class="far fa-calendar-alt text-white" aria-hidden="true"> {{ item.startDate|date("d-m-Y H:m") }}</div>
 
             </div>
         </div>

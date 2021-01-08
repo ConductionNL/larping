@@ -32,6 +32,11 @@ class OrganizationController extends AbstractController
     {
         $variables = [];
 
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+        foreach ($variables['organizations'] as $organization) {
+            $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'],['organizations' => $organization['@id']])['hydra:member'];
+        }
+
 //        foreach($variables['organizations'] as $key => $value){
 //            $variables['organizations'][$key]['totals'] =  $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'item_total'],['resource' => $variables['organizations']['@id']]);
 //        }

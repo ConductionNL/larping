@@ -1,0 +1,55 @@
+{% if resource is defined %}
+    {% set  id = resource['id'] %}
+    {% set  type = 'Event' %}
+{% else %}
+    {% set  id = 'Add' %}
+    {% set  type = 'Event' %}
+{% endif %}
+
+{% extends "dashboard_user/modals/modal.html.twig" %}
+
+{% block body %}
+    <form id="{{ type }}Form{{ id }}" method="post">
+        <input type="hidden" name="events[priority]" value="9">
+            <div class="form-group">
+                <label for="nameInput">{{ 'name of your event'|trans|capitalize }}</label>
+                <input type="text" class="form-control" id="nameInput"
+                       {% if resource.name|default %}value="{{ resource.name|capitalize }}"{% endif %}
+                       name="events[name]"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="descriptionInput">{{ 'description'|trans|capitalize }}</label>
+                <textarea class="form-control" rows="5" id="descriptionInput"
+                          name="events[description]">{% if resource.description|default %}{{ resource.description }}{% endif %}</textarea>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="organizationInput">{{ 'organization for this event'|trans|capitalize }}</label>
+                <select form="event" id="organizationInput" name="events[organization]" class="form-control">
+                    {% if organizations|length > 0 %}
+                        {% for org in organizations %}
+                            <option value="{{ org['@id'] }}">{{ org.name }}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option>{{ 'no organizations found'|trans|capitalize }}</option>
+                    {% endif %}
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-6">
+                    <label for="startdateInput">{{ 'start-date'|trans|capitalize }}</label>
+                    <input class="form-control" name="events[startDate]" type="datetime-local" id="startdateInput" placeholder="yyyy-mm-dd">
+                </div>
+
+                <div class="form-group col-6">
+                    <label for="enddateInput">{{ 'end-date'|trans|capitalize }}</label>
+                    <input class="form-control" name="events[endDate]" type="datetime-local" id="enddateInput" placeholder="yyyy-mm-dd">
+                </div>
+            </div>
+    </form>
+
+{% endblock %}

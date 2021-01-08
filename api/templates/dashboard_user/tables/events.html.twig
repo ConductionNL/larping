@@ -57,3 +57,9 @@
            class="btn btn-primary">{{ 'find'|trans|capitalize~' '~'a'|trans~' '~'event'|trans }}</a>
     </div>
 {% endif %}
+
+{% include 'dashboard_user/modals/event.html.twig' %}
+
+{% for event in events %}
+    {% include 'dashboard_user/modals/event.html.twig' with {'resource': event} %}
+{% endfor %}
