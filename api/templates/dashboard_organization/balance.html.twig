@@ -16,9 +16,33 @@
                         aria-current="page">{{ 'balance'|trans|capitalize }}</li>
                 </ul>
             </nav>
+            <div class="row">
+                <!-- Users -->
+                <div class="col-lg-8">
+                    <div class="card border-light shadow-sm">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h2 class="h5">{{ 'Debit'|trans|capitalize }}</h2></div>
+                            </div>
+                        </div>
+                        {%  include 'dashboard_organization/tables/acounts.html.twig' %}
+                    </div>
+                </div>
 
-            <!-- events -->
-            {# include 'dashboard_organization/tables/events.html.twig' #}
+                <!-- Groups -->
+                <div class="col-lg-4">
+                    <div class="card border-light shadow-sm">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h2 class="h5">{{ 'Credit'|trans|capitalize }}</h2></div>
+                            </div>
+                        </div>
+                        {% include 'dashboard_organization/tables/acounts.html.twig' %}
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 

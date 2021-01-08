@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    {% include 'menu.html.twig' %}
+    {% include 'dashboard_organization/menu.html.twig' %}
 
     <section class="pb-8 pt-5 bg-light height100vh">
         <div class="container">
@@ -17,8 +17,8 @@
                 </ul>
             </nav>
 
-            <!-- events -->
-            {# include 'dashboard_organization/tables/events.html.twig' #}
+            <!-- Characters -->
+            {%  include 'dashboard_organization/tables/characters.html.twig' %}
         </div>
     </section>
 

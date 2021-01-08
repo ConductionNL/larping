@@ -27,14 +27,6 @@ security:
             provider: idVaultProvider
             guard:
                 authenticators:
-                    - Conduction\CommonGroundBundle\Security\CommongroundApplicationAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundEherkenningAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundUserAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundDigispoofAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundIdinAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundIdinLoginAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundFacebookAuthenticator
-                    - Conduction\CommonGroundBundle\Security\CommongroundGmailAuthenticator
                     - Conduction\IdVaultBundle\Security\IdVaultAuthenticator
                 entry_point: Conduction\CommonGroundBundle\Security\CommongroundApplicationAuthenticator
 

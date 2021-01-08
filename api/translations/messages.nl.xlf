@@ -201,6 +201,50 @@
          <source>payment has been aborted</source>
          <target>betaling is geannuleerd</target>
          </trans-unit>
+         <trans-unit id="uBBB13S" resname="start date">
+         <source>start date</source>
+         <target>start datum</target>
+         </trans-unit>
+         <trans-unit id="oMmMMbG" resname="end date">
+         <source>end date</source>
+         <target>eind datum</target>
+         </trans-unit>
+         <trans-unit id="oNAHXbG" resname="send review">
+         <source>send review</source>
+         <target>verstuur recensie</target>
+         </trans-unit>
+         <trans-unit id="uBNAYXS" resname="enter your review">
+         <source>enter your review</source>
+         <target>voer uw recensie in</target>
+         </trans-unit>
+         <trans-unit id="nayMMbG" resname="submit review">
+         <source>submit review</source>
+         <target>review versturen</target>
+         </trans-unit>
+         <trans-unit id="Uhb123S" resname="what are you looking for">
+         <source>what are you looking for</source>
+         <target>waar ben je naar op zoek</target>
+         </trans-unit>
+         <trans-unit id="V9fk1Z6" resname="find by location">
+         <source>find by location</source>
+         <target>zoek via locatie</target>
+         </trans-unit>
+         <trans-unit id="H8mw0lQ" resname="search">
+         <source>search</source>
+         <target>zoek</target>
+         </trans-unit>
+         <trans-unit id="U12oASF" resname="with">
+         <source>with</source>
+         <target>met</target>
+         </trans-unit>
+         <trans-unit id="K214Naf" resname="as">
+         <source>as</source>
+         <target>als</target>
+         </trans-unit>
+         <trans-unit id="ujh532q" resname="keywords">
+         <source>keywords</source>
+         <target>trefwoorden</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>

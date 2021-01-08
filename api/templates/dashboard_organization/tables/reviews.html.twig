@@ -1,0 +1,27 @@
+{% if reviews|default and  reviews|length > 0 %}
+    <table id="reviews" class="display nowrap table" style="width:100%">
+        <thead>
+        <tr>
+            <th>{{ 'name'|trans|capitalize }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+            <tr>
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" >{{ user.name }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card border-light shadow-sm">
+        <div class="card-body text-center">
+            <p>{{ 'no reviews found'|trans|capitalize }}</p>
+        </div>
+    </div>
+{% endif %}
+
+
+

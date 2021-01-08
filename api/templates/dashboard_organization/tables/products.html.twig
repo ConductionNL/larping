@@ -1,6 +1,6 @@
 
-{% if products|length > 0 %}
-    <table id="events" class="display nowrap table" style="width:100%">
+{% if products|default and  products|length > 0 %}
+    <table id="products" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
             <th>{{ 'image'|trans|capitalize }}</th>
@@ -49,7 +49,7 @@
 {% else %}
     <div class="card border-light shadow-sm">
         <div class="card-body text-center">
-            <p>{{ 'no events found'|trans|capitalize }}</p>
+            <p>{{ 'no participants found'|trans|capitalize }}</p>
             <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ProductModalAdd">{{ 'add your first product'|trans|capitalize }}!</a>
         </div>
     </div>

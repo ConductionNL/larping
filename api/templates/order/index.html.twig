@@ -1,10 +1,6 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-
-    <section class="py-7 py-md-10">
-        <div class="container">
-
             <section class="pb-8 pt-5 bg-light height100vh">
                 <div class="container">
 
@@ -71,9 +67,9 @@
 
                                                 <div class="dropdown-menu dropdown-menu-right"
                                                      aria-labelledby="dropdownMenuLink">
-                                                    <a class="dropdown-item"
-                                                       href="{{ path('app_order_removeitem', {id: item.id}) }}"
-                                                       style="color: darkred">{{ 'remove'|trans|capitalize }}</a>
+{#                                                    <a class="dropdown-item"#}
+{#                                                       href="{{ path('app_order_removeitem', {id: item.id}) }}"#}
+{#                                                       style="color: darkred">{{ 'remove'|trans|capitalize }}</a>#}
                                                     <a class="dropdown-item"
                                                        href="{% if item.path|default %}{{ item.path }}{% endif %}">{{ 'view'|trans|capitalize }}</a>
                                                 </div>
@@ -81,7 +77,7 @@
                                         </td>
 
                                     </tr>
-                                    {% set sum = sum + item.price %}
+                                    {% set sum = sum + (item.price * item.quantity) %}
                                 {% endfor %}
                                 <tr role="row" class="odd">
                                     <td>
@@ -91,8 +87,8 @@
                                     </td>
                                     <td class="text-center pt-0">
                                         <div class="text-center pt-4 mx-auto"
-                                             style="width: 50%;border-top: 1px solid grey">
-                                            <b>&euro; {{ sum }}.00,-</b>
+                                             style="width: 99%;border-top: 1px solid grey">
+                                            <b>&euro; {{ sum }},-</b>
                                         </div>
                                     </td>
                                     <td>
@@ -145,8 +141,4 @@
 
                 </div>
             </section>
-
-        </div>
-    </section>
-
 {% endblock %}

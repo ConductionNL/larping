@@ -93,4 +93,44 @@ class DefaultController extends AbstractController
             return new JsonResponse(array('data' => 'you are not logged in'));
         }
     }
+
+    
+    /**
+     * @Route("/how_it_works")
+     * @Template
+     */
+    public function howItWorksAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
+
+
+    /**
+     * @Route("/payment")
+     * @Template
+     */
+    public function paymentAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
+
+
+    /**
+     * @Route("/pricing")
+     * @Template
+     */
+    public function pricingAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
+
+
+    /**
+     * @Route("/terms_and_conditions")
+     * @Template
+     */
+    public function termsAndConditionsAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
 }
