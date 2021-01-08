@@ -15,11 +15,12 @@
             <div class="search-box">
                 <form method="GET" action="{{ path('app_event_index') }}">
                     <div class="form-group mb-md-0">
-                        <input type="text" class="form-control" placeholder="{{ 'enter your keywords'|trans|capitalize }}" id="search" name="search">
+                        <input type="text" class="form-control"
+                               placeholder="{{ 'enter your keywords'|trans|capitalize }}" id="search" name="search">
                     </div>
                     <div class="select-default">
                         <select class="select-location" id="location" name="location">
-                            <option>All Location</option>
+                            <option>{{ 'all'|trans|capitalize~' '~'locations'|trans }}</option>
                             <option>U.S.A</option>
                             <option>U.K</option>
                             <option>ASIA</option>
@@ -27,10 +28,12 @@
                     </div>
                     <div class="select-default">
                         <select class="select-location" id="groups[]" name="groups[]">
-                            <option>{{ 'all Categories'|trans|capitalize }}</option>
-                            {% for group in groups %}
-                            <option>{{ group.name }}</option>
-                            {% endfor %}
+                            <option>{{ 'all'|trans|capitalize~' '~'categories'|trans }}</option>
+                            {% if categories|default %}
+                                {% for item in categories %}
+                                    <option>{{ item.name|capitalize }}</option>
+                                {% endfor %}
+                            {% endif %}
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">
@@ -48,14 +51,19 @@
         <div class="container">
             <div class="section-title pt-md-8">
                 <h2>{{ 'browse by categories'|trans|capitalize }}</h2>
-                <p> {{ 'explore and connect with great local organizations'|trans|capitalize }}</p>
+                {#                <p> {{ 'explore and connect with great local organizations'|trans|capitalize }}</p>#}
             </div>
             <div class="row">
-                {% for group in groups %}
-                    <div class="col-md-6 col-lg-3">
-                        {% include 'cards/group.html.twig' with {'item': group} %}
-                    </div>
-                {% endfor %}
+                {% if categories|default %}
+                    {% for category in categories %}
+                        <div class="col-md-4 col-lg-3 col-xs-12">
+                            {% include 'cards/category.html.twig' with {
+                                'item': category,
+                                'path': '/events'
+                            } %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </section>
@@ -71,13 +79,14 @@
             </div>
             <div class="row justify-content-center">
                 {% for event in events %}
-                <div class="col-md-6 col-lg-4">
-                    {% include 'cards/location.html.twig' with {'item': event} %}
-                </div>
+                    <div class="col-md-6 col-lg-4">
+                        {% include 'cards/location.html.twig' with {'item': event} %}
+                    </div>
                 {% endfor %}
             </div>
             <div class="text-center pt-5">
-                <a href="{{ path('app_event_index') }}" class="btn btn-primary">{{ 'see all events'|trans|capitalize }}</a>
+                <a href="{{ path('app_event_index') }}"
+                   class="btn btn-primary">{{ 'see all events'|trans|capitalize }}</a>
             </div>
         </div>
     </section>
