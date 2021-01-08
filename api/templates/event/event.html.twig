@@ -91,7 +91,7 @@
                                         {# Check if this product is owned or in session order #}
                                         {% set ownsThisProduct = owns_this_product(product) %}
 
-                                        {% if ownsThisProduct|default and ownsThisProduct == false %}
+                                        {% if ownsThisProduct is not null and ownsThisProduct == false %}
                                             {% set product = commonground_resource(product['@id']) %}
                                             {% set counter = counter + 1 %}
                                             <div class="form-group p-3"
