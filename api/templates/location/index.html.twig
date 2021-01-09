@@ -22,47 +22,47 @@
                         <div class="col-12">
                             <!-- Search Box 2 -->
                             <div class="search-box-2 bg-light pb-3 pb-md-1">
-                                <form class="row " action="listing-sidebar-map-left.html">
+                                <form class="row "method="GET">
 
                                     <div class="form-group col-md-6 col-lg-12 col-xl-6">
                                         <div class="input-group mb-2">
                                             <div class="input-group-prepend">
-                                                <div class="input-group-text">Find</div>
+                                                <div class="input-group-text">{{ 'search'|trans|title }}</div>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="What are you looking for?" required>
+                                            <input type="text" class="form-control" id="search" name="search"
+                                                   placeholder="Enter Keyword" {% if search|default %} value="{{ search }}"{% endif %} >
                                         </div>
                                     </div>
 
                                     <div class="form-group prepend-append col-md-6 col-lg-12 col-xl-6">
                                         <div class="input-group mb-2">
                                             <div class="input-group-prepend">
-                                                <div class="input-group-text">Near</div>
-                                            </div>
-                                            <input type="text" class="form-control" placeholder="Location" required>
-                                            <div class="input-group-append">
-                      <span class="input-group-text" data-toggle="tooltip" data-placement="left" title="Find my location">
-                        <i class="icon-listy icon-target" aria-hidden="true"></i>
-                      </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group prepend-append col-md-6 col-lg-12 col-xl-6">
-                                        <div class="input-group mb-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">Category</div>
+                                                <div class="input-group-text">{{ 'regions'|trans|title }}</div>
                                             </div>
 
                                             <div class="select-default">
                                                 <select class="select-location">
-                                                    <option>All Categories</option>
-                                                    <option>Restaurants</option>
-                                                    <option>Hotels</option>
-                                                    <option>Nightclubs</option>
-                                                    <option>Automotive</option>
-                                                    <option>Museums</option>
-                                                    <option>Movie Theaters</option>
-                                                    <option>Shopping</option>
+                                                    <option>{{ 'all regions'|trans|title }}</option>
+                                                    {% for category in regions %}
+                                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group prepend-append col-md-6 col-lg-12 col-xl-6">
+                                        <div class="input-group mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">{{ 'features'|trans|title }}</div>
+                                            </div>
+
+                                            <div class="select-default">
+                                                <select class="select-location">
+                                                    <option>{{ 'all features'|trans|title }}</option>
+                                                    {% for category in features %}
+                                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>

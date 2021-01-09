@@ -35,8 +35,8 @@ class DefaultController extends AbstractController
     {
         $variables = [];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['organization.id'=>'d24e147f-00b9-4970-9809-6684a3fb965b'])['hydra:member'];
-        //$variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations'])['hydra:member'];
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
+        $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
 
         return $variables;
     }

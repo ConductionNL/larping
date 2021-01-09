@@ -29,12 +29,16 @@ class LocationController extends AbstractController
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService)
+    public function indexAction(CommonGroundService $commonGroundService, Request $request)
     {
         $variables = [];
-        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations']);
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories']);
+        $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
+        $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
+        $variables['search'] = $request->get('search', false);
+        $variables['categories'] = $request->get('categories', []);
         $variables['hidefooter'] = 'hide';
+
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations']);
 
         return $variables;
     }
