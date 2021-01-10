@@ -338,13 +338,13 @@ class DashboardOrganizationController extends AbstractController
     public function locationsAction(CommonGroundService $commonGroundService, Request $request)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['place.organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
             $location = $request->request->all();
-            $location['órganization'] = $variables['organization'];
+            $location['organization'] = $variables['organization']['@id'];
             // Set the current organization as owner
             /*@todo use place for this?*/
             // Save the resource

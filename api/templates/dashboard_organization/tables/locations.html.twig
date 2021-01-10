@@ -4,7 +4,7 @@
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
             <th>{{ 'address'|trans|capitalize }}</th>
-            <th>{{ 'capacity'|trans|capitalize }}</th>
+            <th>{{ 'features'|trans|capitalize }}</th>
             <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#LocationModalAdd">{{ 'add'|trans|capitalize }}</button></th>
         </tr>
         </thead>
@@ -14,15 +14,14 @@
                 <td class="text-capitalize">
                     <a class="text-hover-primary text-muted" href="{{ path('app_location_location', {id: location.id}) }}" target="_blank">{{ location.name }}</a>
                 </td>
-                {% if location.place.address|default %}
-                    {% set address = location.place.address  %}
-                {% endif %}
                 <td>
+                    {% if location.address|default %}
                     <span class="d-block">{{ address.street ~' '~ address.houseNumber }}</span>
                     <span class="d-block">{{ address.postalCode ~' '~ address.region }}</span>
+                    {% endif %}
                 </td>
                 <td>
-                    {{ location.maximumAttendeeCapacity }}
+
                 </td>
                 <td>
                     <div class="dropdown">
