@@ -35,8 +35,8 @@ class DefaultController extends AbstractController
     {
         $variables = [];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
-        $variables['groups'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'groups'])['hydra:member'];
-        //$variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations'])['hydra:member'];
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
+        $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
 
         return $variables;
     }
@@ -92,5 +92,45 @@ class DefaultController extends AbstractController
         } else {
             return new JsonResponse(array('data' => 'you are not logged in'));
         }
+    }
+
+
+    /**
+     * @Route("/how_it_works")
+     * @Template
+     */
+    public function howItWorksAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
+
+
+    /**
+     * @Route("/payment")
+     * @Template
+     */
+    public function paymentAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
+
+
+    /**
+     * @Route("/pricing")
+     * @Template
+     */
+    public function pricingAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
+
+
+    /**
+     * @Route("/terms_and_conditions")
+     * @Template
+     */
+    public function termsAndConditionsAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
     }
 }

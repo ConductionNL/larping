@@ -60,13 +60,22 @@ class ShoppingService
 
                     $order['name'] = 'Order for ' . $person['name'];
                     $order['description'] = 'Order for ' . $person['name'];
-                    $order['organization'] = $offer['offeredBy'];
-                    $order['customer'] = $person['@id'];
+//                    $order['organization'] = $offer['offeredBy'];
 
+                    // Hardcoded org because of bug in PDC !
+                    $order['organization'] = 'https://dev.larping.eu/api/v1/wrc/organizations/51eb5628-3b37-497b-a57f-6b039ec776e5';
+
+
+
+                    $order['customer'] = $person['@id'];
+                    if ($this->request->get('remarks')) {
+                        $order['remark'] = $this->request->get('remarks');
+                    }
                     if (isset($order['items'])) {
                         unset($order['items']);
                     }
-
+//                    var_dump($order);
+//                    die;
                     $order = $this->commonGroundService->saveResource($order, ['component' => 'orc', 'type' => 'orders']);
 
                     foreach ($items as $item) {
@@ -229,7 +238,6 @@ class ShoppingService
         if ($thisProductIsOwned == false && $this->security->getUser() && $this->security->getUser()->getPerson()) {
             // Fetches owned products
             $ownedProducts = $this->getOwnedProducts($this->security->getUser()->getPerson());
-
             if (isset($ownedProducts) && count($ownedProducts) > 0) {
                 foreach ($ownedProducts as $ownedProduct) {
                     if ($ownedProduct['id'] == $product['id']) {
@@ -238,6 +246,7 @@ class ShoppingService
                 }
             }
         }
+
 
         return $thisProductIsOwned;
     }

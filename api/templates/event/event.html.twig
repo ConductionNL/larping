@@ -55,6 +55,7 @@
                         {% endif %}
                     </div>
                     <hr>
+
                     <!-- Features -->
                     <div class="my-6">
                         <h3 class="font-weight-normal mb-6">{{ 'features'|trans|capitalize }}</h3>
@@ -90,7 +91,7 @@
                                         {# Check if this product is owned or in session order #}
                                         {% set ownsThisProduct = owns_this_product(product) %}
 
-                                        {% if ownsThisProduct|default and ownsThisProduct == false %}
+                                        {% if ownsThisProduct is not null and ownsThisProduct == false %}
                                             {% set product = commonground_resource(product['@id']) %}
                                             {% set counter = counter + 1 %}
                                             <div class="form-group p-3"
@@ -154,6 +155,8 @@
                             </form>
                             <hr>
                         </div>
+
+                        <hr>
                     {% endif %}
 
                     <!-- Added by -->
@@ -236,16 +239,18 @@
 
                     <!-- Reviews -->
                     {% if reviews is defined and reviews is not empty %}
-                        <div>
-                            <h3 class="font-weight-normal mb-6">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
-                            {%  include 'widgets/reviews.html.twig' %}
-                        </div>
+                    <div>
+                        <h3 class="font-weight-normal mb-6">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
+                        {%  include '/sections/reviews.html.twig' %}
+                    </div>
+
+                    <hr>
                     {% endif %}
 
                     <!-- Add a review -->
                     <div id="add-review">
                         <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
-                        {%  include 'widgets/review.html.twig' %}
+                        {%  include '/sections/review.html.twig' %}
                     </div>
 
                 </div>

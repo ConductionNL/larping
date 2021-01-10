@@ -1,4 +1,4 @@
-{% extends "dashboard_organization/modals/modal.html.twig" %}
+
 
 {% if resource is defined %}
     {% set  id = resource['id'] %}
@@ -7,6 +7,10 @@
     {% set  id = 'Add' %}
     {% set  type = 'Offer' %}
 {% endif %}
+
+{% extends "dashboard_organization/modals/modal.html.twig" %}
+
+{% set activeCategories = commonground_resource_list({'component':'rc','type':'categories'}, {'resources.resource':resource['id']}) %}
 
 {% block body %}
 <form id="{{ type }}Form{{ id }}" method="post">
@@ -26,9 +30,17 @@
     </div>
     <div class="form-group">
         <label for="description">{{ 'products'|trans|capitalize }}</label>
-        <select class="form-control multiple" multiple aria-label="{{ 'the products included in this offer'|trans|capitalize }}">
+        <select class="form-control multiple" multiple aria-label="{{ 'the products included in this offer'|trans|capitalize }}"  id="products" name="products"
             {% for product in products %}
                 <option value="{{ product.id }}">{{ product.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="description">{{ 'categories'|trans|capitalize }}</label>
+        <select class="form-control multiple" multiple aria-label="{{ 'the products included in this offer'|trans|capitalize }}" id="categories" name="categories">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
         </select>
     </div>

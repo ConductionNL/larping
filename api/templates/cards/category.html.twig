@@ -1,0 +1,10 @@
+<a class="card py-5 hover-bg-primary bg-transparent" href="{{ path('app_event_index', {"categories[]":item.id}) }}">
+    <div class="card-body text-center">
+        {% if item.icon|default %}
+            <div class="icon-md">
+                <i class="{{ item.icon }}"></i>
+            </div>
+        {% endif %}
+        <span class="h5">{{ item.name|capitalize }}</span>
+    </div>
+</a>
