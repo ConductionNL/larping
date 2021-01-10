@@ -38,7 +38,7 @@ class LocationController extends AbstractController
         $variables['categories'] = $request->get('categories', []);
         $variables['hidefooter'] = 'hide';
 
-        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations']);
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places']);
 
         return $variables;
     }
@@ -50,10 +50,10 @@ class LocationController extends AbstractController
     public function locationAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables = [];
-        $variables['location'] = $commonGroundService->getResource(['component' => 'lc', 'type' => 'lc','id'=>$id]);
+        $variables['location'] = $commonGroundService->getResource(['component' => 'lc', 'type' => 'place','id'=>$id]);
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['location' => $variables['location']['@id']])['hydra:member'];
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'],['resource' => $variables['location']['@id']]);
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'categories'],['resources.resource' => $variables['organization']['@id']]);
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'],['resources.resource' => $variables['organization']['@id']]);
 
         // Add review
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {

@@ -1,6 +1,6 @@
 <!-- Location card -->
 {% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
-{% set categories = commonground_resource_list({'component':'rc','type':'categories'}, {'resources.resource':item['id']}) %}
+{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']}) %}
 <a href="{{ path('app_location_location', {id: item.id}) }}">
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">
@@ -30,7 +30,7 @@
                             data-placement="top"
                             title=""
                             data-original-title="Favourite this listing" value="{{ item['@id'] }}">
-                        <i {% if isLiked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
+                        <i {% if isLiked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
                         <span id="{{ item['id'] }}">{{ likes }}</span>
                     </button>
                 </li>

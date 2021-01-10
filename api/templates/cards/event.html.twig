@@ -1,6 +1,6 @@
 <!-- Event card -->
 {% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
-{% set categories = commonground_resource_list({'component':'rc','type':'categories'}, {'resources.resource':item['id']}) %}
+{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
 <a href="{{ path('app_event_event', {id: item.id}) }}">
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">
@@ -9,7 +9,7 @@
             <div class="card-img-overlay">
                 <div class="d-flex align-items-center">
                     {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                    <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} (Reviews)</span>
+                    <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
                 </div>
                 <h3>
                     <a href="{{ path('app_event_event', {'id': item.id}) }}" class="stretched-link">
@@ -17,6 +17,12 @@
                     </a>
                 </h3>
                 <p class="text-white">{{ item.location }}</p>
+
+                <p class="text-white">
+                    {% for category in eventCategories %}
+                    <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                    {% endfor %}
+                </p>
                 <div class="far fa-calendar-alt text-white" aria-hidden="true"> {{ item.startDate|date("d-m-Y H:m") }}</div>
 
             </div>
@@ -29,7 +35,7 @@
                             data-placement="top"
                             title=""
                             data-original-title="Favourite this listing" value="{{ item['@id'] }}">
-                        <i {% if totals.liked|default %} class="fa fa-heart text-primary" {% else %}class="fa fa-heart-o text-primary" {% endif %} aria-hidden="true"></i>
+                        <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
                         <span id="{{ item['id'] }}">{{  totals.likes }}</span>
                     </button>
                 </li>

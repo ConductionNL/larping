@@ -1,16 +1,18 @@
-
+{# Offer modale #}
 
 {% if resource is defined %}
     {% set  id = resource['id'] %}
     {% set  type = 'Offer' %}
+    {% set activeCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource['id']}) %}
 {% else %}
     {% set  id = 'Add' %}
     {% set  type = 'Offer' %}
+    {% set  activeCategories = [] %}
 {% endif %}
 
-{% extends "dashboard_organization/modals/modal.html.twig" %}
+{% set  modalClass = 'modal-lg' %}
 
-{% set activeCategories = commonground_resource_list({'component':'rc','type':'categories'}, {'resources.resource':resource['id']}) %}
+{% extends "dashboard_organization/modals/modal.html.twig" %}
 
 {% block body %}
 <form id="{{ type }}Form{{ id }}" method="post">
@@ -30,7 +32,7 @@
     </div>
     <div class="form-group">
         <label for="description">{{ 'products'|trans|capitalize }}</label>
-        <select class="form-control multiple" multiple aria-label="{{ 'the products included in this offer'|trans|capitalize }}"  id="products" name="products"
+        <select class="form-control "  aria-label="{{ 'the products included in this offer'|trans|capitalize }}"  id="products" name="products[]"
             {% for product in products %}
                 <option value="{{ product.id }}">{{ product.name }}</option>
             {% endfor %}
@@ -38,11 +40,17 @@
     </div>
     <div class="form-group">
         <label for="description">{{ 'categories'|trans|capitalize }}</label>
-        <select class="form-control multiple" multiple aria-label="{{ 'the products included in this offer'|trans|capitalize }}" id="categories" name="categories">
+        <select class="form-control"  aria-label="{{ 'the products included in this offer'|trans|capitalize }}" id="categories" name="categories[]">
             {% for category in categories %}
                 <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
         </select>
     </div>
+    <script>
+        $(function() {
+            $('products').selectric();
+            $('categories').selectric();
+        });
+    </script>
 </form>
 {% endblock %}

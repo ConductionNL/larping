@@ -34,9 +34,9 @@ class DashboardOrganizationController extends AbstractController
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $variables['organization']['id']])['hydra:member'];
+        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $variables['organization']['id']]);
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
 
-        var_dump($variables['totals']);
 
         return $variables;
     }
@@ -49,7 +49,7 @@ class DashboardOrganizationController extends AbstractController
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
@@ -58,21 +58,27 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             $event['status'] = 'pending';
 
+            $categories = $event['resource_categories'];
+            if(!$categories) $categories = [];
+
+
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
 
             // Setting the categories
             /*@todo  This should go to a wrc service */
-            $resourceCategories = $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resourceCategory'],['resource'=>$event['id']])['hydra:member'];
+            $resourceCategories =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'],['resource'=>$event['id']])['hydra:member'];
             if(count($resourceCategories) > 0){
                 $resourceCategory = $resourceCategories[0];
             }
             else{
-                $resourceCategory = ['resource'=>$event['@id']];
+                $resourceCategory = ['resource'=>$event['@id'],'catagories'=>[]];
             }
 
-            $resourceCategory['categories'] = $event['categories'];
-            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resourceCategory']);
+            $resourceCategory['categories'] = $categories;
+            $resourceCategory['catagories'] = $categories;
+
+            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
         }
 
         return $variables;
@@ -175,6 +181,7 @@ class DashboardOrganizationController extends AbstractController
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
 
         return $variables;
     }
@@ -331,16 +338,17 @@ class DashboardOrganizationController extends AbstractController
     public function locationsAction(CommonGroundService $commonGroundService, Request $request)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations'], ['place.organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['place.organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
             $location = $request->request->all();
+            $location['órganization'] = $variables['organization'];
             // Set the current organization as owner
             /*@todo use place for this?*/
             // Save the resource
-            $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'accommodations']);
+            $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
         }
 
         return $variables;
