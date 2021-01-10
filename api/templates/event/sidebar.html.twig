@@ -17,6 +17,7 @@
         <ul class="list-unstyled list-gray">
             {% for category in regions %}
                 <li class="mb-2">
+                    <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
                     {% if category.id in categories %}
                         <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span></a>
                     {% else %}
@@ -32,6 +33,7 @@
         <ul class="list-unstyled list-gray">
             {% for category in settings %}
                 <li class="mb-2">
+                    <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
                     {% if category.id in categories %}
                         <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span></a>
                     {% else %}
@@ -47,6 +49,7 @@
         <ul class="list-unstyled list-gray">
             {% for category in features %}
                 <li class="mb-2">
+                    <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
                     {% if category.id in categories %}
                         <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span></a>
                     {% else %}

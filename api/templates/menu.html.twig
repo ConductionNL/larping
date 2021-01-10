@@ -150,7 +150,7 @@
                         {% set order = app.session.get('order') %}
                         <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                            data-display="static" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            <i class="fas fa-shopping-cart" aria-hidden="true"></i>
                             <span class="badge">
                                 {% if order.items|default %}{{ order.items|length }}{% else %}0{% endif %}</span>
                         </a>
