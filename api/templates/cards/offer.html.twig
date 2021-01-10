@@ -1,6 +1,6 @@
-<!-- event card -->
-{% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']})['hydra:member'] %}
-
+<!-- Offer card -->
+{% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
+{% set categories = commonground_resource_list({'component':'rc','type':'categories'}, {'resources.resource':item['id']}) %}
 <a href="#">
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">

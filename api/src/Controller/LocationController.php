@@ -47,10 +47,26 @@ class LocationController extends AbstractController
      * @Route("/{id}")
      * @Template
      */
-    public function locationAction(CommonGroundService $commonGroundService, $id)
+    public function locationAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables = [];
         $variables['location'] = $commonGroundService->getResource(['component' => 'lc', 'type' => 'lc','id'=>$id]);
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['location' => $variables['location']['@id']])['hydra:member'];
+        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'],['resource' => $variables['location']['@id']]);
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'categories'],['resources.resource' => $variables['organization']['@id']]);
+
+        // Add review
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {
+            $resource = $request->request->all();
+
+            $resource['organization'] = $variables['organization']['@id'];
+            $resource['resource'] = $variables['organization']['@id'];
+            $resource['author'] = $this->getUser()->getPerson();
+
+            // Save to the commonground component
+            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+
+        }
 
         return $variables;
     }

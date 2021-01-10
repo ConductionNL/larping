@@ -1,6 +1,6 @@
-
+<!-- Organization card -->
 {% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':resource.id}) %}
-
+{% set categories = commonground_resource_list({'component':'rc','type':'categories'}, {'resources.resource':item['id']}) %}
 <div class="card rounded-0 card-hover-overlay">
     <div class="position-relative">
         <img class="card-img rounded-0"

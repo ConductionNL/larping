@@ -1,4 +1,3 @@
-{% extends "dashboard_organization/modals/modal.html.twig" %}
 
 {% if resource is defined %}
     {% set  id = resource['id'] %}
@@ -7,6 +6,10 @@
     {% set  id = 'Add' %}
     {% set  type = 'Location' %}
 {% endif %}
+
+{% extends "dashboard_organization/modals/modal.html.twig" %}
+
+{% set activeCategories = commonground_resource_list({'component':'rc','type':'categories'}, {'resources.resource':resource['id']}) %}
 
 {% block body %}
     <form id="{{ type }}Form{{ id }}" method="post">
@@ -19,6 +22,14 @@
         <div class="form-group">
             <label for="description">{{ 'description'|trans|capitalize }}</label>
             <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="description">{{ 'categories'|trans|capitalize }}</label>
+            <select class="form-control multiple" multiple aria-label="{{ 'the products included in this offer'|trans|capitalize }}" id="categories" name="categories">
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
         </div>
     </form>
 {% endblock %}

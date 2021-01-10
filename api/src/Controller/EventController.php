@@ -53,8 +53,8 @@ class EventController extends AbstractController
         $variables['path'] = 'app_event_event';
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['event']['@id']])['hydra:member'];
-        $variables['groups'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'groups']);
-        $variables['stats'] = ['likes' => 100, 'reviews' => 5];
+        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'],['resource' => $variables['event']['@id']]);
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'categories'],['resources.resource' => $variables['organization']['@id']]);
 
         /* deze is wat wierd */
         if (isset($variables['event']['resource']) && strpos($variables['event']['resource'], '/pdc/products/')) {
@@ -75,6 +75,7 @@ class EventController extends AbstractController
 
         }
 
+        /* @to dit willen we denk ik verplaatsen naar een algemene order api */
         // Make order in session
         if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' &&
             $request->request->get('offers')) {
@@ -86,6 +87,7 @@ class EventController extends AbstractController
 
             return $this->redirectToRoute('app_order_index');
         }
+
         return $variables;
     }
 }
