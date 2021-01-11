@@ -60,6 +60,7 @@ class DashboardOrganizationController extends AbstractController
 
             $categories = $event['resource_categories'];
             if(!$categories) $categories = [];
+            unset($event['resource_categories']);
 
 
             // Save the resource
@@ -347,12 +348,17 @@ class DashboardOrganizationController extends AbstractController
             $location['organization'] = $variables['organization']['@id'];
             // Set the current organization as owner
 
+
+            $categories = $location['categories'];
+            if(!$categories) $categories = [];
+            unset($location['categories']);
+
             // Save the resource
             $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
 
             // Setting the categories
             /*@todo  This should go to a wrc service */
-            $location = $resourceCategories =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'],['resource'=>$event['id']])['hydra:member'];
+           $resourceCategories =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'],['resource'=>$location['id']])['hydra:member'];
 
             if(count($resourceCategories) > 0){
                 $resourceCategory = $resourceCategories[0];

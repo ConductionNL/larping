@@ -61,6 +61,7 @@ class LocationController extends AbstractController
             $resource['organization'] = $variables['organization']['@id'];
             $resource['resource'] = $variables['organization']['@id'];
             $resource['author'] = $this->getUser()->getPerson();
+            $resource['rating'] = (integer) $resource['rating'];
 
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);

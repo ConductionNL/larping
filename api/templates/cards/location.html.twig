@@ -1,6 +1,6 @@
 <!-- Location card -->
 {% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
-{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']}) %}
+{% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
 <a href="{{ path('app_location_location', {id: item.id}) }}">
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">
@@ -16,6 +16,12 @@
                         {{ item.name|capitalize }}
                     </a>
                 </h3>
+
+                <p class="text-white">
+                    {% for category in locationCategories %}
+                        <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                    {% endfor %}
+                </p>
             </div>
         </div>
 

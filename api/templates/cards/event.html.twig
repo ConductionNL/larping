@@ -20,9 +20,10 @@
 
                 <p class="text-white">
                     {% for category in eventCategories %}
-                    <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                    <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
                     {% endfor %}
                 </p>
+
                 <div class="far fa-calendar-alt text-white" aria-hidden="true"> {{ item.startDate|date("d-m-Y H:m") }}</div>
 
             </div>

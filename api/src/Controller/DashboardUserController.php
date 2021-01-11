@@ -123,7 +123,27 @@ class DashboardUserController extends AbstractController
             }
             */
             // Update to the commonground component
+
+            $categories = $resource['categories'];
+            if(!$categories) $categories = [];
+            unset($resource['categories']);
+
             $organization = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
+
+            $resourceCategories =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'],['resource'=>$organization['id']])['hydra:member'];
+
+            if(count($categories) > 0){
+                $resourceCategory = $resourceCategories[0];
+            }
+            else{
+                $resourceCategory = ['resource'=>$organization['@id'],'catagories'=>[]];
+            }
+
+            $resourceCategory['categories'] = $categories;
+            $resourceCategory['catagories'] = $categories;
+
+            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+
 
 //            if($new){
 //                /*@todo de ingelogde gebruiker toevoegen aan de organisatie */

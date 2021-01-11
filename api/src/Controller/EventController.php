@@ -69,6 +69,7 @@ class EventController extends AbstractController
             $resource['organization'] = $variables['event']['organization'];
             $resource['resource'] = $variables['event']['@id'];
             $resource['author'] = $this->getUser()->getPerson();
+            $resource['rating'] = (integer) $resource['rating'];
 
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);

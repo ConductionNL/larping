@@ -1,6 +1,6 @@
 <!-- Organization card -->
 {% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':resource.id}) %}
-{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource.id}) %}
+{% set organizationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource.id})['hydra:member'] %}
 <div class="card rounded-0 card-hover-overlay">
     <div class="position-relative">
         <img class="card-img rounded-0"
@@ -19,6 +19,13 @@
                     {{ resource.name|capitalize }}
                 </a>
             </h3>
+
+            <p class="text-white">
+                {% for category in organizationCategories %}
+                    <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                {% endfor %}
+            </p>
+
         </div>
     </div>
     <div class="card-footer bg-transparent">
