@@ -15,31 +15,31 @@
             </nav>
 
             <div class="row">
-                <!-- Chararacters -->
-                <div class="col-lg-6">
-                    <div class="card border-light shadow-sm">
-                        <div class="card-header">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <h2 class="h5">{{ 'My characters'|trans|capitalize }}</h2></div>
-                            </div>
-                        </div>
-                        {% include 'dashboard_user/tables/characters.html.twig' %}
-                    </div>
-                </div>
+{#                <!-- Chararacters -->#}
+{#                <div class="col-lg-6">#}
+{#                    <div class="card border-light shadow-sm">#}
+{#                        <div class="card-header">#}
+{#                            <div class="row align-items-center">#}
+{#                                <div class="col">#}
+{#                                    <h2 class="h5">{{ 'My characters'|trans|capitalize }}</h2></div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        {% include 'dashboard_user/tables/characters.html.twig' %}#}
+{#                    </div>#}
+{#                </div>#}
 
-                <!-- Organizations -->
-                <div class="col-lg-6">
-                    <div class="card border-light shadow-sm">
-                        <div class="card-header">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <h2 class="h5">{{ 'My Organizations'|trans|capitalize }}</h2></div>
-                            </div>
-                        </div>
-                        {% include 'dashboard_user/tables/organizations.html.twig' %}
-                    </div>
-                </div>
+{#                <!-- Organizations -->#}
+{#                <div class="col-lg-6">#}
+{#                    <div class="card border-light shadow-sm">#}
+{#                        <div class="card-header">#}
+{#                            <div class="row align-items-center">#}
+{#                                <div class="col">#}
+{#                                    <h2 class="h5">{{ 'My Organizations'|trans|capitalize }}</h2></div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        {% include 'dashboard_user/tables/organizations.html.twig' %}#}
+{#                    </div>#}
+{#                </div>#}
 
                 <!-- Events -->
                 <div class="col-lg-6">
@@ -47,7 +47,7 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <h2 class="h5">{{ 'My events'|trans|capitalize }}</h2></div>
+                                    <h2 class="h5">{{ 'my'|trans|capitalize~' '~'events'|trans }}</h2></div>
                             </div>
                         </div>
                         {% include 'dashboard_user/tables/events.html.twig' %}
@@ -60,7 +60,7 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <h2 class="h5">{{ 'my favorites'|trans|capitalize }}</h2></div>
+                                    <h2 class="h5">{{ 'my'|trans|capitalize~' '~'favourites'|trans }}</h2></div>
                             </div>
                         </div>
                         {% include 'dashboard_user/tables/favorites.html.twig' %}

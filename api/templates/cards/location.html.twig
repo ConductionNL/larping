@@ -1,7 +1,7 @@
-<!-- Event card -->
+<!-- Location card -->
 {% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
-{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
-<a href="{{ path('app_event_event', {id: item.id}) }}">
+{% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
+<a href="{{ path('app_location_location', {id: item.id}) }}">
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">
             <img class="card-img rounded-0" src="https://picsum.photos/300/200"
@@ -9,23 +9,19 @@
             <div class="card-img-overlay">
                 <div class="d-flex align-items-center">
                     {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                    <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
+                    <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} (Reviews)</span>
                 </div>
                 <h3>
-                    <a href="{{ path('app_event_event', {'id': item.id}) }}" class="stretched-link">
+                    <a href="{{ path('app_location_location', {'id': item.id}) }}" class="stretched-link">
                         {{ item.name|capitalize }}
                     </a>
                 </h3>
-                <p class="text-white">{{ item.location }}</p>
 
                 <p class="text-white">
-                    {% for category in eventCategories %}
-                    <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                    {% for category in locationCategories %}
+                        <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
                     {% endfor %}
                 </p>
-
-                <div class="far fa-calendar-alt text-white" aria-hidden="true"> {{ item.startDate|date("d-m-Y H:m") }}</div>
-
             </div>
         </div>
 
@@ -36,12 +32,12 @@
                             data-placement="top"
                             title=""
                             data-original-title="Favourite this listing" value="{{ item['@id'] }}">
-                        <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
-                        <span id="{{ item['id'] }}">{{  totals.likes }}</span>
+                        <i {% if isLiked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
+                        <span id="{{ item['id'] }}">{{ totals.likes }}</span>
                     </button>
                 </li>
                 <li class="ml-auto">
-                    <a class="px-2" href="{{ path('app_event_event', {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                    <a class="px-2" href="{{ path('app_location_location', {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
                 </li>
             </ul>
         </div>

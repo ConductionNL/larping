@@ -140,6 +140,24 @@
             input.setAttribute('name', id);
             input.setAttribute('id', id);
 
+            var options_array = {
+                ValueA : '{{ 'select type'|trans|capitalize }}',
+                ValueB : '{{ 'website'|trans|capitalize }}',
+                ValueC : '{{ 'facebook'|trans|capitalize }}',
+                ValueD : '{{ 'twitter'|trans|capitalize }}',
+                ValueE : '{{ 'instagram'|trans|capitalize }}'
+            };
+
+            const select = document.createElement("select");
+            if (id === 'socials[]') {
+                select.setAttribute('class', "form-control mb-2");
+                input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
+                formDiv.appendChild(select);
+                for(option in options_array) {
+                    select.options[select.options.length] = new Option(options_array[option], option);
+                }
+            }
+
             formDiv.appendChild(input);
         }
     </script>
