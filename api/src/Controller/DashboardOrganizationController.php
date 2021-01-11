@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -50,6 +51,7 @@ class DashboardOrganizationController extends AbstractController
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
@@ -139,6 +141,8 @@ class DashboardOrganizationController extends AbstractController
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
+
 
         if ($request->isMethod('POST')) {
             // Get the current resource
@@ -213,13 +217,27 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/mailings")
+     * @Route("/mailinglists")
      * @Template
      */
-    public function mailingsAction(CommonGroundService $commonGroundService, Request $request)
+    public function mailinglistsAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['mailings'] = [];
+        $variables['mailingLists'] = [];
+//        $variables['mailingLists'] = $idVaultService->getSendLists();
+
+        if ($request->isMethod('POST') && $request->request->get('MailingEvent') == 'true') {
+            // Send email to all subscribers of this mailing list.
+        } elseif ($request->isMethod('POST')) {
+            // Get the resource
+            $sendList = $request->request->all();
+            // Set Organization and email sendList type
+            $sendList['organization'] = $variables['organization']['@id'];
+            $sendList['email'] = true;
+
+            // Save the mailing list resource
+            //$commonGroundService->saveResource($sendList, ['component' => 'bs', 'type' => 'send_lists']);
+        }
 
         return $variables;
     }
@@ -345,9 +363,8 @@ class DashboardOrganizationController extends AbstractController
         if ($request->isMethod('POST')) {
             // Get the current resource
             $location = $request->request->all();
-            $location['organization'] = $variables['organization']['@id'];
             // Set the current organization as owner
-
+            $location['organization'] = $variables['organization']['@id'];
 
             $categories = $location['categories'];
             if(!$categories) $categories = [];

@@ -17,9 +17,43 @@
                 </ul>
             </nav>
 
+            <div class="tab">
+                <button class="tablinks tabcontent" onclick="switchProducts()" id="products">{{ 'products'|trans|capitalize }}</button>
+                <button class="tablinks tabcontent" onclick="swichtOffers()" id="offers">{{ 'offers'|trans|capitalize }}</button>
+            </div>
             <!-- events -->
-            {%  include 'dashboard_organization/tables/products.html.twig' %}
+            <div class="hideProduct" id="products">
+                {%  include 'dashboard_organization/tables/products.html.twig' with {'id': 'products'} %}
+            </div>
+            <div class="hideOffer" id="offers">
+                {%  include 'dashboard_organization/tables/offers.html.twig' with {'id': 'offers'} %}
+            </div>
         </div>
     </section>
+<style>
+    .hideOffer {
+        display: none;
+    }
+    .tab button:hover {
+        background-color: #ddd;
+    }
+
+    .tabcontent {
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+</style>
+    <script>
+        function swichtOffers() {
+            $('.hideOffer').show();
+            $('.hideProduct').hide();
+        }
+
+        function switchProducts() {
+            $('.hideProduct').show();
+            $('.hideOffer').hide();
+        }
+    </script>
 
 {% endblock %}
