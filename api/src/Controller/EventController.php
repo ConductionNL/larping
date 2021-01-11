@@ -76,7 +76,7 @@ class EventController extends AbstractController
 
         }
 
-        /* @to dit willen we denk ik verplaatsen naar een algemene order api */
+        /* @todo dit willen we denk ik verplaatsen naar een algemene order api */
         // Make order in session
         if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' &&
             $request->request->get('offers')) {
