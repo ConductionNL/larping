@@ -29,11 +29,14 @@ class LocationController extends AbstractController
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService)
+    public function indexAction(CommonGroundService $commonGroundService, Request $request)
     {
         $variables = [];
-        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'accommodations']);
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories']);
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'])['hydra:member'];
+        $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
+        $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
+        $variables['search'] = $request->get('search', false);
+        $variables['categories'] = $request->get('categories', []);
         $variables['hidefooter'] = 'hide';
 
         return $variables;
@@ -43,10 +46,27 @@ class LocationController extends AbstractController
      * @Route("/{id}")
      * @Template
      */
-    public function locationAction(CommonGroundService $commonGroundService, $id)
+    public function locationAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables = [];
-        $variables['location'] = $commonGroundService->getResource(['component' => 'lc', 'type' => 'lc','id'=>$id]);
+        $variables['location'] = $commonGroundService->getResource(['component' => 'lc', 'type' => 'places','id'=>$id]);
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['location' => $variables['location']['@id']])['hydra:member'];
+        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'],['resource' => $variables['location']['@id']]);
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'],['resources.resource' => $variables['location']['@id']])['hydra:member'];
+
+        // Add review
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {
+            $resource = $request->request->all();
+
+            $resource['organization'] = $variables['organization']['@id'];
+            $resource['resource'] = $variables['organization']['@id'];
+            $resource['author'] = $this->getUser()->getPerson();
+            $resource['rating'] = (integer) $resource['rating'];
+
+            // Save to the commonground component
+            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+
+        }
 
         return $variables;
     }

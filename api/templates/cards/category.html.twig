@@ -1,4 +1,4 @@
-<a class="card py-5 hover-bg-primary bg-transparent" href="{% if path|default %}{{ path }}{% endif %}">
+<a class="card py-5 hover-bg-primary bg-transparent" href="{{ path('app_event_index', {"categories[]":item.id}) }}">
     <div class="card-body text-center">
         {% if item.icon|default %}
             <div class="icon-md">

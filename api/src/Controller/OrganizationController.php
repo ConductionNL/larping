@@ -32,6 +32,17 @@ class OrganizationController extends AbstractController
     {
         $variables = [];
 
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
+        $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
+        $variables['search'] = $request->get('search', false);
+        $variables['categories'] = $request->get('categories', []);
+
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+
+        foreach ($variables['organizations'] as $organization) {
+            $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'],['organizations' => $organization['@id']])['hydra:member'];
+        }
+
 //        foreach($variables['organizations'] as $key => $value){
 //            $variables['organizations'][$key]['totals'] =  $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'item_total'],['resource' => $variables['organizations']['@id']]);
 //        }
@@ -102,7 +113,8 @@ class OrganizationController extends AbstractController
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'],['resource' => $variables['organization']['@id']])['hydra:member'];
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        $variables['stats'] = ['likes'=>100,'reviews'=>5];
+        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'],['resource' => $variables['organization']['@id']]);
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'],['resources.resource' => $variables['organization']['id']]);
 
         // Add review
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {
@@ -112,6 +124,7 @@ class OrganizationController extends AbstractController
             $resource['organization'] = $variables['organization']['@id'];
             $resource['resource'] = $variables['organization']['@id'];
             $resource['author'] = $this->getUser()->getPerson();
+            $resource['rating'] = (integer) $resource['rating'];
 
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);

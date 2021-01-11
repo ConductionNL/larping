@@ -6,23 +6,10 @@
         </div>
         <div class="media-body">
             <h5 class="media-heading">{{ commonground_resource(review.author).givenName }}</h5>
-            <ul class="list-inline list-inline-rating">
-                <li class="list-inline-item">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                </li>
-                <li class="list-inline-item">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                </li>
-                <li class="list-inline-item">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                </li>
-                <li class="list-inline-item">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                </li>
-                <li class="list-inline-item">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                </li>
-            </ul>
+            <span class="d-inline-block mr-2">
+                {% include 'widgets/rating.html.twig' with {'rating':review.rating} %}
+               ({{ review.rating }})
+            </span>
             <p>{{ review.review }}</p>
             <!-- Reply Section -->
             {#
