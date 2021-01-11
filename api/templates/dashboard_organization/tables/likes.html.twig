@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label for="organizationInput">{{ 'organization for this event'|trans|capitalize }}</label>
                 <select form="event" id="organizationInput" name="events[organization]" class="form-control">
-                    {% if organizations|length > 0 %}
+                    {% if likes|length > 0 %}
                         {% for org in organizations %}
                             <option value="{{ org['@id'] }}">{{ org.name }}</option>
                         {% endfor %}

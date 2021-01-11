@@ -15,23 +15,25 @@
             <div class="search-box">
                 <form method="GET" action="{{ path('app_event_index') }}">
                     <div class="form-group mb-md-0">
-                        <input type="text" class="form-control"
-                               placeholder="{{ 'enter your keywords'|trans|capitalize }}" id="search" name="search">
+                        <input type="text" class="form-control" id="search" name="search"
+                               placeholder="{{ 'enter your keywords'|trans|capitalize }}" >
                     </div>
                     <div class="select-default">
-                        <select class="select-location" id="location" name="location">
-                            <option>{{ 'all'|trans|capitalize~' '~'locations'|trans }}</option>
-                            <option>U.S.A</option>
-                            <option>U.K</option>
-                            <option>ASIA</option>
+                        <select class="select-location" id="categories[]" name="categories[]">
+                            <option>{{ 'all regions'|trans }}</option>
+                            {% if regions|default %}
+                            {% for region in regions %}
+                            <option value="{{ region.id }}">{{ region.name }}</option>
+                            {% endfor %}
+                            {% endif %}
                         </select>
                     </div>
                     <div class="select-default">
-                        <select class="select-location" id="groups[]" name="groups[]">
+                        <select class="select-location" id="categories[]" name="categories[]">
                             <option>{{ 'all'|trans|capitalize~' '~'categories'|trans }}</option>
-                            {% if categories|default %}
-                                {% for item in categories %}
-                                    <option>{{ item.name|capitalize }}</option>
+                            {% if settings|default %}
+                                {% for category in settings %}
+                                    <option value="{{ category.id }}">{{ category.name|capitalize }}</option>
                                 {% endfor %}
                             {% endif %}
                         </select>
@@ -54,12 +56,11 @@
                 {#                <p> {{ 'explore and connect with great local organizations'|trans|capitalize }}</p>#}
             </div>
             <div class="row">
-                {% if categories|default %}
-                    {% for category in categories %}
+                {% if settings|default %}
+                    {% for category in settings %}
                         <div class="col-md-4 col-lg-3 col-xs-12">
                             {% include 'cards/category.html.twig' with {
-                                'item': category,
-                                'path': '/events'
+                                'item': category
                             } %}
                         </div>
                     {% endfor %}
@@ -80,7 +81,7 @@
             <div class="row justify-content-center">
                 {% for event in events %}
                     <div class="col-md-6 col-lg-4">
-                        {% include 'cards/location.html.twig' with {'item': event} %}
+                        {% include 'cards/event.html.twig' with {'item': event} %}
                     </div>
                 {% endfor %}
             </div>
