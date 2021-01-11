@@ -1,6 +1,6 @@
 <?php
 
-// src/Twig/Shopping.php
+// src/Twig/ShoppingController.php
 
 namespace App\Twig;
 
