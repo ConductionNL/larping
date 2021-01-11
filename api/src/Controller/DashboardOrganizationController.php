@@ -51,6 +51,7 @@ class DashboardOrganizationController extends AbstractController
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
@@ -140,6 +141,8 @@ class DashboardOrganizationController extends AbstractController
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
+
 
         if ($request->isMethod('POST')) {
             // Get the current resource
@@ -360,9 +363,8 @@ class DashboardOrganizationController extends AbstractController
         if ($request->isMethod('POST')) {
             // Get the current resource
             $location = $request->request->all();
-            $location['organization'] = $variables['organization']['@id'];
             // Set the current organization as owner
-
+            $location['organization'] = $variables['organization']['@id'];
 
             $categories = $location['categories'];
             if(!$categories) $categories = [];
