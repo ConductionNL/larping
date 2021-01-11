@@ -1,0 +1,115 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <section class="py-7 pt-md-9 pb-md-8 ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-lg-8">
+                    <div class="mb-2 mb-lg-0">
+                        <h1 class="single-listing-title">{{ location.name }}</h1>
+
+                        <!-- Breadcrumb -->
+                        <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
+                            <ul class="list-unstyled d-flex p-0 m-0">
+                                <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{ path('app_location_index') }}">{{ 'locations'|trans|capitalize }}</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ location.name }}</li>
+                            </ul>
+                        </nav>
+
+                        <!-- Ratings -->
+                        <div class="d-flex align-items-center">
+                            {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
+                            <span class="d-inline-block mr-2">{{ totals.rating }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
+                                <i class="fal fa-heart text-primary" aria-hidden="true"></i>
+                                <span>{{ totals.likes }}</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div> <!--/.col -->
+                <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
+                    <a href="#add-review" class="btn btn-primary">{{ 'write a review'|trans|capitalize }}</a>
+                </div><!--/.col -->
+            </div><!-- /.row -->
+        </div><!--/.container -->
+    </section>
+
+    <!-- ====================================
+    ———	MAIN CONTENT
+    ===================================== -->
+    <section class="pt-7 pb-4 pt-md-9 pb-md-8">
+        <div class="container">
+            <div class="row">
+                <!--======= Main =======-->
+                <div class="col-md-8 col-lg-8 single-listing-content">
+                    <!-- About -->
+                    {% if location.description|default %}
+                        <div class="single-listing-content mb-6">
+                            <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {%if location.name|default %}{{ location.name }}{% endif %}</h3>
+                            <p class="mb-6">{{ location.description }}</p>
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Features -->
+                    <div class="my-6">
+                        <h3 class="font-weight-normal mb-6">{{ 'features'|trans|capitalize }}</h3>
+                        <ul class="list-unstyled mb-7">
+                            {% if categories is defined and categories is not empty %}
+                                {% for category in categories %}
+                                    <li class="d-inline-block mr-4 mb-2">
+                                        <i class="{{ category.icon }} mr-2" aria-hidden="true"></i>
+                                        {{ category.name }}
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="d-inline-block mr-4 mb-2">
+                                    {{ 'no features found'|trans|capitalize }}
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    <hr>
+
+
+                    <!-- Reviews -->
+                    {% if reviews is defined and reviews is not empty %}
+                        <div>
+                            <h3 class="font-weight-normal mb-6">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
+                            {%  include '/sections/reviews.html.twig' %}
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Add a review -->
+                    <div id="add-review">
+                        <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
+                        {%  include '/sections/review.html.twig' %}
+                    </div>
+
+                </div>
+
+
+                <!--======= Sidebar =======-->
+                <div class="col-md-5 col-lg-4 pl-xl-8">
+                    <!-- Single listing Map -->
+                    {% if event.location|default %}
+                        {% include 'widgets/single_listing_map.html.twig' with {
+                            'location': event.location
+                        } %}
+                    {% endif %}
+
+                    <!-- You may also like  -->
+                    <h5>{{ 'other events you might like'|trans|capitalize }}</h5>
+                    {% include 'widgets/you_may_like.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

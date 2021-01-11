@@ -1,0 +1,64 @@
+
+{% if products|default and  products|length > 0 %}
+    <table id="products" class="display nowrap table" style="width:100%">
+        <thead>
+        <tr>
+            <th>{{ 'image'|trans|capitalize }}</th>
+            <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'type'|trans|capitalize }}</th>
+            <th>{{ 'offers'|trans|capitalize }}</th>
+            <th>Status</th>
+            <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ProductModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>
+                    <img class="img-sm rounded" src="assets/img/listing/listing-03.jpg" alt="Image">
+                </td>
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" >{{ product.name }}</a>
+                </td>
+                <td>
+                    <a class="text-hover-primary text-muted" >{{ product.type }}</a>
+                </td>
+                <td>
+                    {% for offer in product.offers %}
+                        <span class="d-block ">{{ offer.name }} ({{ offer.price }})</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    <span class="badge badge-warning px-2 py-1">Pending</span>
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ProductModal{{ product.id }}">Edit</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card border-light shadow-sm">
+        <div class="card-body text-center">
+            <p>{{ 'no participants found'|trans|capitalize }}</p>
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ProductModalAdd">{{ 'add your first product'|trans|capitalize }}!</a>
+        </div>
+    </div>
+{% endif %}
+
+{% include 'dashboard_organization/modals/product.html.twig' %}
+
+{% for product in products %}
+    {% include 'dashboard_organization/modals/product.html.twig' with {'resource': product} %}
+{% endfor %}
+
+

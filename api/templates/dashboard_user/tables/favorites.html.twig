@@ -1,0 +1,25 @@
+{% if likes|default and likes|length > 0 %}
+<table id="likes" class="display nowrap table" style="width:100%">
+    <thead class="thead-light">
+    <tr>
+        <th>{{ 'subject'|trans|capitalize }}</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for like in likes %}
+    <tr>
+        <td>{{ commonground_resource(like.resource).name }}</td>
+        <td><i class="fa fa-heart text-primary float-right mr-3" aria-hidden="true"></i></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="card-body  text-center">
+    <p>{{ 'no results found'|trans|capitalize }}</p>
+    <a href="{{ path('app_event_index') }}" class="btn btn-primary btn-sm">{{ 'find'|trans|capitalize~' '~'a'|trans~' '~'event'|trans }}</a>
+    <span class="mx-2">{{ 'or'|trans }}</span>
+    <a href="{{ path('app_organization_index') }}" class="btn btn-primary btn-sm">{{ 'find'|trans|capitalize~' '~'a'|trans~' '~'organization'|trans }}</a>
+</div>
+{% endif %}

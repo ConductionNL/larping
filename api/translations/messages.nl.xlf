@@ -93,6 +93,203 @@
         <source>event</source>
         <target>evenement</target>
         </trans-unit>
+        <trans-unit id="BAHZTa6" resname="startdate">
+        <source>startdate</source>
+        <target>startdatum</target>
+        </trans-unit>
+        <trans-unit id="Lmwaab2" resname="enddate">
+        <source>enddate</source>
+        <target>einddatum</target>
+        </trans-unit>
+        <trans-unit id="BTTTTa6" resname="about">
+         <source>about</source>
+         <target>over</target>
+         </trans-unit>
+        <trans-unit id="GBasf1x" resname="by">
+         <source>by</source>
+         <target>door</target>
+         </trans-unit>
+        <trans-unit id="Jnb1asZ" resname="select an">
+         <source>select an</source>
+         <target>selecteer een</target>
+         </trans-unit>
+        <trans-unit id="Unb1ahT" resname="offers">
+         <source>offers</source>
+         <target>aanbiedingen</target>
+         </trans-unit>
+        <trans-unit id="O109oas" resname="quantity">
+         <source>quantity</source>
+         <target>hoeveelheid</target>
+         </trans-unit>
+        <trans-unit id="GAsf1Zq" resname="offer">
+         <source>offer</source>
+         <target>aanbod</target>
+         </trans-unit>
+        <trans-unit id="UBn1asw" resname="shopping cart">
+         <source>shopping cart</source>
+         <target>winkelmand</target>
+         </trans-unit>
+        <trans-unit id="OsHbnw1" resname="pay">
+         <source>pay</source>
+         <target>afrekenen</target>
+         </trans-unit>
+        <trans-unit id="uBwn1aC" resname="remove">
+         <source>remove</source>
+         <target>verwijder</target>
+         </trans-unit>
+        <trans-unit id="Mn1bav4" resname="you have to be logged in to continue">
+         <source>you have to be logged in to continue</source>
+         <target>je moet ingelogd zijn om verder te gaan</target>
+         </trans-unit>
+        <trans-unit id="Oa2nnba" resname="sum">
+         <source>sum</source>
+         <target>totaal</target>
+         </trans-unit>
+        <trans-unit id="oAwj1zx" resname="price">
+         <source>price</source>
+         <target>prijs</target>
+         </trans-unit>
+        <trans-unit id="7hAB2a9" resname="view your order">
+         <source>view your order</source>
+         <target>bekijk uw bestelling</target>
+         </trans-unit>
+        <trans-unit id="8aHb12A" resname="payment succeeded">
+         <source>payment succeeded</source>
+         <target>betaling gelukt</target>
+         </trans-unit>
+        <trans-unit id="kaJnas1" resname="payment failed">
+         <source>payment failed</source>
+         <target>betaling mislukt</target>
+         </trans-unit>
+        <trans-unit id="Ab12asd" resname="view your">
+         <source>view your</source>
+         <target>bekijk uw</target>
+         </trans-unit>
+        <trans-unit id="oNw123s" resname="invoice">
+         <source>invoice</source>
+         <target>factuur</target>
+         </trans-unit>
+        <trans-unit id="UAHb191" resname="back to the">
+         <source>back to the</source>
+         <target>terug naar de</target>
+         </trans-unit>
+        <trans-unit id="98Nwe15" resname="page">
+         <source>page</source>
+         <target>pagina</target>
+         </trans-unit>
+        <trans-unit id="79aJSdn" resname="try again">
+         <source>try again</source>
+         <target>probeer het opnieuw</target>
+         </trans-unit>
+        <trans-unit id="l2a9nXz" resname="or">
+         <source>or</source>
+         <target>of</target>
+         </trans-unit>
+        <trans-unit id="Osd8129" resname="payment is open, you can still retry paying">
+         <source>payment is open, you can still retry paying</source>
+         <target>betaling staat open, u kunt nog proberen te betalen</target>
+         </trans-unit>
+        <trans-unit id="ubN213S" resname="payment is expired">
+         <source>payment is expired</source>
+         <target>betaling is niet meer geldig</target>
+         </trans-unit>
+        <trans-unit id="oj325bG" resname="unknown error">
+         <source>unknown error</source>
+         <target>onbekende fout</target>
+         </trans-unit>
+        <trans-unit id="uB5235s" resname="payment has been aborted">
+         <source>payment has been aborted</source>
+         <target>betaling is geannuleerd</target>
+         </trans-unit>
+         <trans-unit id="uBBB13S" resname="start date">
+         <source>start date</source>
+         <target>start datum</target>
+         </trans-unit>
+         <trans-unit id="oMmMMbG" resname="end date">
+         <source>end date</source>
+         <target>eind datum</target>
+         </trans-unit>
+         <trans-unit id="oNAHXbG" resname="send review">
+         <source>send review</source>
+         <target>verstuur recensie</target>
+         </trans-unit>
+         <trans-unit id="uBNAYXS" resname="enter your review">
+         <source>enter your review</source>
+         <target>voer uw recensie in</target>
+         </trans-unit>
+         <trans-unit id="nayMMbG" resname="submit review">
+         <source>submit review</source>
+         <target>review versturen</target>
+         </trans-unit>
+         <trans-unit id="Uhb123S" resname="what are you looking for">
+         <source>what are you looking for</source>
+         <target>waar ben je naar op zoek</target>
+         </trans-unit>
+         <trans-unit id="V9fk1Z6" resname="find by location">
+         <source>find by location</source>
+         <target>zoek via locatie</target>
+         </trans-unit>
+         <trans-unit id="H8mw0lQ" resname="search">
+         <source>search</source>
+         <target>zoek</target>
+         </trans-unit>
+         <trans-unit id="U12oASF" resname="with">
+         <source>with</source>
+         <target>met</target>
+         </trans-unit>
+         <trans-unit id="K214Naf" resname="as">
+         <source>as</source>
+         <target>als</target>
+         </trans-unit>
+         <trans-unit id="ujh532q" resname="keywords">
+         <source>keywords</source>
+         <target>trefwoorden</target>
+         </trans-unit>
+         <trans-unit id="q9K2mnW" resname="my">
+         <source>my</source>
+         <target>mijn</target>
+         </trans-unit>
+         <trans-unit id="R3s2gBz" resname="favourites">
+         <source>favourites</source>
+         <target>favorieten</target>
+         </trans-unit>
+         <trans-unit id="k2mN2ba" resname="no favourites found">
+         <source>no favourites found</source>
+         <target>geen favorieten gevonden</target>
+         </trans-unit>
+         <trans-unit id="U8Uj2nS" resname="find">
+         <source>find</source>
+         <target>vind</target>
+         </trans-unit>
+         <trans-unit id="LAmn2S0" resname="a">
+         <source>a</source>
+         <target>een</target>
+         </trans-unit>
+         <trans-unit id="U7jn2SD" resname="no results found">
+         <source>no results found</source>
+         <target>geen resultaten gevonden</target>
+         </trans-unit>
+         <trans-unit id="812Basd" resname="date">
+         <source>date</source>
+         <target>datum</target>
+         </trans-unit>
+         <trans-unit id="j2B214X" resname="remarks">
+         <source>remarks</source>
+         <target>opmerkingen</target>
+         </trans-unit>
+         <trans-unit id="B12as93" resname="something you want us to know">
+         <source>something you want us to know</source>
+         <target>iets wat je ons wilt laten weten</target>
+         </trans-unit>
+         <trans-unit id="8ub124A" resname="browse by categories">
+         <source>browse by categories</source>
+         <target>zoek in categorieën</target>
+         </trans-unit>
+         <trans-unit id="BUS612g" resname="categories">
+         <source>categories</source>
+         <target>categorieën</target>
+         </trans-unit>
+
     </body>
   </file>
 </xliff>

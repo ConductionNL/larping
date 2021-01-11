@@ -1,0 +1,97 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    <section class="py-7 py-md-10 bg-light ">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card">
+
+                        {% if invoice.status|default and invoice.status == 'paid' %}
+
+                            <div class="bg-success text-center py-4">
+                                <h2 class="text-white mb-0 h4">{{ 'payment succeeded'|trans|capitalize }}!</h2>
+                            </div>
+                            <div class="card-body p-7">
+
+                                <p class="mb-0 text-center">{{ 'view your'|trans|capitalize }} <a href="#"
+                                                                                                  class="link">{{ 'invoice'|trans }}</a>
+                                </p>
+
+                                {#                          Get website from owner of the   #}
+                                {% if invoice.order|default %}
+                                    {% set order = commonground_resource(invoice.order) %}
+                                    {% if order.organization|default %}
+                                        {% set organization = commonground_resource(order.organization) %}
+                                        {% if organization.contact|default %}
+                                            {% set contact = commonground_resource(organization.contact) %}
+                                            {% if contact.socials.0|default and contact.socials.0.website|default %}
+                                                <p class="mb-0 text-center">{{ 'go to the'|trans|capitalize }} <a
+                                                        href="{{ path('app_default_index') }}"
+                                                        class="link text-center">{{ 'website'|trans }}</a> {{ 'of the supplier of your bought product'|trans }}
+                                                    .</p>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="card-footer bg-transparent text-center py-3">
+                                <p class="mb-0">{{ 'back to the'|trans|capitalize }} <a
+                                        href="{{ path('app_default_index') }}" class="link" style="font-size: 0.9rem">home</a> {{ 'page'|trans }}
+                                </p>
+                            </div>
+
+                        {% elseif invoice.status|default and invoice.status != 'paid' %}
+
+                            <div class="bg-danger text-center py-4">
+                                <h2 class="text-white mb-0 h4">{{ 'payment failed'|trans|capitalize }}</h2>
+                            </div>
+                            <div class="card-body p-7">
+                                {% if invoice.status == 'open' %}
+                                    <p class="mb-2 text-center">{{ 'payment is open, you can still retry paying'|trans|capitalize }}</p>
+                                {% elseif invoice.status == 'failed' %}
+                                    <p class="mb-2 text-center">{{ 'unknown error'|trans|capitalize }}</p>
+                                {% elseif invoice.status == 'expired' %}
+                                    <p class="mb-2 text-center">{{ 'payment is expired'|trans|capitalize }}</p>
+                                {% elseif invoice.status == 'cancelled' %}
+                                    <p class="mb-2 text-center">{{ 'payment has been aborted'|trans|capitalize }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer bg-transparent text-center py-3">
+                                <form action="{{ path('app_order_index') }}" method="post">
+                                    <button type="submit" name="makeOrder" value="true"
+                                            class="link button-as-a" >{{ 'try again'|trans|capitalize }}</button>
+                                </form>
+                                <p>
+                                    {{ 'or'|trans }}
+                                    <a
+                                        href="{{ path('app_order_index') }}"
+                                        class="link" style="font-size: 0.9rem">{{ 'view your order'|trans }}</a>.
+                                </p>
+                            </div>
+
+                        {% else %}
+                            <p class="text-center">{{ 'something went wrong with fetching your payment status, please ' }}</p>
+                            <form action="{{ path('app_order_index') }}" method="post">
+                                <button type="submit" name="makeOrder" value="true"
+                                        class="link">{{ 'try again'|capitalize }}</button>
+                            </form>
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {#    <section class="py-7 py-md-10">#}
+    {#        <div class="container">#}
+
+    {#            {{ dump(invoice) }}#}
+
+    {#        </div>#}
+    {#    </section>#}
+
+{% endblock %}

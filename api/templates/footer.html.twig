@@ -1,6 +1,6 @@
 <!-- footer -->
 <footer class="pt-7 pt-md-10 bg-white">
-    <div class="container">
+    <div class="{% if containerClass is defined %}{{ containerClass  }}{% else %}container{% endif %}">
         <div class="row">
             <div class="col-sm-7 col-xs-12">
 {#                <a class="d-inline-block mb-6" href="index.html">#}
@@ -29,53 +29,59 @@
                     </li>
                     <li class="mb-3">
                         <i class="fa fa-envelope mr-3" aria-hidden="true"></i>
-                        <a class="text-muted" href="mailto:info@listy.com">info@listy.com</a>
+                        <a class="text-muted" href="mailto:info@conduction.nl">info@conduction.nl</a>
                     </li>
                 </ul>
             </div>
 
             <div class="col-sm-3 col-xs-12">
                 <div class="mb-4 mt-4 mt-md-0">
-                    <h2 class="h4">Links</h2>
+                    <h2 class="h4">{{'Links'|trans|capitalize}}</h2>
                 </div>
                 <ul class="list-unstyled list-gray">
                     <li class="mb-3">
-                        <a href="index.html">Home</a>
+                        <a href="{{ path('app_default_index') }}">Home</a>
                     </li>
                     <li class="mb-3">
-                        <a href="sign-up.html">Create Account</a>
+                        <a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a>
                     </li>
                     <li class="mb-3">
-                        <a href="login.html">Login</a>
+                        <a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
                     </li>
                     <li class="mb-3">
-                        <a href="add-listings.html">Add Listing</a>
+                        <a href="{{ path('app_user_idvault') }}">{{ 'create account'|trans|capitalize }}</a>
                     </li>
                     <li class="mb-3">
-                        <a href="edit-listings.html">Edit Listing</a>
+                        <a href="{{ path('app_user_idvault') }}">{{ 'login'|trans|capitalize }}</a>
                     </li>
+{#                    <li class="mb-3">#}
+{#                        <a href="add-listings.html">Add Listing</a>#}
+{#                    </li>#}
+{#                    <li class="mb-3">#}
+{#                        <a href="edit-listings.html">Edit Listing</a>#}
+{#                    </li>#}
                 </ul>
             </div>
 
             <div class="col-sm-2 col-xs-12">
                 <div class="mb-4 mt-4 mt-md-0">
-                    <h2 class="h4">Company</h2>
+                    <h2 class="h4">{{ 'company'|trans|capitalize }}</h2>
                 </div>
                 <ul class="list-unstyled list-gray">
                     <li class="mb-3">
-                        <a href="contact-us.html">Contact Us</a>
+                        <a href="https://www.conduction.nl/contact">{{ 'contact us'|trans|capitalize }}</a>
                     </li>
                     <li class="mb-3">
-                        <a href="terms-of-services.html">Terms and Conditions</a>
+                        <a href="{{ path('app_default_termsandconditions') }}">{{ 'terms and conditions'|trans|capitalize }}</a>
                     </li>
                     <li class="mb-3">
-                        <a href="how-it-works.html">How It Works</a>
+                        <a href="{{ path('app_default_howitworks') }}">{{ 'how it works'|trans|capitalize }}</a>
                     </li>
                     <li class="mb-3">
-                        <a href="payment-process.html">Payment</a>
+                        <a href="{{ path('app_default_payment') }}">{{ 'payment'|trans|capitalize }}</a>
                     </li>
                     <li class="mb-3">
-                        <a href="pricing-table.html">Pricing</a>
+                        <a href="{{ path('app_default_pricing') }}">{{ 'pricing'|trans|capitalize }}</a>
                     </li>
                 </ul>
             </div>
@@ -87,8 +93,8 @@
 
             <div class="col-sm-7 col-xs-12 align-self-center order-3 order-md-0">
                 <p class="copy-right mb-0 pb-4 pb-md-0">
-                    Copyright &copy; 2019. All Rights Reserved by
-                    <a href="http://www.iamabdus.com/" target="_blank"> Abdus</a>
+                    Copyright &copy; 2020. All Rights Reserved by
+                    <a href="https://www.conduction.nl/" target="_blank">Conduction</a>
                 </p>
             </div>
 
@@ -109,6 +115,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </footer>

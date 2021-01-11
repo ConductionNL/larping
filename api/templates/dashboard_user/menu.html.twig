@@ -1,0 +1,40 @@
+<nav class="navbar navbar-expand-md navbar-dark">
+    <div class="container">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ path('app_dashboarduser_index') }}">
+                        <i class="fas fa-tachometer-alt" aria-hidden="true"></i> {{ 'dashboard'|trans|capitalize }} </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ path('app_dashboarduser_organizations') }}">
+                        <i class="fa fa-building" aria-hidden="true"></i>{{ 'my'|trans|capitalize~' '~'organizations'|trans }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ path('app_dashboarduser_events') }}">
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>{{ 'my'|trans|capitalize~' '~'events'|trans }}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ path('app_dashboarduser_characters') }}">
+                        <i class="fa fa-calendar-o" aria-hidden="true"></i>{{ 'my'|trans|capitalize~' '~'characters'|trans }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ path('app_dashboarduser_favorites') }}">
+                        <i class="far fa-heart" aria-hidden="true"></i>{{ 'my'|trans|capitalize~' '~'favourites'|trans }}</a>
+                </li>
+            </ul>
+
+            <form class="form-inline my-2 my-lg-0 position-relative d-none d-md-block">
+                <input class="form-control-sm" placeholder="Search" aria-label="Search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </form>
+        </div>
+    </div>
+</nav>

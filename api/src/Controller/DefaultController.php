@@ -6,10 +6,13 @@ namespace App\Controller;
 
 use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use http\Env\Response;
+use phpDocumentor\Reflection\Types\String_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,6 +34,9 @@ class DefaultController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
+        $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
 
         return $variables;
     }
@@ -61,5 +67,70 @@ class DefaultController extends AbstractController
         } else {
             return $this->render('500.html.twig');
         }
+    }
+
+    /**
+     * @Route("/like")
+     * @Template
+     */
+    public function likeAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+        if ($this->getUser() && $request->isMethod('POST')) {
+            $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $request->get('resource'), 'author' => $this->getUser()->getPerson()])['hydra:member'];
+            if (count($likes) > 0) {
+                $like = $likes[0];
+                // Delete this existing like
+                $commonGroundService->deleteResource($like);
+                return new JsonResponse(array('data' => 'unliked'));
+            }else {
+                $like['author'] = $this->getUser()->getPerson();
+                $like['resource'] = $request->get('resource');
+                $like['organization'] = 'https://test.com';
+                $like = $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
+                return new JsonResponse(array('data' => 'liked'));
+            }
+        } else {
+            return new JsonResponse(array('data' => 'you are not logged in'));
+        }
+    }
+
+
+    /**
+     * @Route("/how_it_works")
+     * @Template
+     */
+    public function howItWorksAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
+
+
+    /**
+     * @Route("/payment")
+     * @Template
+     */
+    public function paymentAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
+
+
+    /**
+     * @Route("/pricing")
+     * @Template
+     */
+    public function pricingAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
+    }
+
+
+    /**
+     * @Route("/terms_and_conditions")
+     * @Template
+     */
+    public function termsAndConditionsAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+
     }
 }
