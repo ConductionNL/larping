@@ -11,9 +11,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserSubscriber implements EventSubscriberInterface
 {
-
     private $mailingService;
     private $commonGroundService;
+
     public function __construct(MailingService $mailingService, CommonGroundService $commonGroundService)
     {
         $this->mailingService = $mailingService;
@@ -24,7 +24,7 @@ class UserSubscriber implements EventSubscriberInterface
     {
         return [
             IdVaultEvents::NEWUSER  => 'newUser',
-            IdVaultEvents::LOGGEDIN => 'loggedIn'
+            IdVaultEvents::LOGGEDIN => 'loggedIn',
         ];
     }
 
@@ -44,7 +44,5 @@ class UserSubscriber implements EventSubscriberInterface
     {
         $object = $event->getResource();
         //login actions
-
     }
-
 }

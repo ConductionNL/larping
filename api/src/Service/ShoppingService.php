@@ -5,7 +5,6 @@
 namespace App\Service;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
-use GuzzleHttp\Client;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,8 +22,7 @@ class ShoppingService
     private $commonGroundService;
     private $requestService;
 
-    public function __construct
-    (
+    public function __construct(
         ParameterBagInterface $params,
         CacheInterface $cache,
         SessionInterface $session,
@@ -32,8 +30,7 @@ class ShoppingService
         RequestStack $requestStack,
         CommonGroundService $commonGroundService,
         Security $security
-    )
-    {
+    ) {
         $this->params = $params;
         $this->cash = $cache;
         $this->session = $session;
@@ -56,11 +53,11 @@ class ShoppingService
 //
 //                    $items = $order['items'];
 //
-////                $sessionOrder = $order;
+    ////                $sessionOrder = $order;
 //
 //                    $order['name'] = 'Order for ' . $person['name'];
 //                    $order['description'] = 'Order for ' . $person['name'];
-////                    $order['organization'] = $offer['offeredBy'];
+    ////                    $order['organization'] = $offer['offeredBy'];
 //
 //                    // Hardcoded org because of bug in PDC !
 //                    $order['organization'] = 'https://dev.larping.eu/api/v1/wrc/organizations/51eb5628-3b37-497b-a57f-6b039ec776e5';
@@ -73,8 +70,8 @@ class ShoppingService
 //                    if (isset($order['items'])) {
 //                        unset($order['items']);
 //                    }
-////                    var_dump($order);
-////                    die;
+    ////                    var_dump($order);
+    ////                    die;
 //                    $order = $this->commonGroundService->saveResource($order, ['component' => 'orc', 'type' => 'orders']);
 //
 //                    foreach ($items as $item) {
@@ -104,7 +101,6 @@ class ShoppingService
 
     public function redirectToMollie($order)
     {
-
         $object['url'] = $order['@id'];
         $object['mollieKey'] = 'test_e56eJtnShswQS7Usn7uDhsheg9fjeH';
 
@@ -121,11 +117,10 @@ class ShoppingService
 
         if (isset($object['paymentUrl']) && strpos($object['paymentUrl'], 'https://www.mollie.com') !== false) {
             $this->session->set('invoice@id', $object['@id']);
-            header("Location: " . $object['paymentUrl']);
-            die;
+            header('Location: '.$object['paymentUrl']);
+            exit;
         }
     }
-
 
     public function addItemsToCart($offers)
     {
@@ -211,10 +206,10 @@ class ShoppingService
         $actualOffer = $this->commonGroundService->getResource($newOrderItem['offer']);
 
         $order['orderItems'][] = [
-            'offer' => $newOrderItem['offer'],
+            'offer'    => $newOrderItem['offer'],
             'quantity' => $newOrderItem['quantity'],
-            'path' => $newOrderItem['path'],
-            'price' => $actualOffer['price']
+            'path'     => $newOrderItem['path'],
+            'price'    => $actualOffer['price'],
         ];
 
         return $order;
@@ -247,8 +242,8 @@ class ShoppingService
 
     public function uploadOrder($order, $person)
     {
-        $uploadedOrder['name'] = 'Order for ' . $person['name'];
-        $uploadedOrder['description'] = 'Order for ' . $person['name'];
+        $uploadedOrder['name'] = 'Order for '.$person['name'];
+        $uploadedOrder['description'] = 'Order for '.$person['name'];
         $uploadedOrder['organization'] = $order['organization'];
         $uploadedOrder['customer'] = $person['@id'];
 
@@ -273,7 +268,7 @@ class ShoppingService
             $item['quantity'] = intval($item['quantity']);
             $item['price'] = strval($offer['price']);
             $item['priceCurrency'] = $offer['priceCurrency'];
-            $item['order'] = '/orders/' . $uploadedOrder['id'];
+            $item['order'] = '/orders/'.$uploadedOrder['id'];
         }
 
         $item = $this->commonGroundService->saveResource($item, ['component' => 'orc', 'type' => 'order_items']);
@@ -294,16 +289,19 @@ class ShoppingService
     public function removeOrderByInvoice($invoice)
     {
         $ordersInSession = $this->session->get('orders');
-        if (isset($ordersInSession) && count($ordersInSession) > 0)
+        if (isset($ordersInSession) && count($ordersInSession) > 0) {
             if (isset($invoice['order'])) {
                 foreach ($ordersInSession as $k => $order) {
                     if (isset($order['@id']) && $order['@id'] == $invoice['order']) {
                         unset($ordersInSession[$k]);
                         $this->session->set('orders', $ordersInSession);
+
                         return true;
                     }
                 }
             }
+        }
+
         return false;
     }
 
@@ -342,6 +340,7 @@ class ShoppingService
                         foreach ($offer['products'] as $ownedProduct) {
                             if ($product['id'] == $ownedProduct['id']) {
                                 $thisProductIsOwned = true;
+
                                 return $thisProductIsOwned;
                             }
                         }
@@ -363,12 +362,10 @@ class ShoppingService
             }
         }
 
-
         return $thisProductIsOwned;
     }
 
-    public
-    function getOwnedProducts($person)
+    public function getOwnedProducts($person)
     {
         $orders = $this->commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['customer' => $person])['hydra:member'];
         $orderItemIds = [];
