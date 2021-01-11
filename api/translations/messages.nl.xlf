@@ -321,10 +321,6 @@
          <source>register</source>
          <target>registreren</target>
          </trans-unit>
-         <trans-unit id="GBahzZq" resname="see all events">
-         <source>see all events</source>
-         <target>zie alle evenementen</target>
-         </trans-unit>
          <trans-unit id="GOKKtZq" resname="all regions">
          <source>all regions</source>
          <target>alle regio's</target>
@@ -340,6 +336,34 @@
          <trans-unit id="GBYEzZq" resname="enter your keywords">
          <source>enter your keywords</source>
          <target>voer uw zoekwoorden in</target>
+         </trans-unit>
+         <trans-unit id="GTfatZq" resname="secure trading">
+         <source>secure trading</source>
+         <target>veilig handelen</target>
+         </trans-unit>
+         <trans-unit id="BmakoZq" resname="24/7 hours support">
+         <source>24/7 hours support</source>
+         <target>24/7 uur ondersteuning</target>
+         </trans-unit>
+         <trans-unit id="Gbaystq" resname="easy trading">
+         <source>easy trading</source>
+         <target>gemakkelijk handelen</target>
+         </trans-unit>
+         <trans-unit id="NNrtaZq" resname="upcoming events">
+         <source>upcoming events</source>
+         <target>aankomende evenementen</target>
+         </trans-unit>
+         <trans-unit id="Opatstq" resname="see all events">
+         <source>see all events</source>
+         <target>bekijk alle evenementen</target>
+         </trans-unit>
+         <trans-unit id="YYYtstq" resname="what should be next on your calander">
+         <source>what should be next on your calander</source>
+         <target>wat zal het volgende zijn op je kalender</target>
+         </trans-unit>
+         <trans-unit id="OMFFstq" resname="about larping.eu">
+         <source>about larping.eu</source>
+         <target>over larping.eu</target>
          </trans-unit>
     </body>
   </file>
