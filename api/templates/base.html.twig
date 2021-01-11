@@ -8,15 +8,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Larping</title>
-
-    <script src="https://kit.fontawesome.com/be1c31fb58.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-9ZfPnbegQSumzaE7mks2IYgHoayLtuto3AS6ieArECeaR8nCfliJVuLh/GaQ1gyM" crossorigin="anonymous">
 
     <!-- PLUGINS CSS STYLE -->
-    <link href="/bundles/listy/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="/bundles/listy/plugins/listtyicons/style.css" rel="stylesheet">
     <link href="/bundles/listy/plugins/menuzord/css/menuzord.css" rel="stylesheet">
     <link href="/bundles/listy/plugins/map/css/map.css" rel="stylesheet">
-    <link href="/bundles/listy/plugins/selectric/selectric.css" rel="stylesheet">
     <link href="/bundles/listy/plugins/dzsparallaxer/dzsparallaxer.css" rel="stylesheet">
     <link href="/bundles/listy/plugins/owl-carousel/bundles/listy/owl.carousel.min.css" rel="stylesheet">
     <link href="/bundles/listy/plugins/owl-carousel/bundles/listy/owl.theme.default.min.css" rel="stylesheet">
@@ -24,9 +21,12 @@
     <link href="/bundles/listy/plugins/map/css/map.css" rel="stylesheet">
     <link href="/bundles/listy/plugins/rateyo/jquery.rateyo.min.css" rel="stylesheet">
     <link href="/bundles/listy/plugins/daterangepicker/daterangepicker.css" rel="stylesheet">
+    <link href="/bundles/listy/plugins/selectric/selectric.css" rel="stylesheet">
 
     <link href="/bundles/listy/plugins/fancybox/jquery.fancybox.min.css" rel="stylesheet">
 
+    <!-- SELECT2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
     <!-- GOOGLE FONT -->
     <link href="https://fonts.googleapis.com/css?family=Muli:200,300,400,600,700,800,900" rel="stylesheet">
@@ -75,7 +75,9 @@
 
 </div> <!-- element wrapper ends -->
 
+{% if hidefooter is not defined or hidefooter is empty %}
 {% include 'footer.html.twig' %}
+{% endif %}
 
 <!-- JAVASCRIPTS -->
 
@@ -91,7 +93,7 @@
 <script src="/bundles/listy/plugins/smoothscroll/SmoothScroll.js"></script>
 <script src="/bundles/listy/plugins/owl-carousel/owl.carousel.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDU79W1lu5f6PIiuMqNfT1C6M0e_lq1ECY"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
 <script src="/bundles/listy/plugins/map/js/markerclusterer.js"></script>
 <script src="/bundles/listy/plugins/map/js/rich-marker.js"></script>
@@ -99,6 +101,14 @@
 <script src="/bundles/listy/js/map.js"></script>
 <script src="/bundles/listy/js/listty.js"></script>
 <script>
+    // select2 multiselect
+    $(document).ready(function() {
+        $('.select-multiple').select2({
+            placeholder:'select',
+            multiple:true
+        });
+    });
+
     function updateLikeCounter(id, status) {
         let counter = document.getElementById(id);
         let likes = 0;

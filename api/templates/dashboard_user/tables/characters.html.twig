@@ -39,8 +39,8 @@
 </div>
 {% endif %}
 
-{% include 'dashboard_user/modals/characters.html.twig' %}
+{% include 'dashboard_user/modals/character.html.twig' %}
 
 {% for character in characters %}
-    {% include 'dashboard_user/modals/characters.html.twig' with {'resource': character} %}
+    {% include 'dashboard_user/modals/character.html.twig' with {'resource': character} %}
 {% endfor %}

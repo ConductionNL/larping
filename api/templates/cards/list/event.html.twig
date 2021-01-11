@@ -1,0 +1,35 @@
+<!-- Event List card -->
+{% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
+{% set categories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']}) %}
+<div class="card card-list card-listing" data-lat="-33.922125" data-lag="151.159277" data-id="1">
+    <div class="row">
+        <a class="stretched-link" href="{{ path('app_event_event', {'id': item.id}) }}">
+            <div class="col-md-4 col-xl-3">
+                <div class="card-list-img">
+                    <img class="listing-img stretched-link" src="https://picsum.photos/370/250" alt="things-4" >
+                </div>
+            </div>
+        </a>
+        <div class="col-md-8 col-xl-9">
+            <div class="card-body p-0">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <h3 class="card-title listing-title mb-0">
+                        <a href="{{ path('app_event_event', {'id': item.id}) }}" >{{ item.name }}</a>
+                    </h3>
+                    <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
+                            data-original-title="Favourite this listing">
+                        <i class="fal fa-heart text-primary" aria-hidden="true"></i>
+                        <span>{{  totals.likes }}</span>
+                    </button>
+                </div>
+                <br>
+            </div>
+            <span class="d-block mb-4 listing-address">215 Terry Lane, New York</span>
+
+            <span class="d-block mb-4 listing-address">{{ item.description }}</span>
+            <div>
+                <a href="{{ path('app_event_event', {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
+            </div>
+        </div>
+    </div>
+</div>

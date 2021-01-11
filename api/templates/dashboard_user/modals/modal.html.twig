@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="{{ type }}Modal{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ type }}Modal{{ id }}" aria-hidden="true">
+<div class="{% if modalClass is defined %}{{ modalClass }}{% else %}modal{% endif%} fade" id="{{ type }}Modal{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ type }}Modal{{ id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
