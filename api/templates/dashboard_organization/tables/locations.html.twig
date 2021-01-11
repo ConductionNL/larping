@@ -1,0 +1,55 @@
+{% if locations is defined and locations|length > 0 %}
+    <table id="events" class="display nowrap table" style="width:100%">
+        <thead>
+        <tr>
+            <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'address'|trans|capitalize }}</th>
+            <th>{{ 'features'|trans|capitalize }}</th>
+            <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#LocationModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for location in locations %}
+            <tr>
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" href="{{ path('app_location_location', {id: location.id}) }}" target="_blank">{{ location.name }}</a>
+                </td>
+                <td>
+                    {% if location.address|default %}
+                    <span class="d-block">{{ address.street ~' '~ address.houseNumber }}</span>
+                    <span class="d-block">{{ address.postalCode ~' '~ address.region }}</span>
+                    {% endif %}
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#LocationModal{{ location.id }}">{{ 'edit'|trans|capitalize }}</a>
+                            <a class="dropdown-item" href="{{ path('app_location_location', {id: location.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card border-light shadow-sm">
+        <div class="card-body text-center">
+            <p>{{ 'no locations found'|trans|capitalize }}</p>
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#LocationModalAdd">{{ 'add your first location'|trans|capitalize }}!</a>
+        </div>
+    </div>
+{% endif %}
+
+{% include 'dashboard_organization/modals/location.html.twig' %}
+
+{% for location in locations %}
+    {% include 'dashboard_organization/modals/location.html.twig' with {'resource': location} %}
+{% endfor %}

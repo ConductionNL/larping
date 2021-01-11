@@ -1,51 +1,45 @@
-<form action="{{ path(path) }}" method="post">
+<form  method="GET">
+
+    <div class="row mb-6">
+        <div class="col-7">
+            <input type="text" class="form-control" id="search" name="search"
+                   placeholder="Enter Keyword" {% if search|default %} value="{{ search }}"  {% endif %}>
+        </div><!-- /.col -->
+        <div class="col-5">
+            <button type="submit" class="btn btn-block btn-primary">{{ 'search'|trans|title }}
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+
 
     <div class="mb-6">
-        <label class="mb-4 h5 font-weight-normal text-dark"
-               for="keywordInput">{{ 'what are you looking for'|trans|title }}?</label>
-        <input type="text" class="form-control" id="keywordInput" name="filters[keywordsInput]"
-               placeholder="Enter Keyword" {% if filters.keywordsInput|default %} value="{{ filters.keywordsInput }}"  {% endif %}>
-    </div>
-
-    <div class="mb-6">
-        <label class="mb-4 h5 font-weight-normal text-dark"
-               for="locationInput">{{ 'find by location'|trans|title }}</label>
-        <input type="text" class="form-control" id="locationInput" name="filters[locationInput]"
-               placeholder="Enter Location" {% if filters.locationInput|default %} value="{{ filters.locationInput }}" {% endif %}>
-    </div>
-
-    <div class="mb-3 text-center">
-        <button type="submit" class="btn btn-primary btn-sm">{{ 'search'|trans|title }}</button>
-        <button type="button" name="resetFilters" class="btn btn-danger btn-sm">{{ 'reset'|trans|title }}</button>
-    </div>
-
-    <div class="mb-6">
-        <h5 class="mb-4 font-weight-normal">Filter by Area</h5>
+        <h5 class="mb-4 font-weight-normal">{{ 'categories'|trans|title }}</h5>
         <ul class="list-unstyled list-gray">
-            <li class="mb-2"><a href="#Dhaka">Dhaka</a></li>
-            <li class="mb-2"><a href="#Chittagong">Chittagong</a></li>
-            <li class="mb-2"><a href="#Rajshahi">Rajshahi</a></li>
-            <li class="mb-2"><a href="#Khulna">Khulna</a></li>
-            <li class="mb-2"><a href="#Barisal">Barisal</a></li>
-            <li class="mb-2"><a href="#Barisal">Sylhet</a></li>
-            <li class="mb-2"><a href="#Barisal">Rangpure</a></li>
-            <li class="mb-2"><a href="#Barisal">Gazipure</a></li>
-            <li class="mb-2"><a href="#Pabna">Pabna</a></li>
+            {% for category in settings %}
+                <li class="mb-2">
+                {% if category.id in categories %}
+                <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span></a>
+                {% else %}
+                <a href="{{ path('app_event_index', {"categories":categories|merge([category.id]),"search":search}) }}">{{ category.name|title }} </a>
+                {% endif %}
+                </li>
+            {% endfor %}
         </ul>
     </div>
 
     <div class="mb-6">
-        <h5 class="mb-4 font-weight-normal">Related Categories</h5>
+        <h5 class="mb-4 font-weight-normal">{{ 'features'|trans|title }}</h5>
         <ul class="list-unstyled list-gray">
-            <li class="mb-2"><a href="#">Fast food</a></li>
-            <li class="mb-2"><a href="#">Chinese restaurants</a></li>
-            <li class="mb-2"><a href="#">Creole restaurants</a></li>
-            <li class="mb-2"><a href="#">Seafood</a></li>
-            <li class="mb-2"><a href="#">Thai restaurants</a></li>
-            <li class="mb-2"><a href="#">Street food</a></li>
-            <li class="mb-2"><a href="#">Japanese restaurants</a></li>
-            <li class="mb-2"><a href="#">Greek restaurants</a></li>
+            {% for category in features %}
+                <li class="mb-2">
+                    {% if category.id in categories %}
+                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span></a>
+                    {% else %}
+                        <a href="{{ path('app_event_index', {"categories":categories|merge([category.id]),"search":search}) }}">{{ category.name|title }} </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
         </ul>
     </div>
-
 </form>

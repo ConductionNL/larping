@@ -1,70 +1,68 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-
-    {% if location.organization|default %}
-        {% set organization = commonground_resource(location.organization) %}
-    {% endif %}
-
     <section class="py-7 pt-md-9 pb-md-8 ">
         <div class="container">
             <div class="row">
                 <div class="col-md-7 col-lg-8">
-                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ event.name }}</h1>
-                    <!-- Breadcrumb -->
-                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
-                        <ul class="list-unstyled d-flex p-0 m-0">
-                            <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a
-                                    href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a>
-                            </li>
-                            <li class="breadcrumb-item active"
-                                aria-current="page">{{ event.name }}</li>
-                        </ul>
-                    </nav>
                     <div class="mb-2 mb-lg-0">
-                        {#                        {% if product.emails.0.email|default %}#}
-                        {#                            <p class="text-muted mb-1"><i#}
-                        {#                                    class="fa fa-mail-forward text-primary mr-1"></i>{{ item.emails.0.email }}#}
-                        {#                            </p>#}
-                        {#                        {% endif %}#}
-                        {#                        {% if item.phonenumbers.0.phonenumber|default %}#}
-                        {#                            <p class="text-muted mb-1"><i#}
-                        {#                                    class="fa fa-phone text-primary mr-1"></i> {{ item.phonenumbers.0.phonenumber }}#}
-                        {#                            </p>#}
-                        {#                        {% endif %}#}
-                        <div class="d-flex align-items-center">
-                            <ul class="list-inline mr-2">
-                                {% if event.startDate|default %}
-                                    <li class="list-inline-item">
-                                        {{ 'startdate'|trans|capitalize }}: {{ event.startDate|date("d-m-Y") }}
-                                    </li><br>
-                                {% endif %}
-                                {% if event.endDate|default %}
-                                    <li class="list-inline-item">
-                                        {{ 'enddate'|trans|capitalize }}: {{ event.endDate|date("d-m-Y") }}
-                                    </li>
-                                {% endif %}
+                        <h1 class="single-listing-title">{{ location.name }}</h1>
+
+                        <!-- Breadcrumb -->
+                        <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
+                            <ul class="list-unstyled d-flex p-0 m-0">
+                                <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{ path('app_location_index') }}">{{ 'locations'|trans|capitalize }}</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ location.name }}</li>
                             </ul>
+                        </nav>
+
+                        <!-- Ratings -->
+                        <div class="d-flex align-items-center">
+                            {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
+                            <span class="d-inline-block mr-2">{{ totals.rating }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
+                                <i class="fal fa-heart text-primary" aria-hidden="true"></i>
+                                <span>{{ totals.likes }}</span>
+                            </button>
                         </div>
+
                     </div>
+                </div> <!--/.col -->
+                <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
+                    <a href="#add-review" class="btn btn-primary">{{ 'write a review'|trans|capitalize }}</a>
+                </div><!--/.col -->
+            </div><!-- /.row -->
+        </div><!--/.container -->
+    </section>
+
+    <!-- ====================================
+    ———	MAIN CONTENT
+    ===================================== -->
+    <section class="pt-7 pb-4 pt-md-9 pb-md-8">
+        <div class="container">
+            <div class="row">
+                <!--======= Main =======-->
+                <div class="col-md-8 col-lg-8 single-listing-content">
                     <!-- About -->
-                    <div class="single-listing-content mb-6">
-                        {% if event.description|default %}
-                            <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }} {{ event.name }}</h3>
-                            <p class="mb-6">{{ event.description }}</p>
-                        {% endif %}
-                    </div>
-                    <hr>
+                    {% if location.description|default %}
+                        <div class="single-listing-content mb-6">
+                            <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {%if location.name|default %}{{ location.name }}{% endif %}</h3>
+                            <p class="mb-6">{{ location.description }}</p>
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
                     <!-- Features -->
                     <div class="my-6">
                         <h3 class="font-weight-normal mb-6">{{ 'features'|trans|capitalize }}</h3>
                         <ul class="list-unstyled mb-7">
-                            {% if event.categories is defined and event.categories is not empty %}
-                                {% for categories in event.categories %}
+                            {% if categories is defined and categories is not empty %}
+                                {% for category in categories %}
                                     <li class="d-inline-block mr-4 mb-2">
-                                        <i class="fa fa-check mr-2" aria-hidden="true"></i>
-                                        {{ commonground_resource(categories).name }}
+                                        <i class="{{ category.icon }} mr-2" aria-hidden="true"></i>
+                                        {{ category.name }}
                                     </li>
                                 {% endfor %}
                             {% else %}
@@ -73,177 +71,20 @@
                                 </li>
                             {% endif %}
                         </ul>
-                        <hr>
-                    </div>
-
-                    <!-- Offers -->
-                    {% if product.offers|default %}
-                        <div class="my-6">
-                            <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
-                            <form action="{{ path(path, {id: event.id}) }}" method="post">
-
-                                {% if product.prerequisiteProducts|default %}
-                                    <p style="color: indianred">{{ 'there are other products needed before you can buy this product'|capitalize|trans }}
-                                        :</p>
-                                    {% set counter = 1 %}
-                                    {% for product in product.prerequisiteProducts %}
-
-                                        {# Check if this product is owned or in session order #}
-                                        {% set ownsThisProduct = owns_this_product(product) %}
-
-                                        {% if ownsThisProduct|default and ownsThisProduct == false %}
-                                            {% set product = commonground_resource(product['@id']) %}
-                                            {% set counter = counter + 1 %}
-                                            <div class="form-group p-3"
-                                                 style="border-radius: 6px;background: rgba(205,92,92,0.4)">
-                                                <label for="offerInput"
-                                                       style="color: white">{{ product.name|capitalize }}</label>
-                                                <select id="offerInput" class="form-control"
-                                                        name="offers[{{ counter }}][@id]" required>
-                                                    <option
-                                                        value="">{{ 'select an'|trans|capitalize~' '~'offer'|trans }}</option>
-                                                    {% for offer in product.offers %}
-                                                        <option value="{{ offer['@id'] }}">{{ offer.name }}
-                                                            &euro; {{ offer.price }},-
-                                                        </option>
-                                                        <input name="offers[{{ counter }}][path]" type="hidden"
-                                                               value="/events/{{ event.id }}">
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        {% else %}
-                                            <div class="form-group p-3"
-                                                 style="border-radius: 6px;background: rgba(144,238,144, 0.8)">
-                                                <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}
-                                                    :</p>
-                                                <label
-                                                    style="color: white">{{ product.name|capitalize }}</label>
-                                            </div>
-                                        {% endif %}
-                                        {% set ownsThisProduct = 'false' %}
-                                    {% endfor %}
-                                {% endif %}
-
-                                <div class="row">
-                                    <div class="form-group col-8">
-                                        <label for="offerInput">{{ 'offer'|trans|capitalize }}</label>
-                                        <select id="offerInput" class="form-control" name="offers[0][@id]" required>
-                                            <option
-                                                value="">{{ 'select an'|trans|capitalize~' '~'offer'|trans }}</option>
-                                            {% for offer in product.offers %}
-                                                <option value="{{ offer['@id'] }}">{{ offer.name }}
-                                                    &euro; {{ offer.price }},-
-                                                </option>
-                                            {% endfor %}
-                                        </select>
-                                        <input name="offers[0][path]" type="hidden" value="/events/{{ event.id }}">
-                                    </div>
-                                    <div class="form-group col-4">
-                                        <label for="quantityInput">{{ 'quantity'|trans|capitalize }}</label>
-                                        <input min="1" value="1" class="form-control" name="offers[0][quantity]"
-                                               type="number"
-                                               id="quantityInput">
-                                    </div>
-                                </div>
-
-                                <input type="hidden" name="makeOrder" value="true">
-                                <button type="submit"
-                                        class="btn btn-primary btn-block">{{ 'add to cart and pay'|trans|capitalize }}</button>
-
-                                {#                                <button type="submit"#}
-                                {#                                        class="btn btn-primary btn-block">{{ 'add to cart'|trans|capitalize }}</button>#}
-                            </form>
-                            <hr>
-                        </div>
-                    {% endif %}
-
-                    <!-- Added by -->
-                    <div>
-                        <h3 class="font-weight-normal mb-6">{{ 'organized by'|trans|capitalize }}</h3>
-                        <div class="media mb-7">
-                            {% if organization.style.favicon.base64|default %}
-                                <div class="media-img">
-                                    <img src="
-                                {{ organization.style.favicon.base64 }}"
-                                         class="mr-3 media-object rounded-circle" alt="Image User">
-                                </div>
-                            {% endif %}
-                            {% if organization|default %}
-                                <div class="media-body">
-                                    <h5 class="media-heading">{{ organization.name }}</h5>
-                                    <p>{{ organization.description }}</p>
-                                    <div class="d-flex flex-column flex-lg-row align-items-lg-center">
-                                        {% if contact is defined and contact is not empty %}
-                                            <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
-                                                {% if contact.telephones is not empty and contact.emails is not empty %}
-                                                    <li class="list-inline-item">
-                                                        <i class="fa fa-phone" aria-hidden="true"></i>
-                                                        <span class="ml-2">
-                                                {{ contact.telephones[0].telephone }}</span>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                                                        <span class="ml-2">{{ contact.emails[0].email }}</span>
-                                                    </li>
-                                                {% else %}
-                                                    <li class="list-inline-item">
-                                                        {{ "contact info not found"|trans|capitalize }}
-                                                    </li>
-                                                {% endif %}
-
-                                            </ul>
-                                        {% else %}
-                                            <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
-                                                <li class="list-inline-item">
-                                                    {{ "contact info not found"|trans|capitalize }}
-                                                </li>
-                                            </ul>
-                                        {% endif %}
-
-                                        {% if contact.socials is defined and contact.socials is not empty %}
-                                            {% set socials = contact.socials %}
-                                            <ul class="list-inline list-inline-icon ml-lg-auto">
-                                                <li class="list-inline-item">
-                                                    <a class="mr-2" href="{{ socials.facebook }}">
-                                                        <i class="fa fa-facebook-official" aria-hidden="true"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mr-2" href="{{ socials.twitter }}">
-                                                        <i class="fa fa-twitter" aria-hidden="true"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mr-2" href="{{ socials.instagram }}">
-                                                        <i class="fa fa-instagram" aria-hidden="true"></i>
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-                                        {% else %}
-                                            <ul class="list-inline list-inline-icon ml-lg-auto">
-                                                <li class="list-inline-item">
-                                                    {{ 'no socials found'|trans|capitalize }}
-                                                </li>
-                                            </ul>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <hr>
-                    </div>
-
-                    <!-- Reviews -->
-                    {% if reviews is defined and reviews is not empty %}
-                    <div>
-                        <h3 class="font-weight-normal mb-6">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
-                        {%  include '/sections/reviews.html.twig' %}
                     </div>
 
                     <hr>
-                {% endif %}
+
+
+                    <!-- Reviews -->
+                    {% if reviews is defined and reviews is not empty %}
+                        <div>
+                            <h3 class="font-weight-normal mb-6">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
+                            {%  include '/sections/reviews.html.twig' %}
+                        </div>
+
+                        <hr>
+                    {% endif %}
 
                     <!-- Add a review -->
                     <div id="add-review">
