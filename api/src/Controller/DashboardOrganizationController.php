@@ -345,14 +345,13 @@ class DashboardOrganizationController extends AbstractController
         if ($request->isMethod('POST')) {
             // Get the current resource
             $location = $request->request->all();
-            $location['organization'] = $variables['organization']['@id'];
             // Set the current organization as owner
-
+            $location['organization'] = $variables['organization']['@id'];
 
             $categories = $location['categories'];
             if(!$categories) $categories = [];
             unset($location['categories']);
-
+            
             // Save the resource
             $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
 
