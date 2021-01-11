@@ -49,7 +49,7 @@
                                             <a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }} </a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_index') }}">{{ 'edit'|trans|capitalize }} </a>
+                                            <a href="{{ path('app_dashboardorganization_index') }}">{{ 'edit profile'|trans|capitalize }} </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
@@ -247,13 +247,6 @@
                             {#                                        {% endif %}#}
                             {#                                    </a>#}
                             <ul class="dropdown-menu" style="min-width: 200px;">
-                                <li>
-                                    <a class="d-flex flex-wrap align-items-center"
-                                       href="{{ path('app_dashboard_index') }}">
-                                        <i class="fas fa-tachometer mr-2" aria-hidden="true"></i>
-                                        <span>{{ 'dashboard'|trans|capitalize }}</span>
-                                    </a>
-                                </li>
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_organizations') }}">
