@@ -289,7 +289,6 @@
          <source>categories</source>
          <target>categorieën</target>
          </trans-unit>
-
          <trans-unit id="8HBAYsd" resname="contact us">
          <source>contact us</source>
          <target>contact</target>
@@ -330,12 +329,18 @@
          <source>all regions</source>
          <target>alle regio's</target>
          </trans-unit>
+         <trans-unit id="BBAStZq" resname="regions">
+         <source>regions</source>
+         <target>regio's</target>
+         </trans-unit>
+         <trans-unit id="BaFttZq" resname="favorites">
+         <source>favorieten</source>
+         <target>favorieten</target>
+         </trans-unit>
          <trans-unit id="GBYEzZq" resname="enter your keywords">
          <source>enter your keywords</source>
          <target>voer uw zoekwoorden in</target>
          </trans-unit>
-
-
     </body>
   </file>
 </xliff>
