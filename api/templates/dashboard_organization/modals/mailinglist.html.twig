@@ -1,24 +1,29 @@
 {% extends "dashboard_organization/modals/modal.html.twig" %}
 
 {% if resource is defined %}
-    {% set  id = resource['id'] %}
-    {% set  type = 'Mailinglist' %}
+    {% set id = resource['id'] %}
 {% else %}
-    {% set  id = 'Add' %}
-    {% set  type = 'Mailinglist' %}
+    {% set id = 'Add' %}
 {% endif %}
+{% set type = 'Mailinglist' %}
 
 {% block body %}
 <form id="{{ type }}Form{{ id }}" method="post">
     {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
     {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
+    <!-- Name -->
     <div class="form-group">
-        <label for="name">{{ 'name'|trans|capitalize }}*</label>
-        <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+        <label for="name">{{ 'name'|trans|capitalize }} </label>
+        <input class="form-control" name="name" id="name" type="text" placeholder="{{ 'newsletter'|trans|capitalize }}">
     </div>
+
+    <!-- Description -->
     <div class="form-group">
-        <label for="description">{{ 'description'|trans|capitalize }}</label>
-        <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+        <label for="description">{{ 'description'|trans|capitalize }} </label>
+        <textarea class="form-control" name="description" id="description"
+                  cols="2" rows="1" style="max-height: 8rem; min-height: 3.5rem"
+                  placeholder="{{ 'description'|trans|capitalize }}"
+        ></textarea>
     </div>
 </form>
 {% endblock %}
