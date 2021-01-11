@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -216,13 +217,27 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/mailings")
+     * @Route("/mailinglists")
      * @Template
      */
-    public function mailingsAction(CommonGroundService $commonGroundService, Request $request)
+    public function mailinglistsAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['mailings'] = [];
+        $variables['mailingLists'] = [];
+//        $variables['mailingLists'] = $idVaultService->getSendLists();
+
+        if ($request->isMethod('POST') && $request->request->get('MailingEvent') == 'true') {
+            // Send email to all subscribers of this mailing list.
+        } elseif ($request->isMethod('POST')) {
+            // Get the resource
+            $sendList = $request->request->all();
+            // Set Organization and email sendList type
+            $sendList['organization'] = $variables['organization']['@id'];
+            $sendList['email'] = true;
+
+            // Save the mailing list resource
+            //$commonGroundService->saveResource($sendList, ['component' => 'bs', 'type' => 'send_lists']);
+        }
 
         return $variables;
     }

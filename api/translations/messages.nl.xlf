@@ -53,6 +53,18 @@
         <source>no e-mail</source>
         <target>geen e-mail</target>
       </trans-unit>
+      <trans-unit id="UwwPUFN" resname="Mailing Lists">
+        <source>Mailing Lists</source>
+        <target>E-mail Lijsten</target>
+      </trans-unit>
+      <trans-unit id="i-FjlYV" resname="no mailing lists found">
+        <source>no mailing lists found</source>
+        <target>geen e-mail lijsten gevonden</target>
+      </trans-unit>
+      <trans-unit id="1ok7NWH" resname="add your first mailing list">
+        <source>add your first mailing list</source>
+        <target>voeg uw eerste e-mail lijst toe</target>
+      </trans-unit>
       <trans-unit id="On1bas2" resname="no results found">
         <source>no results found</source>
         <target>geen resultaten gevonden</target>
