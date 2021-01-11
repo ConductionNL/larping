@@ -6,8 +6,6 @@ namespace App\Controller;
 
 use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
-use http\Env\Response;
-use phpDocumentor\Reflection\Types\String_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -40,7 +38,6 @@ class DefaultController extends AbstractController
 
         return $variables;
     }
-
 
     /**
      * @Route("/newsletter")
@@ -81,19 +78,20 @@ class DefaultController extends AbstractController
                 $like = $likes[0];
                 // Delete this existing like
                 $commonGroundService->deleteResource($like);
-                return new JsonResponse(array('data' => 'unliked'));
-            }else {
+
+                return new JsonResponse(['data' => 'unliked']);
+            } else {
                 $like['author'] = $this->getUser()->getPerson();
                 $like['resource'] = $request->get('resource');
                 $like['organization'] = 'https://test.com';
                 $like = $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
-                return new JsonResponse(array('data' => 'liked'));
+
+                return new JsonResponse(['data' => 'liked']);
             }
         } else {
-            return new JsonResponse(array('data' => 'you are not logged in'));
+            return new JsonResponse(['data' => 'you are not logged in']);
         }
     }
-
 
     /**
      * @Route("/how_it_works")
@@ -101,9 +99,7 @@ class DefaultController extends AbstractController
      */
     public function howItWorksAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-
     }
-
 
     /**
      * @Route("/payment")
@@ -111,9 +107,7 @@ class DefaultController extends AbstractController
      */
     public function paymentAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-
     }
-
 
     /**
      * @Route("/pricing")
@@ -121,9 +115,7 @@ class DefaultController extends AbstractController
      */
     public function pricingAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-
     }
-
 
     /**
      * @Route("/terms_and_conditions")
@@ -131,7 +123,6 @@ class DefaultController extends AbstractController
      */
     public function termsAndConditionsAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-
     }
 
     /**
