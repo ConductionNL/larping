@@ -3,10 +3,10 @@ entries:
   larping:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-01-11T08:01:50.6044817Z"
+    created: "2021-01-11T16:11:01.6569469Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
-    digest: 85457f8a21defb5d579e16c26a96a260cb6c3dd7b34400a75035bd167d405e05
+    digest: 531d6543f6002729f65f202d28ab33d7d07f2a5f13bbdbb1648cf42e787b4417
     home: www.larping.eu
     icon: www.larping.eu
     name: larping
@@ -16,7 +16,7 @@ entries:
   stage-platform:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-01-11T08:01:50.6112557Z"
+    created: "2021-01-11T16:11:01.6633197Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
     digest: c1f66c64f25eee68e386ece411c43f23b2fbc0670e9c625d75cb9178d219e9cd
@@ -26,4 +26,4 @@ entries:
     urls:
     - stage-platform-0.1.0.tgz
     version: 0.1.0
-generated: "2021-01-11T08:01:50.5977522Z"
+generated: "2021-01-11T16:11:01.6480844Z"
