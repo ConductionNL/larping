@@ -133,4 +133,24 @@ class DefaultController extends AbstractController
     {
 
     }
+
+    /**
+     * @Route("/contact")
+     * @Template
+     */
+    public function contactAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+        $variables = [];
+//        $variables['request'] = $commonGroundService->getResourceList(['component' => 'vrc', 'type' => 'requests'])['hydra:member'];
+
+        if ($this->getUser() && $request->isMethod('POST')) {
+            $resource = $request->request->all();
+            $resource['organization'] = 'https://dev.larping.eu';
+            $resource['submitters'] = $this->getUser()->getPerson();
+
+            $commonGroundService->saveResource($resource, ['component' => 'vrc', 'type' => 'requests']);
+        }
+
+        return $variables;
+    }
 }
