@@ -211,7 +211,8 @@ class DashboardOrganizationController extends AbstractController
                 $offer['audience'] =  'audience';
             }
 
-            //$variables['product']['offers'] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+            if(!array_key_exists('offers',$variables['product'])) $variables['product']['offers'] = [];
+            $variables['product']['offers'][] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
 
         }
 
