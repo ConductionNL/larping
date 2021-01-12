@@ -16,7 +16,8 @@
                         <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
                             <ul class="list-unstyled d-flex p-0 m-0">
                                 <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
+                                <li class="breadcrumb-item"><a
+                                        href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">{{ event.name }}</li>
                             </ul>
                         </nav>
@@ -24,8 +25,10 @@
                         <!-- Ratings -->
                         <div class="d-flex align-items-center">
                             {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                            <span class="d-inline-block mr-2">{{ totals.rating }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
-                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
+                            <span
+                                class="d-inline-block mr-2">{{ totals.rating }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top"
+                                    title="Favourite this listing">
                                 <i class="fal fa-heart text-primary" aria-hidden="true"></i>
                                 <span>{{ totals.likes }}</span>
                             </button>
@@ -65,7 +68,7 @@
                     <!-- About -->
                     {% if event.description|default %}
                         <div class="single-listing-content mb-6">
-                            <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {%if event.name|default %}{{ event.name }}{% endif %}</h3>
+                            <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {% if event.name|default %}{{ event.name }}{% endif %}</h3>
                             <p class="mb-6">{{ event.description }}</p>
                         </div>
 
@@ -99,8 +102,6 @@
                             <form action="{{ path('app_shopping_addoffers') }}" method="post">
 
                                 {% if product.prerequisiteProducts|default %}
-                                    <p style="color: indianred">{{ 'there are other products needed before you can buy this product'|capitalize|trans }}
-                                        :</p>
                                     {% set counter = 1 %}
                                     {% for product in product.prerequisiteProducts %}
 
@@ -110,23 +111,36 @@
                                         {% if ownsThisProduct is not null and ownsThisProduct == false %}
                                             {% set product = commonground_resource(product['@id']) %}
                                             {% set counter = counter + 1 %}
-                                            <div class="form-group p-3"
-                                                 style="border-radius: 6px;background: rgba(205,92,92,0.4)">
-                                                <label for="offerInput"
-                                                       style="color: white">{{ product.name|capitalize }}</label>
-                                                <select id="offerInput" class="form-control"
-                                                        name="offers[{{ counter }}][offer]" required>
-                                                    <option
-                                                        value="">{{ 'select an'|trans|capitalize~' '~'offer'|trans }}</option>
-                                                    {% for offer in product.offers %}
-                                                        <option value="{{ offer['@id'] }}">{{ offer.name }}
-                                                            &euro; {{ offer.price }},-
-                                                        </option>
-                                                        <input name="offers[{{ counter }}][path]" type="hidden"
-                                                               value="/events/{{ event.id }}">
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
+                                            <p style="color: indianred">{{ 'to purchase this product, another product is required and will be added to your shopping cart'|capitalize|trans }}
+                                                :</p>
+                                            <p class="p-3"
+                                               style="border-radius: 6px;background: rgba(205,92,92,0.4);color: white">{{ product.name|capitalize }}
+                                                <span
+                                                    class="float-right mr-4">&euro; {{ product.offers.0.price }},-</span>
+                                            </p>
+                                            <input type="hidden" name="offers[{{ counter }}][offer]"
+                                                   value="{{ product.offers.0['@id'] }}">
+                                            <input name="offers[{{ counter }}][path]" type="hidden"
+                                                   value="/events/{{ event.id }}">
+                                            {#                                                <div class="form-group p-3"#}
+                                            {#                                                     style="border-radius: 6px;background: rgba(205,92,92,0.4)">#}
+                                            {#                                                    <label for="offerInput"#}
+                                            {#                                                           style="color: white">{{ product.name|capitalize }} <span#}
+                                            {#                                                            class="float-right">{{ product.offers.0.price }}</span></label>#}
+                                            {#                                                    <select id="offerInput" class="form-control"#}
+                                            {#                                                            name="offers[{{ counter }}][offer]" required>#}
+                                            {#                                                        <option#}
+                                            {#                                                            value="">{{ 'select an'|trans|capitalize~' '~'offer'|trans }}</option>#}
+                                            {#                                                        {% for offer in product.offers %}#}
+                                            {#                                                            <option value="{{ offer['@id'] }}">{{ offer.name }}#}
+                                            {#                                                                &euro; {{ offer.price }},-#}
+                                            {#                                                            </option>#}
+                                            {#                                                            <input name="offers[{{ counter }}][path]" type="hidden"#}
+                                            {#                                                                   value="/events/{{ event.id }}">#}
+                                            {#                                                        {% endfor %}#}
+                                            {#                                                    </select>#}
+                                            {#                                                </div>#}
+
                                         {% else %}
                                             <div class="form-group p-3"
                                                  style="border-radius: 6px;background: rgba(144,238,144, 0.8)">
@@ -255,18 +269,19 @@
 
                     <!-- Reviews -->
                     {% if reviews is defined and reviews is not empty %}
-                    <div>
-                        <h3 class="font-weight-normal mb-6">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
-                        {%  include '/sections/reviews.html.twig' %}
-                    </div>
+                        <div>
+                            <h3 class="font-weight-normal mb-6">{% if stats|default %}({{ stats.reviews }}
+                                ){% endif %} {{ 'reviews'|trans|capitalize }}</h3>
+                            {% include '/sections/reviews.html.twig' %}
+                        </div>
 
-                    <hr>
+                        <hr>
                     {% endif %}
 
                     <!-- Add a review -->
                     <div id="add-review">
                         <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
-                        {%  include '/sections/review.html.twig' %}
+                        {% include '/sections/review.html.twig' %}
                     </div>
 
                 </div>
