@@ -93,6 +93,7 @@
                         {%  include '/cards/event.html.twig' with {'item': event}  %}
                         </div>
                     {% endfor %}
+                    </div><!-- /.row -->
                 </div>
 
                 <hr>
@@ -108,7 +109,7 @@
                         {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
                         </div>
                     {% endfor %}
-                    </div>
+                    </div><!-- /.row -->
                 </div>
 
                 <hr>
@@ -127,14 +128,28 @@
                 <!-- Add a review -->
                 <div id="add-review">
                     <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
-                    {%  include '/sections/review.html.twig' %}
+                    {%  include '/sections/review.html.twig' with {'item': organization} %}
                 </div>
             </div><!-- /.col -->
+
             <!--======= Sidebar =======-->
             <div class="col-md-5 col-lg-4 pl-xl-8">
+                <!-- Contact  -->
+                <h5>{{ 'contact'|trans|capitalize }}</h5>
+                {% include 'widgets/contact.html.twig' %}
 
+                <!-- You may also like  -->
+                {% if categories is defined and categories is not empty %}
+                <h5>{{ 'categories might like'|trans|capitalize }}</h5>
+                {% for category in categories %}
+                    {% include 'cards/category.html.twig' with {
+                        'item': category
+                    } %}
+                {% endfor %}
+
+                {% endif %}
             </div><!-- /.col -->
-        </div> <!-- /.container -->
+        </div> <!-- /.row -->
     </div> <!-- /.container -->
 </section>
 
