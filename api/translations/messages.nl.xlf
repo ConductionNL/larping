@@ -359,11 +359,15 @@
          </trans-unit>
          <trans-unit id="oNAHXbG" resname="send review">
          <source>send review</source>
-         <target>verstuur recensie</target>
+         <target>verstuur review</target>
+         </trans-unit>
+         <trans-unit id="fDrHXbG" resname="add a review">
+         <source>add a review</source>
+         <target>voeg een review toe</target>
          </trans-unit>
          <trans-unit id="uBNAYXS" resname="enter your review">
          <source>enter your review</source>
-         <target>voer uw recensie in</target>
+         <target>voer uw review in</target>
          </trans-unit>
          <trans-unit id="nayMMbG" resname="submit review">
          <source>submit review</source>
