@@ -48,9 +48,11 @@
                         </div>
                     </div>
                 </div> <!--/.col -->
+                {% if product.offers|default %}
                 <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
-                    <a href="#add-review" class="btn btn-primary">{{ 'write a review'|trans|capitalize }}</a>
+                    <a href="#offers" class="btn btn-primary">{{ 'buy a ticket'|trans|capitalize }}</a>
                 </div><!--/.col -->
+                {% endif %}
             </div><!-- /.row -->
         </div><!--/.container -->
     </section>
@@ -85,7 +87,7 @@
 
                     <!-- Offers -->
                     {% if product.offers|default %}
-                        <div class="my-6">
+                        <div class="my-6" id="offers">
                             <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
                             <form action="{{ path('app_shopping_addoffers') }}" method="post">
 
@@ -257,7 +259,7 @@
                     <!-- Add a review -->
                     <div id="add-review">
                         <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
-                        {%  include '/sections/review.html.twig' %}
+                        {%  include '/sections/review.html.twig' with {'item': event} %}
                     </div>
 
                 </div>
@@ -266,15 +268,17 @@
                 <!--======= Sidebar =======-->
                 <div class="col-md-5 col-lg-4 pl-xl-8">
                     <!-- Single listing Map -->
-                    {% if event.location|default %}
-                        {% include 'widgets/single_listing_map.html.twig' with {
-                            'location': event.location
-                        } %}
-                    {% endif %}
+                    {% include 'widgets/map.html.twig' %}
+
+                    <!-- Contact  -->
+                    <h5>{{ 'contact'|trans|capitalize }}</h5>
+                    {% include 'widgets/contact.html.twig' %}
 
                     <!-- You may also like  -->
                     <h5>{{ 'other events you might like'|trans|capitalize }}</h5>
-                    {% include 'widgets/you_may_like.html.twig' %}
+                    {% for event in events %}
+                            {% include '/cards/event.html.twig' with {'item': event} %}
+                    {% endfor %}
                 </div>
 
             </div>

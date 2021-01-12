@@ -8,6 +8,7 @@ use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -201,11 +202,61 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/members")
      * @Template
      */
-    public function membersAction(CommonGroundService $commonGroundService, Request $request)
+    public function membersAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['users'] = [];
-        $variables['groups'] = [];
+        $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $variables['organization']['id']]);
+        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+
+        $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
+
+        if (count($variables['groups']) == 0) {
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$variables['organization']['name']}", $organizationUrl);
+            $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
+            $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
+            $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
+        }
+
+        $users = [];
+        foreach ($variables['groups'] as $group) {
+            foreach ($group['users'] as $user) {
+                if (in_array($user, $users)) {
+                    $users[$user]['groups'][] = $group['name'];
+                } else {
+                    $users[$user]['name'] = $user;
+                    $users[$user]['groups'][] = $group['name'];
+                }
+            }
+        }
+        $variables['users'] = $users;
+
+        if ($request->isMethod('POST') && $request->get('newGroup')) {
+            $result = $idVaultService->createGroup($provider['configuration']['app_id'], $request->get('name'), $request->get('description'), $organizationUrl);
+            if (isset($result['id'])) {
+                $this->addFlash('success', 'Groep is aangemaakt');
+            } else {
+                $this->addFlash('error', 'Er is een fout opgetreden');
+            }
+
+            return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
+        } elseif ($request->isMethod('POST') && $request->get('inviteUser')) {
+            $email = $request->get('email');
+            $selectedGroup = $request->get('group');
+
+            foreach ($variables['groups'] as $group) {
+                if ($group['name'] == 'root' && !in_array($email, $group['users'])) {
+                    $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, true);
+                }
+                if ($group['id'] == $selectedGroup && !in_array($email, $group['users'])) {
+                    $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, true);
+                    $this->addFlash('success', 'gebruiker is toegevoegd aan groep');
+                } elseif ($group['id'] == $selectedGroup && in_array($email, $group['users']) && $group['name'] !== 'root') {
+                    $this->addFlash('error', 'Gebruiker zit al in de gekozen groep');
+                }
+            }
+
+            return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
+        }
 
         return $variables;
     }
@@ -366,7 +417,7 @@ class DashboardOrganizationController extends AbstractController
                 $categories = [];
             }
 
-            if (!empty($address)){
+            if (!empty($address)) {
                 if (!isset($address['name'])) {
                     $address['name'] = $location['name'];
                 }
@@ -413,27 +464,27 @@ class DashboardOrganizationController extends AbstractController
             $categories = $resource['categories'];
 
             $email = [];
-            $email['name'] = 'email for ' . $person['name'];
+            $email['name'] = 'email for '.$person['name'];
             $email['email'] = $request->get('email');
             if (isset($email['id'])) {
                 $commonGroundService->saveResource($email, ['component' => 'cc', 'type' => 'emails']);
-                $resource['emails'][] = '/emails/' . $email['id'];
+                $resource['emails'][] = '/emails/'.$email['id'];
             } elseif (isset($email['email'])) {
                 $resource['emails'][] = $email;
             }
 
             $telephone = [];
-            $telephone['name'] = 'telephone for ' . $person['name'];
+            $telephone['name'] = 'telephone for '.$person['name'];
             $telephone['telephone'] = $request->get('telephone');
             if (isset($telephone['id'])) {
                 $commonGroundService->saveResource($telephone, ['component' => 'cc', 'type' => 'telephones']);
-                $resource['telephones'][] = '/telephones/' . $telephone['id'];
+                $resource['telephones'][] = '/telephones/'.$telephone['id'];
             } elseif (isset($telephone['telephone'])) {
                 $resource['telephones'][] = $telephone;
             }
 
             $address = [];
-            $address['name'] = 'address for ' . $person['name'];
+            $address['name'] = 'address for '.$person['name'];
             $address['street'] = $request->get('street');
             $address['houseNumber'] = $request->get('houseNumber');
             $address['houseNumberSuffix'] = $request->get('houseNumberSuffix');
@@ -441,7 +492,7 @@ class DashboardOrganizationController extends AbstractController
             $address['locality'] = $request->get('locality');
             if (isset($address['id'])) {
                 $commonGroundService->saveResource($address, ['component' => 'cc', 'type' => 'addresses']);
-                $resource['adresses'][] = '/addresses/' . $address['id'];
+                $resource['adresses'][] = '/addresses/'.$address['id'];
             } else {
                 $resource['adresses'][] = $address;
             }
@@ -538,5 +589,4 @@ class DashboardOrganizationController extends AbstractController
 
         return $variables;
     }
-
 }
