@@ -4,18 +4,12 @@
 
 namespace App\Controller;
 
-use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Security\User\IdVaultUser;
 use Conduction\IdVaultBundle\Service\IdVaultService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
@@ -28,7 +22,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class DashboardController extends AbstractController
 {
     /**
-     * Lets catch any users lost in routes
+     * Lets catch any users lost in routes.
      *
      * @Route("/")
      */
@@ -38,7 +32,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * Method  for switching the organization on a user session
+     * Method  for switching the organization on a user session.
      *
      * @Route("/switch-organization/{id}")
      */

@@ -7,17 +7,12 @@ namespace App\Controller;
 use App\Service\MailingService;
 use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
-use http\Env\Response;
-use phpDocumentor\Reflection\Types\String_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * The OrderController handles any calls about orders.
@@ -28,31 +23,31 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class OrderController extends AbstractController
 {
-    /**
-     * @Route("/")
-     * @Template
-     */
-    public function indexAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $ss, MailingService $mailingService, Request $request, ParameterBagInterface $params)
-    {
-        $variables = [];
-
-        if ($this->getUser() && $this->getUser()->getPerson()) {
-            $person = $this->getUser()->getPerson();
-            if ($request->request->get('makeOrder') == null or $request->request->get('makeOrder') != 'true') {
-                $variables['order'] = $ss->makeOrder($person);
-            }
-        } else {
-            $variables['order'] = $session->get('order');
-        }
-
-        if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' && isset($variables['order']) &&
-            $this->getUser()) {
-            $variables['order'] = $ss->makeOrder($person);
-            $ss->redirectToMollie($variables['order']);
-        }
-
-        return $variables;
-    }
+//    /**
+//     * @Route("/")
+//     * @Template
+//     */
+//    public function indexAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $ss, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+//    {
+//        $variables = [];
+//
+//        if ($this->getUser() && $this->getUser()->getPerson()) {
+//            $person = $this->getUser()->getPerson();
+//            if ($request->request->get('makeOrder') == null or $request->request->get('makeOrder') != 'true') {
+//                $variables['order'] = $ss->makeOrder($person);
+//            }
+//        } else {
+//            $variables['order'] = $session->get('order');
+//        }
+//
+//        if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' && isset($variables['order']) &&
+//            $this->getUser()) {
+//            $variables['order'] = $ss->makeOrder($person);
+//            $ss->redirectToMollie($variables['order']);
+//        }
+//
+//        return $variables;
+//    }
 
     /**
      * @Route("/remove-item/{id}")

@@ -11881,7 +11881,7 @@ p {
 }
 
 .menuzord-menu li .indicator::before {
-  font-family: 'FontAwesome';
+  font-family: "Font Awesome 5 Pro";
   content: "\f107";
   position: absolute;
   top: 0;
@@ -11950,7 +11950,7 @@ p {
 }
 
 .menuzord-menu ul.dropdown li .fa {
-  font-family: 'FontAwesome';
+  font-family: "Font Awesome 5 Pro";
 }
 
 /* Menu Brand */
@@ -12281,10 +12281,6 @@ p {
   }
 }
 
-.menu-right .notification .dropdown-toggle i {
-  font-family: 'FontAwesome' !important;
-}
-
 .menu-right .notification .dropdown-toggle .badge {
   position: absolute;
   top: 20px;
@@ -12455,10 +12451,6 @@ p {
   }
 }
 
-.menu-right .avatar .dropdown-menu i {
-  font-family: 'FontAwesome' !important;
-}
-
 .menu-right .avatar .dropdown-menu a {
   display: block;
   padding-left: 1rem;
@@ -12519,7 +12511,7 @@ p {
 }
 
 .navbar .navbar-toggler:before {
-  font-family: "FontAwesome";
+  font-family: "Font Awesome 5 Pro";
   content: "\f0c9";
 }
 
@@ -12701,7 +12693,7 @@ p {
 }
 
 .icon-burger-mini:before {
-  font-family: "FontAwesome";
+  font-family: "Font Awesome 5 Pro";
   content: "\f142";
   color: #c4c4c4;
 }
@@ -12917,7 +12909,7 @@ p {
 }
 
 .map-sidebar .btn-map-view:before {
-  font-family: 'FontAwesome';
+  font-family: "Font Awesome 5 Pro";
   content: "\f279";
   left: 12px;
   position: absolute;
@@ -13925,7 +13917,7 @@ p {
   .testimonial-content .testimonial-box:after {
     position: absolute;
     content: "\f10d";
-    font-family: 'FontAwesome';
+    font-family: "Font Awesome 5 Pro";
     top: 75px;
     left: 40px;
     opacity: .5;
