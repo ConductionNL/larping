@@ -30,7 +30,7 @@
                     <!-- Ratings -->
                     <div class="d-flex align-items-center">
                         {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                        <span class="d-inline-block mr-2">{{ totals.rating }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                        <span class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
                         <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
                             <i class="fal fa-heart text-primary" aria-hidden="true"></i>
                             <span>{{ totals.likes }}</span>
@@ -64,10 +64,10 @@
                 {% endif %}
 
                 <!-- Catagories -->
-                {% if catagories is defined and catagories is not empty %}
+                {% if categories is defined and categories is not empty %}
                 <div>
                     <h3 class="font-weight-normal mb-6">{{ 'catagories'|trans|capitalize }} {{ organization.name }}</h3>
-                    {%  include '/sections/catagories.html.twig' with {'catagories': catagories} %}
+                    {%  include '/sections/categories.html.twig' with {'categories': categories} %}
                 </div>
 
                 <hr>
