@@ -89,7 +89,7 @@ class DashboardOrganizationController extends AbstractController
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
-        $variables['products'] = [];
+        $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
 
         //Delete event
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
