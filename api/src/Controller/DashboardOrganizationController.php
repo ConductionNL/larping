@@ -207,8 +207,8 @@ class DashboardOrganizationController extends AbstractController
             $offer['products'] = ['/products/'.$id];
             $offer['offeredBy'] = $variables['organization']['@id'];
 
-            if(!array_key_exists('audiance', $offer) || !$offer['audiance']){
-                $offer['audiance'] =  'audience';
+            if(!array_key_exists('audience', $offer) || !$offer['audience']){
+                $offer['audience'] =  'audience';
             }
 
 
