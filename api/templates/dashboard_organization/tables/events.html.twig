@@ -35,17 +35,16 @@
             <span class="badge badge-warning px-2 py-1">{{event.status}}</span>
         </td>
         <td>
+            <a class="btn btn-outline-primary btn-sm" href="{{ path('app_dashboardorganization_event', {id: organization.id}) }}">{<i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
+
             <div class="dropdown">
                 <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#EventModal{{ event.id }}">{{ 'edit'|trans|capitalize }}</a>
-                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_event', {id: event.id}) }}">{{ 'config'|trans|capitalize }}</a>
-                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_eventparticipants', { id: event.id}) }}">{{ 'participants'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_eventcheckin', { id: event.id}) }}">{{ 'checkin'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="{{ path('app_dashboardorganization_eventtickets', { id: event.id}) }}">{{ 'tickets'|trans|capitalize }}</a>
-                    <a class="dropdown-item" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
                 </div>
             </div>
         </td>

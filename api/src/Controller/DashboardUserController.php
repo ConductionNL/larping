@@ -43,6 +43,16 @@ class DashboardUserController extends AbstractController
     }
 
     /**
+     * @Route("/memberships")
+     * @Template
+     */
+    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables = [];
+    }
+
+    /**
      * @Route("/organizations")
      * @Template
      */

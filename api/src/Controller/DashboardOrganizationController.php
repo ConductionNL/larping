@@ -114,10 +114,10 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/event/{id}/participants")
+     * @Route("/event/{id}/checkin")
      * @Template
      */
-    public function eventParticipantsAction(CommonGroundService $commonGroundService, Request $request, $id)
+    public function eventCheckinAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
