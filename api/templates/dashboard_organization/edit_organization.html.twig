@@ -1,0 +1,213 @@
+{% extends "base.html.twig" %}
+{% if organization is defined %}
+    {% set  id = organization['id'] %}
+    {% set  type = 'Organization' %}
+{% endif %}
+{% block content %}
+
+    {% include 'dashboard_organization/menu.html.twig' %}
+
+    <section class="bg-light py-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'edit profile'|trans|capitalize }}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ 'edit profile'|trans|capitalize }}</li>
+                </ul>
+            </nav>
+            <form id="{{ type }}Form{{ id }}" method="post">
+                {% if organization['id'] is defined %}<input type="hidden" id="id" name="id"
+                                                         value="{{ organization['id'] }}">{% endif %}
+                {% if organization['@id'] is defined %}<input type="hidden" id="@id" name="@id"
+                                                          value="{{ organization['@id'] }}">{% endif %}
+                <!-- About -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
+                        <p class="mb-5">{{ organization.description }}</p>
+
+                        <div class="row">
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="name">{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" value="{{ organization.name }}" id="name"
+                                       name="name">
+                            </div>
+
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="description">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="form-control" rows="6" id="description"
+                                          name="description">{{ organization.description }}</textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'contact'|trans|capitalize }}</h3>
+
+                        <div class="row">
+                            {% if organization.contact|default %}
+                                {% set contact = commonground_resource(organization.contact) %}
+                            {% endif %}
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"
+                                       {% if contact.postalCode|default %}value="{{ organization.postalCode }}"{% endif %}
+                                       id="postalCode" name="postalCode">
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="street">{{ 'street'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"
+                                       {% if contact.street|default %}value="{{ organization.street }}"{% endif %}
+                                       id="street" name="street">
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="houseNumber">{{ 'house number'|trans|capitalize }}</label>
+                                <input type="number" class="form-control"
+                                       {% if contact.houseNumber|default %}value="{{ organization.houseNumber }}"{% endif %}
+                                       id="houseNumber" name="houseNumber">
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="suffix">{{ 'suffix'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"
+                                       {% if contact.suffix|default %}value="{{ organization.suffix }}"{% endif %}
+                                       id="suffix" name="suffix">
+                            </div>
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="locality">{{ 'locality'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"
+                                       {% if contact.locality|default %}value="{{ organization.locality }}"{% endif %}
+                                       id="locality" name="locality">
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6" id="telephones[]">
+                                <div class="form-inline">
+                                    <label for="telephone">{{ 'telephone'|trans|capitalize }}</label>
+                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus"
+                                       onclick="addItem('telephones[]');" data-toggle="tooltip" data-placement="top"
+                                       title="{{ 'add more phone numbers'|trans|capitalize }}"></i>
+                                </div>
+                                {% if contact.telephones is defined and contact.telephones is not empty %}
+                                    {% for numbers in contact.telephones %}
+                                        <input class="form-control" name="telephone" type="tel" id="telephone"
+                                               value="{{ numbers.telephone }}">
+                                    {% endfor %}
+                                {% else %}
+                                    <input class="form-control" name="telephone" id="telephone" type="tel"
+                                           placeholder="{{ 'add phone number'|trans|capitalize }}">
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6" id="emails[]">
+                                <div class="form-inline">
+                                    <label for="email">{{ 'email'|trans|capitalize }}</label>
+                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('emails[]');"
+                                       data-toggle="tooltip" data-placement="top"
+                                       title="{{ 'add more emails'|trans|capitalize }}"></i>
+                                </div>
+                                {% if contact.emails is defined and contact.emails is not empty %}
+                                    {% for emails in contact.emails %}
+                                        <input class="form-control" name="email" type="email" id="email" value="{{ emails.email }}">
+                                    {% endfor %}
+                                {% else %}
+                                    <input class="form-control" name="email" id="email" type="email"
+                                           placeholder="{{ 'add email'|trans|capitalize }}">
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>
+
+                        <div class="row">
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="webiste">{{ 'website'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="website" name="website" type="url" placeholder="http://"
+                                       {% if contact.socials.webiste|default %}value="{{ contact.socials.webiste.url }}"{% endif %}>
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="linkedin">{{ 'linkedIn'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="linkedin" name="linkedin" type="url" placeholder="http://linkedin.com"
+                                       {% if contact.socials.linkedin|default %}value="{{ contact.socials.linkedin.url }}"{% endif %}>
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="facebook">{{ 'facebook'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="facebook" name="facebook" type="url" placeholder="http://facebook.com"
+                                       {% if contact.socials.facebook|default %}value="{{ contact.socials.facebook.url }}"{% endif %}>
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="twitter">{{ 'twitter'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="twitter" name="twitter" type="url" placeholder="http://twitter.com"
+                                       {% if contact.socials.twitter|default %}value="{{ contact.socials.twitter.url }}"{% endif %}>
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="instagram">{{ 'instagram'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="instagram" name="instagram" type="url" placeholder="http://instagram.com"
+                                       {% if contact.socials.instagram|default %}value="{{ contact.socials.instagram.url }}"{% endif %}>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gallery -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
+
+                        <div class="form-group position-relative mb-6 form-group-dragable">
+                            <input type="file" class="custom-file-input" id="favicon" name="favicon">
+                            <label class="custom-file-label" for="favicon">
+                               {{ 'Click or Drag images here'|trans|capitalize }}
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-6 col-xl-5">
+                        <div class="mb-6">
+                            <button type="submit" class="btn btn-lg btn-primary btn-block">{{ 'submit'|trans|capitalize }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+    <script>
+        function addItem(id) {
+            const formDiv = document.getElementById(id);
+            const input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+            input.setAttribute('class', "form-control mb-2");
+            input.setAttribute('name', id);
+            input.setAttribute('id', id);
+
+            formDiv.appendChild(input);
+        }
+    </script>
+{% endblock %}
