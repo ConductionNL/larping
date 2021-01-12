@@ -1,0 +1,39 @@
+{% set events = commonground_resource_list({'component': 'arc', 'type': 'events'},{'order[dateCreated]': 'asc'})['hydra:member'] %}
+<div class="position-relative">
+    {% for event in events|slice(0, 1) %}
+    <img class="card-img rounded-0" src="https://picsum.photos/200"
+         alt="Card image cap">
+    <div class="card-img-overlay" style="text-align: center">
+        <h3>
+            <a href="{{ path('app_event_event', {id: event.id}) }}" style="">{{ event.name }}</a>
+        </h3>
+        <p class="text-black">{{ event.description }}</p>
+        <ul class="list-inline list-inline-rating">
+            <li class="list-inline-item">
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </li>
+            <li class="list-inline-item">
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </li>
+            <li class="list-inline-item">
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </li>
+            <li class="list-inline-item">
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </li>
+            <li class="list-inline-item">
+                <i class="fa fa-star-o" aria-hidden="true"></i>
+            </li>
+        </ul>
+        <button class="btn-like px-2" data-toggle="tooltip" data-placement="top"
+                title=""
+                data-original-title="Favourite this listing">
+            <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+<hr>
+
+
+
