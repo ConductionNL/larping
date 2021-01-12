@@ -21,37 +21,88 @@
                 </ul>
             </nav>
             <form id="{{ type }}Form{{ id }}" method="post">
+                <input type="hidden" name="@type" value="Product">
                 <!-- About -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
+                        <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ product.name }}</h3>
                         <div class="row">
-                            <div class="form-group col-md-8 mb-6">
+                            <div class="form-group  col-md-12 mb-6">
                                 <label for="name">{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" value="{{ organization.name }}" id="name"
+                                <input type="text" class="form-control" value="{{ product.name }}" id="name"
                                        name="name">
-                            </div>
-
-                            <div class="form-group col-md-4 mb-6">
-                                <label for="description">{{ 'type'|trans|capitalize }}</label>
-                                <select class="form-control" aria-label="{{ 'the type of this product'|trans|capitalize }}" required id="type" name="type">
-                                    <option value="simple" {% if resource.type is defined  and resource.type == "simple"%} selected {% endif %}>{{ 'simple'|trans|capitalize }}</option>
-                                    <option value="set" {% if resource.type is defined  and resource.type == "set"%} selected {% endif %}>{{ 'set'|trans|capitalize }}</option>
-                                    <option value="virtual" {% if resource.type is defined  and resource.type == "virtual"%} selected {% endif %}>{{ 'virtual'|trans|capitalize }}</option>
-                                    <option value="external" {% if resource.type is defined  and resource.type == "external"%} selected {% endif %}>{{ 'external'|trans|capitalize }}</option>
-                                    <option value="ticket" {% if resource.type is defined  and resource.type == "ticket"%} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
-                                    <option value="variable" {% if resource.type is defined  and resource.type == "variable"%} selected {% endif %}>{{ 'variable'|trans|capitalize }}</option>
-                                    <option value="subscription" {% if resource.type is defined  and resource.type == "subscription"%} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
-                                    <option value="person" {% if resource.type is defined  and resource.type == "person"%} selected {% endif %}>{{ 'person'|trans|capitalize }}</option>
-                                    <option value="location" {% if resource.type is defined  and resource.type == "location"%} selected {% endif %}>{{ 'location'|trans|capitalize }}</option>
-                                    <option value="service" {% if resource.type is defined  and resource.type == "service"%} selected {% endif %}>{{ 'service'|trans|capitalize }}</option>
-                                </select>
                             </div>
                             <div class="form-group col-md-12 mb-6">
                                 <label for="description">{{ 'description'|trans|capitalize }}</label>
                                 <textarea class="form-control" rows="6" id="description"
-                                          name="description">{{ organization.description }}</textarea>
+                                          name="description">{{ product.description }}</textarea>
                             </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                {% if product.type == "ticket"%}
+                    <!-- About -->
+                    <div class="card">
+                        <div class="card-body px-6 pt-6 pb-1">
+                            <h3 class="h4 mb-4">Voor welk evenement is dit ticket?</h3>
+                            <div class="row">
+                                <div class="form-group  col-md-12 mb-6">
+                                    <label for="name">{{ 'event'|trans|capitalize }}</label>
+                                    <select class="form-control" aria-label="{{ 'the event of this product'|trans|capitalize }}" required id="type" name="type">
+                                    {% for event in events %}
+                                        <option value="simple" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ event.name }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- About -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'pricing'|trans|capitalize }} </h3>
+                        <div class="row">
+
+
+                            {% if product.offers is  defined and product.offers|length > 0 %}
+                                <table id="events" class="display nowrap table" style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'name'|trans|capitalize }}</th>
+                                        <th>{{ 'audiance'|trans|capitalize }}</th>
+                                        <th>{{ 'price'|trans|capitalize }}</th>
+                                        <th><a type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#OfferModalAdd">{{ 'add pricing'|trans|capitalize }}</a>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for offer in product.offers %}
+                                        <tr>
+                                            <td class="text-capitalize">
+                                               {{ offer.name }}
+                                            </td>
+                                            <td>
+                                                {{ offer.audience }}
+                                            </td>
+                                            <td>
+                                                {{ offer.priceCurrency }} {{ offer.price }}
+                                            </td>
+                                            <td class="text-capitalize">
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                    <a href="#"  class="btn btn-primary btn-block" data-toggle="modal" data-target="#OfferModalAdd">{{ 'add pricing'|trans|capitalize }}</a>
+                            {% endif %}
+
+                        </div>
+                        <div class="row">
+
                         </div>
 
                     </div>
@@ -83,6 +134,9 @@
         </div>
 
     </section>
+
+    {% include 'dashboard_organization/modals/offer_product.html.twig'%}
+
     <script>
         function addItem(id) {
             const formDiv = document.getElementById(id);

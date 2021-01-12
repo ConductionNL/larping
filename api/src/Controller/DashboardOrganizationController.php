@@ -143,6 +143,7 @@ class DashboardOrganizationController extends AbstractController
             // Get the current resource
             $product = $request->request->all();
             // Set the current organization as owner
+            $product['requiresAppointment'] = false;
             $product['organization'] = $variables['organization']['@id'];
             $product['sourceOrganization'] = $variables['organization']['@id'];
             // Save the resource
@@ -169,7 +170,7 @@ class DashboardOrganizationController extends AbstractController
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
 
-        if ($request->isMethod('POST')) {
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
             // Get the current resource
             //$product = array_merge($variables['product'],$request->request->all()) ;
             $product = $request->request->all();
@@ -180,6 +181,23 @@ class DashboardOrganizationController extends AbstractController
             //$product['sourceOrganization'] = $variables['organization']['@id'];
             // Save the resource
             $variables['product'] =  $commonGroundService->updateResource($product, ['component' => 'pdc', 'type' => 'products', 'id' => $id]);
+
+        }
+
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Offer') {
+
+            $offer = $request->request->all();
+            // Add the current product to het offer
+            $offer['products'] = ['/products/'.$id];
+            $offer['offeredBy'] = $variables['organization']['@id'];
+
+            if(!array_key_exists('audiance', $offer) || !$offer['audiance']){
+                $offer['audiance'] =  'audience';
+            }
+
+
+            $variables['product']['offers'] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+
         }
 
         return $variables;
