@@ -119,7 +119,7 @@ class OrganizationController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {
             $resource = $request->request->all();
 
-            $resource['organization'] = $variables['organization']['@id'];
+            $resource[''] = $variables['organization']['@id'];
             $resource['resource'] = $variables['organization']['@id'];
             $resource['author'] = $this->getUser()->getPerson();
             $resource['rating'] = (int) $resource['rating'];
