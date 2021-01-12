@@ -48,15 +48,17 @@
                     </div>
                 </div>
 
+                {% if organization.contact|default %}
+                    {% set contact = commonground_resource(organization.contact) %}
+                {% endif %}
+
                 <!-- Contact -->
                 <div class="card">
                     <div class="card-body p-6">
                         <h3 class="h4 mb-4">{{ 'contact'|trans|capitalize }}</h3>
 
                         <div class="row">
-                            {% if organization.contact|default %}
-                                {% set contact = commonground_resource(organization.contact) %}
-                            {% endif %}
+
                             <div class="form-group col-md-6 mb-6">
                                 <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
                                 <input type="text" class="form-control"
@@ -84,7 +86,7 @@
                                        {% if contact.suffix|default %}value="{{ organization.suffix }}"{% endif %}
                                        id="suffix" name="suffix">
                             </div>
-                            <div class="form-group col-md-12 mb-6">
+                            <div class="form-group col-md-6 mb-6">
                                 <label for="locality">{{ 'locality'|trans|capitalize }}</label>
                                 <input type="text" class="form-control"
                                        {% if contact.locality|default %}value="{{ organization.locality }}"{% endif %}
@@ -126,50 +128,71 @@
                                 {% endif %}
                             </div>
 
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Social -->
-                <div class="card">
-                    <div class="card-body p-6">
-                        <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>
-
-                        <div class="row">
-
-                            <div class="form-group col-md-6 mb-6">
-                                <label for="webiste">{{ 'website'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" id="website" name="website" type="url" placeholder="http://"
-                                       {% if contact.socials.webiste|default %}value="{{ contact.socials.webiste.url }}"{% endif %}>
-                            </div>
-
-                            <div class="form-group col-md-6 mb-6">
-                                <label for="linkedin">{{ 'linkedIn'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" id="linkedin" name="linkedin" type="url" placeholder="http://linkedin.com"
-                                       {% if contact.socials.linkedin|default %}value="{{ contact.socials.linkedin.url }}"{% endif %}>
-                            </div>
-
-                            <div class="form-group col-md-6 mb-6">
-                                <label for="facebook">{{ 'facebook'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" id="facebook" name="facebook" type="url" placeholder="http://facebook.com"
-                                       {% if contact.socials.facebook|default %}value="{{ contact.socials.facebook.url }}"{% endif %}>
-                            </div>
-
-                            <div class="form-group col-md-6 mb-6">
-                                <label for="twitter">{{ 'twitter'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" id="twitter" name="twitter" type="url" placeholder="http://twitter.com"
-                                       {% if contact.socials.twitter|default %}value="{{ contact.socials.twitter.url }}"{% endif %}>
-                            </div>
-
-                            <div class="form-group col-md-6 mb-6">
-                                <label for="instagram">{{ 'instagram'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" id="instagram" name="instagram" type="url" placeholder="http://instagram.com"
-                                       {% if contact.socials.instagram|default %}value="{{ contact.socials.instagram.url }}"{% endif %}>
+                            <div class="form-group col-md-6 mb-6" id="socials[]">
+                                <div class="form-inline">
+                                    <label for="socials">{{ 'socials'|trans|capitalize }}</label>
+                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('socials[]');"
+                                       data-toggle="tooltip" data-placement="top"
+                                       title="{{ 'add more socials'|trans|capitalize }}"></i>
+                                </div>
+                                <select class="form-control" name="type" id="type">
+                                    <option>{{ 'select type'|capitalize }}</option>
+                                    <option name="type" id="type">{{ 'website'|capitalize }}</option>
+                                    <option name="type" id="type">{{ 'facebook'|capitalize }}</option>
+                                    <option name="type" id="type">{{ 'twitter'|capitalize }}</option>
+                                    <option name="type" id="type">{{ 'instagram'|capitalize }}</option>
+                                </select>
+                                <input class="form-control" name="url" id="url" type="url"
+                                    {% if contact.socials|default %} value="{{ contact.socials[0].url }}"
+                                {% else %}
+                                    placeholder="{{ 'add url'|trans|capitalize }}"
+                                    {% endif %}>
                             </div>
 
                         </div>
                     </div>
                 </div>
+
+{#                <!-- Social -->#}
+{#                <div class="card">#}
+{#                    <div class="card-body p-6">#}
+{#                        <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>#}
+
+{#                        <div class="row">#}
+
+{#                            <div class="form-group col-md-6 mb-6">#}
+{#                                <label for="webiste">{{ 'website'|trans|capitalize }}</label>#}
+{#                                <input type="text" class="form-control" id="website" name="website" type="url" placeholder="http://"#}
+{#                                       {% if contact.socials.type == 'website' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
+{#                            </div>#}
+
+{#                            <div class="form-group col-md-6 mb-6">#}
+{#                                <label for="linkedin">{{ 'linkedIn'|trans|capitalize }}</label>#}
+{#                                <input type="text" class="form-control" id="linkedin" name="linkedin" type="url" placeholder="http://linkedin.com"#}
+{#                                       {% if contact.socials.type == 'linkedin' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
+{#                            </div>#}
+
+{#                            <div class="form-group col-md-6 mb-6">#}
+{#                                <label for="facebook">{{ 'facebook'|trans|capitalize }}</label>#}
+{#                                <input type="text" class="form-control" id="facebook" name="facebook" type="url" placeholder="http://facebook.com"#}
+{#                                       {% if contact.socials.type == 'facebook' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
+{#                            </div>#}
+
+{#                            <div class="form-group col-md-6 mb-6">#}
+{#                                <label for="twitter">{{ 'twitter'|trans|capitalize }}</label>#}
+{#                                <input type="text" class="form-control" id="twitter" name="twitter" type="url" placeholder="http://twitter.com"#}
+{#                                       {% if contact.socials.type == 'twitter' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
+{#                            </div>#}
+
+{#                            <div class="form-group col-md-6 mb-6">#}
+{#                                <label for="instagram">{{ 'instagram'|trans|capitalize }}</label>#}
+{#                                <input type="text" class="form-control" id="instagram" name="instagram" type="url" placeholder="http://instagram.com"#}
+{#                                       {% if contact.socials.type == 'instagram' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
+{#                            </div>#}
+
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
 
                 <!-- Gallery -->
                 <div class="card">
@@ -206,6 +229,24 @@
             input.setAttribute('class', "form-control mb-2");
             input.setAttribute('name', id);
             input.setAttribute('id', id);
+
+            var options_array = {
+                ValueA : '{{ 'select type'|trans|capitalize }}',
+                ValueB : '{{ 'website'|trans|capitalize }}',
+                ValueC : '{{ 'facebook'|trans|capitalize }}',
+                ValueD : '{{ 'twitter'|trans|capitalize }}',
+                ValueE : '{{ 'instagram'|trans|capitalize }}'
+            };
+
+            const select = document.createElement("select");
+            if (id === 'socials[]') {
+                select.setAttribute('class', "form-control mb-2");
+                input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
+                formDiv.appendChild(select);
+                for(option in options_array) {
+                    select.options[select.options.length] = new Option(options_array[option], option);
+                }
+            }
 
             formDiv.appendChild(input);
         }

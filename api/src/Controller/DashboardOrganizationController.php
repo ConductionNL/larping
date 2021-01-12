@@ -444,65 +444,77 @@ class DashboardOrganizationController extends AbstractController
                 $resource['adresses'][] = $address;
             }
 
-            $facebook = [];
-            $facebook['name'] = 'facebook of '.$person['name'];
-            $facebook['description'] = 'facebook of '. $person['name'];
-            $facebook['type'] = 'facebook';
-            $facebook['url'] = $request->get('facebook');
-            if (isset($facebook['id'])) {
-                $commonGroundService->saveResource($facebook, ['component' => 'cc', 'type' => 'socials']);
-                $resource['socials'][] = '/socials/'.$facebook['id'];
-            } else {
-                $resource['socials'][] = $facebook;
-            }
-
-            $instagram = [];
-            $instagram['name'] = 'instagram of '.$person['name'];
-            $instagram['description'] = 'instagram of '. $person['name'];
-            $instagram['type'] = 'instagram';
-            $instagram['url'] = $request->get('instagram');
-            if (isset($instagram['id'])) {
-                $commonGroundService->saveResource($instagram, ['component' => 'cc', 'type' => 'socials']);
-                $resource['socials'][] = '/socials/'.$instagram['id'];
-            } else {
-                $resource['socials'][] = $instagram;
-            }
-
-            $linkedin = [];
-            $linkedin['name'] = 'Linkedin of '.$person['name'];
-            $linkedin['description'] = 'Linkedin of '. $person['name'];
-            $linkedin['type'] = 'linkedin';
-            $linkedin['url'] = $request->get('linkedin');
-            if (isset($linkedin['id'])) {
-                $commonGroundService->saveResource($linkedin, ['component' => 'cc', 'type' => 'socials']);
-                $resource['socials'][] = '/socials/'.$linkedin['id'];
-            } else {
-                $resource['socials'][] = $linkedin;
-            }
-
-            $website = [];
-            $website['name'] = 'Website of '.$person['name'];
-            $website['description'] = 'Website of '. $person['name'];
-            $website['type'] = 'website';
-            $website['url'] = $request->get('website');
-            if (isset($website['id'])) {
-                $commonGroundService->saveResource($website, ['component' => 'cc', 'type' => 'socials']);
-                $resource['socials'][] = '/socials/'.$website['id'];
-            } else {
-                $resource['socials'][] = $website;
-            }
-
-            $twitter = [];
-            $twitter['name'] = 'Twitter  of '.$person['name'];
-            $twitter['description'] = 'Twitter  of '. $person['name'];
-            $twitter['type'] = 'twitter ';
-            $twitter['url'] = $request->get('twitter ');
+            $socials = [];
+            $socials['name'] = $request->get('type').' of '.$person['name'];
+            $socials['description'] = $request->get('type').' of '.$person['name'];
+            $socials['type'] = $request->get('type');
+            $socials['url'] = $request->get('url');
             if (isset($twitter['id'])) {
-                $commonGroundService->saveResource($twitter, ['component' => 'cc', 'type' => 'socials']);
-                $resource['socials'][] = '/socials/'.$twitter['id'];
+                $commonGroundService->saveResource($socials, ['component' => 'cc', 'type' => 'socials']);
+                $resource['socials'][] = '/socials/'.$socials['id'];
             } else {
-                $resource['socials'][] = $twitter;
+                $resource['socials'][] = $socials;
             }
+
+//            $facebook = [];
+//            $facebook['name'] = 'facebook of '.$person['name'];
+//            $facebook['description'] = 'facebook of '. $person['name'];
+//            $facebook['type'] = 'facebook';
+//            $facebook['url'] = $request->get('facebook');
+//            if (isset($facebook['id'])) {
+//                $commonGroundService->saveResource($facebook, ['component' => 'cc', 'type' => 'socials']);
+//                $resource['socials'][] = '/socials/'.$facebook['id'];
+//            } else {
+//                $resource['socials'][] = $facebook;
+//            }
+//
+//            $instagram = [];
+//            $instagram['name'] = 'instagram of '.$person['name'];
+//            $instagram['description'] = 'instagram of '. $person['name'];
+//            $instagram['type'] = 'instagram';
+//            $instagram['url'] = $request->get('instagram');
+//            if (isset($instagram['id'])) {
+//                $commonGroundService->saveResource($instagram, ['component' => 'cc', 'type' => 'socials']);
+//                $resource['socials'][] = '/socials/'.$instagram['id'];
+//            } else {
+//                $resource['socials'][] = $instagram;
+//            }
+//
+//            $linkedin = [];
+//            $linkedin['name'] = 'Linkedin of '.$person['name'];
+//            $linkedin['description'] = 'Linkedin of '. $person['name'];
+//            $linkedin['type'] = 'linkedin';
+//            $linkedin['url'] = $request->get('linkedin');
+//            if (isset($linkedin['id'])) {
+//                $commonGroundService->saveResource($linkedin, ['component' => 'cc', 'type' => 'socials']);
+//                $resource['socials'][] = '/socials/'.$linkedin['id'];
+//            } else {
+//                $resource['socials'][] = $linkedin;
+//            }
+//
+//            $website = [];
+//            $website['name'] = 'Website of '.$person['name'];
+//            $website['description'] = 'Website of '. $person['name'];
+//            $website['type'] = 'website';
+//            $website['url'] = $request->get('website');
+//            if (isset($website['id'])) {
+//                $commonGroundService->saveResource($website, ['component' => 'cc', 'type' => 'socials']);
+//                $resource['socials'][] = '/socials/'.$website['id'];
+//            } else {
+//                $resource['socials'][] = $website;
+//            }
+//
+//            $twitter = [];
+//            $twitter['name'] = 'Twitter  of '.$person['name'];
+//            $twitter['description'] = 'Twitter  of '. $person['name'];
+//            $twitter['type'] = 'twitter ';
+//            $twitter['url'] = $request->get('twitter ');
+//            if (isset($twitter['id'])) {
+//                $commonGroundService->saveResource($twitter, ['component' => 'cc', 'type' => 'socials']);
+//                $resource['socials'][] = '/socials/'.$twitter['id'];
+//            } else {
+//                $resource['socials'][] = $twitter;
+//            }
 
             $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
         }
