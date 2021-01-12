@@ -5,6 +5,7 @@
     {% if event.organization|default %}
         {% set organization = commonground_resource(event.organization) %}
     {% endif %}
+
     <section class="py-7 pt-md-9 pb-md-8 ">
         <div class="container">
             <div class="row">
@@ -24,7 +25,7 @@
                         <!-- Ratings -->
                         <div class="d-flex align-items-center">
                             {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                            <span class="d-inline-block mr-2">{{ totals.rating }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                            <span class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
                             <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
                                 <i class="fal fa-heart text-primary" aria-hidden="true"></i>
                                 <span>{{ totals.likes }}</span>
@@ -72,25 +73,15 @@
                         <hr>
                     {% endif %}
 
-                    <!-- Features -->
-                    <div class="my-6">
-                        <h3 class="font-weight-normal mb-6">{{ 'features'|trans|capitalize }}</h3>
-                        <ul class="list-unstyled mb-7">
-                            {% if event.categories is defined and event.categories is not empty %}
-                                {% for categories in event.categories %}
-                                    <li class="d-inline-block mr-4 mb-2">
-                                        <i class="fa fa-check mr-2" aria-hidden="true"></i>
-                                        {{ commonground_resource(categories).name }}
-                                    </li>
-                                {% endfor %}
-                            {% else %}
-                                <li class="d-inline-block mr-4 mb-2">
-                                    {{ 'no features found'|trans|capitalize }}
-                                </li>
-                            {% endif %}
-                        </ul>
+                    <!-- Catagories -->
+                    {% if categories is defined and categories is not empty %}
+                        <div>
+                            <h3 class="font-weight-normal mb-6">{{ 'settings'|trans|capitalize }}</h3>
+                            {%  include '/sections/categories.html.twig' with {'categories': categories} %}
+                        </div>
+
                         <hr>
-                    </div>
+                    {% endif %}
 
                     <!-- Offers -->
                     {% if product.offers|default %}
@@ -256,7 +247,7 @@
                     <!-- Reviews -->
                     {% if reviews is defined and reviews is not empty %}
                     <div>
-                        <h3 class="font-weight-normal mb-6">({{ stats.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
+                        <h3 class="font-weight-normal mb-6">({{ totals.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
                         {%  include '/sections/reviews.html.twig' %}
                     </div>
 
@@ -285,6 +276,7 @@
                     <h5>{{ 'other events you might like'|trans|capitalize }}</h5>
                     {% include 'widgets/you_may_like.html.twig' %}
                 </div>
+
             </div>
         </div>
     </section>
