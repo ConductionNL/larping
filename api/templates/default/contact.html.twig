@@ -2,42 +2,8 @@
 
 {% block content %}
 
-    <div class="container" style="margin-top: 50px">
-        <div class="page-inner">
-            {% if app.user.person|default %}
-            <form method="post" action="">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-12">
-
-                                <h3 class="d-inline-block">{{ 'contact us' }}</h3>
-
-                                <div class="row">
-                                    <div class="form-group col-12">
-                                        <label for="organizationInput">{{ 'organization'|trans|capitalize }} *</label>
-                                        <input class="form-control" name="organization" id="organizationInput" required>
-                                    </div>
-
-                                    <div class="form-group col-12">
-                                        <label for="requestInput">{{ 'request type'|trans|capitalize }}</label>
-                                        <select class="form-control" name="requestType" id="requestInput">
-                                            <option>{{ 'select an request type'|trans|capitalize }}</option>
-                                            <option>{{ 'question'|trans|capitalize }}</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <button type="button" class="btn btn-primary">{{ 'save'|trans|capitalize }}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            {% else %}
-                <p>{{ 'you must be logged in to contact us'|trans|capitalize }}</p>
-            {% endif %}
-        </div>
+    <div class="container">
+        {% include 'widgets/contact.html.twig' %}
     </div>
 
 {% endblock %}

@@ -1,6 +1,9 @@
 <!-- Add Review -->
 {% if app.user %}
-<form method="post">
+<form method="post" action="{{ path('app_default_review') }}">
+    <input type="hidden" name="redirect" value="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">
+    <input type="hidden" name="organization" value="{{ organization['@id'] }}">
+    <input type="hidden" name="resource" value="{{ item['@id'] }}">
     <span class="star add-rating-default pl-0 mb-6"></span>
     <div class="form-group mb-6">
         <label for="description">{{ 'rating'|trans|capitalize }}</label>
