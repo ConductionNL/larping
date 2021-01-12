@@ -229,6 +229,17 @@ class DashboardOrganizationController extends AbstractController
             }
         }
         $variables['users'] = $users;
+
+        if ($request->isMethod('POST') && $request->get('newGroup')) {
+            $result = $idVaultService->createGroup($provider['configuration']['app_id'], $request->get('name'), $request->get('description'), $organizationUrl);
+            if (isset($result['id'])) {
+                $this->addFlash('success', 'Groep is aangemaakt');
+            } else {
+                $this->addFlash('error', 'Er is een fout opgetreden');
+            }
+            return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
+        }
+
         return $variables;
     }
 
