@@ -8,7 +8,6 @@
             <h5 class="media-heading">{{ commonground_resource(review.author).givenName }}</h5>
             <span class="d-inline-block mr-2">
                 {% include 'widgets/rating.html.twig' with {'rating':review.rating} %}
-               ({{ review.rating }})
             </span>
             <p>{{ review.review }}</p>
             <!-- Reply Section -->
