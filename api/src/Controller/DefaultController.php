@@ -125,7 +125,6 @@ class DefaultController extends AbstractController
     {
     }
 
-
     /**
      * @Route("/review")
      * @Template
@@ -134,7 +133,7 @@ class DefaultController extends AbstractController
     {
         $variables = [];
         // Add review
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $resource = $request->request->all();
 
             $resource['author'] = $this->getUser()->getPerson();
@@ -144,10 +143,11 @@ class DefaultController extends AbstractController
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
 
             // redirects externally
-            if($request->get('redirect')){
+            if ($request->get('redirect')) {
                 return $this->redirect($request->get('redirect'));
             }
         }
+
         return $variables;
     }
 
@@ -167,7 +167,7 @@ class DefaultController extends AbstractController
             $commonGroundService->saveResource($resource, ['component' => 'cm', 'type' => 'contact_moment']);
 
             // redirects externally
-            if($request->get('redirect')){
+            if ($request->get('redirect')) {
                 return $this->redirect($request->get('redirect'));
             }
         }
