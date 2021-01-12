@@ -69,7 +69,7 @@
                     <div id="gridFullwidthDiv" class="fade-in">
                         <div class="row">
                             {% for event in events %}
-                                <div class="col-md-6" id="event{{ event.id }}">
+                                <div class="col-md-4" id="event{{ event.id }}">
                                     {% include '/cards/event.html.twig' with {'item': event} %}
                                 </div>
                             {% endfor %}

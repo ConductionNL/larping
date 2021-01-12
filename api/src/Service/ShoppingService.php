@@ -70,8 +70,6 @@ class ShoppingService
 //                    if (isset($order['items'])) {
 //                        unset($order['items']);
 //                    }
-    ////                    var_dump($order);
-    ////                    die;
 //                    $order = $this->commonGroundService->saveResource($order, ['component' => 'orc', 'type' => 'orders']);
 //
 //                    foreach ($items as $item) {
@@ -125,7 +123,6 @@ class ShoppingService
     public function addItemsToCart($offers)
     {
         $ordersInSession = $this->session->get('orders');
-
         foreach ($offers as $newOrderItem) {
             // Check if new item has accpetable quantity
             if (!isset($newOrderItem['quantity']) || $newOrderItem < !1) {
@@ -163,20 +160,24 @@ class ShoppingService
 //        if (!isset($order)) {
 //            $order = null;
 //        }
-
         return $order;
     }
 
-    public function cumulateItems($order, $newOrderItem)
+    public function cumulateItems($newOrderItem, $order)
     {
-        if (isset($order['orderItems']) && $order['orderItems'] > 0) {
+        if (isset($order['orderItems']) && count($order['orderItems']) > 0) {
             foreach ($order['orderItems'] as $key => $orderItem) {
                 if (isset($orderItem['offer'])) {
                     $actualOffer = $this->commonGroundService->getResource($orderItem['offer']);
                     $newActualOffer = $this->commonGroundService->getResource($newOrderItem['offer']);
 
                     if ($actualOffer['offeredBy'] == $newActualOffer['offeredBy']) {
-                        $order['orderItems'][$key]['quantity'] += $newOrderItem['quantity'];
+                        if ($this->checkIfIsPersonalTicket($newActualOffer) == true &&
+                            $newOrderItem['quantity'] + $order['orderItems'][$key]['quantity'] > 1) {
+                            $order['orderItems'][$key]['quantity'] = 1;
+                        } else {
+                            $order['orderItems'][$key]['quantity'] += $newOrderItem['quantity'];
+                        }
                     }
                 }
             }
@@ -185,10 +186,20 @@ class ShoppingService
         return $order;
     }
 
+    public function checkIfIsPersonalTicket($offer)
+    {
+        if (isset($offer['audience']) && $offer['audience'] == 'internal' &&
+            isset($offer['products']) && $this->checkForTypeInProducts('ticket', $offer['products']) == true) {
+            return true;
+        }
+
+        return false;
+    }
+
     // Checks if item is in given order if true cumulates quantity
     public function checkIfInOrder($newOrderItem, $order)
     {
-        if (isset($order['orderItems']) && $order['orderItems'] > 0) {
+        if (isset($order['orderItems']) && count($order['orderItems']) > 0) {
             foreach ($order['orderItems'] as $key => $orderItem) {
                 if (isset($orderItem['offer'])) {
                     if ($orderItem['offer'] == $newOrderItem['offer']) {
@@ -201,9 +212,27 @@ class ShoppingService
         return false;
     }
 
+    public function checkForTypeInProducts($type, $products)
+    {
+        if (count($products) > 0) {
+            foreach ($products as $product) {
+                if (isset($product['type']) == $type) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function addItemToOrder($newOrderItem, $order)
     {
         $actualOffer = $this->commonGroundService->getResource($newOrderItem['offer']);
+
+        if ($this->checkIfIsPersonalTicket($actualOffer) == true &&
+            $newOrderItem['quantity'] > 1) {
+            $newOrderItem['quantity'] = 1;
+        }
 
         $order['orderItems'][] = [
             'offer'    => $newOrderItem['offer'],

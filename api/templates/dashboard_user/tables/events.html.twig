@@ -3,7 +3,8 @@
         <thead class="thead-light">
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
-            <th>{{ 'date'|trans|capitalize }}</th>
+            <th>{{ 'start'|trans|capitalize }}</th>
+            <th>{{ 'end'|trans|capitalize }}</th>
             <th>{{ 'location'|trans|capitalize }}</th>
             <th scope="col"></th>
         </tr>
@@ -17,10 +18,12 @@
                 </td>
                 <td>
                     {% if event.startDate|default %}
-                        <span class="d-block">{{ event.startDate|date('d-m-Y h:i:s') }} /</span>
+                        {{ event.startDate|date('d-m-Y') }}
                     {% endif %}
+                </td>
+                <td>
                     {% if event.endDate|default %}
-                        <span class="d-block">{{ event.endDate|date('d-m-Y h:i:s') }}</span>
+                        {{ event.endDate|date('d-m-Y') }}
                     {% endif %}
                 </td>
                 <td class="text-capitalize">
