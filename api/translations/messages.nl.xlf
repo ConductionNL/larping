@@ -386,6 +386,51 @@
          <source>about larping.eu</source>
          <target>over larping.eu</target>
          </trans-unit>
+
+         <trans-unit id="8UyAttA" resname="my memberchips">
+         <source>my memberchips</source>
+         <target>mijn memberchips</target>
+         </trans-unit>
+         <trans-unit id="opqq12g" resname="my organizations">
+         <source>my organizations</source>
+         <target>mijn organisaties</target>
+         </trans-unit>
+         <trans-unit id="NppZ12g" resname="my events">
+         <source>my events</source>
+         <target>mijn evenementen</target>
+         </trans-unit>
+         <trans-unit id="yatkkas" resname="my characters">
+         <source>my characters</source>
+         <target>mijn karakters</target>
+         </trans-unit>
+         <trans-unit id="ygggkas" resname="my favorites">
+         <source>my favorites</source>
+         <target>mijn favorieten</target>
+         </trans-unit>
+         <trans-unit id="yrrtkas" resname="products">
+         <source>products</source>
+         <target>producten</target>
+         </trans-unit>
+         <trans-unit id="yrKWkas" resname="edit profile">
+         <source>edit profile</source>
+         <target>bewerk profiel</target>
+         </trans-unit>
+         <trans-unit id="terskas" resname="locations">
+         <source>locations</source>
+         <target>locaties</target>
+         </trans-unit>
+         <trans-unit id="uiopkas" resname="orders">
+         <source>orders</source>
+         <target>bestellingen</target>
+         </trans-unit>
+         <trans-unit id="uRRpkas" resname="members">
+         <source>members</source>
+         <target>leden</target>
+         </trans-unit>
+         <trans-unit id="uNgfkas" resname="reviews">
+         <source>reviews</source>
+         <target>beoordelingen</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
