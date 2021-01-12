@@ -37,7 +37,7 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ProductModal{{ product.id }}">Edit</a>
+                            <a class="dropdown-item" href="{{ path('app_dashboardorganization_editproduct', { id: product.id}) }}">Edit</a>
                         </div>
                     </div>
                 </td>
@@ -48,7 +48,7 @@
 {% else %}
     <div class="card border-light shadow-sm">
         <div class="card-body text-center">
-            <p>{{ 'no participants found'|trans|capitalize }}</p>
+            <p>{{ 'no products found'|trans|capitalize }}</p>
             <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ProductModalAdd">{{ 'add your first product'|trans|capitalize }}!</a>
         </div>
     </div>
@@ -56,6 +56,3 @@
 
 {% include 'dashboard_organization/modals/product.html.twig' %}
 
-{% for product in products %}
-    {% include 'dashboard_organization/modals/product.html.twig' with {'resource': product} %}
-{% endfor %}
