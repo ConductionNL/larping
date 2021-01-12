@@ -51,9 +51,11 @@
                         </div>
                     </div>
                 </div> <!--/.col -->
+                {% if product.offers|default %}
                 <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
-                    <a href="#add-review" class="btn btn-primary">{{ 'buy a ticket'|trans|capitalize }}</a>
+                    <a href="#offers" class="btn btn-primary">{{ 'buy a ticket'|trans|capitalize }}</a>
                 </div><!--/.col -->
+                {% endif %}
             </div><!-- /.row -->
         </div><!--/.container -->
     </section>
