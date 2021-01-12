@@ -95,11 +95,9 @@
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_orders') }}">{{ 'orders'|trans|capitalize }}</a>
                                         </li>
-                                        <!--
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_reviews') }}">{{ 'reviews'|trans|capitalize }}</a>
                                         </li>
-                                        -->
                                     </ul>
                                 </div>
                                 <div class="col4">
@@ -268,32 +266,29 @@
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="https://id-vault.com/dashboard/general" target="_blank">
-                                        <i class="fal fa-user" aria-hidden="true"></i>
-                                        <span
-                                            style="font-size: 13px!important;">{{ 'my profile'|trans }}</span>
+                                        <i class="fal fa-user mr-2" aria-hidden="true"></i>
+                                        {{ 'my profile'|trans|capitalize }}
                                     </a>
                                 </li>
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_memberships') }}">
                                         <i class="fal fa-building mr-2" aria-hidden="true"></i>
-                                        <span
-                                            style="font-size: 13px!important;">{{ 'my memberships'|trans }}</span>
+                                        {{ 'my memberships'|trans|capitalize }}
                                     </a>
                                 </li>
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_organizations') }}">
                                         <i class="fal fa-building mr-2" aria-hidden="true"></i>
-                                        <span
-                                            style="font-size: 13px!important;">{{ 'my organizations'|trans }}</span>
+                                        {{ 'my organizations'|trans|capitalize }}
                                     </a>
                                 </li>
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_events') }}">
                                         <i class="fal fa-calendar-alt mr-2" aria-hidden="true"></i>
-                                        <span>{{ 'my events'|trans }}</span>
+                                      {{ 'my events'|trans|capitalize }}
                                     </a>
                                 </li>
                                 <!--
@@ -301,7 +296,7 @@
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_characters') }}">
                                         <i class="fal fa-calendar-o mr-2" aria-hidden="true"></i>
-                                        <span>{{ 'my characters'|trans }}</span>
+                                        {{ 'my characters'|trans|capitalize }}
                                     </a>
                                 </li>
                                 -->
@@ -309,7 +304,7 @@
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_favorites') }}">
                                         <i class="fal fa-heart mr-2" aria-hidden="true"></i>
-                                        <span>{{ 'my favorites'|trans }}</span>
+                                        {{ 'my favorites'|trans|capitalize }}
                                     </a>
                                 </li>
                                 <li>
