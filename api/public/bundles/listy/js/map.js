@@ -267,13 +267,13 @@ $(document).ready(function () {
   var MapMain = document.getElementById("listing-main-map");
   if (MapMain) {
     // map center
-    var center = new google.maps.LatLng(-33.924351, 151.156788);
+    var center = new google.maps.LatLng(-52.0706557, 4.9119418);
 
     //Map initialize function
     function initialize() {
       var mapOptions = {
         center: center,
-        zoom: 15,
+        zoom: 8,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: mapStyles,
         scrollwheel: false,
