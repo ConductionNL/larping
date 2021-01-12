@@ -98,13 +98,16 @@ class DashboardOrganizationController extends AbstractController
             $product['requiresAppointment'] = false;
             $product['event'] =  $variables['event'];
             $product['type'] =  'ticket';
-            $product['sourceOrganization'] =  $variables['organization'];
+            $product['sourceOrganization'] =  $variables['organization']['@id'];
             $product =  $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
-            $offer['products'] = $variables['product']['id'];
+            $offer['price'] = $request->get('price');
+            $offer['name'] = $product['name'];
+            $offer['description'] = $product['description'];
+            $offer['products'] = ['/products/'.$product['id']];
             $offer['offeredBy'] = $variables['organization']['@id'];
-            $offer['audiance'] =  'audience';
+            $offer['audience'] =  'public';
 
             $product['offers'] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
             $variables['products'][] = $product;
