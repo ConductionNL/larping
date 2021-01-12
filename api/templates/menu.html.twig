@@ -53,20 +53,6 @@
                                             <a href="{{ path('app_dashboardorganization_editorganization') }}">{{ 'edit profile'|trans|capitalize }} </a>
                                         </li>
                                     </ul>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <h5 class="heading">
-                                                <i class="fa fa-building text-primary mr-2" aria-hidden="true"></i>
-                                                {{ 'member managment'|trans|capitalize }}
-                                            </h5>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_dashboardorganization_members') }}">{{ 'members'|trans|capitalize }}</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_dashboardorganization_mailinglists') }}">{{ 'Mailing Lists'|trans }}</a>
-                                        </li>
-                                    </ul>
                                 </div>
                                 <div class="col4">
                                     <!--
@@ -116,8 +102,22 @@
                                         -->
                                     </ul>
                                 </div>
-                                <!--
                                 <div class="col4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <h5 class="heading">
+                                                <i class="fa fa-building text-primary mr-2" aria-hidden="true"></i>
+                                                {{ 'member managment'|trans|capitalize }}
+                                            </h5>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_members') }}">{{ 'members'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_mailinglists') }}">{{ 'Mailing Lists'|trans }}</a>
+                                        </li>
+                                    </ul>
+                                    <!--
                                     <ul class="list-unstyled">
                                         <li>
                                             <h5 class="heading">
@@ -141,8 +141,8 @@
                                             <a href="{{ path('app_dashboardorganization_storylines') }}">{{ 'storylines'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
-                                </div>
                                 -->
+                                </div>
                             </div>
                         </div>
                     {% endif %}
