@@ -95,8 +95,9 @@ class DashboardOrganizationController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
 
             $product = $request->request->all();
+            unset($product['price']);
             $product['requiresAppointment'] = false;
-            $product['event'] =  $variables['event'];
+            $product['event'] =  $variables['event']['@id'];
             $product['type'] =  'ticket';
             $product['sourceOrganization'] =  $variables['organization']['@id'];
             $product =  $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
@@ -109,7 +110,7 @@ class DashboardOrganizationController extends AbstractController
             $offer['offeredBy'] = $variables['organization']['@id'];
             $offer['audience'] =  'public';
 
-            $product['offers'] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+            $product['offers'][] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
             $variables['products'][] = $product;
         }
 
