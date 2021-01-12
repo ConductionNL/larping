@@ -237,6 +237,7 @@ class DashboardOrganizationController extends AbstractController
             } else {
                 $this->addFlash('error', 'Er is een fout opgetreden');
             }
+
             return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
         } elseif ($request->isMethod('POST') && $request->get('inviteUser')) {
             $email = $request->get('email');
@@ -253,6 +254,7 @@ class DashboardOrganizationController extends AbstractController
                     $this->addFlash('error', 'Gebruiker zit al in de gekozen groep');
                 }
             }
+
             return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
         }
 
@@ -415,7 +417,7 @@ class DashboardOrganizationController extends AbstractController
                 $categories = [];
             }
 
-            if (!empty($address)){
+            if (!empty($address)) {
                 if (!isset($address['name'])) {
                     $address['name'] = $location['name'];
                 }
@@ -462,27 +464,27 @@ class DashboardOrganizationController extends AbstractController
             $categories = $resource['categories'];
 
             $email = [];
-            $email['name'] = 'email for ' . $person['name'];
+            $email['name'] = 'email for '.$person['name'];
             $email['email'] = $request->get('email');
             if (isset($email['id'])) {
                 $commonGroundService->saveResource($email, ['component' => 'cc', 'type' => 'emails']);
-                $resource['emails'][] = '/emails/' . $email['id'];
+                $resource['emails'][] = '/emails/'.$email['id'];
             } elseif (isset($email['email'])) {
                 $resource['emails'][] = $email;
             }
 
             $telephone = [];
-            $telephone['name'] = 'telephone for ' . $person['name'];
+            $telephone['name'] = 'telephone for '.$person['name'];
             $telephone['telephone'] = $request->get('telephone');
             if (isset($telephone['id'])) {
                 $commonGroundService->saveResource($telephone, ['component' => 'cc', 'type' => 'telephones']);
-                $resource['telephones'][] = '/telephones/' . $telephone['id'];
+                $resource['telephones'][] = '/telephones/'.$telephone['id'];
             } elseif (isset($telephone['telephone'])) {
                 $resource['telephones'][] = $telephone;
             }
 
             $address = [];
-            $address['name'] = 'address for ' . $person['name'];
+            $address['name'] = 'address for '.$person['name'];
             $address['street'] = $request->get('street');
             $address['houseNumber'] = $request->get('houseNumber');
             $address['houseNumberSuffix'] = $request->get('houseNumberSuffix');
@@ -490,7 +492,7 @@ class DashboardOrganizationController extends AbstractController
             $address['locality'] = $request->get('locality');
             if (isset($address['id'])) {
                 $commonGroundService->saveResource($address, ['component' => 'cc', 'type' => 'addresses']);
-                $resource['adresses'][] = '/addresses/' . $address['id'];
+                $resource['adresses'][] = '/addresses/'.$address['id'];
             } else {
                 $resource['adresses'][] = $address;
             }
@@ -587,5 +589,4 @@ class DashboardOrganizationController extends AbstractController
 
         return $variables;
     }
-
 }
