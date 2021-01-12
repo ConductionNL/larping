@@ -402,6 +402,7 @@ class DashboardOrganizationController extends AbstractController
     public function editOrganizationAction(CommonGroundService $commonGroundService, Request $request)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['type'] = 'organization';
 
         if ($request->isMethod('POST')) {
@@ -409,6 +410,7 @@ class DashboardOrganizationController extends AbstractController
             $resource['rsin'] = '';
             $resource['chamberOfComerce'] = '';
             $person = $commonGroundService->getResource($this->getUser()->getPerson());
+            $categories = $resource['categories'];
 
             $email = [];
             $email['name'] = 'email for ' . $person['name'];
@@ -516,7 +518,22 @@ class DashboardOrganizationController extends AbstractController
 //                $resource['socials'][] = $twitter;
 //            }
 
-            $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
+            $resource = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
+
+            // Setting the categories
+            /*@todo  This should go to a wrc service */
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$resource['id']])['hydra:member'];
+
+            if (count($resourceCategories) > 0) {
+                $resourceCategory = $resourceCategories[0];
+            } else {
+                $resourceCategory = ['resource'=>$resource['@id'], 'catagories'=>[]];
+            }
+
+            $resourceCategory['categories'] = $categories;
+            $resourceCategory['catagories'] = $categories;
+
+            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
         }
 
         return $variables;

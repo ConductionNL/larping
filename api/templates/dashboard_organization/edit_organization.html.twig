@@ -29,8 +29,6 @@
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
                         <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
-                        <p class="mb-5">{{ organization.description }}</p>
-
                         <div class="row">
                             <div class="form-group col-md-12 mb-6">
                                 <label for="name">{{ 'name'|trans|capitalize }}</label>
@@ -42,6 +40,14 @@
                                 <label for="description">{{ 'description'|trans|capitalize }}</label>
                                 <textarea class="form-control" rows="6" id="description"
                                           name="description">{{ organization.description }}</textarea>
+                            </div>
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="description">{{ 'categories'|trans|capitalize }}</label>
+                                <select class="form-control select-multiple" aria-label="" id="categories{{ id }}" name="categories[]" multiple="select-multiple">
+                                    {% for category in settings %}
+                                        <option value="/categories/{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
 
