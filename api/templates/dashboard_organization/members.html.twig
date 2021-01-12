@@ -19,12 +19,12 @@
 
         <div class="row">
             <!-- Users -->
-            <div class="col-lg-8">
+            <div class="col-lg-7">
                 <div class="card border-light shadow-sm">
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h2 class="h5">{{ 'Users'|trans|capitalize }}</h2></div>
+                                <h2 class="h5">{{ 'members'|trans|capitalize }}</h2></div>
                         </div>
                     </div>
                     {%  include 'dashboard_organization/tables/users.html.twig' %}
@@ -32,12 +32,12 @@
             </div>
 
             <!-- Groups -->
-            <div class="col-lg-4">
+            <div class="col-lg-5">
                 <div class="card border-light shadow-sm">
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h2 class="h5">{{ 'Groups'|trans|capitalize }}</h2></div>
+                                <h2 class="h5">{{ 'groups'|trans|capitalize }}</h2></div>
                         </div>
                     </div>
                     {% include 'dashboard_organization/tables/groups.html.twig' %}
