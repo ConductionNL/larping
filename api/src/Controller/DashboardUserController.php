@@ -195,8 +195,6 @@ class DashboardUserController extends AbstractController
         $variables = [];
     }
 
-
-
     /**
      * @Route("/events")
      * @Template
