@@ -19,7 +19,7 @@
                 <li class="mb-2">
                     <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
                     {% if category.id in categories %}
-                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span></a>
+                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span><span style="color: red" class="fa fa-times px-2 py-1"></span></a>
                     {% else %}
                         <a href="{{ path('app_event_index', {"categories":categories|merge([category.id]),"search":search}) }}">{{ category.name|title }} </a>
                     {% endif %}
@@ -35,7 +35,7 @@
                 <li class="mb-2">
                     <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
                     {% if category.id in categories %}
-                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span></a>
+                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span><span style="color: red" class="fa fa-times px-2 py-1"></span></a>
                     {% else %}
                         <a href="{{ path('app_event_index', {"categories":categories|merge([category.id]),"search":search}) }}">{{ category.name|title }} </a>
                     {% endif %}
@@ -51,7 +51,7 @@
                 <li class="mb-2">
                     <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
                     {% if category.id in categories %}
-                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span></a>
+                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span><span style="color: red" class="fa fa-times px-2 py-1"></span></a>
                     {% else %}
                         <a href="{{ path('app_event_index', {"categories":categories|merge([category.id]),"search":search}) }}">{{ category.name|title }} </a>
                     {% endif %}
