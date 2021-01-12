@@ -290,7 +290,7 @@ class DashboardOrganizationController extends AbstractController
 
         if ($request->isMethod('POST') && $request->request->get('MailToList') == 'true') {
             // Get the correct sendList to send this mail to
-            $sendListId = $request->get('id');;
+            $sendListId = $request->get('id');
 
             // Setup the mail to be send
             $mail = [];
@@ -298,7 +298,7 @@ class DashboardOrganizationController extends AbstractController
             $mail['html'] = $request->get('html');
             $mail['sender'] = $variables['organization']['name'].'@larping.eu';
 
-            // Send email to all subscribers of this mailing list.
+        // Send email to all subscribers of this mailing list.
 //            $idVaultService->sendToSendList($sendListId, $mail);
         } elseif ($request->isMethod('POST')) {
             // Get the resource
