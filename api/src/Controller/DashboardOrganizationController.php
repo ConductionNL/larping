@@ -402,7 +402,6 @@ class DashboardOrganizationController extends AbstractController
     public function editOrganizationAction(CommonGroundService $commonGroundService, Request $request)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        var_dump($variables['organization']);die();
         $variables['type'] = 'organization';
 
         if ($request->isMethod('POST')) {
