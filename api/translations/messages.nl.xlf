@@ -435,6 +435,62 @@
          <source>buy a ticket</source>
          <target>koop een kaartje</target>
          </trans-unit>
+         <trans-unit id="uoiRkas" resname="my memberships">
+         <source>my memberships</source>
+         <target>mijn lidmaatschappen</target>
+         </trans-unit>
+         <trans-unit id="rtxRkas" resname="my profile">
+         <source>my profile</source>
+         <target>mijn profiel</target>
+         </trans-unit>
+         <trans-unit id="uHHHkas" resname="memberships">
+         <source>memberships</source>
+         <target>lidmaatschappen</target>
+         </trans-unit>
+         <trans-unit id="betskas" resname="groups">
+         <source>groups</source>
+         <target>groepen</target>
+         </trans-unit>
+         <trans-unit id="upeosas" resname="member from">
+         <source>member from</source>
+         <target>lid van</target>
+         </trans-unit>
+         <trans-unit id="urrrras" resname="contribution">
+         <source>contribution</source>
+         <target>bijdragen</target>
+         </trans-unit>
+         <trans-unit id="etsedas" resname="renewal">
+         <source>renewal</source>
+         <target>vernieuwing</target>
+         </trans-unit>
+         <trans-unit id="uertyas" resname="member page">
+         <source>member page</source>
+         <target>ledenpagina</target>
+         </trans-unit>
+         <trans-unit id="awsddas" resname="unsubscribe">
+         <source>unsubscribe</source>
+         <target>afmelden</target>
+         </trans-unit>
+         <trans-unit id="eqqqdas" resname="membership">
+         <source>membership</source>
+         <target>lidmaatschap</target>
+         </trans-unit>
+         <trans-unit id="ertydas" resname="go to dashboard">
+         <source>go to dashboard</source>
+         <target>naar het dashboard</target>
+         </trans-unit>
+         <trans-unit id="mkxcdas" resname="logout">
+         <source>logout</source>
+         <target>uitloggen</target>
+         </trans-unit>
+         <trans-unit id="qsawras" resname="search">
+         <source>search</source>
+         <target>zoeken</target>
+         </trans-unit>
+         <trans-unit id="wsxwras" resname="no products in cart">
+         <source>no products in cart</source>
+         <target>geen producten in winkelwagen</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
