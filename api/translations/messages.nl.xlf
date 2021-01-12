@@ -431,6 +431,10 @@
          <source>reviews</source>
          <target>beoordelingen</target>
          </trans-unit>
+         <trans-unit id="uRRRkas" resname="buy a ticket">
+         <source>buy a ticket</source>
+         <target>koop een kaartje</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
