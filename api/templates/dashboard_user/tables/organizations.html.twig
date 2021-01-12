@@ -14,7 +14,7 @@
     <tr>
         <td>{{ organization.name }} {% if app.user.organization is defined and organization['@id'] == app.user.organization %}<i style="color: green" class="fas fa-check-circle mr-2"></i>{% endif %}</td>
         <td>
-            <a class="btn btn-outline-primary btn-sm" href="{{ path('app_dashboard_switchorganization', {id: organization.id}) }}">{<i class="fas fa-edit" aria-hidden="true"></i>{{ 'go to dashboard'|trans|capitalize }}</a>
+            <a class="btn btn-outline-primary btn-sm" href="{{ path('app_dashboard_switchorganization', {id: organization.id}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'go to dashboard'|trans|capitalize }}</a>
         </td>
     </tr>
     {% endfor %}

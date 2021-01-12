@@ -4,7 +4,7 @@
     <thead>
     <tr>
         <th>{{ 'name'|trans|capitalize }}</th>
-        <th>{{ 'date'|trans|capitalize }}</th>
+        <th>{{ 'start'|trans|capitalize }}</th>
         <th>{{ 'end'|trans|capitalize }}</th>
         <th>{{ 'location'|trans|capitalize }}</th>
         <th>{{ 'tickets available'|trans|capitalize }}</th>
@@ -33,7 +33,6 @@
             <span class="badge badge-warning px-2 py-1">{{event.status}}</span>
         </td>
         <td>
-            <a class="btn btn-outline-primary btn-sm" href="{{ path('app_dashboardorganization_event', {id: organization.id}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
 
             <div class="dropdown">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -41,6 +40,7 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_event', {id: organization.id}) }}">{{ 'edit'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="{{ path('app_dashboardorganization_eventcheckin', { id: event.id}) }}">{{ 'checkin'|trans|capitalize }}</a>
                     <a class="dropdown-item" href="{{ path('app_dashboardorganization_eventtickets', { id: event.id}) }}">{{ 'tickets'|trans|capitalize }}</a>
                 </div>

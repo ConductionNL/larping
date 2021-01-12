@@ -51,26 +51,15 @@ class EventController extends AbstractController
         $variables = [];
         $variables['path'] = 'app_event_event';
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['event']['@id']])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['event']['@id']]);
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['event']['id']]);
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['event']['id']])['hydra:member'];
 
         /* deze is wat wierd */
         if (isset($variables['event']['resource']) && strpos($variables['event']['resource'], '/pdc/products/')) {
             $variables['product'] = $commonGroundService->getResource($variables['event']['resource']);
-        }
-
-        // Add review
-        if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {
-            $resource = $request->request->all();
-
-            $resource['organization'] = $variables['event']['organization'];
-            $resource['resource'] = $variables['event']['@id'];
-            $resource['author'] = $this->getUser()->getPerson();
-            $resource['rating'] = (int) $resource['rating'];
-
-            // Save to the commonground component
-            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
         }
 
         /* @todo dit willen we denk ik verplaatsen naar een algemene order api */
