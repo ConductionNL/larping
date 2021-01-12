@@ -15,7 +15,7 @@
                 </td>
                 <td>
                     <a class="text-hover-primary text-muted" >
-                        {% for group in user.groups %}{% if user.groups|length == 1 %}{{ group|capitalize }}{% else %}{{ group|capitalize }},{% endif %}{% endfor %}
+                        {% for group in user.groups %}{{ group|capitalize }}{% if not loop.last %}, {% endif %}{% endfor %}
                     </a>
                 </td>
                 <td>

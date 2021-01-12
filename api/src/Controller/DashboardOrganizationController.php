@@ -238,6 +238,22 @@ class DashboardOrganizationController extends AbstractController
                 $this->addFlash('error', 'Er is een fout opgetreden');
             }
             return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
+        } elseif ($request->isMethod('POST') && $request->get('inviteUser')) {
+            $email = $request->get('email');
+            $selectedGroup = $request->get('group');
+
+            foreach ($variables['groups'] as $group) {
+                if ($group['name'] == 'root' && !in_array($email, $group['users'])) {
+                    $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, true);
+                }
+                if ($group['id'] == $selectedGroup && !in_array($email, $group['users'])) {
+                    $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, true);
+                    $this->addFlash('success', 'gebruiker is toegevoegd aan groep');
+                } elseif ($group['id'] == $selectedGroup && in_array($email, $group['users']) && $group['name'] !== 'root') {
+                    $this->addFlash('error', 'Gebruiker zit al in de gekozen groep');
+                }
+            }
+            return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
         }
 
         return $variables;

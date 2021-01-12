@@ -639,7 +639,7 @@
       </trans-unit>
       <trans-unit id="giREF.l" resname="email">
         <source>email</source>
-        <target>__email</target>
+        <target>email</target>
       </trans-unit>
       <trans-unit id="kRiRT1h" resname="add more emails">
         <source>add more emails</source>
