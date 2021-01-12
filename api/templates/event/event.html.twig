@@ -96,7 +96,7 @@
                     {% if product.offers|default %}
                         <div class="my-6">
                             <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
-                            <form action="{{ path(path, {id: event.id}) }}" method="post">
+                            <form action="{{ path('app_shopping_addoffers') }}" method="post">
 
                                 {% if product.prerequisiteProducts|default %}
                                     <p style="color: indianred">{{ 'there are other products needed before you can buy this product'|capitalize|trans }}
@@ -115,7 +115,7 @@
                                                 <label for="offerInput"
                                                        style="color: white">{{ product.name|capitalize }}</label>
                                                 <select id="offerInput" class="form-control"
-                                                        name="offers[{{ counter }}][@id]" required>
+                                                        name="offers[{{ counter }}][offer]" required>
                                                     <option
                                                         value="">{{ 'select an'|trans|capitalize~' '~'offer'|trans }}</option>
                                                     {% for offer in product.offers %}
@@ -143,7 +143,7 @@
                                 <div class="row">
                                     <div class="form-group col-8">
                                         <label for="offerInput">{{ 'offer'|trans|capitalize }}</label>
-                                        <select id="offerInput" class="form-control" name="offers[0][@id]" required>
+                                        <select id="offerInput" class="form-control" name="offers[0][offer]" required>
                                             <option
                                                 value="">{{ 'select an'|trans|capitalize~' '~'offer'|trans }}</option>
                                             {% for offer in product.offers %}

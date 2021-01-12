@@ -301,6 +301,15 @@
          <source>categories</source>
          <target>categorieën</target>
          </trans-unit>
+         <trans-unit id="U1bh2as" resname="other">
+         <source>other</source>
+         <target>andere</target>
+         </trans-unit>
+         <trans-unit id="ABcea12" resname="other">
+         <source>other</source>
+         <target>andere</target>
+         </trans-unit>
+
          <trans-unit id="8HBAYsd" resname="contact us">
          <source>contact us</source>
          <target>contact</target>

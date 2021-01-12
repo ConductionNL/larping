@@ -19,6 +19,14 @@
                                                                                                   class="link">{{ 'invoice'|trans }}</a>
                                 </p>
 
+                                {% set orders = app.session.get('orders') %}
+                                {% if orders|default and orders|length > 0 %}
+                                    <p class="mb-0 text-center">{{ 'view your other items in your'|trans|capitalize }}
+                                        <a href="{{ 'app_shopping_index' }}"
+                                           class="link">{{ 'shopping cart'|trans }}</a>
+                                    </p>
+                                {% endif %}
+
                                 {#                          Get website from owner of the   #}
                                 {% if invoice.order|default %}
                                     {% set order = commonground_resource(invoice.order) %}
@@ -61,7 +69,7 @@
                             <div class="card-footer bg-transparent text-center py-3">
                                 <form action="{{ path('app_order_index') }}" method="post">
                                     <button type="submit" name="makeOrder" value="true"
-                                            class="link button-as-a" >{{ 'try again'|trans|capitalize }}</button>
+                                            class="link button-as-a">{{ 'try again'|trans|capitalize }}</button>
                                 </form>
                                 <p>
                                     {{ 'or'|trans }}
