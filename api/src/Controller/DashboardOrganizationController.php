@@ -304,23 +304,47 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/mailinglists")
      * @Template
      */
-    public function mailinglistsAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService)
+    public function mailinglistsAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params)
     {
-        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['mailingLists'] = [];
-//        $variables['mailingLists'] = $idVaultService->getSendLists();
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
 
-        if ($request->isMethod('POST') && $request->request->get('MailingEvent') == 'true') {
-            // Send email to all subscribers of this mailing list.
+        // Get the organization
+        $organizationUrl = $this->getUser()->getOrganization();
+        $variables['organization'] = $commonGroundService->getResource($organizationUrl);
+
+        // Get clientSecret of larping application
+        $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
+        $clientSecret = $providers[0]['configuration']['secret'];
+
+        // Get mailingLists from id-vault with filters: larping application secret and this users organization url
+        $variables['mailingLists'] = $idVaultService->getSendLists($clientSecret, $organizationUrl);
+
+        if ($request->isMethod('POST') && $request->request->get('MailToList') == 'true') {
+            // Get the correct sendList to send this mail to
+            $sendListId = $request->get('id');
+
+            // Setup the mail to be send
+            $mail = [];
+            $mail['title'] = $request->get('title');
+            $mail['html'] = $request->get('html');
+            $mail['sender'] = $variables['organization']['name'].'@larping.eu';
+
+        // Send email to all subscribers of this mailing list.
+//            $idVaultService->sendToSendList($sendListId, $mail);
         } elseif ($request->isMethod('POST')) {
             // Get the resource
             $sendList = $request->request->all();
             // Set Organization and email sendList type
-            $sendList['organization'] = $variables['organization']['@id'];
+            $sendList['resource'] = $organizationUrl;
             $sendList['email'] = true;
 
-            // Save the mailing list resource
-            //$commonGroundService->saveResource($sendList, ['component' => 'bs', 'type' => 'send_lists']);
+            // Save the mailing list resource on id-vault
+            $idVaultService->createSendList($clientSecret, $sendList);
+
+            return $this->redirect($this->generateUrl('app_dashboardorganization_mailinglists'));
         }
 
         return $variables;
