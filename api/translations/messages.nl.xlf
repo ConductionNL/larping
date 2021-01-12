@@ -53,6 +53,18 @@
         <source>no e-mail</source>
         <target>geen e-mail</target>
       </trans-unit>
+      <trans-unit id="UwwPUFN" resname="Mailing Lists">
+        <source>Mailing Lists</source>
+        <target>E-mail Lijsten</target>
+      </trans-unit>
+      <trans-unit id="i-FjlYV" resname="no mailing lists found">
+        <source>no mailing lists found</source>
+        <target>geen e-mail lijsten gevonden</target>
+      </trans-unit>
+      <trans-unit id="1ok7NWH" resname="add your first mailing list">
+        <source>add your first mailing list</source>
+        <target>voeg uw eerste e-mail lijst toe</target>
+      </trans-unit>
       <trans-unit id="On1bas2" resname="no results found">
         <source>no results found</source>
         <target>geen resultaten gevonden</target>
@@ -289,7 +301,91 @@
          <source>categories</source>
          <target>categorieën</target>
          </trans-unit>
+         <trans-unit id="U1bh2as" resname="other">
+         <source>other</source>
+         <target>andere</target>
+         </trans-unit>
+         <trans-unit id="ABcea12" resname="other">
+         <source>other</source>
+         <target>andere</target>
+         </trans-unit>
 
+         <trans-unit id="8HBAYsd" resname="contact us">
+         <source>contact us</source>
+         <target>contact</target>
+         </trans-unit>
+         <trans-unit id="86GS14X" resname="terms and conditions">
+         <source>terms and conditions</source>
+         <target>voorwaarden</target>
+         </trans-unit>
+         <trans-unit id="BNAJ93" resname="how it works">
+         <source>how it works</source>
+         <target>hoe werkt het</target>
+         </trans-unit>
+         <trans-unit id="8uMAOPA" resname="payment">
+         <source>payment</source>
+         <target>betaling</target>
+         </trans-unit>
+         <trans-unit id="BBBB12g" resname="pricing">
+         <source>pricing</source>
+         <target>prijsstelling</target>
+         </trans-unit>
+         <trans-unit id="BBTT12g" resname="company">
+         <source>company</source>
+         <target>bedrijf</target>
+         </trans-unit>
+         <trans-unit id="OGGGoas" resname="login">
+         <source>login</source>
+         <target>inloggen</target>
+         </trans-unit>
+         <trans-unit id="GOwutZq" resname="register">
+         <source>register</source>
+         <target>registreren</target>
+         </trans-unit>
+         <trans-unit id="GOKKtZq" resname="all regions">
+         <source>all regions</source>
+         <target>alle regio's</target>
+         </trans-unit>
+         <trans-unit id="BBAStZq" resname="regions">
+         <source>regions</source>
+         <target>regio's</target>
+         </trans-unit>
+         <trans-unit id="BaFttZq" resname="favorites">
+         <source>favorieten</source>
+         <target>favorieten</target>
+         </trans-unit>
+         <trans-unit id="GBYEzZq" resname="enter your keywords">
+         <source>enter your keywords</source>
+         <target>voer uw zoekwoorden in</target>
+         </trans-unit>
+         <trans-unit id="GTfatZq" resname="secure trading">
+         <source>secure trading</source>
+         <target>veilig handelen</target>
+         </trans-unit>
+         <trans-unit id="BmakoZq" resname="24/7 hours support">
+         <source>24/7 hours support</source>
+         <target>24/7 uur ondersteuning</target>
+         </trans-unit>
+         <trans-unit id="Gbaystq" resname="easy trading">
+         <source>easy trading</source>
+         <target>gemakkelijk handelen</target>
+         </trans-unit>
+         <trans-unit id="NNrtaZq" resname="upcoming events">
+         <source>upcoming events</source>
+         <target>aankomende evenementen</target>
+         </trans-unit>
+         <trans-unit id="Opatstq" resname="see all events">
+         <source>see all events</source>
+         <target>bekijk alle evenementen</target>
+         </trans-unit>
+         <trans-unit id="YYYtstq" resname="what should be next on your calander">
+         <source>what should be next on your calander</source>
+         <target>wat zal het volgende zijn op je kalender</target>
+         </trans-unit>
+         <trans-unit id="OMFFstq" resname="about larping.eu">
+         <source>about larping.eu</source>
+         <target>over larping.eu</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>

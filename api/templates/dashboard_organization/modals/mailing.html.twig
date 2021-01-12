@@ -1,12 +1,12 @@
 {% extends "dashboard_organization/modals/modal.html.twig" %}
 
 {% if resource is defined %}
-    {% set  id = resource['id'] %}
-    {% set  type = 'Mailing' %}
+    {% set id = resource['id'] %}
 {% else %}
-    {% set  id = 'Add' %}
-    {% set  type = 'Mailing' %}
+    {% set id = 'Add' %}
 {% endif %}
+{% set type = 'Mailing' %}
+{% set modalEvent = 'MailingEvent' %}
 
 {% block body %}
 <form id="{{ type }}Form{{ id }}" method="post">

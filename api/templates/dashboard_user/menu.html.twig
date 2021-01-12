@@ -8,22 +8,28 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
 
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ path('app_dashboarduser_memberships') }}">
+                        <i class="fa fa-building" aria-hidden="true"></i>{{ 'my memberchips'|trans|capitalize }}</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_organizations') }}">
-                        <i class="fa fa-building" aria-hidden="true"></i>{{ 'my'|trans|capitalize~' '~'organizations'|trans }}</a>
+                        <i class="fa fa-building" aria-hidden="true"></i>{{ 'my organizations'|trans }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_events') }}">
-                        <i class="far fa-calendar-alt" aria-hidden="true"></i>{{ 'my'|trans|capitalize~' '~'events'|trans }}</a>
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>{{ 'my events'|trans }}</a>
                 </li>
-
+                <!--
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_characters') }}">
-                        <i class="fa fa-calendar-o" aria-hidden="true"></i>{{ 'my'|trans|capitalize~' '~'characters'|trans }}</a>
+                        <i class="fa fa-calendar-o" aria-hidden="true"></i>{{ 'my characters'|trans }}</a>
                 </li>
+                -->
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_favorites') }}">
-                        <i class="far fa-heart" aria-hidden="true"></i>{{ 'my'|trans|capitalize~' '~'favourites'|trans }}</a>
+                        <i class="far fa-heart" aria-hidden="true"></i>{{ 'my favourites'|trans }}</a>
                 </li>
             </ul>
 
