@@ -347,11 +347,11 @@ class DashboardOrganizationController extends AbstractController
             // Setup the mail to be send
             $mail = [];
             $mail['title'] = $request->get('title');
-            $mail['html'] = $request->get('html');
-            $mail['sender'] = $variables['organization']['name'].'@larping.eu';
+            $mail['html'] = '<p>HTML content of the mail</p>';//$request->get('html');
+            $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']).'@larping.eu';
 
         // Send email to all subscribers of this mailing list.
-//            $idVaultService->sendToSendList($sendListId, $mail);
+            $idVaultService->sendToSendList($sendListId, $mail);
         } elseif ($request->isMethod('POST')) {
             // Get the resource
             $sendList = $request->request->all();
