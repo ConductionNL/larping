@@ -8,6 +8,7 @@ use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -200,12 +201,33 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/members")
      * @Template
      */
-    public function membersAction(CommonGroundService $commonGroundService, Request $request)
+    public function membersAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['users'] = [];
-        $variables['groups'] = [];
+        $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $variables['organization']['id']]);
+        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
+        $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
+
+        if (count($variables['groups']) == 0) {
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$variables['organization']['name']}", $organizationUrl);
+            $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
+            $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
+            $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
+        }
+
+        $users = [];
+        foreach ($variables['groups'] as $group) {
+            foreach ($group['users'] as $user) {
+                if (in_array($user, $users)) {
+                    $users[$user]['groups'][] = $group['name'];
+                } else {
+                    $users[$user]['name'] = $user;
+                    $users[$user]['groups'][] = $group['name'];
+                }
+            }
+        }
+        $variables['users'] = $users;
         return $variables;
     }
 
