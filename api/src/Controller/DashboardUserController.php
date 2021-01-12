@@ -148,6 +148,12 @@ class DashboardUserController extends AbstractController
             $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
             $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
 
+            //create the groups clients, members, administrators
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
+
+
             $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$organization['id']])['hydra:member'];
 
             if (count($categories) > 0) {
