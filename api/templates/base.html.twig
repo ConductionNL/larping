@@ -69,6 +69,27 @@
 
     {% include 'header.html.twig' %}
 
+    {% set flashes = [] %}
+    {% for label, messages in app.flashes() %}
+        {% for message in messages %}
+            {% if message not in flashes %}
+                {% set flashes = flashes|merge([message]) %}
+                <div class="alert alert-{% if label == 'error' %}{% set label = 'danger' %}{% endif %}{{ label }} rounded-0 mb-0">
+                    <div class="container-md">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- Text -->
+                                <p class="text-center mb-0">
+                                    {{ message|trans|capitalize }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
     {% block content %}
 
     {% endblock %}
@@ -92,7 +113,7 @@
 <script src="/bundles/listy/plugins/revolution/js/jquery.themepunch.revolution.min.js"></script>
 <script src="/bundles/listy/plugins/smoothscroll/SmoothScroll.js"></script>
 <script src="/bundles/listy/plugins/owl-carousel/owl.carousel.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDU79W1lu5f6PIiuMqNfT1C6M0e_lq1ECY"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWklIAhbeyYWWX5cJLOaNW3qw9PErDjLg"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
 <script src="/bundles/listy/plugins/map/js/markerclusterer.js"></script>
@@ -101,6 +122,7 @@
 <script src="/bundles/listy/js/map.js"></script>
 <script src="/bundles/listy/js/listty.js"></script>
 <script>
+
     // select2 multiselect
     $(document).ready(function() {
         $('.select-multiple').select2({

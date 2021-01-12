@@ -6,8 +6,8 @@ namespace App\Controller;
 
 use App\Service\MailingService;
 use App\Service\ShoppingService;
-use Conduction\CommonGroundBundle\Security\User\CommongroundUser;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -15,8 +15,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * The DashboardController handles any calls about administration and dashboard pages.
@@ -31,35 +29,45 @@ class DashboardUserController extends AbstractController
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService, ShoppingService $shoppingService,  MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    public function indexAction(CommonGroundService $commonGroundService, ShoppingService $shoppingService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
 
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
         $variables['events'] = $shoppingService->getOwnedProducts($this->getUser()->getPerson());
-        $variables['characters'] = [];// $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
+        $variables['characters'] = []; // $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
         $variables['participants'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'people'])['hydra:member'];
         $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
+
         return $variables;
+    }
+
+    /**
+     * @Route("/memberships")
+     * @Template
+     */
+    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables = [];
     }
 
     /**
      * @Route("/organizations")
      * @Template
      */
-    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, IdVaultService $idVaultService)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
-        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
 //        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => $params->get('app_id')]);
         $variables['type'] = 'organization';
 
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
-            $resource['rsin'] = "";
-            $resource['chamberOfComerce'] = "";
+            $resource['rsin'] = '';
+            $resource['chamberOfComerce'] = '';
             // @todo person toevoegen
             $person = $commonGroundService->getResource($this->getUser()->getPerson());
 //            $resource['persons'][] = $person;
@@ -99,8 +107,8 @@ class DashboardUserController extends AbstractController
             }
 
             $socials = [];
-            $socials['name'] = $request->get('type'). ' of '.$person['name'];
-            $socials['description'] = $request->get('type'). ' of '.$person['name'];
+            $socials['name'] = $request->get('type').' of '.$person['name'];
+            $socials['description'] = $request->get('type').' of '.$person['name'];
             $socials['type'] = $request->get('type');
             $socials['url'] = $request->get('url');
             if (isset($twitter['id'])) {
@@ -124,26 +132,39 @@ class DashboardUserController extends AbstractController
             */
             // Update to the commonground component
 
-            $categories = $resource['categories'];
-            if(!$categories) $categories = [];
+            if (isset($resource['categories'])) {
+                $categories = $resource['categories'];
+            }
+            if (!isset($categories)) {
+                $categories = [];
+            }
             unset($resource['categories']);
 
             $organization = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
+            $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
+            $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
-            $resourceCategories =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'],['resource'=>$organization['id']])['hydra:member'];
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
+            $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
+            $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
 
-            if(count($categories) > 0){
+            //create the groups clients, members, administrators
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
+
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$organization['id']])['hydra:member'];
+
+            if (count($categories) > 0) {
                 $resourceCategory = $resourceCategories[0];
-            }
-            else{
-                $resourceCategory = ['resource'=>$organization['@id'],'catagories'=>[]];
+            } else {
+                $resourceCategory = ['resource'=>$organization['@id'], 'catagories'=>[]];
             }
 
             $resourceCategory['categories'] = $categories;
             $resourceCategory['catagories'] = $categories;
 
             $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
-
 
 //            if($new){
 //                /*@todo de ingelogde gebruiker toevoegen aan de organisatie */
@@ -158,10 +179,23 @@ class DashboardUserController extends AbstractController
 //                $user = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'users'], ['username' => $this->getUser()->getUsername()])['hydra:member'];
 //
 //            }
-
         }
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+
         return $variables;
     }
+
+    /**
+     * @Route("/addorganization")
+     * @Template
+     */
+    public function addorganizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables = [];
+    }
+
+
 
     /**
      * @Route("/events")
@@ -184,12 +218,11 @@ class DashboardUserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
-        $variables['characters'] = [];//commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
+        $variables['characters'] = []; //commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'], ['persons' => $this->getUser()->getPerson()])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             $character = $request->request->all();
-
         }
 
         return $variables;

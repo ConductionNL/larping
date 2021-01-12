@@ -1,0 +1,60 @@
+
+<table id="events" class="display nowrap table" style="width:100%">
+    <thead class="thead-light">
+    <tr>
+        <th>{{ 'organization'|trans|capitalize }}</th>
+        <th>{{ 'membership'|trans|capitalize }}</th>
+        <th>{{ 'groups'|trans|capitalize }}</th>
+        <th>{{ 'member from'|trans|capitalize }}</th>
+        <th>{{ 'contribution'|trans|capitalize }}</th>
+        <th>{{ 'renewal'|trans|capitalize }}</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Vortex adventure</td>
+        <td>Jaarlid</td>
+        <td>Leden, Spelleiders, Bestuur</td>
+        <td>2020/1/1</td>
+        <td>€120 / year</td>
+        <td>
+            <span class="badge badge-warning px-2 py-1">No</span>
+        </td>
+        <td>
+            <div class="dropdown">
+                <a class="fas fa-ellipsis-v" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">{{ 'member page'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">{{ 'unsubscribe'|trans|capitalize }}</a>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>Ommen</td>
+        <td>Jaarlid</td>
+        <td>Leden, Spelleiders </td>
+        <td>2020/1/1</td>
+        <td>€10 / month </td>
+        <td>
+            <span class="badge badge-success px-2 py-1">Yes</span>
+        </td>
+        <td>
+            <div class="dropdown">
+                <a href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i class="fas fa-ellipsis-v"></i>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">{{ 'member page'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">{{ 'unsubscribe'|trans|capitalize }}</a>
+                </div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>

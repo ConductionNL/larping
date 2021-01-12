@@ -1,0 +1,175 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {% include 'dashboard_organization/menu.html.twig' %}
+
+    <!-- Breadcrumb -->
+    <section class="pb-8 pt-5 bg-light height100vh">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'checkin for'|trans|capitalize }} {{ event.name}}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item active"
+                        aria-current="page">{{ 'checkin'|trans|capitalize }}</li>
+                </ul>
+            </nav>
+
+            <div class="row">
+
+                <!-- checked-in -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'checked-in'|trans|capitalize }}</span>
+                            <span class="badge badge-primary">{{ 'download'|trans|capitalize }}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">221</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">{{ 'people currently pressent'|trans|capitalize }}</p>
+                            </div>
+                            <a href="#" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
+                        </div>
+                    </div><!-- /.col -->
+                </div><!-- /.col -->
+
+                <!-- checked-in -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'To do'|trans|capitalize }}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">400</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">{{ 'people yet to check in'|trans|capitalize }}</p>
+                            </div>
+                            <a href="#" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
+                        </div>
+                    </div><!-- /.col -->
+                </div><!-- /.col -->
+
+                <!-- checked-in -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'checked-out'|trans|capitalize }}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">6</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">{{ 'people that have left'|trans|capitalize }}</p>
+                            </div>
+                            <a href="#" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
+                        </div>
+                    </div><!-- /.col -->
+                </div><!-- /.col -->
+
+            </div><!-- /.row -->
+
+            <!-- events -->
+            <table id="checkin" class="display nowrap table" style="width:100%">
+                <thead>
+                <tr>
+                    <th>{{ 'reference'|trans|capitalize }}</th>
+                    <th>{{ 'person'|trans|capitalize }}</th>
+                    <th>{{ 'membership'|trans|capitalize }}</th>
+                    <th>{{ 'order'|trans|capitalize }}</th>
+                    <th>{{ 'payment'|trans|capitalize }}</th>
+                    <th>{{ 'status'|trans|capitalize }}</th>
+                    <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#CheckinModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            5092
+                        </td>
+                        <td class="text-capitalize">
+                            <a class="text-hover-primary text-muted" >Ruben van der Linde</a>
+                        </td>
+                        <td>
+                            Jaarlid
+                        </td>
+                        <td>
+                            Vortes Adventures 2020-12
+                        </td>
+                        <td>
+                            <span class="badge badge-danger px-2 py-1">Not paid</span>
+                        </td>
+                        <td>
+                            <span class="badge badge-warning px-2 py-1">Not checked in</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-primary btn-sm" href="#"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            5092
+                        </td>
+                        <td class="text-capitalize">
+                            <a class="text-hover-primary text-muted" >Ruben van der Linde</a>
+                        </td>
+                        <td>
+                            Jaarlid
+                        </td>
+                        <td>
+                            Vortes Adventures 2020-12
+                        </td>
+                        <td>
+                            Paid
+                        </td>
+                        <td>
+                            <span class="badge badge-success px-2 py-1">Checked in</span>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a href="#" role="button" id="dropdownMenuLink"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i class="fas fa-ellipsis-v"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" href="#">{{ 'check out'|trans|capitalize }}</a>
+                                    <a class="dropdown-item" href="#">{{ 'emergency information'|trans|capitalize }}</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            5092
+                        </td>
+                        <td class="text-capitalize">
+                            <a class="text-hover-primary text-muted" >Ruben van der Linde</a>
+                        </td>
+                        <td>
+                            Jaarlid
+                        </td>
+                        <td>
+                            Vortes Adventures 2020-12
+                        </td>
+                        <td>
+                            Paid
+                        </td>
+                        <td>
+                            <span class="badge badge-danger px-2 py-1">checked out</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-primary btn-sm" href="#"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+{% endblock %}

@@ -5,7 +5,8 @@
     <tr>
         <th>{{ 'name'|trans|capitalize }}</th>
         <th>
-            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#OrganizationModalAdd">{{ 'add'|trans|capitalize }}</button>
+{#            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#OrganizationModalAdd">{{ 'add'|trans|capitalize }}</button>#}
+            <a href="{{ path('app_dashboarduser_addorganization') }}" class="btn btn-success btn-sm">{{ 'add'|trans|capitalize }}</a>
         </th>
     </tr>
     </thead>
@@ -14,16 +15,7 @@
     <tr>
         <td>{{ organization.name }} {% if app.user.organization is defined and organization['@id'] == app.user.organization %}<i style="color: green" class="fas fa-check-circle mr-2"></i>{% endif %}</td>
         <td>
-            <div class="dropdown">
-                <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#OrganizationModal{{ organization.id }}">{{ 'edit'|trans|capitalize }}</a>
-                    <a class="dropdown-item" href="{{ path('app_dashboard_switchorganization', {id: organization.id}) }}">{{ 'admin'|trans|capitalize }}</a>
-                    <a class="dropdown-item" href="{{ path('app_organization_organization', {id: organization.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
-                </div>
-            </div>
+            <a class="btn btn-outline-primary btn-sm" href="{{ path('app_dashboard_switchorganization', {id: organization.id}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'go to dashboard'|trans|capitalize }}</a>
         </td>
     </tr>
     {% endfor %}
