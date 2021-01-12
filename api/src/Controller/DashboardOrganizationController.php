@@ -144,8 +144,42 @@ class DashboardOrganizationController extends AbstractController
             $product = $request->request->all();
             // Set the current organization as owner
             $product['organization'] = $variables['organization']['@id'];
+            $product['sourceOrganization'] = $variables['organization']['@id'];
             // Save the resource
-            $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
+            $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
+
+            // redirects externally
+            if ($product['id']) {
+                return $this->redirectToRoute('app_dashboardorganization_editproduct', ['id'=>$product['id']]);
+            }
+        }
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/products/{id}/edit")
+     * @Template
+     */
+    public function editProductAction(CommonGroundService $commonGroundService, Request $request, $id)
+    {
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['product'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products', 'id' => $id]);
+        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
+
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            //$product = array_merge($variables['product'],$request->request->all()) ;
+            $product = $request->request->all();
+            // Set the current organization as owner equiresAppointment
+            //$product['id'] =  $id;
+            //$product['requiresAppointment'] = false;
+            //$product['organization'] = $variables['organization']['@id'];
+            //$product['sourceOrganization'] = $variables['organization']['@id'];
+            // Save the resource
+            $variables['product'] =  $commonGroundService->updateResource($product, ['component' => 'pdc', 'type' => 'products', 'id' => $id]);
         }
 
         return $variables;

@@ -1,0 +1,117 @@
+{% extends "base.html.twig" %}
+{% if organization is defined %}
+    {% set  id = organization['id'] %}
+    {% set  type = 'Organization' %}
+{% endif %}
+{% block content %}
+
+    {% include 'dashboard_organization/menu.html.twig' %}
+
+    <section class="bg-light py-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'edit product'|trans|capitalize }}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ 'edit product'|trans|capitalize }}</li>
+                </ul>
+            </nav>
+            <form id="{{ type }}Form{{ id }}" method="post">
+                <!-- About -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
+                        <div class="row">
+                            <div class="form-group col-md-8 mb-6">
+                                <label for="name">{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" value="{{ organization.name }}" id="name"
+                                       name="name">
+                            </div>
+
+                            <div class="form-group col-md-4 mb-6">
+                                <label for="description">{{ 'type'|trans|capitalize }}</label>
+                                <select class="form-control" aria-label="{{ 'the type of this product'|trans|capitalize }}" required id="type" name="type">
+                                    <option value="simple" {% if resource.type is defined  and resource.type == "simple"%} selected {% endif %}>{{ 'simple'|trans|capitalize }}</option>
+                                    <option value="set" {% if resource.type is defined  and resource.type == "set"%} selected {% endif %}>{{ 'set'|trans|capitalize }}</option>
+                                    <option value="virtual" {% if resource.type is defined  and resource.type == "virtual"%} selected {% endif %}>{{ 'virtual'|trans|capitalize }}</option>
+                                    <option value="external" {% if resource.type is defined  and resource.type == "external"%} selected {% endif %}>{{ 'external'|trans|capitalize }}</option>
+                                    <option value="ticket" {% if resource.type is defined  and resource.type == "ticket"%} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
+                                    <option value="variable" {% if resource.type is defined  and resource.type == "variable"%} selected {% endif %}>{{ 'variable'|trans|capitalize }}</option>
+                                    <option value="subscription" {% if resource.type is defined  and resource.type == "subscription"%} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
+                                    <option value="person" {% if resource.type is defined  and resource.type == "person"%} selected {% endif %}>{{ 'person'|trans|capitalize }}</option>
+                                    <option value="location" {% if resource.type is defined  and resource.type == "location"%} selected {% endif %}>{{ 'location'|trans|capitalize }}</option>
+                                    <option value="service" {% if resource.type is defined  and resource.type == "service"%} selected {% endif %}>{{ 'service'|trans|capitalize }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="description">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="form-control" rows="6" id="description"
+                                          name="description">{{ organization.description }}</textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Gallery -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
+
+                        <div class="form-group position-relative mb-6 form-group-dragable">
+                            <input type="file" class="custom-file-input" id="favicon" name="favicon">
+                            <label class="custom-file-label" for="favicon">
+                               {{ 'Click or Drag images here'|trans|capitalize }}
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-6 col-xl-5">
+                        <div class="mb-6">
+                            <button type="submit" class="btn btn-lg btn-primary btn-block">{{ 'submit'|trans|capitalize }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+    <script>
+        function addItem(id) {
+            const formDiv = document.getElementById(id);
+            const input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+            input.setAttribute('class', "form-control mb-2");
+            input.setAttribute('name', id);
+            input.setAttribute('id', id);
+
+            var options_array = {
+                ValueA : '{{ 'select type'|trans|capitalize }}',
+                ValueB : '{{ 'website'|trans|capitalize }}',
+                ValueC : '{{ 'facebook'|trans|capitalize }}',
+                ValueD : '{{ 'twitter'|trans|capitalize }}',
+                ValueE : '{{ 'instagram'|trans|capitalize }}'
+            };
+
+            const select = document.createElement("select");
+            if (id === 'socials[]') {
+                select.setAttribute('class', "form-control mb-2");
+                input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
+                formDiv.appendChild(select);
+                for(option in options_array) {
+                    select.options[select.options.length] = new Option(options_array[option], option);
+                }
+            }
+
+            formDiv.appendChild(input);
+        }
+    </script>
+{% endblock %}
