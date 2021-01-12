@@ -1,14 +1,15 @@
 <!-- Organization card -->
 {% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':resource.id}) %}
-{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource.id}) %}
-<div class="card rounded-0 card-hover-overlay">
-    <div class="position-relative">
-        <img class="card-img rounded-0"
-            {% if resource.style %}  src="{{ organizations.style.favicon.base64 }}"
-                    {% else %}
-                        src="https://picsum.photos/200"
-                    {% endif %}
-                    alt="organization logo">
+{% set organizationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource.id})['hydra:member'] %}
+<a href="{{ path('app_organization_organization', {id: resource.id}) }}">
+    <div class="card rounded-0 card-hover-overlay">
+        <div class="position-relative">
+            <img class="card-img rounded-0"
+                {% if resource.style %}  src="{{ organizations.style.favicon.base64 }}"
+                {% else %}
+                    src="https://picsum.photos/300/200"
+                {% endif %}
+                 alt="Card image cap">
         <div class="card-img-overlay">
             <div class="d-flex align-items-center">
                 {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
@@ -19,6 +20,13 @@
                     {{ resource.name|capitalize }}
                 </a>
             </h3>
+
+            <p class="text-white">
+                {% for category in organizationCategories %}
+                    <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                {% endfor %}
+            </p>
+
         </div>
     </div>
     <div class="card-footer bg-transparent">

@@ -21,19 +21,50 @@
         {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
         <div class="form-group">
             <label for="name">{{ 'name'|trans|capitalize }}*</label>
-            <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+            <input type="text" class="form-control" id="name{{ id }}" name="location[name]" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
         </div>
         <div class="form-group">
             <label for="description">{{ 'description'|trans|capitalize }}</label>
-            <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+            <textarea class="form-control" rows="5" id="description{{ id }}" name="location[description]">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
         </div>
         <div class="form-group">
             <label for="description">{{ 'categories'|trans|capitalize }}</label>
-            <select class="form-control multiple" multiple aria-label="{{ 'the products included in this offer'|trans|capitalize }}" id="categories" name="categories">
+            <select class="form-control select-multiple" multiple aria-label="{{ 'the products included in this offer'|trans|capitalize }}" id="categories{{ id }}" name="categories[]"  multiple="select-multiple">
                 {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
+                    <option value="/categories/{{ category.id }}">{{ category.name }}</option>
                 {% endfor %}
             </select>
         </div>
+        {% if resource is defined %}
+        <h5>{{ 'address of this location'|trans|capitalize }}</h5>
+        <div class="row">
+            <div class="col-6 form-group">
+                <label for="street">{{ 'street'|trans|capitalize }}</label>
+                <input type="text" class="form-control" id="street" name="address[street]">
+            </div>
+            <div class="col-3 form-group">
+                <label for="houseNumber">{{ 'number'|trans|capitalize }}</label>
+                <input type="text" class="form-control" id="houseNumber" name="address[houseNumber]">
+            </div>
+            <div class="col-3 form-group">
+                <label for="houseNumberSuffix">{{ 'suffix'|trans|capitalize }}</label>
+                <input type="text" class="form-control" id="houseNumberSuffix" name="address[houseNumberSuffix]">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-6">
+                <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                <input type="text" class="form-control" id="postalCode" name="address[postalCode]">
+            </div>
+            <div class="form-group col-6">
+                <label for="region">{{ 'region'|trans|capitalize }}</label>
+                <input type="text" class="form-control" id="region" name="address[region]">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="country">{{ 'country'|trans|capitalize }}</label>
+            <input type="text" class="form-control" id="region" name="address[country]">
+        </div>
+        {% endif %}
     </form>
 {% endblock %}

@@ -14,7 +14,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * The EventController handles any calls about events.
@@ -53,8 +52,8 @@ class EventController extends AbstractController
         $variables['path'] = 'app_event_event';
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['event']['@id']])['hydra:member'];
-        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'],['resource' => $variables['event']['@id']]);
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'],['resources.resource' => $variables['event']['id']]);
+        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['event']['@id']]);
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['event']['id']]);
 
         /* deze is wat wierd */
         if (isset($variables['event']['resource']) && strpos($variables['event']['resource'], '/pdc/products/')) {
@@ -65,21 +64,19 @@ class EventController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {
             $resource = $request->request->all();
 
-
             $resource['organization'] = $variables['event']['organization'];
             $resource['resource'] = $variables['event']['@id'];
             $resource['author'] = $this->getUser()->getPerson();
+            $resource['rating'] = (int) $resource['rating'];
 
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
-
         }
 
-        /* @to dit willen we denk ik verplaatsen naar een algemene order api */
+        /* @todo dit willen we denk ik verplaatsen naar een algemene order api */
         // Make order in session
         if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' &&
             $request->request->get('offers')) {
-
             $resource = $request->request->all();
 
             // Add offers to session

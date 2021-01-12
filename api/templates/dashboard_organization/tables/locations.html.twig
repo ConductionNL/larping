@@ -4,7 +4,7 @@
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
             <th>{{ 'address'|trans|capitalize }}</th>
-            <th>{{ 'capacity'|trans|capitalize }}</th>
+            <th>{{ 'features'|trans|capitalize }}</th>
             <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#LocationModalAdd">{{ 'add'|trans|capitalize }}</button></th>
         </tr>
         </thead>
@@ -14,26 +14,25 @@
                 <td class="text-capitalize">
                     <a class="text-hover-primary text-muted" href="{{ path('app_location_location', {id: location.id}) }}" target="_blank">{{ location.name }}</a>
                 </td>
-                {% if location.place.address|default %}
-                    {% set address = location.place.address  %}
-                {% endif %}
                 <td>
-                    <span class="d-block">{{ address.street ~' '~ address.houseNumber }}</span>
-                    <span class="d-block">{{ address.postalCode ~' '~ address.region }}</span>
+                    {% if location.address|default %}
+                    <span class="d-block">{{ location.address.street ~' '~ location.address.houseNumber }}</span>
+                    <span class="d-block">{{ location.address.postalCode ~' '~ location.address.region }}</span>
+                    {% endif %}
                 </td>
                 <td>
-                    {{ location.maximumAttendeeCapacity }}
+
                 </td>
                 <td>
                     <div class="dropdown">
                         <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                         </a>
-                    </div>
 
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#LocationModal{{ location.id }}">{{ 'edit'|trans|capitalize }}</a>
-                        <a class="dropdown-item" href="{{ path('app_location_location', {id: location.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#LocationModal{{ location.id }}">{{ 'edit'|trans|capitalize }}</a>
+                            <a class="dropdown-item" href="{{ path('app_location_location', {id: location.id}) }}" target="_blank">{{ 'view'|trans|capitalize }}</a>
+                        </div>
                     </div>
                 </td>
             </tr>

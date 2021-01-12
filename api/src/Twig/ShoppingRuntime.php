@@ -1,13 +1,11 @@
 <?php
 
-// src/Twig/Shopping.php
+// src/Twig/ShoppingController.php
 
 namespace App\Twig;
 
 use App\Service\ShoppingService;
-use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 

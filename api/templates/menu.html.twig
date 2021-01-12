@@ -29,8 +29,9 @@
             <ul class="menuzord-menu menuzord-right">
                 <li><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a></li>
                 <li><a href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
+                <!-- Tijdelijk uitgezet ivm
                 <li><a href="{{ path('app_location_index') }}">{{ 'locations'|trans|capitalize }}</a></li>
-
+                -->
                 <li class="">
                     {% if app.user.organization is defined and app.user.organization is not empty %}
                         {% set organization = commonground_resource(app.user.organization) %}
@@ -49,7 +50,7 @@
                                             <a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }} </a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_index') }}">{{ 'edit'|trans|capitalize }} </a>
+                                            <a href="{{ path('app_dashboardorganization_index') }}">{{ 'edit profile'|trans|capitalize }} </a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
@@ -66,7 +67,7 @@
                                             <a href="{{ path('app_dashboardorganization_members') }}">{{ 'members'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_mailings') }}">{{ 'mailing'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_mailinglists') }}">{{ 'Mailing Lists'|trans }}</a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_reviews') }}">{{ 'reviews'|trans|capitalize }}</a>
@@ -74,6 +75,7 @@
                                     </ul>
                                 </div>
                                 <div class="col4">
+                                    <!--
                                     <ul class="list-unstyled">
                                         <li>
                                             <h5 class="heading">
@@ -91,6 +93,7 @@
                                             <a href="{{ path('app_dashboardorganization_earnings') }}">{{ 'earnings'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
+                                    -->
                                     <ul class="list-unstyled">
                                         <li>
                                             <h5 class="heading">
@@ -115,6 +118,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <!--
                                 <div class="col4">
                                     <ul class="list-unstyled">
                                         <li>
@@ -140,6 +144,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                -->
                             </div>
                         </div>
                     {% endif %}
@@ -147,57 +152,72 @@
 
                 <div class="menu-right">
                     <div class="notification">
-                        {% set order = app.session.get('order') %}
+                        {% set order = app.session.get('orders') %}
                         <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                            data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-shopping-cart" aria-hidden="true"></i>
                             <span class="badge">
-                                {% if order.items|default %}{{ order.items|length }}{% else %}0{% endif %}</span>
+                                {% if orders|default %}
+                                    {% set itemsCount = 0 %}
+                                    {% for order in orders %}
+                                        {% if order.orderItems|default %}{% set itemsCount = itemsCount + order.orderItems|length %}{% endif %}
+                                    {% endfor %}
+                                {% if itemsCount|default %}
+                                    {{ itemsCount }}
+                                {% endif %}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </span>
                         </a>
-                        {% if order.items|default %}
+                        {% if orders|default %}
                             <ul class="dropdown-menu" style="min-width: 350px; right: -149px">
-                                {% set sum = 0 %}
-                                {% for item in order.items %}
-                                    {% set sum = sum + item.price * item.quantity %}
-                                    {% set offer = commonground_resource(item.offer) %}
-                                    <li>
-                                        <a href="{{ path('app_dashboard_index') }}">
-                                            <div class="media media-xs align-items-center">
-                                                <div class="media-body">
-                                                    <div class="d-flex justify-content-between">
-                                                        <span class="font-weight-bold">{{ offer.name }}</span>
-                                                        <b class="mb-1 text-right">&euro; {{ item.price }},-</b>
+                                {% for order in orders %}
+                                    {% if order.orderItems|default %}
+                                        {% set sum = 0 %}
+                                        {% for item in order.orderItems %}
+                                            {% set sum = sum + item.price * item.quantity %}
+                                            {% set offer = commonground_resource(item.offer) %}
+                                            <li>
+                                                <a href="{{ path('app_dashboard_index') }}">
+                                                    <div class="media media-xs align-items-center">
+                                                        <div class="media-body">
+                                                            <div class="d-flex justify-content-between">
+                                                                <span class="font-weight-bold">{{ offer.name }}</span>
+                                                                <b class="mb-1 text-right">&euro; {{ item.price }},-</b>
+                                                            </div>
+                                                            <p class="mb-1 mt-n2"
+                                                               style="font-size: smaller">{{ item.quantity }} {% if item.quantity > 1 %}items{% else %}item{% endif %}</p>
+                                                        </div>
                                                     </div>
-                                                    <p class="mb-1 mt-n2"
-                                                       style="font-size: smaller">{{ item.quantity }} {% if item.quantity > 1 %}items{% else %}item{% endif %}</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                                <li style="border-top: 1px solid #e5e5e5">
-                                    <div style="display: block;padding-left: 1rem;padding-right: 1rem;
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                        <li style="border-top: 1px solid #e5e5e5">
+                                            <div style="display: block;padding-left: 1rem;padding-right: 1rem;
                                             padding-top: 0.5rem;padding-bottom: 0.5rem;color: #848484;
                                             text-decoration: none;">
-                                        <div class="media media-xs align-items-center">
-                                            <div class="media-body">
-                                                <div class="d-flex justify-content-between">
+                                                <div class="media media-xs align-items-center">
+                                                    <div class="media-body">
+                                                        <div class="d-flex justify-content-between">
                                                             <span
                                                                 class="font-weight-bold">{{ 'sum'|trans|capitalize }}:</span>
-                                                    <b class="mb-1 text-right"
-                                                       style="color: black">&euro; {{ sum }},-</b>
+                                                            <b class="mb-1 text-right"
+                                                               style="color: black">&euro; {{ sum }},-</b>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li style="margin-top: 0">
-                                    <a href="{{ path('app_order_index') }}"
-                                       style="border-top: none; font-size: medium;text-transform: none"
-                                       class="btn btn-small text-right">
-                                        {{ 'view order'|trans|capitalize }}
-                                    </a>
-                                </li>
+                                        </li>
+                                        <li style="margin-top: 0">
+                                            <a href="{{ path('app_shopping_index') }}"
+                                               style="border-top: none; font-size: medium;text-transform: none"
+                                               class="btn btn-small text-right">
+                                                {{ 'view shopping cart'|trans|capitalize }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
                             </ul>
                         {% else %}
                             <ul class="dropdown-menu">
@@ -249,9 +269,10 @@
                             <ul class="dropdown-menu" style="min-width: 200px;">
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
-                                       href="{{ path('app_dashboard_index') }}">
-                                        <i class="fas fa-tachometer mr-2" aria-hidden="true"></i>
-                                        <span>{{ 'dashboard'|trans|capitalize }}</span>
+                                       href="{{ path('app_dashboarduser_memberships') }}">
+                                        <i class="fa fa-building mr-2" aria-hidden="true"></i>
+                                        <span
+                                            style="font-size: 13px!important;">{{ 'my memberships'|trans }}</span>
                                     </a>
                                 </li>
                                 <li>
@@ -259,28 +280,30 @@
                                        href="{{ path('app_dashboarduser_organizations') }}">
                                         <i class="fa fa-building mr-2" aria-hidden="true"></i>
                                         <span
-                                            style="font-size: 13px!important;">{{ 'my'|trans|capitalize~' '~'organizations'|trans }}</span>
+                                            style="font-size: 13px!important;">{{ 'my organizations'|trans }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_events') }}">
                                         <i class="far fa-calendar-alt mr-2" aria-hidden="true"></i>
-                                        <span>{{ 'my'|trans|capitalize~' '~'events'|trans }}</span>
+                                        <span>{{ 'my events'|trans }}</span>
                                     </a>
                                 </li>
+                                <!--
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_characters') }}">
                                         <i class="fa fa-calendar-o mr-2" aria-hidden="true"></i>
-                                        <span>{{ 'my'|trans|capitalize~' '~'characters'|trans }}</span>
+                                        <span>{{ 'my characters'|trans }}</span>
                                     </a>
                                 </li>
+                                -->
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_favorites') }}">
                                         <i class="far fa-heart mr-2" aria-hidden="true"></i>
-                                        <span>{{ 'my'|trans|capitalize~' '~'favorites'|trans }}</span>
+                                        <span>{{ 'my favorites'|trans }}</span>
                                     </a>
                                 </li>
                                 <li>
