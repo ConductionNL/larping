@@ -132,7 +132,7 @@ class DashboardUserController extends AbstractController
             */
             // Update to the commonground component
 
-            if (isset($resource['categories'])){
+            if (isset($resource['categories'])) {
                 $categories = $resource['categories'];
             }
             if (!isset($categories)) {
