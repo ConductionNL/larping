@@ -52,8 +52,6 @@ class ShoppingController extends AbstractController
      */
     public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-        var_dump('test');
-        exit;
         if ($session->get('invoice@id')) {
             $variables['invoice'] = $commonGroundService->getResource($session->get('invoice@id'));
 
