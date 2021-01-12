@@ -88,13 +88,26 @@ class DashboardOrganizationController extends AbstractController
     public function eventAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
+        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+        $variables['products'] = [];
 
         //Delete event
-        if ($request->isMethod('POST') && $request->request->get('DeleteEvent') == 'true') {
-            $del = $commonGroundService->deleteResource($variables['event'], $variables['event']['@id']);
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
 
-            return $this->redirect($this->generateUrl('app_dashboardorganization_events'));
+            $product = $request->request->all();
+            $product['requiresAppointment'] = false;
+            $product['event'] =  $variables['event'];
+            $product['type'] =  'ticket';
+            $product['sourceOrganization'] =  $variables['organization'];
+            $product =  $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
+
+            $offer = [];
+            $offer['products'] = $variables['product']['id'];
+            $offer['offeredBy'] = $variables['organization']['@id'];
+            $offer['audiance'] =  'audience';
+
+            $product['offers'] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+            $variables['products'][] = $product;
         }
 
         return $variables;
@@ -122,7 +135,7 @@ class DashboardOrganizationController extends AbstractController
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
-        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
+        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
 
         return $variables;
     }
