@@ -64,10 +64,10 @@
                 {% endif %}
 
                 <!-- Catagories -->
-                {% if catagories is defined and catagories is not empty %}
+                {% if categories is defined and categories is not empty %}
                 <div>
                     <h3 class="font-weight-normal mb-6">{{ 'catagories'|trans|capitalize }} {{ organization.name }}</h3>
-                    {%  include '/sections/catagories.html.twig' with {'catagories': catagories} %}
+                    {%  include '/sections/categories.html.twig' with {'categories': categories} %}
                 </div>
 
                 <hr>
