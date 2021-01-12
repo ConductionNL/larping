@@ -121,6 +121,7 @@ class DashboardOrganizationController extends AbstractController
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
+        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
 
         return $variables;
     }
@@ -355,16 +356,23 @@ class DashboardOrganizationController extends AbstractController
 
         if ($request->isMethod('POST')) {
             // Get the current resource
-            $location = $request->request->all();
+            $location = $request->get('location');
+            $address = $request->get('address');
+            $categories = $request->get('categories');
             // Set the current organization as owner
             $location['organization'] = $variables['organization']['@id'];
 
-            $categories = $location['categories'];
             if (!$categories) {
                 $categories = [];
             }
-            unset($location['categories']);
 
+            if (!empty($address)){
+                if (!isset($address['name'])) {
+                    $address['name'] = $location['name'];
+                }
+                $address = $commonGroundService->saveResource($address, ['component' => 'lc', 'type' => 'addresses']);
+                $location['address'] = '/addresses/'.$address['id'];
+            }
             // Save the resource
             $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
 
