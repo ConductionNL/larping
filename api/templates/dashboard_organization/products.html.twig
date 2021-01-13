@@ -17,17 +17,8 @@
                 </ul>
             </nav>
 
-            <div class="tab">
-                <button class="tablinks tabcontent" onclick="switchProducts()" id="products">{{ 'products'|trans|capitalize }}</button>
-                <button class="tablinks tabcontent" onclick="swichtOffers()" id="offers">{{ 'offers'|trans|capitalize }}</button>
-            </div>
-            <!-- events -->
-            <div class="hideProduct" id="products">
-                {%  include 'dashboard_organization/tables/products.html.twig' with {'id': 'products'} %}
-            </div>
-            <div class="hideOffer" id="offers">
-                {%  include 'dashboard_organization/tables/offers.html.twig' with {'id': 'offers'} %}
-            </div>
+            <!-- Products -->
+            {%  include 'dashboard_organization/tables/products.html.twig' with {'id': 'products'} %}
         </div>
     </section>
 <style>
