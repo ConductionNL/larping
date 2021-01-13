@@ -7,7 +7,7 @@
             <th>{{ 'type'|trans|capitalize }}</th>
             <th>{{ 'offers'|trans|capitalize }}</th>
             <th>Status</th>
-            <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ProductModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+            <th><button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#ProductModalAdd">{{ 'add'|trans|capitalize }}</button></th>
         </tr>
         </thead>
         <tbody>
@@ -31,15 +31,8 @@
                     <span class="badge badge-warning px-2 py-1">Pending</span>
                 </td>
                 <td>
-                    <div class="dropdown">
-                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                        </a>
 
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="{{ path('app_dashboardorganization_editproduct', { id: product.id}) }}">Edit</a>
-                        </div>
-                    </div>
+                    <a class="btn btn-outline-primary btn-sm float-right" href="{{ path('app_dashboardorganization_editproduct', { id: product.id}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
                 </td>
             </tr>
         {% endfor %}
