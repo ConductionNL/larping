@@ -12,15 +12,15 @@
                 <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ path('app_dashboard_index') }}">Dashboard</a></li>
                 <li class="breadcrumb-item active"
-                    aria-current="page">{{ 'add organizations'|trans|capitalize }}</li>
+                    aria-current="page">{{ 'add organization'|trans|capitalize }}</li>
             </ul>
         </nav>
 
-        <form>
+        <form method="post" action="{{ path('app_dashboarduser_addorganization') }}">
             <!-- About -->
             <div class="card">
                 <div class="card-body px-6 pt-6 pb-1">
-                    <h3 class="h4 mb-4">About</h3>
+                    <h3 class="h4 mb-4">{{ 'basics'|trans|capitalize }}</h3>
                     <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by
                         posting business listings here. Please use our site at your own discretion and exercise good
                         judgement as well as common sense when advertising business here.</p>
@@ -28,161 +28,187 @@
                     <div class="row">
                         <div class="form-group col-md-12 mb-6">
                             <label for="name">{{ 'name of your organization'|trans|capitalize }}*</label>
-                            <input type="text" class="form-control" id="name" name="wrc[name]">
+                            <input type="text" class="form-control" id="name" name="name">
                         </div>
 
                         <div class="form-group col-md-12 mb-6">
-                            <label for="description">{{ 'description of your organization' }}</label>
-                            <textarea class="form-control" id="description" name="wrc[description]" rows="6"></textarea>
+                            <label for="description">{{ 'description of your organization'|trans|capitalize }}</label>
+                            <textarea class="form-control" id="description" name="description" rows="6"></textarea>
                         </div>
                     </div>
 
 
                 </div>
             </div>
-        </form>
 
-        <!-- Contact -->
-        <div class="card">
-            <div class="card-body p-6">
-                <h3 class="h4 mb-4">Contact</h3>
-                <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
-                    business listings here.
-                    Please use our site at your own discretion and exercise good judgement as well as common sense when
-                    advertising
-                    business here.</p>
+            <!-- Contact -->
+            <div class="card">
+                <div class="card-body p-6">
+                    <h3 class="h4 mb-4">Contact</h3>
+                    <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
+                        business listings here.
+                        Please use our site at your own discretion and exercise good judgement as well as common sense when
+                        advertising
+                        business here.
+                    </p>
 
-                <div class="row">
-                    <div class="col-md-6">
-
-                        <div class="form-group mb-6">
-                            <label for="exampleFormControlSelect1">Listing Region</label>
-                            <div class="select-default bg-white">
-                                <div class="selectric-wrapper selectric-select-location">
-                                    <div class="selectric-hide-select">
-                                        <select class="select-location" tabindex="-1">
-                                            <option>All Location</option>
-                                            <option>U.S.A</option>
-                                            <option>U.K</option>
-                                            <option>ASIA</option>
-                                        </select>
-                                    </div>
-                                    <div class="selectric"><span class="label">All Location</span>
-                                        <div class="arrow-button"><i class="fa fa-angle-down" aria-hidden="true"></i>
-                                        </div>
-                                    </div>
-                                    <div class="selectric-items" tabindex="-1">
-                                        <div class="selectric-scroll">
-                                            <ul>
-                                                <li data-index="0" class="selected">All Location</li>
-                                                <li data-index="1" class="">U.S.A</li>
-                                                <li data-index="2" class="">U.K</li>
-                                                <li data-index="3" class="last">ASIA</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <input class="selectric-input" tabindex="0"></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="street">{{ 'street'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="street" name="addresses[street]">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="houseNumber">{{ 'house number'|trans|capitalize }}</label>
+                                <input type="number" class="form-control" id="houseNumber" name="addresses[houseNumber]">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="suffix">{{ 'suffix'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="suffix" name="addresses[suffix]">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="postalCode" name="addresses[postalCode]">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="locality">{{ 'locality'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="locality" name="addresses[locality]">
                             </div>
                         </div>
 
-                        <div class="form-group mb-6">
-                            <label for="listingPhone">Listing Phone</label>
-                            <input type="phone" class="form-control" placeholder="546 - 545 - 2546">
+                        <div class="col-md-6">
+                            <div class="form-group" id="emails[]">
+                                <div class="form-inline">
+                                    <label for="email">{{ 'email'|trans|capitalize }}</label>
+                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('emails[]');"
+                                       data-toggle="tooltip" data-placement="top"
+                                       title="{{ 'add more emails'|trans|capitalize }}">
+                                    </i>
+                                </div>
+                                    <input class="form-control mb-2" name="email" id="email" type="email" placeholder="{{ 'add email'|trans|capitalize }}">
+                            </div>
                         </div>
 
-                        <div class="form-group mb-6">
-                            <label for="listingEmail">Listing Email</label>
-                            <input type="email" class="form-control" placeholder="hello@example.com">
-                        </div>
-
-                        <div class="form-group mb-6">
-                            <label for="listingWebsite">Listing Website</label>
-                            <input type="text" class="form-control" id="listingWebsite" placeholder="http://">
+                        <div class="col-md-6">
+                            <div class="form-group" id="telephones[]">
+                                <div class="form-inline">
+                                    <label for="telephone">{{ 'telephone'|trans|capitalize }}</label>
+                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus"
+                                       onclick="addItem('telephones[]');" data-toggle="tooltip" data-placement="top"
+                                       title="{{ 'add more phone numbers'|trans|capitalize }}">
+                                    </i>
+                                </div>
+                                    <input class="form-control mb-2" name="telephone" id="telephone" type="tel" placeholder="{{ 'add phone number'|trans|capitalize }}">
+                            </div>
                         </div>
 
                     </div>
+                </div>
+            </div>
 
-                    <div class="col-md-6 map-place-search-wrapper">
-                        <div class="form-group mb-0 ">
-                            <label for="listingAddress">Listing Address</label>
-                            <input type="text" class="form-control" id="listingAddress" placeholder="Type Location">
-                        </div>
+            <!-- Gallery -->
+            <div class="card">
+                <div class="card-body p-6">
+                    <h3 class="h4 mb-4">Gallery</h3>
+                    <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
+                        business listings here.
+                        Please use our site at your own discretion and exercise good judgement as well as common sense when
+                        advertising
+                        business here.
+                    </p>
 
-                        <div class="map-place-search">
-                            <div id="map-add-edit"></div>
-                        </div>
-
+                    <div class="form-group position-relative mb-6 form-group-dragable">
+                        <input type="file" class="custom-file-input">
+                        <label class="custom-file-label" for="customFile">
+                            Click or Drag images here
+                        </label>
                     </div>
 
                 </div>
             </div>
-        </div>
 
-        <!-- Gallery -->
-        <div class="card">
-            <div class="card-body p-6">
-                <h3 class="h4 mb-4">Gallery</h3>
-                <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
-                    business listings here.
-                    Please use our site at your own discretion and exercise good judgement as well as common sense when
-                    advertising
-                    business here.</p>
+            <!-- Socials -->
+            <div class="card">
+                <div class="card-body p-6">
+                    <h3 class="h4 mb-4">Social</h3>
+                    <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
+                        business listings here.
+                        Please use our site at your own discretion and exercise good judgement as well as common sense when
+                        advertising
+                        business here.
+                    </p>
 
-                <div class="form-group position-relative mb-6 form-group-dragable">
-                    <input type="file" class="custom-file-input">
-                    <label class="custom-file-label" for="customFile">
-                        Click or Drag images here
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label for="videoUrl">Video URL</label>
-                    <input type="text" class="form-control" id="videoUrl" placeholder="http://">
-                </div>
-            </div>
-        </div>
-
-        <!-- Socials -->
-        <div class="card">
-            <div class="card-body p-6">
-                <h3 class="h4 mb-4">Social</h3>
-                <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
-                    business listings here.
-                    Please use our site at your own discretion and exercise good judgement as well as common sense when
-                    advertising
-                    business here.</p>
-
-                <div class="row">
-                    <div class="form-group col-md-6 mb-6">
-                        <label for="linkedUrl">Linked in URL</label>
-                        <input type="text" class="form-control" placeholder="http://linkedin.com/listty">
-                    </div>
-
-                    <div class="form-group col-md-6 mb-6">
-                        <label for="facebookUrl">Facebook URL</label>
-                        <input type="text" class="form-control" placeholder="http://facebook.com/listty">
-                    </div>
-
-                    <div class="form-group col-md-6 mb-6">
-                        <label for="twitterUrl">Twitter URL</label>
-                        <input type="text" class="form-control" placeholder="http://twitter.com/listty">
-                    </div>
-
-                    <div class="form-group col-md-6 mb-6">
-                        <label for="youtubeUrl">You Tube URL</label>
-                        <input type="text" class="form-control" placeholder="http://youtube.com/listty">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" id="socials[]">
+                                <div class="form-inline">
+                                    <label for="socials">{{ 'socials'|trans|capitalize }}</label>
+                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('socials[]');"
+                                       data-toggle="tooltip" data-placement="top"
+                                       title="{{ 'add more socials'|trans|capitalize }}">
+                                    </i>
+                                </div>
+                                <select class="form-control" name="type" id="type">
+                                    <option>{{ 'select type'|capitalize }}</option>
+                                    <option name="socials[type]" id="type">{{ 'website'|capitalize }}</option>
+                                    <option name="socials[type]" id="type">{{ 'facebook'|capitalize }}</option>
+                                    <option name="socials[type]" id="type">{{ 'twitter'|capitalize }}</option>
+                                    <option name="socials[type]" id="type">{{ 'instagram'|capitalize }}</option>
+                                </select>
+                                <input class="form-control mb-2" name="socials[url]" id="socials" type="url" placeholder="{{ 'add url'|trans|capitalize }}">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row justify-content-center">
-            <div class="col-md-7 col-lg-6 col-xl-5">
-                <div class="mb-6">
-                    <button type="submit" class="btn btn-lg btn-primary btn-block">submit</button>
+            <div class="row justify-content-center">
+                <div class="col-md-7 col-lg-6 col-xl-5">
+                    <div class="mb-6">
+                        <button type="submit" class="btn btn-lg btn-primary btn-block">submit</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </section>
+    <script>
+        function addItem(id) {
+            const formDiv = document.getElementById(id);
+            const input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+            input.setAttribute('class', "form-control mb-2");
+            input.setAttribute('name', id);
+            input.setAttribute('id', id);
+
+            var options_array = {
+                ValueA : '{{ 'select type'|trans|capitalize }}',
+                ValueB : '{{ 'website'|trans|capitalize }}',
+                ValueC : '{{ 'facebook'|trans|capitalize }}',
+                ValueD : '{{ 'twitter'|trans|capitalize }}',
+                ValueE : '{{ 'instagram'|trans|capitalize }}'
+            };
+
+            const select = document.createElement("select");
+            if (id === 'socials[]') {
+                select.setAttribute('class', "form-control mb-2");
+                input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
+                formDiv.appendChild(select);
+                for(option in options_array) {
+                    select.options[select.options.length] = new Option(options_array[option], option);
+                }
+            }
+
+            formDiv.appendChild(input);
+        }
+    </script>
 {% endblock %}

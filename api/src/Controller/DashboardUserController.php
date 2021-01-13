@@ -193,6 +193,17 @@ class DashboardUserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+
+        if ($request->isMethod('POST')) {
+            //get all the fields from the form
+            $name = $request->get('name');
+            $description = $request->get('description');
+            $address = $request->get('addresses');
+            $emails = $request->get('emails');
+            $telephones = $request->get('telephones');
+            $socials = $request->get('socials[]');
+        }
+        return $variables;
     }
 
     /**
