@@ -1,63 +1,141 @@
 {% extends "base.html.twig" %}
-
+{% if organization is defined %}
+    {% set  id = organization['id'] %}
+    {% set  type = 'Organization' %}
+{% endif %}
 {% block content %}
 
     {% include 'dashboard_organization/menu.html.twig' %}
 
-<section class="pb-8 pt-5 bg-light height100vh">
-    <div class="container">
-        <!-- Breadcrumb -->
-        <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
-            <h3 class="font-weight-normal mb-4 mb-md-0">{{ event.name }} {{ 'advanced settings'|trans }}</h3>
-            <ul class="list-unstyled d-flex p-0 m-0">
-                <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_events') }}">{{ 'events'|trans|capitalize }}</a></li>
-                <li class="breadcrumb-item active"
-                    aria-current="page">{{ event.name }}</li>
-            </ul>
-        </nav>
-
-        <div class="row">
-            <table class="table col-7">
-                <thead>
-                <tr>
-                    <th scope="col">{{ 'setting'|trans|capitalize }}</th>
-                    <th scope="col">{{ 'description'|trans|capitalize }}</th>
-                    <th scope="col">{{ 'manage'|trans|capitalize }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>{{ 'Delete event'|trans|capitalize }}</td>
-                    <td>{{ 'removes this event but not the products made for it'|trans|capitalize }}</td>
-                    <td>
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-                            {{ 'delete' }}
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-
-    </div>
-</section>
-    <!--Delete event confirmation -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form action="{{ path('app_dashboardorganization_event', {id: event.id}) }}" method="post">
-                        <label for="delete" class="font-weight-bold">{{ 'you are about to delete'|trans|capitalize }} {{ event.name }} {{ 'are you sure?' }}</label>
-                        <div class="btn-group" id="delete">
-                            <button type="submit" name="DeleteEvent" value="true" class="btn btn-danger mr-1">{{ 'delete event'|trans|capitalize }}</button>
-                            <a class="btn btn-primary text-white" data-dismiss="modal">{{ 'cancel' }}</a>
+    <section class="bg-light py-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'edit event'|trans|capitalize }}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ 'edit event'|trans|capitalize }}</li>
+                </ul>
+            </nav>
+            <form id="{{ type }}Form{{ id }}" method="post">
+                <input type="hidden" name="@type" value="Product">
+                <!-- About -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ event.name }}</h3>
+                        <div class="row">
+                            <div class="form-group  col-md-12 mb-6">
+                                <label for="name">{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" value="{{ event.name }}" id="name"
+                                       name="name">
+                            </div>
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="description">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="form-control" rows="6" id="description"
+                                          name="description">{{ event.description }}</textarea>
+                            </div>
                         </div>
-                    </form>
+
+                    </div>
                 </div>
-            </div>
+
+                <!-- Settings -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'settings'|trans|capitalize }} </h3>
+                        <ul class="list-unstyled mb-6">
+                            {% for category in settings %}
+                                <li class="d-inline-block mr-4 mb-2">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            value="{{ category.id }}"
+                                            id="category{{ category.id }}"
+                                            name="categories[]"
+                                            {% if category.id in categories.id %} sel
+                                        />
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <i class="{{ category.icon }} mr-2" aria-hidden="true"></i>{{ category.name }}
+                                        </label>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Products -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'products'|trans|capitalize }} </h3>
+                        <div class="row">
+                            {%  include 'dashboard_organization/tables/products.html.twig' with {'id': 'products'} %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gallery -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
+
+                        <div class="form-group position-relative mb-6 form-group-dragable">
+                            <input type="file" class="custom-file-input" id="favicon" name="favicon">
+                            <label class="custom-file-label" for="favicon">
+                                {{ 'Click or Drag images here'|trans|capitalize }}
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-6 col-xl-5">
+                        <div class="mb-6">
+                            <button type="submit" class="btn btn-lg btn-primary btn-block">{{ 'submit'|trans|capitalize }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-    </div>
+
+    </section>
+
+    {% include 'dashboard_organization/modals/event_product.html.twig'%}
+
+    <script>
+        function addItem(id) {
+            const formDiv = document.getElementById(id);
+            const input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+            input.setAttribute('class', "form-control mb-2");
+            input.setAttribute('name', id);
+            input.setAttribute('id', id);
+
+            var options_array = {
+                ValueA : '{{ 'select type'|trans|capitalize }}',
+                ValueB : '{{ 'website'|trans|capitalize }}',
+                ValueC : '{{ 'facebook'|trans|capitalize }}',
+                ValueD : '{{ 'twitter'|trans|capitalize }}',
+                ValueE : '{{ 'instagram'|trans|capitalize }}'
+            };
+
+            const select = document.createElement("select");
+            if (id === 'socials[]') {
+                select.setAttribute('class', "form-control mb-2");
+                input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
+                formDiv.appendChild(select);
+                for(option in options_array) {
+                    select.options[select.options.length] = new Option(options_array[option], option);
+                }
+            }
+
+            formDiv.appendChild(input);
+        }
+    </script>
 {% endblock %}

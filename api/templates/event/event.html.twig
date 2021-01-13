@@ -70,40 +70,51 @@
                 <div class="col-md-8 col-lg-8 single-listing-content">
                     <!-- About -->
                     {% if event.description|default %}
-                        <div class="single-listing-content mb-6">
-                            <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {% if event.name|default %}{{ event.name }}{% endif %}</h3>
-                            <p class="mb-6">{{ event.description }}</p>
-                        </div>
+                    <div class="single-listing-content mb-6">
+                        <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {% if event.name|default %}{{ event.name }}{% endif %}</h3>
+                        <p class="mb-6">{{ event.description }}</p>
+                    </div>
 
-                        <hr>
+                    <hr>
                     {% endif %}
 
                     <!-- Catagories -->
                     {% if categories is defined and categories is not empty %}
-                        <div>
-                            <h3 class="font-weight-normal mb-6">{{ 'settings'|trans|capitalize }}</h3>
-                            {% include '/sections/categories.html.twig' with {'categories': categories} %}
-                        </div>
+                    <div>
+                        <h3 class="font-weight-normal mb-6">{{ 'settings'|trans|capitalize }}</h3>
+                        {% include '/sections/categories.html.twig' with {'categories': categories} %}
+                    </div>
 
-                        <hr>
+                    <hr>
                     {% endif %}
 
-                    <!-- Offers -->
-                    {% if product.offers|default %}
-                    <div class="my-6">
-                        <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
+                    <!-- Tickets -->
+                    {% if tickets is defined and tickets is not empty %}
+                    <div id="gridFullwidthDiv" class="fade-in">
+                        <h3 class="font-weight-normal mb-6">{{ 'tickets'|trans|capitalize }}</h3>
                         <div class="row">
-                            {% for offer in product.offers %}
-                                <div class="col-md-4">
-                                    {% include 'shopping/cards/offer.html.twig' with {'offer': offer} %}
+                            {% for offer in tickets %}
+                                <div class="col-md-6" id="organization">
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
                                 </div>
                             {% endfor %}
-                        </div>
+                        </div><!-- /.row -->
+                    </div>
+                    {% endif %}
 
-
-
-                        <hr>
-                        {% endif %}
+                    <!-- Products -->
+                    {% if products is defined and products is not empty %}
+                    <div id="gridFullwidthDiv" class="fade-in">
+                        <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
+                        <div class="row">
+                            {% for offer in products %}
+                                <div class="col-md-6" id="organization">
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                                </div>
+                            {% endfor %}
+                        </div><!-- /.row -->
+                    </div>
+                    {% endif %}
 
                         <!-- Added by -->
                         <div>

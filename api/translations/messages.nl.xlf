@@ -527,9 +527,9 @@
          <target>over larping.eu</target>
          </trans-unit>
 
-         <trans-unit id="8UyAttA" resname="my memberchips">
-         <source>my memberchips</source>
-         <target>mijn memberchips</target>
+         <trans-unit id="8UyAttA" resname="my memberships">
+         <source>my memberships</source>
+         <target>mijn lidmaatschappen</target>
          </trans-unit>
          <trans-unit id="opqq12g" resname="my organizations">
          <source>my organizations</source>
