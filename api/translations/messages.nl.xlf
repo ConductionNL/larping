@@ -631,9 +631,29 @@
          <source>search</source>
          <target>zoeken</target>
          </trans-unit>
+         <trans-unit id="Qtswras" resname="topic">
+         <source>topic</source>
+         <target>onderwerp</target>
+        </trans-unit>
          <trans-unit id="wsxwras" resname="no products in cart">
          <source>no products in cart</source>
          <target>geen producten in winkelwagen</target>
+         </trans-unit>
+         <trans-unit id="OPAWdas" resname="write a review">
+         <source>write a review</source>
+         <target>bericht</target>
+         </trans-unit>
+         <trans-unit id="QyGadas" resname="categories you might like">
+         <source>categories you might like</source>
+         <target>categorieën die je misschien leuk vindt</target>
+         </trans-unit>
+         <trans-unit id="OPnDfas" resname="message">
+         <source>message</source>
+         <target>bericht</target>
+         </trans-unit>
+         <trans-unit id="BgAwras" resname="submit message">
+         <source>submit message</source>
+         <target>verzend bericht</target>
          </trans-unit>
     </body>
   </file>
