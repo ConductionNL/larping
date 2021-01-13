@@ -32,9 +32,9 @@
     <div class="form-group">
         <label for="name">{{ 'audience'|trans|capitalize }}*</label>
         <select class="form-control" aria-label="{{ 'the audience of this product'|trans|capitalize }}" required id="audience" name="audience" required>
-            <option value="internal" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ 'internal'|trans|capitalize }}</option>
-            <option value="public" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ 'public'|trans|capitalize }}</option>
-            <option value="personal" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ 'personal'|trans|capitalize }}</option>
+            <option value="internal" {% if product.audience|default  and product.audience == "internal"%} selected {% endif %}>{{ 'internal'|trans|capitalize }}</option>
+            <option value="public" {% if product.audience|default  and product.audience == "public"%} selected {% endif %}>{{ 'public'|trans|capitalize }}</option>
+            <option value="personal" {% if product.audience|default  and product.audience == "personal"%} selected {% endif %}>{{ 'personal'|trans|capitalize }}</option>
         </select>
     </div>
 </form>
