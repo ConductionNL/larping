@@ -30,7 +30,7 @@
                     <!-- Ratings -->
                     <div class="d-flex align-items-center">
                         {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                        <span class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                        <span class="d-inline-block mr-2">{{ totals.rating|round(1) }} {{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
                         <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
                             <i class="fal fa-heart text-primary" aria-hidden="true"></i>
                             <span>{{ totals.likes }}</span>
@@ -69,19 +69,9 @@
                     <h3 class="font-weight-normal mb-6">{{ 'catagories'|trans|capitalize }} {{ organization.name }}</h3>
                     {%  include '/sections/categories.html.twig' with {'categories': categories} %}
                 </div>
-
                 <hr>
                 {% endif %}
 
-                <!-- Organization -->
-                {% if organization is defined and organization is not empty %}
-                <div class="fade-in">
-                    <h3 class="font-weight-normal mb-6">{{ 'contact details'|trans|capitalize }} {{ organization.name }}</h3>
-                    {%  include '/sections/organization.html.twig' with {'organization': organization} %}
-                </div>
-
-                <hr>
-                {% endif %}
 
                 <!-- Events -->
                 {% if events is defined and events is not empty %}
@@ -167,12 +157,12 @@
             <!--======= Sidebar =======-->
             <div class="col-md-5 col-lg-4 pl-xl-8">
                 <!-- Contact  -->
-                <h5>{{ 'contact'|trans|capitalize }}</h5>
+                <h5>{{ organization.name }}</h5>
                 {% include 'widgets/contact.html.twig' %}
 
                 <!-- You may also like  -->
                 {% if categories is defined and categories is not empty %}
-                <h5>{{ 'categories might like'|trans|capitalize }}</h5>
+                <h5>{{ 'categories you might like'|trans|capitalize }}</h5>
                 {% for category in categories %}
                     {% include 'cards/category.html.twig' with {
                         'item': category
@@ -180,6 +170,13 @@
                 {% endfor %}
 
                 {% endif %}
+
+                <i class="fas fa-phone mr-2" aria-hidden="true"></i>((telefoon nummer))
+                <br><br>
+                <i class="fas fa-home-lg mr-2" aria-hidden="true"></i>((adres))
+                <br><br>
+                <i class="fas fa-envelope mr-2" aria-hidden="true"></i>((email))
+
             </div><!-- /.col -->
         </div> <!-- /.row -->
     </div> <!-- /.container -->
