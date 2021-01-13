@@ -50,11 +50,26 @@ class DashboardUserController extends AbstractController
     public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ShoppingService $shoppingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $products = $shoppingService->getOwnedProducts("https://dev.larping.eu/api/v1/cc/people/de4c85c1-90fa-4f99-bb11-a90ec7925f3a");
-        var_dump($products);
-        die;
-        $groups = $this->getUser()->getGroups();
         $variables = [];
+        $products = $shoppingService->getOwnedProducts($this->getUser()->getPerson());
+        $groups = $this->getUser()->getGroups();
+        if (count($products) > 0) {
+            foreach ($products as &$product) {
+                $product['groups'] = [];
+                if ($product['type'] == 'subscription') {
+                    foreach ($groups as $group) {
+                        if ($product['sourceOrganization'] == $group['organization'] && $group['name'] !== 'root') {
+                            $product['groups'][] = $group['name'];
+                            $product['joined'] = $group['dateJoined'];
+                        }
+                    }
+                    $variables['products'][] = $product;
+                }
+            }
+        }
+
+        return $variables;
+
     }
 
     /**
