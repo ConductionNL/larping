@@ -3,26 +3,23 @@
         <thead>
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
-            <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#MailingListModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+            <th><a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#MailinglistModalAdd">{{ 'add'|trans|capitalize }}</a></th>
         </tr>
         </thead>
         <tbody>
         {% for mailingList in mailingLists %}
             <tr>
                 <td class="text-capitalize">
-                    <a class="text-hover-primary text-muted" >{{ mailing.name }}</a>
+                    <a class="text-hover-primary text-muted" >{{ mailingList.name }}</a>
                 </td>
                 <td>
                     <div class="dropdown">
-                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i class="fas fa-ellipsis-v"></i>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailinglistModal{{ mailingList.id }}">Edit</a>
-                        </div>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailingModal{{ mailingList.id }}">Send Email</a>
                         </div>
                     </div>
@@ -43,6 +40,6 @@
 {% include 'dashboard_organization/modals/mailinglist.html.twig' %}
 
 {% for mailingList in mailingLists %}
-    {% include 'dashboard_organization/modals/mailinglist.html.twig' with {'resource': mailinglist} %}
-    {% include 'dashboard_organization/modals/mailing.html.twig' with {'resource': mailinglist} %}
+    {% include 'dashboard_organization/modals/mailinglist.html.twig' with {'resource': mailingList} %}
+    {% include 'dashboard_organization/modals/mailing.html.twig' with {'resource': mailingList} %}
 {% endfor %}

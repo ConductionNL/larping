@@ -51,16 +51,12 @@ class EventController extends AbstractController
         $variables = [];
         $variables['path'] = 'app_event_event';
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['event']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['event']['@id']]);
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['event']['id']])['hydra:member'];
-
-        /* deze is wat wierd */
-        if (isset($variables['event']['resource']) && strpos($variables['event']['resource'], '/pdc/products/')) {
-            $variables['product'] = $commonGroundService->getResource($variables['event']['resource']);
-        }
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $id,'products.type' => 'simple'])['hydra:member'];
+        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $id,'products.type' => 'ticket'])['hydra:member'];
 
         /* @todo dit willen we denk ik verplaatsen naar een algemene order api */
         // Make order in session
