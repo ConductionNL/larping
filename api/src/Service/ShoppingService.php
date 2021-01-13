@@ -110,7 +110,7 @@ class ShoppingService
         }
 
         // Only enable on localhost ! Dont forget to disable before pushing !
-//        $object['redirectUrl'] = 'http://localhost/payment-status';
+        $object['redirectUrl'] = 'http://localhost/payment-status';
 
         $object = $this->commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
 
@@ -124,6 +124,7 @@ class ShoppingService
     public function addItemsToCart($offers)
     {
         $ordersInSession = $this->session->get('orders');
+//        var_dump($ordersInSession);
         foreach ($offers as $newOrderItem) {
             // Check if new item has accpetable quantity
             if (!isset($newOrderItem['quantity']) || $newOrderItem < !1) {
@@ -138,14 +139,21 @@ class ShoppingService
                     if (isset($order['organization']) && $order['organization'] == $offerFromThisItem['offeredBy']) {
                         if ($this->checkIfInOrder($newOrderItem, $order) == true) {
                             $ordersInSession[$key] = $this->cumulateItems($newOrderItem, $order);
+                            $isNotInAOrder = true;
                         } else {
                             $ordersInSession[$key] = $this->addItemToOrder($newOrderItem, $order);
+                            $isNotInAOrder = true;
                         }
+                    } else {
+                        $isNotInAOrder = false;
                     }
                     // Lazy fix
 //                    if (isset($order['organization'])) {
 //                        $ordersInSession[$key] = $order;
 //                    }
+                }
+                if (isset($isNotInAOrder) && $isNotInAOrder == false) {
+                    $ordersInSession[] = $this->makeNewOrder($newOrderItem);
                 }
             } else {
                 $ordersInSession[] = $this->makeNewOrder($newOrderItem);
@@ -156,12 +164,14 @@ class ShoppingService
             }
         }
         // Set orders in session
+//        var_dump($ordersInSession);
+//        die;
         $this->session->set('orders', $ordersInSession);
 
 //        if (!isset($order)) {
 //            $order = null;
 //        }
-        return $order;
+//        return $order;
     }
 
     public function cumulateItems($newOrderItem, $order)
