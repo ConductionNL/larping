@@ -89,9 +89,41 @@ class DashboardOrganizationController extends AbstractController
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
-        $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
 
-        //Delete event
+        // Update event
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Wvent') {
+            // Get the current resource
+            $event = $request->request->all();
+            // Set the current organization as owner
+            $event['organization'] = $variables['organization']['@id'];
+            $event['status'] = 'pending';
+
+            $categories = $event['resource_categories'];
+            if (!$categories) {
+                $categories = [];
+            }
+            unset($event['resource_categories']);
+
+            // Save the resource
+            $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
+
+            // Setting the categories
+            /*@todo  This should go to a wrc service */
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$event['id']])['hydra:member'];
+            if (count($resourceCategories) > 0) {
+                $resourceCategory = $resourceCategories[0];
+            } else {
+                $resourceCategory = ['resource'=>$event['@id'], 'catagories'=>[]];
+            }
+
+            $resourceCategory['categories'] = $categories;
+            $resourceCategory['catagories'] = $categories;
+
+            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+        }
+
+        // Add product
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
 
             $product = $request->request->all();
@@ -111,8 +143,10 @@ class DashboardOrganizationController extends AbstractController
             $offer['audience'] =  'public';
 
             $product['offers'][] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
-            $variables['products'][] = $product;
         }
+
+        $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
         return $variables;
     }
