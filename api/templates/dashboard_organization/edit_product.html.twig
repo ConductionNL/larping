@@ -25,12 +25,36 @@
                 <!-- About -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ product.name }}</h3>
                         <div class="row">
-                            <div class="form-group  col-md-12 mb-6">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ product.name }}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <button type="submit" class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group  col-md-8 mb-8">
                                 <label for="name">{{ 'name'|trans|capitalize }}</label>
                                 <input type="text" class="form-control" value="{{ product.name }}" id="name"
                                        name="name">
+                            </div>
+                            <div class="form-group  col-md-4">
+                                <label for="type">{{ 'type'|trans|capitalize }}</label>
+                                <select class="form-control" aria-label="{{ 'the type of this product'|trans|capitalize }}" required id="type" name="type" {% if product.type|default %}disabled{% endif%}>
+                                    <option value="simple" {% if product.type is defined  and product.type == "simple"%} selected {% endif %}>{{ 'simple'|trans|capitalize }}</option>
+                                    <option value="ticket" {% if product.type is defined  and product.type == "ticket"%} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
+                                    <option value="subscription" {% if product.type is defined  and product.type == "subscription"%} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
+                                    <!--
+                                    <option value="set" {% if product.type is defined  and product.type == "set"%} selected {% endif %}>{{ 'set'|trans|capitalize }}</option>
+                                    <option value="virtual" {% if product.type is defined  and product.type == "virtual"%} selected {% endif %}>{{ 'virtual'|trans|capitalize }}</option>
+                                    <option value="external" {% if product.type is defined  and product.type == "external"%} selected {% endif %}>{{ 'external'|trans|capitalize }}</option>
+                                    <option value="variable" {% if product.type is defined  and product.type == "variable"%} selected {% endif %}>{{ 'variable'|trans|capitalize }}</option>
+                                    <option value="person" {% if product.type is defined  and product.type == "person"%} selected {% endif %}>{{ 'person'|trans|capitalize }}</option>
+                                    <option value="location" {% if product.type is defined  and product.type == "location"%} selected {% endif %}>{{ 'location'|trans|capitalize }}</option>
+                                    <option value="service" {% if product.type is defined  and product.type == "service"%} selected {% endif %}>{{ 'service'|trans|capitalize }}</option>
+                                    -->
+                                </select>
                             </div>
                             <div class="form-group col-md-12 mb-6">
                                 <label for="description">{{ 'description'|trans|capitalize }}</label>
@@ -49,10 +73,10 @@
                             <h3 class="h4 mb-4">Voor welk evenement is dit ticket?</h3>
                             <div class="row">
                                 <div class="form-group  col-md-12 mb-6">
-                                    <label for="name">{{ 'event'|trans|capitalize }}</label>
-                                    <select class="form-control" aria-label="{{ 'the event of this product'|trans|capitalize }}" required id="type" name="type">
+                                    <label for="name">{{ 'event'|trans|capitalize }}* </label>
+                                    <select class="form-control" aria-label="{{ 'the event of this product'|trans|capitalize }}" required id="event" name="event">
                                     {% for event in events %}
-                                        <option value="simple" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ event.name }}</option>
+                                        <option value="{{ event['@id'] }}" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ event.name }}</option>
                                     {% endfor %}
                                     </select>
                                 </div>
@@ -66,8 +90,6 @@
                     <div class="card-body px-6 pt-6 pb-1">
                         <h3 class="h4 mb-4">{{ 'pricing'|trans|capitalize }} </h3>
                         <div class="row">
-
-
                             {% if product.offers is  defined and product.offers|length > 0 %}
                                 <table id="events" class="display nowrap table" style="width:100%">
                                     <thead>

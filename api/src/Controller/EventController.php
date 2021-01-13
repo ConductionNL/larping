@@ -55,20 +55,10 @@ class EventController extends AbstractController
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['event']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
-        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $id,'products.type' => 'simple'])['hydra:member'];
-        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $id,'products.type' => 'ticket'])['hydra:member'];
 
-        /* @todo dit willen we denk ik verplaatsen naar een algemene order api */
-        // Make order in session
-        if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' &&
-            $request->request->get('offers')) {
-            $resource = $request->request->all();
-
-            // Add offers to session
-            $order = $ss->addItemsToCart($resource['offers']);
-
-            return $this->redirectToRoute('app_order_index');
-        }
+        // Getting the offers
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'],'products.type' => 'simple'])['hydra:member']; // The product array is PUPRUSLY filled with offers instead of products
+        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'],'products.type' => 'ticket'])['hydra:member'];
 
         return $variables;
     }

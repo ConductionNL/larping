@@ -44,8 +44,6 @@ class DashboardOrganizationController extends AbstractController
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
-        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
@@ -54,35 +52,20 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             $event['status'] = 'pending';
 
-            $categories = $event['resource_categories'];
-            if (!$categories) {
-                $categories = [];
-            }
-            unset($event['resource_categories']);
-
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
 
-            // Setting the categories
-            /*@todo  This should go to a wrc service */
-            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$event['id']])['hydra:member'];
-            if (count($resourceCategories) > 0) {
-                $resourceCategory = $resourceCategories[0];
-            } else {
-                $resourceCategory = ['resource'=>$event['@id'], 'catagories'=>[]];
+            // redirects externally
+            if (array_key_exists('id', $event) && $event['id']) {
+                return $this->redirectToRoute('app_dashboardorganization_event', ['id'=> $event['id']]);
             }
-
-            $resourceCategory['categories'] = $categories;
-            $resourceCategory['catagories'] = $categories;
-
-            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
         }
 
         return $variables;
     }
 
     /**
-     * @Route("/event/{id}")
+     * @Route("/events/{id}")
      * @Template
      */
     public function eventAction(CommonGroundService $commonGroundService, Request $request, $id)
@@ -210,7 +193,7 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/products/{id}/edit")
+     * @Route("/products/{id}")
      * @Template
      */
     public function editProductAction(CommonGroundService $commonGroundService, Request $request, $id)
