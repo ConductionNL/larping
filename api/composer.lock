@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cab477452a7fffb0eb174764869dc6cb",
+    "content-hash": "84a951736155874ab19ad972989e68d6",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -776,12 +776,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/id-vault-php.git",
-                "reference": "077f23f295925ba8663ddd895e4876fcf6b5b890"
+                "reference": "2e56eced43fd316571be146f4680483da654736f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/077f23f295925ba8663ddd895e4876fcf6b5b890",
-                "reference": "077f23f295925ba8663ddd895e4876fcf6b5b890",
+                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/2e56eced43fd316571be146f4680483da654736f",
+                "reference": "2e56eced43fd316571be146f4680483da654736f",
                 "shasum": ""
             },
             "require": {
@@ -819,7 +819,7 @@
                 "commonground",
                 "conduction"
             ],
-            "time": "2020-12-23T15:46:44+00:00"
+            "time": "2021-01-12T15:30:55+00:00"
         },
         {
             "name": "conduction/idvaultbundle",
@@ -827,12 +827,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/IdVaultBundle.git",
-                "reference": "3ca51655a3cdccee34616a4284d66d1dd47dfcb3"
+                "reference": "016c427626b27444453b357c422a8fd3ae0664f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/3ca51655a3cdccee34616a4284d66d1dd47dfcb3",
-                "reference": "3ca51655a3cdccee34616a4284d66d1dd47dfcb3",
+                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/016c427626b27444453b357c422a8fd3ae0664f8",
+                "reference": "016c427626b27444453b357c422a8fd3ae0664f8",
                 "shasum": ""
             },
             "require": {
@@ -872,7 +872,7 @@
                 "commonground",
                 "conduction"
             ],
-            "time": "2021-01-12T14:01:15+00:00"
+            "time": "2021-01-12T15:43:20+00:00"
         },
         {
             "name": "conduction/listybundle",
@@ -10735,6 +10735,7 @@
     "stability-flags": {
         "conduction/balancebundle": 20,
         "conduction/commongroundbundle": 20,
+        "conduction/id-vault-php": 20,
         "conduction/idvaultbundle": 20,
         "conduction/listybundle": 20
     },

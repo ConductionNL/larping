@@ -1,0 +1,22 @@
+
+    <div class="card rounded-0 card-hover-overlay card-listing" data-lat="-33.922125" data-lag="151.159277" data-id="1">
+        <div class="position-relative">
+            <img class="card-img rounded-0 listing-img" src="https://picsum.photos/200/133" alt="Card image cap">
+            <div class="card-img-overlay">
+                <h3 class="listing-title" style="color: white">
+                        {{ offer.name }}
+                </h3>
+                <p class="text-white listing-address float-right">&euro; {{ offer.price }},-</p>
+            </div>
+        </div>
+
+        <div class="card-footer bg-transparent">
+            <ul class="list-unstyled d-flex mb-0">
+                <li class="mx-auto">
+                    <a class="px-2 hover-color-primary" data-toggle="modal" data-target="#offer{{ offer.id }}Modal"><i style="font-size: 20px" class="fa fa-cart-plus"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    {% include 'shopping/modals/offer.html.twig' with {'offer': offer}  %}
