@@ -30,8 +30,7 @@ class ShoppingService
         RequestStack $requestStack,
         CommonGroundService $commonGroundService,
         Security $security
-    )
-    {
+    ) {
         $this->params = $params;
         $this->cash = $cache;
         $this->session = $session;
@@ -116,7 +115,7 @@ class ShoppingService
 
         if (isset($object['paymentUrl']) && strpos($object['paymentUrl'], 'https://www.mollie.com') !== false) {
             $this->session->set('invoice@id', $object['@id']);
-            header('Location: ' . $object['paymentUrl']);
+            header('Location: '.$object['paymentUrl']);
             exit;
         }
     }
@@ -180,14 +179,14 @@ class ShoppingService
             foreach ($order['orderItems'] as $key => $orderItem) {
                 if (isset($orderItem['offer']) && isset($newOrderItem['offer']) &&
                     $orderItem['offer'] == $newOrderItem['offer']) {
-                        if ($this->checkIfIsPersonalTicket($this->commonGroundService->getResource($newOrderItem['offer'])) == true &&
+                    if ($this->checkIfIsPersonalTicket($this->commonGroundService->getResource($newOrderItem['offer'])) == true &&
                             $newOrderItem['quantity'] + $order['orderItems'][$key]['quantity'] > 1) {
-                            $order['orderItems'][$key]['quantity'] = 1;
-                        } else {
-                            $order['orderItems'][$key]['quantity'] += $newOrderItem['quantity'];
-                        }
+                        $order['orderItems'][$key]['quantity'] = 1;
+                    } else {
+                        $order['orderItems'][$key]['quantity'] += $newOrderItem['quantity'];
                     }
                 }
+            }
         }
 
         return $order;
@@ -242,10 +241,10 @@ class ShoppingService
         }
 
         $order['orderItems'][] = [
-            'offer' => $newOrderItem['offer'],
+            'offer'    => $newOrderItem['offer'],
             'quantity' => $newOrderItem['quantity'],
-            'path' => $newOrderItem['path'],
-            'price' => $actualOffer['price'],
+            'path'     => $newOrderItem['path'],
+            'price'    => $actualOffer['price'],
         ];
 
         return $order;
@@ -278,8 +277,8 @@ class ShoppingService
 
     public function uploadOrder($order, $person)
     {
-        $uploadedOrder['name'] = 'Order for ' . $person['name'];
-        $uploadedOrder['description'] = 'Order for ' . $person['name'];
+        $uploadedOrder['name'] = 'Order for '.$person['name'];
+        $uploadedOrder['description'] = 'Order for '.$person['name'];
         $uploadedOrder['organization'] = $order['organization'];
         $uploadedOrder['customer'] = $person['@id'];
 
@@ -304,7 +303,7 @@ class ShoppingService
             $item['quantity'] = intval($item['quantity']);
             $item['price'] = strval($offer['price']);
             $item['priceCurrency'] = $offer['priceCurrency'];
-            $item['order'] = '/orders/' . $uploadedOrder['id'];
+            $item['order'] = '/orders/'.$uploadedOrder['id'];
         }
 
         $item = $this->commonGroundService->saveResource($item, ['component' => 'orc', 'type' => 'order_items']);
