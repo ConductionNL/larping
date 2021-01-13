@@ -88,14 +88,65 @@ class DashboardOrganizationController extends AbstractController
     public function eventAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
+        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
 
-        //Delete event
-        if ($request->isMethod('POST') && $request->request->get('DeleteEvent') == 'true') {
-            $del = $commonGroundService->deleteResource($variables['event'], $variables['event']['@id']);
+        // Update event
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Wvent') {
+            // Get the current resource
+            $event = $request->request->all();
+            // Set the current organization as owner
+            $event['organization'] = $variables['organization']['@id'];
+            $event['status'] = 'pending';
 
-            return $this->redirect($this->generateUrl('app_dashboardorganization_events'));
+            $categories = $event['resource_categories'];
+            if (!$categories) {
+                $categories = [];
+            }
+            unset($event['resource_categories']);
+
+            // Save the resource
+            $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
+
+            // Setting the categories
+            /*@todo  This should go to a wrc service */
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$event['id']])['hydra:member'];
+            if (count($resourceCategories) > 0) {
+                $resourceCategory = $resourceCategories[0];
+            } else {
+                $resourceCategory = ['resource'=>$event['@id'], 'catagories'=>[]];
+            }
+
+            $resourceCategory['categories'] = $categories;
+            $resourceCategory['catagories'] = $categories;
+
+            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
         }
+
+        // Add product
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
+
+            $product = $request->request->all();
+            unset($product['price']);
+            $product['requiresAppointment'] = false;
+            $product['event'] =  $variables['event']['@id'];
+            $product['type'] =  'ticket';
+            $product['sourceOrganization'] =  $variables['organization']['@id'];
+            $product =  $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
+
+            $offer = [];
+            $offer['price'] = $request->get('price');
+            $offer['name'] = $product['name'];
+            $offer['description'] = $product['description'];
+            $offer['products'] = ['/products/'.$product['id']];
+            $offer['offeredBy'] = $variables['organization']['@id'];
+            $offer['audience'] =  'public';
+
+            $product['offers'][] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+        }
+
+        $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
         return $variables;
     }
@@ -122,7 +173,7 @@ class DashboardOrganizationController extends AbstractController
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
-        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
+        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
 
         return $variables;
     }
@@ -143,9 +194,61 @@ class DashboardOrganizationController extends AbstractController
             // Get the current resource
             $product = $request->request->all();
             // Set the current organization as owner
+            $product['requiresAppointment'] = false;
             $product['organization'] = $variables['organization']['@id'];
+            $product['sourceOrganization'] = $variables['organization']['@id'];
             // Save the resource
-            $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
+            $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
+
+            // redirects externally
+            if ($product['id']) {
+                return $this->redirectToRoute('app_dashboardorganization_editproduct', ['id'=>$product['id']]);
+            }
+        }
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/products/{id}/edit")
+     * @Template
+     */
+    public function editProductAction(CommonGroundService $commonGroundService, Request $request, $id)
+    {
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['product'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products', 'id' => $id]);
+        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
+
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
+            // Get the current resource
+            //$product = array_merge($variables['product'],$request->request->all()) ;
+            $product = $request->request->all();
+            // Set the current organization as owner equiresAppointment
+            //$product['id'] =  $id;
+            //$product['requiresAppointment'] = false;
+            //$product['organization'] = $variables['organization']['@id'];
+            //$product['sourceOrganization'] = $variables['organization']['@id'];
+            // Save the resource
+            $variables['product'] =  $commonGroundService->updateResource($product, ['component' => 'pdc', 'type' => 'products', 'id' => $id]);
+
+        }
+
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Offer') {
+
+            $offer = $request->request->all();
+            // Add the current product to het offer
+            $offer['products'] = ['/products/'.$id];
+            $offer['offeredBy'] = $variables['organization']['@id'];
+
+            if(!array_key_exists('audience', $offer) || !$offer['audience']){
+                $offer['audience'] =  'audience';
+            }
+
+            if(!array_key_exists('offers',$variables['product'])) $variables['product']['offers'] = [];
+            $variables['product']['offers'][] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+
         }
 
         return $variables;
@@ -215,6 +318,11 @@ class DashboardOrganizationController extends AbstractController
             $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
             $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
             $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
+        } elseif (count($variables['groups']) == 1) {
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$variables['organization']['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$variables['organization']['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$variables['organization']['name']}", $organizationUrl);
+            $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
         }
 
         $users = [];
@@ -265,23 +373,47 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/mailinglists")
      * @Template
      */
-    public function mailinglistsAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService)
+    public function mailinglistsAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params)
     {
-        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['mailingLists'] = [];
-//        $variables['mailingLists'] = $idVaultService->getSendLists();
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
 
-        if ($request->isMethod('POST') && $request->request->get('MailingEvent') == 'true') {
-            // Send email to all subscribers of this mailing list.
+        // Get the organization
+        $organizationUrl = $this->getUser()->getOrganization();
+        $variables['organization'] = $commonGroundService->getResource($organizationUrl);
+
+        // Get clientSecret of larping application
+        $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
+        $clientSecret = $providers[0]['configuration']['secret'];
+
+        // Get mailingLists from id-vault with filters: larping application secret and this users organization url
+        $variables['mailingLists'] = $idVaultService->getSendLists($clientSecret, $organizationUrl);
+
+        if ($request->isMethod('POST') && $request->request->get('MailToList') == 'true') {
+            // Get the correct sendList to send this mail to
+            $sendListId = $request->get('id');
+
+            // Setup the mail to be send
+            $mail = [];
+            $mail['title'] = $request->get('title');
+            $mail['html'] = '<p>HTML content of the mail</p>';//$request->get('html');
+            $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']).'@larping.eu';
+
+        // Send email to all subscribers of this mailing list.
+            $idVaultService->sendToSendList($sendListId, $mail);
         } elseif ($request->isMethod('POST')) {
             // Get the resource
             $sendList = $request->request->all();
             // Set Organization and email sendList type
-            $sendList['organization'] = $variables['organization']['@id'];
+            $sendList['resource'] = $organizationUrl;
             $sendList['email'] = true;
 
-            // Save the mailing list resource
-            //$commonGroundService->saveResource($sendList, ['component' => 'bs', 'type' => 'send_lists']);
+            // Save the mailing list resource on id-vault
+            $idVaultService->createSendList($clientSecret, $sendList);
+
+            return $this->redirect($this->generateUrl('app_dashboardorganization_mailinglists'));
         }
 
         return $variables;

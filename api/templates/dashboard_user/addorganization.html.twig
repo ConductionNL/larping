@@ -1,0 +1,188 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {% include 'dashboard_user/menu.html.twig' %}
+
+<section class="bg-light py-5 height100vh">
+    <div class="container">
+        <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+            <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'add organization'|trans|capitalize }}</h2>
+            <ul class="list-unstyled d-flex p-0 m-0">
+                <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_dashboard_index') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active"
+                    aria-current="page">{{ 'add organizations'|trans|capitalize }}</li>
+            </ul>
+        </nav>
+
+        <form>
+            <!-- About -->
+            <div class="card">
+                <div class="card-body px-6 pt-6 pb-1">
+                    <h3 class="h4 mb-4">About</h3>
+                    <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by
+                        posting business listings here. Please use our site at your own discretion and exercise good
+                        judgement as well as common sense when advertising business here.</p>
+
+                    <div class="row">
+                        <div class="form-group col-md-12 mb-6">
+                            <label for="name">{{ 'name of your organization'|trans|capitalize }}*</label>
+                            <input type="text" class="form-control" id="name" name="wrc[name]">
+                        </div>
+
+                        <div class="form-group col-md-12 mb-6">
+                            <label for="description">{{ 'description of your organization' }}</label>
+                            <textarea class="form-control" id="description" name="wrc[description]" rows="6"></textarea>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </form>
+
+        <!-- Contact -->
+        <div class="card">
+            <div class="card-body p-6">
+                <h3 class="h4 mb-4">Contact</h3>
+                <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
+                    business listings here.
+                    Please use our site at your own discretion and exercise good judgement as well as common sense when
+                    advertising
+                    business here.</p>
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group mb-6">
+                            <label for="exampleFormControlSelect1">Listing Region</label>
+                            <div class="select-default bg-white">
+                                <div class="selectric-wrapper selectric-select-location">
+                                    <div class="selectric-hide-select">
+                                        <select class="select-location" tabindex="-1">
+                                            <option>All Location</option>
+                                            <option>U.S.A</option>
+                                            <option>U.K</option>
+                                            <option>ASIA</option>
+                                        </select>
+                                    </div>
+                                    <div class="selectric"><span class="label">All Location</span>
+                                        <div class="arrow-button"><i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <div class="selectric-items" tabindex="-1">
+                                        <div class="selectric-scroll">
+                                            <ul>
+                                                <li data-index="0" class="selected">All Location</li>
+                                                <li data-index="1" class="">U.S.A</li>
+                                                <li data-index="2" class="">U.K</li>
+                                                <li data-index="3" class="last">ASIA</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <input class="selectric-input" tabindex="0"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-6">
+                            <label for="listingPhone">Listing Phone</label>
+                            <input type="phone" class="form-control" placeholder="546 - 545 - 2546">
+                        </div>
+
+                        <div class="form-group mb-6">
+                            <label for="listingEmail">Listing Email</label>
+                            <input type="email" class="form-control" placeholder="hello@example.com">
+                        </div>
+
+                        <div class="form-group mb-6">
+                            <label for="listingWebsite">Listing Website</label>
+                            <input type="text" class="form-control" id="listingWebsite" placeholder="http://">
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 map-place-search-wrapper">
+                        <div class="form-group mb-0 ">
+                            <label for="listingAddress">Listing Address</label>
+                            <input type="text" class="form-control" id="listingAddress" placeholder="Type Location">
+                        </div>
+
+                        <div class="map-place-search">
+                            <div id="map-add-edit"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="card">
+            <div class="card-body p-6">
+                <h3 class="h4 mb-4">Gallery</h3>
+                <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
+                    business listings here.
+                    Please use our site at your own discretion and exercise good judgement as well as common sense when
+                    advertising
+                    business here.</p>
+
+                <div class="form-group position-relative mb-6 form-group-dragable">
+                    <input type="file" class="custom-file-input">
+                    <label class="custom-file-label" for="customFile">
+                        Click or Drag images here
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="videoUrl">Video URL</label>
+                    <input type="text" class="form-control" id="videoUrl" placeholder="http://">
+                </div>
+            </div>
+        </div>
+
+        <!-- Socials -->
+        <div class="card">
+            <div class="card-body p-6">
+                <h3 class="h4 mb-4">Social</h3>
+                <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
+                    business listings here.
+                    Please use our site at your own discretion and exercise good judgement as well as common sense when
+                    advertising
+                    business here.</p>
+
+                <div class="row">
+                    <div class="form-group col-md-6 mb-6">
+                        <label for="linkedUrl">Linked in URL</label>
+                        <input type="text" class="form-control" placeholder="http://linkedin.com/listty">
+                    </div>
+
+                    <div class="form-group col-md-6 mb-6">
+                        <label for="facebookUrl">Facebook URL</label>
+                        <input type="text" class="form-control" placeholder="http://facebook.com/listty">
+                    </div>
+
+                    <div class="form-group col-md-6 mb-6">
+                        <label for="twitterUrl">Twitter URL</label>
+                        <input type="text" class="form-control" placeholder="http://twitter.com/listty">
+                    </div>
+
+                    <div class="form-group col-md-6 mb-6">
+                        <label for="youtubeUrl">You Tube URL</label>
+                        <input type="text" class="form-control" placeholder="http://youtube.com/listty">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-6 col-xl-5">
+                <div class="mb-6">
+                    <button type="submit" class="btn btn-lg btn-primary btn-block">submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

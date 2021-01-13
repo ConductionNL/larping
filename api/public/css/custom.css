@@ -37,3 +37,7 @@
         opacity: 1;
     }
 }
+
+.hover-color-primary:host{
+    color: #2095F2;
+}

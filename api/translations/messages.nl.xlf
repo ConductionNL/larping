@@ -527,9 +527,9 @@
          <target>over larping.eu</target>
          </trans-unit>
 
-         <trans-unit id="8UyAttA" resname="my memberchips">
-         <source>my memberchips</source>
-         <target>mijn memberchips</target>
+         <trans-unit id="8UyAttA" resname="my memberships">
+         <source>my memberships</source>
+         <target>mijn lidmaatschappen</target>
          </trans-unit>
          <trans-unit id="opqq12g" resname="my organizations">
          <source>my organizations</source>
@@ -570,6 +570,10 @@
          <trans-unit id="uNgfkas" resname="reviews">
          <source>reviews</source>
          <target>beoordelingen</target>
+         </trans-unit>
+         <trans-unit id="U7hb12S" resname="to purchase this product, another product is required and will be added to your shopping cart">
+         <source>to purchase this product, another product is required and will be added to your shopping cart</source>
+         <target>om dit product te kunnen kopen, is er een ander product nodig die dan aan uw winkelmand wordt toegevoegd</target>
          </trans-unit>
          <trans-unit id="uRRRkas" resname="buy a ticket">
          <source>buy a ticket</source>

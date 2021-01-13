@@ -1,0 +1,41 @@
+{# Offer modale #}
+
+{% if resource is defined %}
+    {% set  id = resource['id'] %}
+    {% set  type = 'Offer' %}
+{% else %}
+    {% set  id = 'Add' %}
+    {% set  type = 'Offer' %}
+{% endif %}
+
+{% set  modalClass = 'modal-lg' %}
+
+{% extends "dashboard_organization/modals/modal.html.twig" %}
+
+{% block body %}
+<form id="{{ type }}Form{{ id }}" method="post">
+    {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
+    {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
+    <input type="hidden" name="@type" value="Offer">
+    <div class="form-group">
+        <label for="name">{{ 'name'|trans|capitalize }}*</label>
+        <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+    </div>
+    <div class="form-group">
+        <label for="description">{{ 'description'|trans|capitalize }}</label>
+        <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="name">{{ 'price'|trans|capitalize }}*</label>
+        <input type="text" class="form-control" id="price" name="price" {% if resource.price is defined %}value="{{ resource.price|capitalize }}"{% endif %} required>
+    </div>
+    <div class="form-group">
+        <label for="name">{{ 'audience'|trans|capitalize }}*</label>
+        <select class="form-control" aria-label="{{ 'the audience of this product'|trans|capitalize }}" required id="audience" name="audience" required>
+            <option value="internal" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ 'internal'|trans|capitalize }}</option>
+            <option value="public" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ 'public'|trans|capitalize }}</option>
+            <option value="personal" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ 'personal'|trans|capitalize }}</option>
+        </select>
+    </div>
+</form>
+{% endblock %}

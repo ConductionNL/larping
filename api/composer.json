@@ -8,6 +8,7 @@
         "api-platform/api-pack": "^1.1",
         "conduction/balancebundle": "dev-master",
         "conduction/commongroundbundle": "dev-symfony51",
+        "conduction/id-vault-php": "dev-main",
         "conduction/idvaultbundle": "dev-master",
         "conduction/listybundle": "dev-master",
         "dompdf/dompdf": "^0.8.5",
