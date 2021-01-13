@@ -198,8 +198,14 @@ class DashboardOrganizationController extends AbstractController
      */
     public function editProductAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
-        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['product'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products', 'id' => $id]);
+        if($request->get('action') == 'delete'){
+            $commonGroundService->deleteResource($variables['product']);
+
+            return $this->redirectToRoute('app_dashboardorganization_products');
+        }
+
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
