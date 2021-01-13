@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Service\MailingService;
 use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -56,11 +57,10 @@ class DashboardUserController extends AbstractController
      * @Route("/organizations")
      * @Template
      */
-    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, IdVaultService $idVaultService)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
-        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
 //        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => $params->get('app_id')]);
         $variables['type'] = 'organization';
 
@@ -132,13 +132,26 @@ class DashboardUserController extends AbstractController
             */
             // Update to the commonground component
 
-            $categories = $resource['categories'];
-            if (!$categories) {
+            if (isset($resource['categories'])) {
+                $categories = $resource['categories'];
+            }
+            if (!isset($categories)) {
                 $categories = [];
             }
             unset($resource['categories']);
 
             $organization = $commonGroundService->saveResource($resource, ['component' => 'wrc', 'type' => 'organizations']);
+            $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
+            $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
+            $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
+            $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
+
+            //create the groups clients, members, administrators
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
 
             $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$organization['id']])['hydra:member'];
 
@@ -167,8 +180,19 @@ class DashboardUserController extends AbstractController
 //
 //            }
         }
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
 
         return $variables;
+    }
+
+    /**
+     * @Route("/addorganization")
+     * @Template
+     */
+    public function addorganizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables = [];
     }
 
     /**

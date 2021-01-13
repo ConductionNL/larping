@@ -3,7 +3,8 @@
         <thead>
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
-            <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#GroupModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+            <th>{{ 'members'|trans|capitalize }}</th>
+            <th><button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#GroupModalAdd">{{ 'add'|trans|capitalize }}</button></th>
         </tr>
         </thead>
         <tbody>
@@ -12,9 +13,12 @@
                 <td class="text-capitalize">
                     <a class="text-hover-primary text-muted" >{{ group.name }}</a>
                 </td>
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" >{{ group.users|length }}</a>
+                </td>
                 <td>
                     <div class="dropdown">
-                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                        <a class="dropdown-toggle icon-burger-mini float-right" href="#" role="button" id="dropdownMenuLink"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                         </a>
 

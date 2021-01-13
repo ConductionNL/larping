@@ -1,24 +1,27 @@
-{% extends "dashboard_organization/modals/modal.html.twig" %}
+<!--Send mail to mailing list modal -->
+<div class="modal fade" id="MailingModal{{ resource.id }}" tabindex="-1" role="dialog" aria-labelledby="MailingModal{{ resource.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Send Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ path('app_dashboardorganization_mailinglists') }}" method="post">
+                    <input type="hidden" id="id" name="id" value="{{ resource.id }}">
 
-{% if resource is defined %}
-    {% set id = resource['id'] %}
-{% else %}
-    {% set id = 'Add' %}
-{% endif %}
-{% set type = 'Mailing' %}
-{% set modalEvent = 'MailingEvent' %}
+                    <div class="form-group">
+                        <label for="title">{{ 'title'|trans|capitalize }}*</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
 
-{% block body %}
-<form id="{{ type }}Form{{ id }}" method="post">
-    {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
-    {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
-    <div class="form-group">
-        <label for="name">{{ 'name'|trans|capitalize }}*</label>
-        <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+{#                    <div class="summernote" id="html" name="html">summernote 1</div>#}
+
+                    <button type="submit" name="MailToList" value="true" class="btn btn-primary mr-1">{{ 'send'|trans|capitalize }}</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="description">{{ 'description'|trans|capitalize }}</label>
-        <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
-    </div>
-</form>
-{% endblock %}
+</div>

@@ -13,12 +13,23 @@
     {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
     {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
     <div class="form-group">
-        <label for="name">{{ 'name'|trans|capitalize }}*</label>
-        <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+        <label for="email">{{ 'email'|trans|capitalize }}*</label>
+        <input type="email" class="form-control" id="email" name="email" required>
     </div>
+
     <div class="form-group">
-        <label for="description">{{ 'description'|trans|capitalize }}</label>
-        <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+        <label for="group">{{ 'group'|trans|capitalize }}*</label>
+        <select class="form-control" name="group" id="group">
+            {% for group in groups %}
+                <option value="{{ group.id }}">{{ group.name }}</option>
+            {% endfor %}
+        </select>
     </div>
+
+    {% if resource is defined %}
+        <input type="hidden" name="editUser" value="true">
+    {% else %}
+        <input type="hidden" name="inviteUser" value="true">
+    {% endif %}
 </form>
 {% endblock %}
