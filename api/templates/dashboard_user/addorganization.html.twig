@@ -156,14 +156,14 @@
                                        title="{{ 'add more socials'|trans|capitalize }}">
                                     </i>
                                 </div>
-                                <select class="form-control" name="socials{#[]#}[type]" id="type">
+                                <select class="form-control" name="socials[][type]" id="type">
                                     <option>{{ 'select type'|capitalize }}</option>
                                     <option value="website" id="type">{{ 'website'|capitalize }}</option>
                                     <option value="facebook" id="type">{{ 'facebook'|capitalize }}</option>
                                     <option value="twitter" id="type">{{ 'twitter'|capitalize }}</option>
                                     <option value="instagram" id="type">{{ 'instagram'|capitalize }}</option>
                                 </select>
-                                <input class="form-control mb-2" name="socials{#[]#}[url]" id="socials" type="url" placeholder="{{ 'add url'|trans|capitalize }}">
+                                <input class="form-control mb-2" name="socials[][url]" id="socials" type="url" placeholder="{{ 'add url'|trans|capitalize }}">
                             </div>
                         </div>
                     </div>
@@ -201,9 +201,9 @@
             const select = document.createElement("select");
             if (id === 'socials[]') {
                 select.setAttribute('class', "form-control mb-2");
-                select.setAttribute('name', 'socials{#[]#}[type]');
+                select.setAttribute('name', 'socials[][type]');
                 input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
-                input.setAttribute('name', 'socials{#[]#}[url]');
+                input.setAttribute('name', 'socials[][url]');
                 formDiv.appendChild(select);
                 for(option in options_array) {
                     select.options[select.options.length] = new Option(options_array[option], option);
