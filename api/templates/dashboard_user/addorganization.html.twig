@@ -156,12 +156,12 @@
                                        title="{{ 'add more socials'|trans|capitalize }}">
                                     </i>
                                 </div>
-                                <select class="form-control" name="type" id="type">
+                                <select class="form-control" name="socials[type]" id="type">
                                     <option>{{ 'select type'|capitalize }}</option>
-                                    <option name="socials[type]" id="type">{{ 'website'|capitalize }}</option>
-                                    <option name="socials[type]" id="type">{{ 'facebook'|capitalize }}</option>
-                                    <option name="socials[type]" id="type">{{ 'twitter'|capitalize }}</option>
-                                    <option name="socials[type]" id="type">{{ 'instagram'|capitalize }}</option>
+                                    <option value="website" id="type">{{ 'website'|capitalize }}</option>
+                                    <option value="facebook" id="type">{{ 'facebook'|capitalize }}</option>
+                                    <option value="twitter" id="type">{{ 'twitter'|capitalize }}</option>
+                                    <option value="instagram" id="type">{{ 'instagram'|capitalize }}</option>
                                 </select>
                                 <input class="form-control mb-2" name="socials[url]" id="socials" type="url" placeholder="{{ 'add url'|trans|capitalize }}">
                             </div>
@@ -191,20 +191,23 @@
             input.setAttribute('id', id);
 
             var options_array = {
-                ValueA : '{{ 'select type'|trans|capitalize }}',
-                ValueB : '{{ 'website'|trans|capitalize }}',
-                ValueC : '{{ 'facebook'|trans|capitalize }}',
-                ValueD : '{{ 'twitter'|trans|capitalize }}',
-                ValueE : '{{ 'instagram'|trans|capitalize }}'
+                select_type : '{{ 'select type'|trans|capitalize }}',
+                website : '{{ 'website'|trans|capitalize }}',
+                facebook : '{{ 'facebook'|trans|capitalize }}',
+                twitter : '{{ 'twitter'|trans|capitalize }}',
+                instagram : '{{ 'instagram'|trans|capitalize }}'
             };
 
             const select = document.createElement("select");
             if (id === 'socials[]') {
                 select.setAttribute('class', "form-control mb-2");
+                select.setAttribute('name', 'socials[type]')
                 input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
+                input.setAttribute('name', 'socials[url]');
                 formDiv.appendChild(select);
                 for(option in options_array) {
                     select.options[select.options.length] = new Option(options_array[option], option);
+                    select.value = option
                 }
             }
 
