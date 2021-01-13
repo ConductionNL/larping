@@ -5,6 +5,7 @@
 namespace App\Service;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -21,6 +22,7 @@ class ShoppingService
     private $request;
     private $commonGroundService;
     private $requestService;
+    private $idVaultService;
 
     public function __construct(
         ParameterBagInterface $params,
@@ -29,7 +31,8 @@ class ShoppingService
         FlashBagInterface $flash,
         RequestStack $requestStack,
         CommonGroundService $commonGroundService,
-        Security $security
+        Security $security,
+        IdVaultService $idVaultService
     ) {
         $this->params = $params;
         $this->cash = $cache;
@@ -38,6 +41,7 @@ class ShoppingService
         $this->request = $requestStack->getCurrentRequest();
         $this->commonGroundService = $commonGroundService;
         $this->security = $security;
+        $this->idVaultService = $idVaultService;
     }
 
 //    public function makeOrder($person)
@@ -284,6 +288,16 @@ class ShoppingService
 //        $uploadedOrder['organization'] = 'https://dev.larping.eu/api/v1/wrc/organizations/51eb5628-3b37-497b-a57f-6b039ec776e5';
 
         $uploadedOrder = $this->commonGroundService->saveResource($uploadedOrder, ['component' => 'orc', 'type' => 'orders']);
+
+        //add user to
+        $provider = $this->commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $this->params->get('app_id')])['hydra:member'][0];
+        $groups = $this->idVaultService->getGroups($provider['configuration']['app_id'], $order['organization'])['groups'];
+
+        foreach ($groups as $group) {
+            if ($group['name'] == 'clients' || $group['name'] == 'root' && !in_array($this->security->getUser()->getUsername(), $group['users'])) {
+                $this->idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $this->security->getUser()->getUsername(), true);
+            }
+        }
 
         foreach ($order['orderItems'] as $item) {
             $offer = $this->commonGroundService->getResource($item['offer']);
