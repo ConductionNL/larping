@@ -47,9 +47,13 @@ class DashboardUserController extends AbstractController
      * @Route("/memberships")
      * @Template
      */
-    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ShoppingService $shoppingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $products = $shoppingService->getOwnedProducts("https://dev.larping.eu/api/v1/cc/people/de4c85c1-90fa-4f99-bb11-a90ec7925f3a");
+        var_dump($products);
+        die;
+        $groups = $this->getUser()->getGroups();
         $variables = [];
     }
 
