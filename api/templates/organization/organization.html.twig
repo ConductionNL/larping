@@ -5,181 +5,199 @@
   {% endif %}
 
 {% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':organization['@id']})['hydra:member'] %}
+{% set features = commonground_resource_list({'component':'wrc','type':'categories'}, {'parent.name': 'features'})['hydra:member'] %}
 {% extends "base.html.twig" %}
 {% block content %}
 
-<!-- ====================================
-———	LISTING SINGLE HEADING
-===================================== -->
-<section class="py-7 pt-md-9 pb-md-8">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-7 col-lg-8">
-                <div class="mb-2 mb-lg-0">
-                    <h1 class="single-listing-title">{{ organization.name }}</h1>
+    <!-- ====================================
+    ———	LISTING SINGLE HEADING
+    ===================================== -->
+    <section class="py-7 pt-md-9 pb-md-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-lg-8">
+                    <div class="mb-2 mb-lg-0">
+                        <h1 class="single-listing-title">{{ organization.name }}</h1>
 
-                    <!-- Breadcrumb -->
-                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
-                        <ul class="list-unstyled d-flex p-0 m-0">
-                            <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ organization.name }}</li>
-                        </ul>
-                    </nav>
+                        <!-- Breadcrumb -->
+                        <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
+                            <ul class="list-unstyled d-flex p-0 m-0">
+                                <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                                <li class="breadcrumb-item"><a
+                                        href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ organization.name }}</li>
+                            </ul>
+                        </nav>
 
-                    <!-- Ratings -->
-                    <div class="d-flex align-items-center">
-                        {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                        <span class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
-                        <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
-                            <i class="fal fa-heart text-primary" aria-hidden="true"></i>
-                            <span>{{ totals.likes }}</span>
-                        </button>
+                        <!-- Ratings -->
+                        <div class="d-flex align-items-center">
+                            {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
+                            <span
+                                class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top"
+                                    title="Favourite this listing">
+                                <i class="fal fa-heart text-primary" aria-hidden="true"></i>
+                                <span>{{ totals.likes }}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
-                <a href="#add-review" class="btn btn-primary">{{ 'write a review'|trans|capitalize }}</a>
-            </div><!--/.col -->
-        </div><!-- /.row -->
-    </div><!--/.container -->
-</section>
+                <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
+                    <a href="#add-review" class="btn btn-primary">{{ 'write a review'|trans|capitalize }}</a>
+                </div><!--/.col -->
+            </div><!-- /.row -->
+        </div><!--/.container -->
+    </section>
 
-<!-- ====================================
-———	MAIN CONTENT
-===================================== -->
-<section class="pt-7 pb-4 pt-md-9 pb-md-8">
-    <div class="container">
-        <div class="row">
-            <!--======= Main =======-->
-            <div class="col-md-8 col-lg-8 single-listing-content">
-                <!-- About -->
-                {% if organization.description|default %}
-                <div class="fade-in">
-                    <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {%if organization.name|default %}{{ organization.name }}{% endif %}</h3>
-                        <p class="mb-6">{{ organization.description }}</p>
-                </div>
-
-                <hr>
-                {% endif %}
-
-                <!-- Catagories -->
-                {% if categories is defined and categories is not empty %}
-                <div class="fade-in">
-                    <h3 class="font-weight-normal mb-6">{{ 'catagories'|trans|capitalize }} {{ organization.name }}</h3>
-                    {%  include '/sections/categories.html.twig' with {'categories': categories} %}
-                </div>
-                <hr>
-                {% endif %}
-
-
-                <!-- Events -->
-                {% if events is defined and events is not empty %}
-                <div class="fade-in">
-                    <h3 class="font-weight-normal mb-6">{{ 'events'|trans|capitalize }}</h3>
-                    <div class="row">
-                    {% for event in events %}
-                        <div class="col-md-6" id="organization">
-                        {%  include '/cards/event.html.twig' with {'item': event}  %}
+    <!-- ====================================
+    ———	MAIN CONTENT
+    ===================================== -->
+    <section class="pt-7 pb-4 pt-md-9 pb-md-8">
+        <div class="container">
+            <div class="row">
+                <!--======= Main =======-->
+                <div class="col-md-8 col-lg-8 single-listing-content">
+                    <!-- About -->
+                    {% if organization.description|default %}
+                        <div class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {% if organization.name|default %}{{ organization.name }}{% endif %}</h3>
+                            <p class="mb-6">{{ organization.description }}</p>
                         </div>
-                    {% endfor %}
-                    </div><!-- /.row -->
-                </div>
 
-                <hr>
-                {% endif %}
+                        <hr>
+                    {% endif %}
 
-                <!-- Tickets -->
-                {% if tickets is defined and tickets is not empty %}
-                <div class="fade-in">
-                    <h3 class="font-weight-normal mb-6">{{ 'tickets'|trans|capitalize }}</h3>
-                    <div class="row">
-                    {% for offer in tickets %}
-                        <div class="col-md-6" id="organization">
-                        {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                    <!-- Catagories -->
+                    {% if categories is defined and categories is not empty %}
+                        <div class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ 'catagories'|trans|capitalize }} {{ organization.name }}</h3>
+                            {% include '/sections/categories.html.twig' with {'categories': categories} %}
                         </div>
-                    {% endfor %}
-                    </div><!-- /.row -->
-                </div>
+                        <hr>
+                    {% endif %}
 
-                <hr>
-                {% endif %}
 
-                <!-- Subscriptions -->
-                {% if subscriptions is defined and subscriptions is not empty %}
-                <div class="fade-in">
-                    <h3 class="font-weight-normal mb-6">{{ 'subscriptions'|trans|capitalize }}</h3>
-                    <div class="row">
-                        {% for offer in subscriptions %}
-                            <div class="col-md-6" id="organization">
-                                {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
-                            </div>
+                    <!-- Events -->
+                    {% if events is defined and events is not empty %}
+                        <div class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ 'events'|trans|capitalize }}</h3>
+                            <div class="row">
+                                {% for event in events %}
+                                    <div class="col-md-6" id="organization">
+                                        {% include '/cards/event.html.twig' with {'item': event} %}
+                                    </div>
+                                {% endfor %}
+                            </div><!-- /.row -->
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Tickets -->
+                    {% if tickets is defined and tickets is not empty %}
+                        <div class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ 'tickets'|trans|capitalize }}</h3>
+                            <div class="row">
+                                {% for offer in tickets %}
+                                    <div class="col-md-6" id="organization">
+                                        {% include 'cards/offer.html.twig'  with {'item': offer} %}
+                                    </div>
+                                {% endfor %}
+                            </div><!-- /.row -->
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Subscriptions -->
+                    {% if subscriptions is defined and subscriptions is not empty %}
+                        <div class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ 'subscriptions'|trans|capitalize }}</h3>
+                            <div class="row">
+                                {% for offer in subscriptions %}
+                                    <div class="col-md-6" id="organization">
+                                        {% include 'cards/offer.html.twig'  with {'item': offer} %}
+                                    </div>
+                                {% endfor %}
+                            </div><!-- /.row -->
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Products -->
+                    {% if products is defined and products is not empty %}
+                        <div id="gridFullwidthDiv" class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
+                            <div class="row">
+                                {% for offer in products %}
+                                    <div class="col-md-6" id="organization">
+                                        {% include 'cards/offer.html.twig'  with {'item': offer} %}
+                                    </div>
+                                {% endfor %}
+                            </div><!-- /.row -->
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Reviews -->
+                    {% if reviews is defined and reviews is not empty %}
+                        <div class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</h3>
+                            {% include '/sections/reviews.html.twig' %}
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Add a review -->
+                    <div id="add-review" class="fade-in ">
+                        <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
+                        {% include '/sections/review.html.twig' with {'item': organization} %}
+                    </div>
+                </div><!-- /.col -->
+
+                <!--======= Sidebar =======-->
+                <div class="col-md-5 col-lg-4 pl-xl-8">
+                    <!-- Contact  -->
+                    <h5>{{ 'contact'|trans|capitalize }} {{ organization.name }}</h5>
+                    <p>{{ organization.description }}</p>
+                    {% include 'widgets/contact.html.twig' %}
+
+                    <!-- You may also like  -->
+                    {% if categories is defined and categories is not empty %}
+                        <h5>{{ 'categories you might like'|trans|capitalize }}</h5>
+                        {% for category in categories %}
+                            {% include 'cards/category.html.twig' with {
+                                'item': category
+                            } %}
                         {% endfor %}
-                    </div><!-- /.row -->
-                </div>
 
-                <hr>
-                {% endif %}
+                    {% endif %}
 
-                <!-- Products -->
-                {% if products is defined and products is not empty %}
-                <div id="gridFullwidthDiv" class="fade-in">
-                    <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
-                    <div class="row">
-                        {% for offer in products %}
-                            <div class="col-md-6" id="organization">
-                                {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
-                            </div>
-                        {% endfor %}
-                    </div><!-- /.row -->
-                </div>
-
-                <hr>
-                {% endif %}
-
-                <!-- Reviews -->
-                {% if reviews is defined and reviews is not empty %}
-                <div class="fade-in">
-                    <h3 class="font-weight-normal mb-6">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</h3>
-                    {%  include '/sections/reviews.html.twig' %}
-                </div>
-
-                <hr>
-                {% endif %}
-
-                <!-- Add a review -->
-                <div id="add-review" class="fade-in ">
-                    <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
-                    {%  include '/sections/review.html.twig' with {'item': organization} %}
-                </div>
-            </div><!-- /.col -->
-
-            <!--======= Sidebar =======-->
-            <div class="col-md-5 col-lg-4 pl-xl-8">
-                <!-- Contact  -->
-                <h5>{{ organization.name }}</h5>
-                {% include 'widgets/contact.html.twig' %}
-
-                <!-- You may also like  -->
-                {% if categories is defined and categories is not empty %}
-                <h5>{{ 'categories you might like'|trans|capitalize }}</h5>
-                {% for category in categories %}
-                    {% include 'cards/category.html.twig' with {
-                        'item': category
-                    } %}
-                {% endfor %}
-
-                {% endif %}
-
-                <i class="fas fa-phone mr-2" aria-hidden="true"></i>((telefoon nummer))
-                <br><br>
-                <i class="fas fa-home-lg mr-2" aria-hidden="true"></i>((adres))
-                <br><br>
-                <i class="fas fa-envelope mr-2" aria-hidden="true"></i>((email))
-
-            </div><!-- /.col -->
-        </div> <!-- /.row -->
-    </div> <!-- /.container -->
-</section>
+                    <ul class="list-unstyled text-muted">
+                        {% if contact.telephones|default %}
+                            {% for numbers in contact.telephones %}
+                                <i class="fas fa-phone mr-2"
+                                   aria-hidden="true"><span>{{ numbers.telephone }}</span></i>
+                            {% endfor %}
+                        {% endif %}
+                        {% if contact.emails|default %}
+                            {% for emails in contact.emails %}
+                                <i class="fas fa-envelope mr-2"
+                                   aria-hidden="true"><span>{{ emails.email }}</span></i>
+                            {% endfor %}
+                        {% endif %}
+                        {% if contact.adresses|default %}
+                            <i class="fas fa-home-lg mr-2"
+                               aria-hidden="true"><span>{{ adres.street }}{{ adres.houseNumber }}</span></i>
+                        {% endif %}
+                    </ul>
+                </div><!-- /.col -->
+            </div> <!-- /.row -->
+        </div> <!-- /.container -->
+    </section>
 
 {% endblock %}
