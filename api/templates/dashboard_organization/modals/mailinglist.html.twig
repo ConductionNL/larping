@@ -10,12 +10,11 @@
 {% block body %}
 <form id="{{ type }}Form{{ id }}" method="post">
     {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
-    {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
     <!-- Name -->
     <div class="form-group">
-        <label for="name">{{ 'name'|trans|capitalize }} </label>
+        <label for="name">{{ 'name'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
         <input class="form-control" name="name" id="name" type="text" placeholder="{{ 'newsletter'|trans|capitalize }}"
-        {% if resource.name is defined %}value="{{ resource.name }}{% endif %}">
+        {% if resource.name is defined %}value="{{ resource.name }}{% endif %}" required>
     </div>
 
     <!-- Description -->
