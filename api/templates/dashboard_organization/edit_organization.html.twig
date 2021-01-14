@@ -2,7 +2,11 @@
 {% if organization is defined %}
     {% set  id = organization['id'] %}
     {% set  type = 'Organization' %}
+{% else %}
+    {% set  id = 'Add' %}
+    {% set  type = 'Organization' %}
 {% endif %}
+
 {% block content %}
 
     {% include 'dashboard_organization/menu.html.twig' %}
@@ -10,14 +14,14 @@
     <section class="bg-light py-5 height100vh">
         <div class="container">
             <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
-                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'edit profile'|trans|capitalize }}</h2>
+                <h2 class="font-weight-normal mb-4 mb-md-0">{% if organization|default %}{{ 'edit profile'|trans|capitalize }}{% else %}{{ 'add organization'|trans|capitalize }}{% endif %}</h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ 'edit profile'|trans|capitalize }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{% if organization|default %}{{ 'edit profile'|trans|capitalize }}{% else %}{{ 'add organization'|trans|capitalize }}{% endif %}</li>
                 </ul>
             </nav>
             <form id="{{ type }}Form{{ id }}" method="post">
@@ -28,24 +32,24 @@
                 <!-- About -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ organization.name }}</h3>
+                        <h3 class="h4 mb-4">{% if organization|default %}{{ 'about'|trans|capitalize }} {{ organization.name }}{% else %}{{ 'basics'|trans|capitalize }}{% endif %}</h3>
                         <div class="row">
                             <div class="form-group col-md-12 mb-6">
                                 <label for="name">{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" value="{{ organization.name }}" id="name"
+                                <input type="text" class="form-control" {% if organization|default %}value="{{ organization.name }}"{% endif %} id="name"
                                        name="name">
                             </div>
 
                             <div class="form-group col-md-12 mb-6">
                                 <label for="description">{{ 'description'|trans|capitalize }}</label>
                                 <textarea class="form-control" rows="6" id="description"
-                                          name="description">{{ organization.description }}</textarea>
+                                          name="description">{% if organization|default %}{{ organization.description }}{% endif %}</textarea>
                             </div>
                         </div>
 
                     </div>
                 </div>
-
+                {% if organization is defined %}
                 <!-- Settings -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
@@ -160,6 +164,7 @@
                     <div class="card-body p-6">
                         <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>
 
+                        {% for socials in contact.socials %}
                         <div class="row">
                             <div class="form-group col-md-12 mb-6" id="socials[]">
                                 <div class="form-inline">
@@ -169,19 +174,20 @@
                                        title="{{ 'add more socials'|trans|capitalize }}"></i>
                                 </div>
                                 <select class="form-control" name="type" id="type">
-                                    <option>{% if contact.socials|default %}{{ contact.socials[0].type }}{% else %}{{ 'select type'|capitalize }}{% endif %}</option>
+                                    <option>{% if socials|default %}{{ socials.type }}{% else %}{{ 'select type'|capitalize }}{% endif %}</option>
                                     <option name="type" id="type">{{ 'website'|capitalize }}</option>
                                     <option name="type" id="type">{{ 'facebook'|capitalize }}</option>
                                     <option name="type" id="type">{{ 'twitter'|capitalize }}</option>
                                     <option name="type" id="type">{{ 'instagram'|capitalize }}</option>
                                 </select>
                                 <input class="form-control" name="url" id="url" type="url"
-                                    {% if contact.socials|default %} value="{{ contact.socials[0].url }}"
+                                    {% if socials|default %} value="{{ socials.url }}"
                                 {% else %}
                                     placeholder="{{ 'add url'|trans|capitalize }}"
                                     {% endif %}>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
 
@@ -199,6 +205,7 @@
 
                     </div>
                 </div>
+                {% endif %}
 
                 <div class="row justify-content-center">
                     <div class="col-md-7 col-lg-6 col-xl-5">
@@ -211,6 +218,9 @@
         </div>
 
     </section>
+
+
+
     <script>
         function addItem(id) {
             const formDiv = document.getElementById(id);
