@@ -19,7 +19,7 @@
 
                     <div class="form-group">
                         <label for="summernote">{{ 'content'|trans|capitalize }} <span style="color: red;"><strong>*</strong></span></label>
-                        <textarea class="summernote" name="html" id="summernote"></textarea>
+                        <textarea class="summernote" name="html" id="summernote{{ resource.id }}"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -31,7 +31,7 @@
 </div>
 
 <script>
-    $('#summernote').summernote({
+    $('#summernote{{ resource.id }}').summernote({
         placeholder: '{{ 'content'|trans|capitalize }}',
         tabsize: 2,
         height: 300
