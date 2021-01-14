@@ -323,6 +323,13 @@
                                     </a>
                                 </li>
                                 <li>
+                                    <a class="d-flex flex-wrap align-items-center"
+                                       href="{{ path('app_dashboarduser_orders') }}">
+                                        <i class="fal fa-shopping-cart mr-2" aria-hidden="true"></i>
+                                        {{ 'my orders'|trans|capitalize }}
+                                    </a>
+                                </li>
+                                <li>
                                     <a class="d-flex flex-wrap align-items-center" href="{{ path('app_user_logout') }}">
                                         <i class="fal fa-sign-out mr-2" aria-hidden="true"></i>
                                         <span class="text-small">{{ 'logout'|trans|capitalize }}</span>
