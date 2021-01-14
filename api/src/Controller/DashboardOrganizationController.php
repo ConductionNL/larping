@@ -378,18 +378,28 @@ class DashboardOrganizationController extends AbstractController
         // Get mailingLists from id-vault with filters: larping application secret and this users organization url
         $variables['mailingLists'] = $idVaultService->getSendLists($clientSecret, $organizationUrl);
 
-        if ($request->isMethod('POST') && $request->request->get('MailToList') == 'true') {
+        if ($request->isMethod('POST') && $request->request->get('DeleteList') == 'true') {
+            // Get the correct sendList to delete
+            $sendListId = $request->get('id');
+
+            // Delete the sendList
+            $idVaultService->deleteSendList($sendListId);
+
+            $variables['mailingLists'] = $idVaultService->getSendLists($clientSecret, $organizationUrl);
+        } else if ($request->isMethod('POST') && $request->request->get('MailToList') == 'true') {
             // Get the correct sendList to send this mail to
             $sendListId = $request->get('id');
 
             // Setup the mail to be send
             $mail = [];
             $mail['title'] = $request->get('title');
-            $mail['html'] = '<p>HTML content of the mail</p>'; //$request->get('html');
+            $mail['html'] = $request->get('html');
             $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']).'@larping.eu';
 
             // Send email to all subscribers of this mailing list.
             $idVaultService->sendToSendList($sendListId, $mail);
+
+            return $this->redirect($this->generateUrl('app_dashboardorganization_mailinglists'));
         } elseif ($request->isMethod('POST')) {
             // Get the resource
             $sendList = $request->request->all();
@@ -398,7 +408,7 @@ class DashboardOrganizationController extends AbstractController
             $sendList['email'] = true;
 
             // Save the mailing list resource on id-vault
-            $idVaultService->createSendList($clientSecret, $sendList);
+            $idVaultService->saveSendList($clientSecret, $sendList);
 
             return $this->redirect($this->generateUrl('app_dashboardorganization_mailinglists'));
         }
