@@ -24,7 +24,7 @@
         <div class="card-footer bg-transparent">
             <ul class="list-unstyled d-flex mb-0 py-2">
                 <li>
-                    {{ item.priceCurrency }} {{ item.price }}
+                    {{ (item.price/100)|localizedcurrency(item.priceCurrency) }}
                 </li>
                 <li class="ml-auto">
                     <a class="px-2" data-toggle="modal" data-target="#offer{{ offer.id }}Modal" >{{ 'buy'|trans|capitalize }}</a>
