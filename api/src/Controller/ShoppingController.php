@@ -4,7 +4,6 @@
 
 namespace App\Controller;
 
-use App\Service\MailingService;
 use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
