@@ -11,15 +11,15 @@
 
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_memberships') }}">
-                        <i class="fa fa-building" aria-hidden="true"></i>{{ 'my membership'|trans|capitalize }}</a>
+                        <i class="fal fa-building" aria-hidden="true"></i>{{ 'my memberships'|trans|capitalize }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_organizations') }}">
-                        <i class="fa fa-building" aria-hidden="true"></i>{{ 'my organizations'|trans }}</a>
+                        <i class="fal fa-building" aria-hidden="true"></i>{{ 'my organizations'|trans }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_events') }}">
-                        <i class="far fa-calendar-alt" aria-hidden="true"></i>{{ 'my events'|trans }}</a>
+                        <i class="fal fa-calendar-alt" aria-hidden="true"></i>{{ 'my events'|trans }}</a>
                 </li>
                 <!--
                 <li class="nav-item">
@@ -29,13 +29,13 @@
                 -->
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_favorites') }}">
-                        <i class="far fa-heart" aria-hidden="true"></i>{{ 'my favorites'|trans }}</a>
+                        <i class="fal fa-heart" aria-hidden="true"></i>{{ 'my favorites'|trans }}</a>
                 </li>
             </ul>
 
             <form class="form-inline my-2 my-lg-0 position-relative d-none d-md-block">
-                <input class="form-control-sm" placeholder="Search" aria-label="Search">
-                <i class="fa fa-search" aria-hidden="true"></i>
+                <input class="form-control-sm" placeholder="{{ 'search' |trans|capitalize }}" aria-label="Search">
+                <i class="fal fa-search" aria-hidden="true"></i>
             </form>
         </div>
     </div>

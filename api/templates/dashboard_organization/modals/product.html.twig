@@ -22,36 +22,20 @@
     </div>
     <div class="form-group">
         <label for="description">{{ 'type'|trans|capitalize }}</label>
-        <select class="form-control" aria-label="{{ 'the type of this product'|trans|capitalize }}" required id="type" name="type">
+        <select class="form-control" aria-label="{{ 'the type of this product'|trans|capitalize }}" required id="type" name="type" {% if esource.type|default %}disabled{% endif %}>
             <option value="simple" {% if resource.type is defined  and resource.type == "simple"%} selected {% endif %}>{{ 'simple'|trans|capitalize }}</option>
+            <option value="ticket" {% if resource.type is defined  and resource.type == "ticket"%} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
+            <option value="subscription" {% if resource.type is defined  and resource.type == "subscription"%} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
+            <!--
             <option value="set" {% if resource.type is defined  and resource.type == "set"%} selected {% endif %}>{{ 'set'|trans|capitalize }}</option>
             <option value="virtual" {% if resource.type is defined  and resource.type == "virtual"%} selected {% endif %}>{{ 'virtual'|trans|capitalize }}</option>
             <option value="external" {% if resource.type is defined  and resource.type == "external"%} selected {% endif %}>{{ 'external'|trans|capitalize }}</option>
-            <option value="ticket" {% if resource.type is defined  and resource.type == "ticket"%} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
             <option value="variable" {% if resource.type is defined  and resource.type == "variable"%} selected {% endif %}>{{ 'variable'|trans|capitalize }}</option>
-            <option value="subscription" {% if resource.type is defined  and resource.type == "subscription"%} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
             <option value="person" {% if resource.type is defined  and resource.type == "person"%} selected {% endif %}>{{ 'person'|trans|capitalize }}</option>
             <option value="location" {% if resource.type is defined  and resource.type == "location"%} selected {% endif %}>{{ 'location'|trans|capitalize }}</option>
             <option value="service" {% if resource.type is defined  and resource.type == "service"%} selected {% endif %}>{{ 'service'|trans|capitalize }}</option>
+            -->
         </select>
     </div>
-    <div class="form-group">
-        <label for="description">{{ 'event'|trans|capitalize }}</label>
-        <select class="form-control" aria-label="{{ 'the event that this ticket is for'|trans|capitalize }}">
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="description">{{ 'offers'|trans|capitalize }}</label>
-        <select class="form-control" multiple aria-label="{{ 'offers that this product belongs to'|trans|capitalize }}">
-            {% for offer in offers %}
-                <option value="{{ offer.id }}">{{ offer.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
 </form>
 {% endblock %}

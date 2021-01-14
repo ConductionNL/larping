@@ -1,0 +1,26 @@
+<!-- Make Online Reservations -->
+{% if app.user %}
+<form class="mb-5" action="{{ path('app_default_contact') }}" method="post">
+    <input type="hidden" name="return" value="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">
+    <input type="hidden" name="receiver" value="{{ organization['@id'] }}">
+    <input type="hidden" name="channel" value="web-form">
+    <div class="form-group mb-6">
+        <label for="name">{{ 'topic'|trans|capitalize }}</label>
+        <input type="text" class="form-control single-date" name="topic">
+    </div>
+    <div class="form-group mb-6">
+        <label for="name">{{ 'message'|trans|capitalize }}</label>
+        <textarea  class="form-control single-date" name="message"></textarea>
+    </div>
+    <div class="form-group mb-6">
+        <button type="submit" class="btn btn-outline-primary btn-block">{{ 'submit message'|trans|capitalize }}</button>
+    </div>
+</form>
+{% else %}
+    <div>
+        <button class="btn btn-primary btn-block">
+            <a class="mt-2 text-center text-white"
+               href="{{ path('app_user_idvault') }}">{{ 'login to contact organizer'|trans|capitalize }}</a>
+        </button>
+    </div>
+{% endif %}

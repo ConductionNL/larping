@@ -126,6 +126,32 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * @Route("/review")
+     * @Template
+     */
+    public function reviewAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    {
+        $variables = [];
+        // Add review
+        if ($request->isMethod('POST')) {
+            $resource = $request->request->all();
+
+            $resource['author'] = $this->getUser()->getPerson();
+            $resource['rating'] = (int) $resource['rating'];
+
+            // Save to the commonground component
+            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+
+            // redirects externally
+            if ($request->get('redirect')) {
+                return $this->redirect($request->get('redirect'));
+            }
+        }
+
+        return $variables;
+    }
+
+    /**
      * @Route("/contact")
      * @Template
      */
@@ -136,11 +162,17 @@ class DefaultController extends AbstractController
 
         if ($this->getUser() && $request->isMethod('POST')) {
             $resource = $request->request->all();
-            $resource['organization'] = 'https://dev.larping.eu';
-            $resource['submitters'] = $this->getUser()->getPerson();
+            $resource['snder'] = $this->getUser()->getPerson();
 
-            $commonGroundService->saveResource($resource, ['component' => 'vrc', 'type' => 'requests']);
+            $commonGroundService->saveResource($resource, ['component' => 'cm', 'type' => 'contact_moment']);
+
+            // redirects externally
+            if ($request->get('redirect')) {
+                return $this->redirect($request->get('redirect'));
+            }
         }
+
+        $variables['organization'] = ['@id'=>'https://www.larping.eu'];
 
         return $variables;
     }

@@ -14,7 +14,8 @@
     <!-- Name -->
     <div class="form-group">
         <label for="name">{{ 'name'|trans|capitalize }} </label>
-        <input class="form-control" name="name" id="name" type="text" placeholder="{{ 'newsletter'|trans|capitalize }}">
+        <input class="form-control" name="name" id="name" type="text" placeholder="{{ 'newsletter'|trans|capitalize }}"
+        {% if resource.name is defined %}value="{{ resource.name }}{% endif %}">
     </div>
 
     <!-- Description -->
@@ -23,7 +24,7 @@
         <textarea class="form-control" name="description" id="description"
                   cols="2" rows="1" style="max-height: 8rem; min-height: 3.5rem"
                   placeholder="{{ 'description'|trans|capitalize }}"
-        ></textarea>
+        >{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
     </div>
 </form>
 {% endblock %}

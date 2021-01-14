@@ -48,19 +48,6 @@ class LocationController extends AbstractController
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['location']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['location']['@id']])['hydra:member'];
 
-        // Add review
-        if ($request->isMethod('POST') && $request->request->get('@type') == 'Review') {
-            $resource = $request->request->all();
-
-            $resource['organization'] = $variables['organization']['@id'];
-            $resource['resource'] = $variables['organization']['@id'];
-            $resource['author'] = $this->getUser()->getPerson();
-            $resource['rating'] = (int) $resource['rating'];
-
-            // Save to the commonground component
-            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
-        }
-
         return $variables;
     }
 }

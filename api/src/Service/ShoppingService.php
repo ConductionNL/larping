@@ -5,6 +5,7 @@
 namespace App\Service;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -21,6 +22,7 @@ class ShoppingService
     private $request;
     private $commonGroundService;
     private $requestService;
+    private $idVaultService;
 
     public function __construct(
         ParameterBagInterface $params,
@@ -29,7 +31,8 @@ class ShoppingService
         FlashBagInterface $flash,
         RequestStack $requestStack,
         CommonGroundService $commonGroundService,
-        Security $security
+        Security $security,
+        IdVaultService $idVaultService
     ) {
         $this->params = $params;
         $this->cash = $cache;
@@ -38,6 +41,7 @@ class ShoppingService
         $this->request = $requestStack->getCurrentRequest();
         $this->commonGroundService = $commonGroundService;
         $this->security = $security;
+        $this->idVaultService = $idVaultService;
     }
 
 //    public function makeOrder($person)
@@ -70,8 +74,6 @@ class ShoppingService
 //                    if (isset($order['items'])) {
 //                        unset($order['items']);
 //                    }
-    ////                    var_dump($order);
-    ////                    die;
 //                    $order = $this->commonGroundService->saveResource($order, ['component' => 'orc', 'type' => 'orders']);
 //
 //                    foreach ($items as $item) {
@@ -111,7 +113,7 @@ class ShoppingService
         }
 
         // Only enable on localhost ! Dont forget to disable before pushing !
-//        $object['redirectUrl'] = 'http://localhost/payment-status';
+        $object['redirectUrl'] = 'http://localhost/payment-status';
 
         $object = $this->commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
 
@@ -125,7 +127,7 @@ class ShoppingService
     public function addItemsToCart($offers)
     {
         $ordersInSession = $this->session->get('orders');
-
+//        var_dump($ordersInSession);
         foreach ($offers as $newOrderItem) {
             // Check if new item has accpetable quantity
             if (!isset($newOrderItem['quantity']) || $newOrderItem < !1) {
@@ -139,43 +141,52 @@ class ShoppingService
                     // Check if order with organization from this offer exists if true add item to that order
                     if (isset($order['organization']) && $order['organization'] == $offerFromThisItem['offeredBy']) {
                         if ($this->checkIfInOrder($newOrderItem, $order) == true) {
-                            $order = $this->cumulateItems($newOrderItem, $order);
+                            $ordersInSession[$key] = $this->cumulateItems($newOrderItem, $order);
+                            $isNotInAOrder = true;
                         } else {
-                            $order = $this->addItemToOrder($newOrderItem, $order);
+                            $ordersInSession[$key] = $this->addItemToOrder($newOrderItem, $order);
+                            $isNotInAOrder = true;
                         }
+                    } else {
+                        $isNotInAOrder = false;
                     }
                     // Lazy fix
-                    if (isset($order['organization'])) {
-                        $ordersInSession[$key] = $order;
-                    }
+//                    if (isset($order['organization'])) {
+//                        $ordersInSession[$key] = $order;
+//                    }
+                }
+                if (isset($isNotInAOrder) && $isNotInAOrder == false) {
+                    $ordersInSession[] = $this->makeNewOrder($newOrderItem);
                 }
             } else {
-                $order = $this->makeNewOrder($newOrderItem);
+                $ordersInSession[] = $this->makeNewOrder($newOrderItem);
                 // Lazy fix
-                if (isset($order['organization'])) {
-                    $ordersInSession[] = $order;
-                }
+//                if (isset($order['organization'])) {
+//                    $ordersInSession[] = $order;
+//                }
             }
         }
         // Set orders in session
+//        var_dump($ordersInSession);
+//        die;
         $this->session->set('orders', $ordersInSession);
 
 //        if (!isset($order)) {
 //            $order = null;
 //        }
-
-        return $order;
+//        return $order;
     }
 
-    public function cumulateItems($order, $newOrderItem)
+    public function cumulateItems($newOrderItem, $order)
     {
-        if (isset($order['orderItems']) && $order['orderItems'] > 0) {
+        if (isset($order['orderItems']) && count($order['orderItems']) > 0) {
             foreach ($order['orderItems'] as $key => $orderItem) {
-                if (isset($orderItem['offer'])) {
-                    $actualOffer = $this->commonGroundService->getResource($orderItem['offer']);
-                    $newActualOffer = $this->commonGroundService->getResource($newOrderItem['offer']);
-
-                    if ($actualOffer['offeredBy'] == $newActualOffer['offeredBy']) {
+                if (isset($orderItem['offer']) && isset($newOrderItem['offer']) &&
+                    $orderItem['offer'] == $newOrderItem['offer']) {
+                    if ($this->checkIfIsPersonalTicket($this->commonGroundService->getResource($newOrderItem['offer'])) == true &&
+                            $newOrderItem['quantity'] + $order['orderItems'][$key]['quantity'] > 1) {
+                        $order['orderItems'][$key]['quantity'] = 1;
+                    } else {
                         $order['orderItems'][$key]['quantity'] += $newOrderItem['quantity'];
                     }
                 }
@@ -185,10 +196,20 @@ class ShoppingService
         return $order;
     }
 
+    public function checkIfIsPersonalTicket($offer)
+    {
+        if (isset($offer['audience']) && $offer['audience'] == 'internal' &&
+            isset($offer['products']) && $this->checkForTypeInProducts('ticket', $offer['products']) == true) {
+            return true;
+        }
+
+        return false;
+    }
+
     // Checks if item is in given order if true cumulates quantity
     public function checkIfInOrder($newOrderItem, $order)
     {
-        if (isset($order['orderItems']) && $order['orderItems'] > 0) {
+        if (isset($order['orderItems']) && count($order['orderItems']) > 0) {
             foreach ($order['orderItems'] as $key => $orderItem) {
                 if (isset($orderItem['offer'])) {
                     if ($orderItem['offer'] == $newOrderItem['offer']) {
@@ -201,9 +222,27 @@ class ShoppingService
         return false;
     }
 
+    public function checkForTypeInProducts($type, $products)
+    {
+        if (count($products) > 0) {
+            foreach ($products as $product) {
+                if (isset($product['type']) == $type) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function addItemToOrder($newOrderItem, $order)
     {
         $actualOffer = $this->commonGroundService->getResource($newOrderItem['offer']);
+
+        if ($this->checkIfIsPersonalTicket($actualOffer) == true &&
+            $newOrderItem['quantity'] > 1) {
+            $newOrderItem['quantity'] = 1;
+        }
 
         $order['orderItems'][] = [
             'offer'    => $newOrderItem['offer'],
@@ -255,6 +294,16 @@ class ShoppingService
 //        $uploadedOrder['organization'] = 'https://dev.larping.eu/api/v1/wrc/organizations/51eb5628-3b37-497b-a57f-6b039ec776e5';
 
         $uploadedOrder = $this->commonGroundService->saveResource($uploadedOrder, ['component' => 'orc', 'type' => 'orders']);
+
+        //add user to
+        $provider = $this->commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $this->params->get('app_id')])['hydra:member'][0];
+        $groups = $this->idVaultService->getGroups($provider['configuration']['app_id'], $order['organization'])['groups'];
+
+        foreach ($groups as $group) {
+            if ($group['name'] == 'clients' || $group['name'] == 'root' && !in_array($this->security->getUser()->getUsername(), $group['users'])) {
+                $this->idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $this->security->getUser()->getUsername(), true);
+            }
+        }
 
         foreach ($order['orderItems'] as $item) {
             $offer = $this->commonGroundService->getResource($item['offer']);
@@ -329,19 +378,23 @@ class ShoppingService
     {
         $thisProductIsOwned = false;
 
-        // Checks if required product is in session order
-        $order = $this->session->get('order');
-        if (isset($order['items']) && count($order['items']) > 0) {
-            foreach ($order['items'] as $item) {
-                if (isset($item['offer'])) {
-                    $offer = $this->commonGroundService->getResource($item['offer']);
+        // Checks if required product is in one of the session orders
+        $orders = $this->session->get('orders');
+        if (isset($orders) && count($orders) > 0) {
+            foreach ($orders as $order) {
+                if (isset($order['orderItems']) && count($order['orderItems']) > 0) {
+                    foreach ($order['orderItems'] as $item) {
+                        if (isset($item['offer'])) {
+                            $offer = $this->commonGroundService->getResource($item['offer']);
 
-                    if (isset($offer['products']) && count($offer['products']) > 0) {
-                        foreach ($offer['products'] as $ownedProduct) {
-                            if ($product['id'] == $ownedProduct['id']) {
-                                $thisProductIsOwned = true;
+                            if (isset($offer['products']) && count($offer['products']) > 0) {
+                                foreach ($offer['products'] as $ownedProduct) {
+                                    if ($product['id'] == $ownedProduct['id']) {
+                                        $thisProductIsOwned = true;
 
-                                return $thisProductIsOwned;
+                                        return $thisProductIsOwned;
+                                    }
+                                }
                             }
                         }
                     }
