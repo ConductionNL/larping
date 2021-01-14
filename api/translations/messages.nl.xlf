@@ -667,6 +667,14 @@
          <source>submit message</source>
          <target>verzend bericht</target>
          </trans-unit>
+         <trans-unit id="Afq1234" resname="my orders">
+         <source>my orders</source>
+         <target>mijn bestellingen</target>
+         </trans-unit>
+         <trans-unit id="H21AssD" resname="amount of items">
+         <source>amount of items</source>
+         <target>aantal items</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
