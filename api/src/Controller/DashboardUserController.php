@@ -304,4 +304,32 @@ class DashboardUserController extends AbstractController
 
         return $variables;
     }
+
+    /**
+     * @Route("/orders")
+     * @Template
+     */
+    public function ordersAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['customer' => $this->getUser()->getPerson()])['hydra:member'];
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/orders/{id}")
+     * @Template
+     */
+    public function orderAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['order'] = $commonGroundService->getResource(['component' => 'orc', 'type' => 'orders', 'id' => $id]);
+
+        if ($this->getUser()->getPerson() != $variables['order']['customer']) {
+            return $this->redirectToRoute('app_default_index');
+        }
+
+        return $variables;
+    }
 }
