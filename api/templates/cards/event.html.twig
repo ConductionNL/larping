@@ -38,7 +38,8 @@
                             data-placement="top"
                             title=""
                             data-original-title="Favourite this listing" value="{{ item['@id'] }}">
-                        <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
+                        {{ totals.liked }}
+                        <i {# {% if totals.liked|default %} #} class="fal fa-heart text-primary" {# {% else %} class="fal fa-heart text-primary" {% endif %} #} aria-hidden="true"></i>
                         <span id="{{ item['id'] }}">{{  totals.likes }}</span>
                     </button>
                 </li>
