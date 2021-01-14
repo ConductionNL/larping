@@ -386,7 +386,7 @@ class DashboardOrganizationController extends AbstractController
             $idVaultService->deleteSendList($sendListId);
 
             $variables['mailingLists'] = $idVaultService->getSendLists($clientSecret, $organizationUrl);
-        } else if ($request->isMethod('POST') && $request->request->get('MailToList') == 'true') {
+        } elseif ($request->isMethod('POST') && $request->request->get('MailToList') == 'true') {
             // Get the correct sendList to send this mail to
             $sendListId = $request->get('id');
 
