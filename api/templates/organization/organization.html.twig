@@ -30,7 +30,7 @@
                     <!-- Ratings -->
                     <div class="d-flex align-items-center">
                         {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                        <span class="d-inline-block mr-2">{{ totals.rating|round(1) }} {{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                        <span class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
                         <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
                             <i class="fal fa-heart text-primary" aria-hidden="true"></i>
                             <span>{{ totals.likes }}</span>
