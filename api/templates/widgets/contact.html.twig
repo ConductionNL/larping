@@ -1,26 +1,71 @@
-<!-- Make Online Reservations -->
 {% if app.user %}
-<form class="mb-5" action="{{ path('app_default_contact') }}" method="post">
-    <input type="hidden" name="return" value="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">
-    <input type="hidden" name="receiver" value="{{ organization['@id'] }}">
-    <input type="hidden" name="channel" value="web-form">
-    <div class="form-group mb-6">
-        <label for="name">{{ 'topic'|trans|capitalize }}</label>
-        <input type="text" class="form-control single-date" name="topic">
+    <div class="row">
+        <div class="col-md-10 col-lg-8 single-listing-content">
+            <form class="mb-5" action="{{ path('app_default_contact') }}" method="post">
+                <input type="hidden" name="return"
+                       value="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">
+                <input type="hidden" name="receiver" value="{{ organization['@id'] }}">
+                <input type="hidden" name="channel" value="web-form">
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <div class="row">
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="name">{{ 'topic'|trans|capitalize }}</label>
+                                <input type="text" class="form-control single-date" name="topic">
+                            </div>
+
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="name">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="form-control single-date" name="message"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-6">
+                    <button type="submit"
+                            class="btn btn-outline-primary btn-block">{{ 'submit message'|trans|capitalize }}</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-2 col-lg-4 pl-xl-8">
+            <div class="card">
+                <div class="card-body px-6 pt-6 pb-1">
+                    <h3 class="h4 mb-4">{{ 'contact information'|trans|capitalize }}</h3>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-3">
+                            <i class="fa fa-phone mr-3" aria-hidden="true"></i>
+                            <a class="text-muted" href="tel:+088-657-524-332">+88 657 524 332</a>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fa fa-envelope mr-3" aria-hidden="true"></i>
+                            <a class="text-muted" href="mailto:info@larping.eu">info@larping.eu</a>
+                        </li>
+                    </ul>
+                    <div class="row pb-md-6">
+                        <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2" href="#facebook">
+                                <i class="fab fa-facebook" aria-hidden="true"></i>
+                            </a>
+                            <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2" href="#twitter">
+                                <i class="fab fa-twitter" aria-hidden="true"></i>
+                            </a>
+                            <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2" href="#pinterest">
+                                <i class="fab fa-pinterest-p" aria-hidden="true"></i>
+                            </a>
+                            <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2" href="#linkedin">
+                                <i class="fab fa-linkedin" aria-hidden="true"></i>
+                            </a>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.col -->
     </div>
-    <div class="form-group mb-6">
-        <label for="name">{{ 'message'|trans|capitalize }}</label>
-        <textarea  class="form-control single-date" name="message"></textarea>
-    </div>
-    <div class="form-group mb-6">
-        <button type="submit" class="btn btn-outline-primary btn-block">{{ 'submit message'|trans|capitalize }}</button>
-    </div>
-</form>
 {% else %}
     <div>
-        <button class="btn btn-primary btn-block">
-            <a class="mt-2 text-center text-white"
-               href="{{ path('app_user_idvault') }}">{{ 'login to contact organizer'|trans|capitalize }}</a>
-        </button>
+        <a class="mt-2 text-center text-white" href="{{ path('app_user_idvault') }}">
+            <button class="btn btn-primary btn-block">
+                {{ 'login to contact organizer'|trans|capitalize }}
+            </button>
+        </a>
     </div>
 {% endif %}
