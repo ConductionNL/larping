@@ -41,16 +41,34 @@
                                 <textarea class="form-control" rows="6" id="description"
                                           name="description">{{ organization.description }}</textarea>
                             </div>
-                            <div class="form-group col-md-12 mb-6">
-                                <label for="description">{{ 'categories'|trans|capitalize }}</label>
-                                <select class="form-control select-multiple" aria-label="" id="categories{{ id }}" name="categories[]" multiple="select-multiple">
-                                    {% for category in settings %}
-                                        <option value="/categories/{{ category.id }}">{{ category.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                         </div>
 
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'settings'|trans|capitalize }} </h3>
+                        <ul class="list-unstyled mb-6">
+                            {% for category in settings %}
+                                <li class="d-inline-block mr-4 mb-2">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            value="{{ category.id }}"
+                                            id="category{{ category.id }}"
+                                            name="categories[]"
+                                            {# if category.id in categories.id %} select {% endif %} #}
+                                        />
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <i class="{{ category.icon }} mr-2" aria-hidden="true"></i>{{ category.name }}
+                                        </label>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
 
@@ -92,7 +110,7 @@
                                        {% if contact.suffix|default %}value="{{ organization.suffix }}"{% endif %}
                                        id="suffix" name="suffix">
                             </div>
-                            <div class="form-group col-md-6 mb-6">
+                            <div class="form-group col-md-12 mb-6">
                                 <label for="locality">{{ 'locality'|trans|capitalize }}</label>
                                 <input type="text" class="form-control"
                                        {% if contact.locality|default %}value="{{ organization.locality }}"{% endif %}
@@ -133,8 +151,17 @@
                                            placeholder="{{ 'add email'|trans|capitalize }}">
                                 {% endif %}
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="form-group col-md-6 mb-6" id="socials[]">
+                <!-- Social -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>
+
+                        <div class="row">
+                            <div class="form-group col-md-12 mb-6" id="socials[]">
                                 <div class="form-inline">
                                     <label for="socials">{{ 'socials'|trans|capitalize }}</label>
                                     <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('socials[]');"
@@ -142,7 +169,7 @@
                                        title="{{ 'add more socials'|trans|capitalize }}"></i>
                                 </div>
                                 <select class="form-control" name="type" id="type">
-                                    <option>{{ 'select type'|capitalize }}</option>
+                                    <option>{% if contact.socials|default %}{{ contact.socials[0].type }}{% else %}{{ 'select type'|capitalize }}{% endif %}</option>
                                     <option name="type" id="type">{{ 'website'|capitalize }}</option>
                                     <option name="type" id="type">{{ 'facebook'|capitalize }}</option>
                                     <option name="type" id="type">{{ 'twitter'|capitalize }}</option>
@@ -154,51 +181,9 @@
                                     placeholder="{{ 'add url'|trans|capitalize }}"
                                     {% endif %}>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
-{#                <!-- Social -->#}
-{#                <div class="card">#}
-{#                    <div class="card-body p-6">#}
-{#                        <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>#}
-
-{#                        <div class="row">#}
-
-{#                            <div class="form-group col-md-6 mb-6">#}
-{#                                <label for="webiste">{{ 'website'|trans|capitalize }}</label>#}
-{#                                <input type="text" class="form-control" id="website" name="website" type="url" placeholder="http://"#}
-{#                                       {% if contact.socials.type == 'website' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
-{#                            </div>#}
-
-{#                            <div class="form-group col-md-6 mb-6">#}
-{#                                <label for="linkedin">{{ 'linkedIn'|trans|capitalize }}</label>#}
-{#                                <input type="text" class="form-control" id="linkedin" name="linkedin" type="url" placeholder="http://linkedin.com"#}
-{#                                       {% if contact.socials.type == 'linkedin' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
-{#                            </div>#}
-
-{#                            <div class="form-group col-md-6 mb-6">#}
-{#                                <label for="facebook">{{ 'facebook'|trans|capitalize }}</label>#}
-{#                                <input type="text" class="form-control" id="facebook" name="facebook" type="url" placeholder="http://facebook.com"#}
-{#                                       {% if contact.socials.type == 'facebook' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
-{#                            </div>#}
-
-{#                            <div class="form-group col-md-6 mb-6">#}
-{#                                <label for="twitter">{{ 'twitter'|trans|capitalize }}</label>#}
-{#                                <input type="text" class="form-control" id="twitter" name="twitter" type="url" placeholder="http://twitter.com"#}
-{#                                       {% if contact.socials.type == 'twitter' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
-{#                            </div>#}
-
-{#                            <div class="form-group col-md-6 mb-6">#}
-{#                                <label for="instagram">{{ 'instagram'|trans|capitalize }}</label>#}
-{#                                <input type="text" class="form-control" id="instagram" name="instagram" type="url" placeholder="http://instagram.com"#}
-{#                                       {% if contact.socials.type == 'instagram' %}value="{{ contact.socials[0].url }}"{% endif %}>#}
-{#                            </div>#}
-
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
 
                 <!-- Gallery -->
                 <div class="card">
