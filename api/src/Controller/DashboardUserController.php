@@ -220,8 +220,8 @@ class DashboardUserController extends AbstractController
 
             //make wrc org
             $wrc = [];
-            $wrc['rsin'] ='';
-            $wrc['chamberOfComerce'] ='';
+            $wrc['rsin'] = '';
+            $wrc['chamberOfComerce'] = '';
             $wrc['name'] = $name;
             $wrc['description'] = $description;
             $wrcOrganization = $commonGroundService->saveResource($wrc, ['component' => 'wrc', 'type' => 'organizations']);
@@ -237,7 +237,7 @@ class DashboardUserController extends AbstractController
             $address['name'] = 'address of '.$name;
             $address = array_merge($address, $request->get('addresses'));
             $address = $commonGroundService->saveResource($address, ['component' => 'cc', 'type' => 'addresses']);
-            $cc['address'] =  '/addresses/'.$address['id'];
+            $cc['address'] = '/addresses/'.$address['id'];
 
             //make email
             $emails['name'] = 'email of '.$name;
@@ -257,6 +257,7 @@ class DashboardUserController extends AbstractController
             $wrcOrganization['contact'] = $organizationUrl;
             $commonGroundService->saveResource($wrcOrganization, ['component' => 'wrc', 'type' => 'organizations']);
         }
+
         return $variables;
     }
 
