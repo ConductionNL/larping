@@ -47,10 +47,28 @@ class DashboardUserController extends AbstractController
      * @Route("/memberships")
      * @Template
      */
-    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ShoppingService $shoppingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+        $products = $shoppingService->getOwnedProducts($this->getUser()->getPerson());
+        $groups = $this->getUser()->getGroups();
+        if (count($products) > 0) {
+            foreach ($products as &$product) {
+                $product['groups'] = [];
+                if ($product['type'] == 'subscription') {
+                    foreach ($groups as $group) {
+                        if ($product['sourceOrganization'] == $group['organization'] && $group['name'] !== 'root') {
+                            $product['groups'][] = $group['name'];
+                            $product['joined'] = $group['dateJoined'];
+                        }
+                    }
+                    $variables['products'][] = $product;
+                }
+            }
+        }
+
+        return $variables;
     }
 
     /**

@@ -827,12 +827,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/IdVaultBundle.git",
-                "reference": "016c427626b27444453b357c422a8fd3ae0664f8"
+                "reference": "4fab27eddf34a02aed351b2db2a5e9483883c3c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/016c427626b27444453b357c422a8fd3ae0664f8",
-                "reference": "016c427626b27444453b357c422a8fd3ae0664f8",
+                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/4fab27eddf34a02aed351b2db2a5e9483883c3c0",
+                "reference": "4fab27eddf34a02aed351b2db2a5e9483883c3c0",
                 "shasum": ""
             },
             "require": {
@@ -872,7 +872,7 @@
                 "commonground",
                 "conduction"
             ],
-            "time": "2021-01-12T15:43:20+00:00"
+            "time": "2021-01-13T10:43:59+00:00"
         },
         {
             "name": "conduction/listybundle",

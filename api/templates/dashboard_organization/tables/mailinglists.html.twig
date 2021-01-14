@@ -3,7 +3,8 @@
         <thead>
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
-            <th><a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#MailinglistModalAdd">{{ 'add'|trans|capitalize }}</a></th>
+            <th>{{ 'members'|trans|capitalize }}</th>
+            <th><a href="#" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#MailinglistModalAdd">{{ 'add'|trans|capitalize }}</a></th>
         </tr>
         </thead>
         <tbody>
@@ -12,18 +13,14 @@
                 <td class="text-capitalize">
                     <a class="text-hover-primary text-muted" >{{ mailingList.name }}</a>
                 </td>
+                <td>0</td>
                 <td>
-                    <div class="dropdown">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i class="fas fa-ellipsis-v"></i>
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailinglistModal{{ mailingList.id }}">Edit</a>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailingModal{{ mailingList.id }}">Send Email</a>
-                        </div>
+                    <div class="float-right">
+                        <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#MailinglistModal{{ mailingList.id }}">Edit</a>
+                        <a class="btn btn-success ml-2 btn-sm" href="#" data-toggle="modal" data-target="#MailingModal{{ mailingList.id }}">Send Email</a>
                     </div>
                 </td>
+
             </tr>
         {% endfor %}
         </tbody>

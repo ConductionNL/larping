@@ -35,7 +35,6 @@ class OrganizationController extends AbstractController
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
         $variables['search'] = $request->get('search', false);
         $variables['categories'] = $request->get('categories', []);
-
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
 
         return $variables;
