@@ -31,13 +31,35 @@ class EventController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
+        $variables['sorting'] = $request->get('sorting_order');
+        $variables['search'] = $request->get('search');
+        $variables['categories'] = $request->get('categories');
+
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
         $variables['search'] = $request->get('search', false);
         $variables['categories'] = $request->get('categories', []);
 
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
+        // Processing form input
+        if($variables['sorting']){
+            $sorting = explode('-',$variables['sorting']);
+            $sorting = ['order['.$sorting[0].']' => $sorting[1]];
+        }
+        else{
+            $sorting = [];
+        }
+
+        if($variables['search']){
+            $filter = ['name'=> $variables['search']];
+        }
+        else{
+            $filter = [];
+        }
+
+        $query = array_merge($sorting, $filter);
+
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], $query)['hydra:member'];
 
         return $variables;
     }
