@@ -51,28 +51,14 @@ class EventController extends AbstractController
         $variables = [];
         $variables['path'] = 'app_event_event';
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews', 'resource' => $variables['event']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['event']['@id']]);
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['event']['id']])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
-        /* deze is wat wierd */
-        if (isset($variables['event']['resource']) && strpos($variables['event']['resource'], '/pdc/products/')) {
-            $variables['product'] = $commonGroundService->getResource($variables['event']['resource']);
-        }
-
-        /* @todo dit willen we denk ik verplaatsen naar een algemene order api */
-        // Make order in session
-        if ($request->isMethod('POST') && $request->request->get('makeOrder') == 'true' &&
-            $request->request->get('offers')) {
-            $resource = $request->request->all();
-
-            // Add offers to session
-            $order = $ss->addItemsToCart($resource['offers']);
-
-            return $this->redirectToRoute('app_order_index');
-        }
+        // Getting the offers
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'], 'products.type' => 'simple'])['hydra:member']; // The product array is PUPRUSLY filled with offers instead of products
+        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
 
         return $variables;
     }
