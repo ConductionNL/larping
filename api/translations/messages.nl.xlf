@@ -679,6 +679,59 @@
          <source>favourite this listing</source>
          <target>favoriet deze aanbieding</target>
          </trans-unit>
+         <trans-unit id="OPnHHTs" resname="manage organization">
+         <source>manage organization</source>
+         <target>beheer organisatie</target>
+         </trans-unit>
+         <trans-unit id="ORtsfas" resname="member managment">
+         <source>member managment</source>
+         <target>ledenbeheer</target>
+         </trans-unit>
+         <trans-unit id="ORtazas" resname="revenue">
+         <source>revenue</source>
+         <target>omzet</target>
+         </trans-unit>
+        <trans-unit id="yetsrCvd" resname="all events">
+        <source>all events</source>
+        <target>alle evenementen</target>
+        </trans-unit>
+        <trans-unit id="PoAEXvd" resname="all reviews">
+        <source>all reviews</source>
+        <target>alle reviews</target>
+        </trans-unit>
+        <trans-unit id="HaYtHTs" resname="all earnings">
+        <source>all earnings</source>
+        <target>alle inkomsten</target>
+        </trans-unit>
+        <trans-unit id="MakXfas" resname="all members">
+        <source>all members</source>
+        <target>alle leden</target>
+        </trans-unit>
+        <trans-unit id="Iayazas" resname="all orders">
+        <source>all orders</source>
+        <target>alle bestellingen</target>
+        </trans-unit>
+        <trans-unit id="IaHatas" resname="financial results">
+        <source>financial results</source>
+        <target>financiële resultaten</target>
+        </trans-unit>
+        <trans-unit id="YWTtDas" resname="add your first order">
+        <source>add your first order</source>
+        <target>voeg je eerste bestelling toe</target>
+        </trans-unit>
+        <trans-unit id="oPaRDas" resname="no orders found">
+        <source>no orders found</source>
+        <target>geen bestellingen gevonden</target>
+        </trans-unit>
+        <trans-unit id="IHatDas" resname="invite">
+        <source>invite</source>
+        <target>uitnodigen</target>
+        </trans-unit>
+        <trans-unit id="KKKtDas" resname="edit">
+        <source>edit</source>
+        <target>bewerken</target>
+        </trans-unit>
+
     </body>
   </file>
 </xliff>
