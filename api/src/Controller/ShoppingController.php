@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Service\MailingService;
 use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -50,7 +51,7 @@ class ShoppingController extends AbstractController
      * @Route("/payment-status")
      * @Template
      */
-    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params)
     {
         if ($session->get('invoice@id')) {
             $variables['invoice'] = $commonGroundService->getResource($session->get('invoice@id'));
@@ -63,6 +64,22 @@ class ShoppingController extends AbstractController
             // Empty session order when order is paid
             if (isset($variables['invoice']['status']) && $variables['invoice']['status'] == 'paid') {
                 $shoppingService->removeOrderByInvoice($variables['invoice']);
+
+                //lets see if we need to add the user to the members group of the organization
+                foreach ($variables['invoice']['items'] as $item) {
+                    $offer = $commonGroundService->getResource($item['offer']);
+                    if ($offer['products'][0]['type'] == 'subscription') {
+                        //add user to clients group
+                        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+                        $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
+
+                        foreach ($groups as $group) {
+                            if ($group['name'] == 'members' || $group['name'] == 'root' && !in_array($this->getUser()->getUsername(), $group['users'])) {
+                                $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $this->getUser()->getUsername(), true);
+                            }
+                        }
+                    }
+                }
             }
         } else {
             return $this->redirectToRoute('app_shopping_index');

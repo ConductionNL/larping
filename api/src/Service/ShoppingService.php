@@ -295,7 +295,7 @@ class ShoppingService
 
         $uploadedOrder = $this->commonGroundService->saveResource($uploadedOrder, ['component' => 'orc', 'type' => 'orders']);
 
-        //add user to
+        //add user to clients group
         $provider = $this->commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $this->params->get('app_id')])['hydra:member'][0];
         $groups = $this->idVaultService->getGroups($provider['configuration']['app_id'], $order['organization'])['groups'];
 
@@ -379,6 +379,7 @@ class ShoppingService
         $thisProductIsOwned = false;
 
         // Checks if required product is in one of the session orders
+        // @todo kijken naar fix voor minder loops
         $orders = $this->session->get('orders');
         if (isset($orders) && count($orders) > 0) {
             foreach ($orders as $order) {
@@ -420,21 +421,8 @@ class ShoppingService
 
     public function getOwnedProducts($person)
     {
-        $orders = $this->commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['customer' => $person])['hydra:member'];
-        $orderItemIds = [];
+        $orderItems = $this->commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['order.customer' => $person])['hydra:member'];
         $ownedProducts = [];
-
-        // Get all order items of the given person
-        foreach ($orders as $order) {
-            if (isset($order['items']) && count($order['items']) > 0) {
-                foreach ($order['items'] as $item) {
-                    if (!in_array($item['id'], $orderItemIds)) {
-                        $orderItems[] = $item;
-                        $orderItemIds[] = $item['id'];
-                    }
-                }
-            }
-        }
 
         // Get all ownedProducts of the given person
         $productIds = [];
@@ -445,6 +433,7 @@ class ShoppingService
                     if (isset($offer['products']) && count($offer['products']) > 0) {
                         foreach ($offer['products'] as $product) {
                             if (!in_array($product['id'], $productIds)) {
+                                $product['orderItem'] = $item;
                                 $ownedProducts[] = $product;
                                 $productIds[] = $product['id'];
                             }
