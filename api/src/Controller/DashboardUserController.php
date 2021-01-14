@@ -326,7 +326,7 @@ class DashboardUserController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['order'] = $commonGroundService->getResource(['component' => 'orc', 'type' => 'orders', 'id' => $id]);
 
-        if($this->getUser()->getPerson() != $variables['order']['customer']) {
+        if ($this->getUser()->getPerson() != $variables['order']['customer']) {
             return $this->redirectToRoute('app_default_index');
         }
 
