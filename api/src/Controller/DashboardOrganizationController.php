@@ -108,14 +108,13 @@ class DashboardOrganizationController extends AbstractController
 
         // Add product
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
-
             $product = $request->request->all();
             unset($product['price']);
             $product['requiresAppointment'] = false;
-            $product['event'] =  $variables['event']['@id'];
-            $product['type'] =  'ticket';
-            $product['sourceOrganization'] =  $variables['organization']['@id'];
-            $product =  $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
+            $product['event'] = $variables['event']['@id'];
+            $product['type'] = 'ticket';
+            $product['sourceOrganization'] = $variables['organization']['@id'];
+            $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
             $offer['price'] = $request->get('price');
@@ -123,9 +122,9 @@ class DashboardOrganizationController extends AbstractController
             $offer['description'] = $product['description'];
             $offer['products'] = ['/products/'.$product['id']];
             $offer['offeredBy'] = $variables['organization']['@id'];
-            $offer['audience'] =  'public';
+            $offer['audience'] = 'public';
 
-            $product['offers'][] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+            $product['offers'][] = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
         }
 
         $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
@@ -199,7 +198,7 @@ class DashboardOrganizationController extends AbstractController
     public function editProductAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables['product'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products', 'id' => $id]);
-        if($request->get('action') == 'delete'){
+        if ($request->get('action') == 'delete') {
             $commonGroundService->deleteResource($variables['product']);
 
             return $this->redirectToRoute('app_dashboardorganization_products');
@@ -220,24 +219,23 @@ class DashboardOrganizationController extends AbstractController
             //$product['organization'] = $variables['organization']['@id'];
             //$product['sourceOrganization'] = $variables['organization']['@id'];
             // Save the resource
-            $variables['product'] =  $commonGroundService->updateResource($product, ['component' => 'pdc', 'type' => 'products', 'id' => $id]);
-
+            $variables['product'] = $commonGroundService->updateResource($product, ['component' => 'pdc', 'type' => 'products', 'id' => $id]);
         }
 
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Offer') {
-
             $offer = $request->request->all();
             // Add the current product to het offer
             $offer['products'] = ['/products/'.$id];
             $offer['offeredBy'] = $variables['organization']['@id'];
 
-            if(!array_key_exists('audience', $offer) || !$offer['audience']){
-                $offer['audience'] =  'audience';
+            if (!array_key_exists('audience', $offer) || !$offer['audience']) {
+                $offer['audience'] = 'audience';
             }
 
-            if(!array_key_exists('offers',$variables['product'])) $variables['product']['offers'] = [];
-            $variables['product']['offers'][] =  $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
-
+            if (!array_key_exists('offers', $variables['product'])) {
+                $variables['product']['offers'] = [];
+            }
+            $variables['product']['offers'][] = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
         }
 
         return $variables;
@@ -387,10 +385,10 @@ class DashboardOrganizationController extends AbstractController
             // Setup the mail to be send
             $mail = [];
             $mail['title'] = $request->get('title');
-            $mail['html'] = '<p>HTML content of the mail</p>';//$request->get('html');
+            $mail['html'] = '<p>HTML content of the mail</p>'; //$request->get('html');
             $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']).'@larping.eu';
 
-        // Send email to all subscribers of this mailing list.
+            // Send email to all subscribers of this mailing list.
             $idVaultService->sendToSendList($sendListId, $mail);
         } elseif ($request->isMethod('POST')) {
             // Get the resource

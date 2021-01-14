@@ -148,7 +148,7 @@
 
                 <div class="menu-right">
                     <div class="notification">
-                        {% set order = app.session.get('orders') %}
+                        {% set orders = app.session.get('orders') %}
                         <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                            data-display="static" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-shopping-cart"></i>
@@ -158,9 +158,9 @@
                                     {% for order in orders %}
                                         {% if order.orderItems|default %}{% set itemsCount = itemsCount + order.orderItems|length %}{% endif %}
                                     {% endfor %}
-                                {% if itemsCount|default %}
-                                    {{ itemsCount }}
-                                {% endif %}
+                                    {% if itemsCount|default %}
+                                        {{ itemsCount }}
+                                    {% endif %}
                                 {% else %}
                                     0
                                 {% endif %}
@@ -169,6 +169,20 @@
                         {% if orders|default %}
                             <ul class="dropdown-menu" style="min-width: 350px; right: -149px">
                                 {% for order in orders %}
+                                    {% if order.organization|default %}
+                                        {% set organization = commonground_resource(order.organization) %}
+                                        {% if organization|default %}
+                                            <li>
+                                                <a href="{{ path('app_organization_organization', {id: organization.id}) }}">
+                                                    <div class="media media-xs align-items-center">
+                                                        <div class="media-body">
+                                                            <span style="font-size: 1.4rem" class="font-weight-bold">{{ organization.name }}</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    {% endif %}
                                     {% if order.orderItems|default %}
                                         {% set sum = 0 %}
                                         {% for item in order.orderItems %}
@@ -189,7 +203,7 @@
                                                 </a>
                                             </li>
                                         {% endfor %}
-                                        <li style="border-top: 1px solid #e5e5e5">
+                                        <li>
                                             <div style="display: block;padding-left: 1rem;padding-right: 1rem;
                                             padding-top: 0.5rem;padding-bottom: 0.5rem;color: #848484;
                                             text-decoration: none;">
@@ -205,15 +219,16 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li style="margin-top: 0">
-                                            <a href="{{ path('app_shopping_index') }}"
-                                               style="border-top: none; font-size: medium;text-transform: none"
-                                               class="btn btn-small text-right">
-                                                {{ 'view shopping cart'|trans|capitalize }}
-                                            </a>
-                                        </li>
                                     {% endif %}
+                                    <hr>
                                 {% endfor %}
+                                <li style="margin-top: 0">
+                                    <a href="{{ path('app_shopping_index') }}"
+                                       style="border-top: none; font-size: medium;text-transform: none"
+                                       class="btn btn-small text-right">
+                                        {{ 'view shopping cart'|trans|capitalize }}
+                                    </a>
+                                </li>
                             </ul>
                         {% else %}
                             <ul class="dropdown-menu">
@@ -288,7 +303,7 @@
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_events') }}">
                                         <i class="fal fa-calendar-alt mr-2" aria-hidden="true"></i>
-                                      {{ 'my events'|trans|capitalize }}
+                                        {{ 'my events'|trans|capitalize }}
                                     </a>
                                 </li>
                                 <!--

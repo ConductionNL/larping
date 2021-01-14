@@ -47,10 +47,28 @@ class DashboardUserController extends AbstractController
      * @Route("/memberships")
      * @Template
      */
-    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ShoppingService $shoppingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+        $products = $shoppingService->getOwnedProducts($this->getUser()->getPerson());
+        $groups = $this->getUser()->getGroups();
+        if (count($products) > 0) {
+            foreach ($products as &$product) {
+                $product['groups'] = [];
+                if ($product['type'] == 'subscription') {
+                    foreach ($groups as $group) {
+                        if ($product['sourceOrganization'] == $group['organization'] && $group['name'] !== 'root') {
+                            $product['groups'][] = $group['name'];
+                            $product['joined'] = $group['dateJoined'];
+                        }
+                    }
+                    $variables['products'][] = $product;
+                }
+            }
+        }
+
+        return $variables;
     }
 
     /**
@@ -193,6 +211,54 @@ class DashboardUserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+
+        if ($request->isMethod('POST')) {
+            //get all the fields from the form
+            $name = $request->get('name');
+            $description = $request->get('description');
+            $socials = $request->get('socials');
+
+            //make wrc org
+            $wrc = [];
+            $wrc['rsin'] = '';
+            $wrc['chamberOfComerce'] = '';
+            $wrc['name'] = $name;
+            $wrc['description'] = $description;
+            $wrcOrganization = $commonGroundService->saveResource($wrc, ['component' => 'wrc', 'type' => 'organizations']);
+            $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $wrcOrganization['id']]);
+
+            //make cc org
+            $cc = [];
+            $cc['name'] = $name;
+            $cc['description'] = $name;
+            $cc['sourceOrganization'] = $organizationUrl;
+
+            //make address
+            $address['name'] = 'address of '.$name;
+            $address = array_merge($address, $request->get('addresses'));
+            $address = $commonGroundService->saveResource($address, ['component' => 'cc', 'type' => 'addresses']);
+            $cc['address'] = '/addresses/'.$address['id'];
+
+            //make email
+            $emails['name'] = 'email of '.$name;
+            $emails = array_merge($emails, $request->get('emails'));
+            $emails = $commonGroundService->saveResource($emails, ['component' => 'cc', 'type' => 'emails']);
+            $cc['email'] = '/emails/'.$emails['id'];
+
+            //make telephone
+            $telephones['name'] = 'telephone of '.$name;
+            $telephones = array_merge($telephones, $request->get('telephones'));
+            $telephones = $commonGroundService->saveResource($telephones, ['component' => 'cc', 'type' => 'telephones']);
+            $cc['telephones'] = '/telephones/'.$telephones['id'];
+
+            //save organization and set as wrc contact
+            $ccOrganization = $commonGroundService->saveResource($cc, ['component' => 'cc', 'type' => 'organizations']);
+            $organizationUrl = $commonGroundService->cleanUrl(['component' => 'cc', 'type' => 'organizations', 'id' => $ccOrganization['id']]);
+            $wrcOrganization['contact'] = $organizationUrl;
+            $commonGroundService->saveResource($wrcOrganization, ['component' => 'wrc', 'type' => 'organizations']);
+        }
+
+        return $variables;
     }
 
     /**
