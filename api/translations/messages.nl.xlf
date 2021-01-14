@@ -639,6 +639,18 @@
          <source>no products in cart</source>
          <target>geen producten in winkelwagen</target>
          </trans-unit>
+         <trans-unit id="U82jnaS" resname="add to shopping cart and view">
+         <source>add to shopping cart and view</source>
+         <target>aan winkelmand toevoegen en bekijken</target>
+         </trans-unit>
+         <trans-unit id="Th12zIw" resname="view shopping cart">
+         <source>view shopping cart</source>
+         <target>bekijk winkelmand</target>
+         </trans-unit>
+         <trans-unit id="P91oasd" resname="view your other items in your">
+         <source>view your other items in your</source>
+         <target>bekijk je andere items in je</target>
+         </trans-unit>
          <trans-unit id="OPAWdas" resname="write a review">
          <source>write a review</source>
          <target>bericht</target>

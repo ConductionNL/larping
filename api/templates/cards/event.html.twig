@@ -43,7 +43,7 @@
                     </button>
                 </li>
                 <li class="ml-auto">
-                    <a class="px-2" href="{{ path('app_event_event', {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                    <a class="px-2" href="{{ path('app_organization_organization', {'id': commonground_resource(item.organization).id }) }}">{{ commonground_resource(item.organization).name }}</a>
                 </li>
             </ul>
         </div>
