@@ -708,4 +708,16 @@ class DashboardOrganizationController extends AbstractController
 
         return $variables;
     }
+
+
+    /**
+     * @Route("/make-order-for-member")
+     * @Template
+     */
+    public function makeOrderForMemberAction(CommonGroundService $commonGroundService, Request $request)
+    {
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+
+        return $variables;
+    }
 }

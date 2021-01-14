@@ -675,6 +675,10 @@
          <source>amount of items</source>
          <target>aantal items</target>
          </trans-unit>
+         <trans-unit id="Uh21bas" resname="make a order for a member">
+         <source>make a order for a membe</source>
+         <target>maak een bestelling voor een lid</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
