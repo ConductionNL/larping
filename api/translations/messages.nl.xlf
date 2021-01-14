@@ -631,6 +631,10 @@
          <source>search</source>
          <target>zoeken</target>
          </trans-unit>
+         <trans-unit id="qTReDas" resname="no memberships found">
+         <source>no memberships found</source>
+         <target>geen lidmaatschappen gevonden</target>
+         </trans-unit>
          <trans-unit id="Qtswras" resname="topic">
          <source>topic</source>
          <target>onderwerp</target>
@@ -666,6 +670,14 @@
          <trans-unit id="BgAwras" resname="submit message">
          <source>submit message</source>
          <target>verzend bericht</target>
+         </trans-unit>
+         <trans-unit id="UtRfCvd" resname="favourite this organisation">
+         <source>favourite this organisation</source>
+         <target>favoriet deze organisatie</target>
+         </trans-unit>
+         <trans-unit id="TraEXvd" resname="favourite this listing">
+         <source>favourite this listing</source>
+         <target>favoriet deze aanbieding</target>
          </trans-unit>
     </body>
   </file>

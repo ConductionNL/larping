@@ -1,6 +1,7 @@
 <!-- Event card -->
 {% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
 {% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
+{% set eventOrganizations = commonground_resource(event.organization)%}
 <a href="{{ path('app_event_event', {id: item.id}) }}">
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">
@@ -23,7 +24,6 @@
                     <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
                     {% endfor %}
                 </p>
-
                 <p class="text-white">
                     <i class="far fa-calendar-alt" aria-hidden="true"></i> {{ item.startDate|date("d-m-Y H:m") }}
                 </p>
@@ -37,7 +37,7 @@
                     <button class="btn-like px-2" onclick="likeItem(this)" data-toggle="tooltip"
                             data-placement="top"
                             title=""
-                            data-original-title="Favourite this listing" value="{{ item['@id'] }}">
+                            data-original-title="{{ 'favourite this listing'|trans|capitalize }}" value="{{ item['@id'] }}">
                         <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
                         <span id="{{ item['id'] }}">{{  totals.likes }}</span>
                     </button>
