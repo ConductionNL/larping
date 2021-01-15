@@ -418,7 +418,7 @@ class DashboardOrganizationController extends AbstractController
                 if (isset($subscriber['resource'])) {
                     if (strpos($subscriber['resource'], '/wac/groups/')) {
                         foreach ($variables['groups'] as $group) {
-                            if(strpos($subscriber['resource'], $group['id'])) {
+                            if (strpos($subscriber['resource'], $group['id'])) {
                                 array_push($groups, $group);
                             }
                         }
