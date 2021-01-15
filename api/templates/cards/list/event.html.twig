@@ -16,7 +16,7 @@
                 <span class="d-inline-block mr-2" style="color: black">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <h3 class="card-title listing-title mb-0">
-                        <a href="{{ path('app_event_event', {'id': item.id}) }}" >{{ item.name }}</a>
+                        <a href="{{ path('app_event_event', {'id': item.id}) }}" >{{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}</a>
                     </h3>
                     <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
                             data-original-title="Favourite this listing">
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <span class="d-block mb-4 listing-address">215 Terry Lane, New York</span>
-            <span class="d-block mb-4 listing-address">{{ item.description }}</span>
+            <span class="d-block mb-4 listing-address">{{ item.description|length > 50 ? item.description|slice(0, 50) ~ '...' : item.description }}</span>
             <div>
                 <a href="{{ path('app_event_event', {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
             </div>
