@@ -38,6 +38,7 @@ class OrganizationController extends AbstractController
 
         // Processing form input
         $query=[];
+        $resourceIds=[];
         if(!empty($variables['categories'])){
 
             $categoryQuery['categories.id'] = $variables['categories'];
@@ -66,7 +67,7 @@ class OrganizationController extends AbstractController
 
         // hotfix -> remove unwanted evenst
         foreach($variables['organizations'] as $key => $organization){
-            if($resourceIds && !in_array($organization['id'], $resourceIds)) unset($variables['organizations'][$key]);
+            if(!empty($resourceIds) && !in_array($organization['id'], $resourceIds)) unset($variables['organizations'][$key]);
         }
 
         return $variables;

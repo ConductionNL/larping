@@ -41,6 +41,7 @@ class EventController extends AbstractController
 
         // Processing form input by building our search query
         $query=[];
+        $resourceIds=[];
         if(!empty($variables['categories'])){
 
             $categoryQuery['categories.id'] = $variables['categories'];
@@ -69,7 +70,7 @@ class EventController extends AbstractController
 
         // hotfix -> remove unwanted evenst
         foreach($variables['events'] as $key => $event){
-            if($resourceIds && !in_array($event['id'], $resourceIds)) unset($variables['events'][$key]);
+            if(!empty($resourceIds) && !in_array($event['id'], $resourceIds)) unset($variables['events'][$key]);
         }
 
         return $variables;
