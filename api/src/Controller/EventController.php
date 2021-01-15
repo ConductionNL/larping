@@ -46,9 +46,13 @@ class EventController extends AbstractController
             $categoryQuery['categories.id'] = $variables['categories'];
             $categoryQuery['filter'] = 'id';
 
-            $resourceIds =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
+            $resourcecategories =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
 
-            var_dump($resourceIds);
+            $resourceIds = [];
+            foreach ($resourcecategories as $resourcecategory){
+                $resourceIds[]  = $commonGroundService->getUuidFromUrl($resourcecategory['resource']);
+            }
+            $query['id'] = $resourceIds;
         }
 
 
@@ -62,6 +66,11 @@ class EventController extends AbstractController
         }
 
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], $query)['hydra:member'];
+
+        // hotfix -> remove unwanted evenst
+        foreach($variables['events'] as $key => $event){
+            if($resourceIds && !in_array($event['id'], $resourceIds)) unset($variables['events'][$key]);
+        }
 
         return $variables;
     }
