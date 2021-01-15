@@ -21,7 +21,7 @@
             <!-- events -->
             {%  include 'dashboard_organization/tables/products.html.twig' %}
 
-            {%  include 'dashboard_organization/tables/offers.html.twig' %}
+            {%  include 'dashboard_organization/tables/offers.html.twig'  with {'offers': offers} %}
 
         </div>
     </section>
