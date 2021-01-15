@@ -9,25 +9,24 @@
             <div class="card-img-overlay">
                 <div class="d-flex align-items-center">
                     {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                    <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
+                    <span class="d-inline-block mr-2"
+                          style="color: white">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
                 </div>
-                <h3>
-                    <a href="{{ path('app_event_event', {'id': item.id}) }}" class="stretched-link">
-                        {{ item.name|capitalize }}
-                    </a>
+                <h3 style="color: white">
+                    {{ item.name|capitalize }}
                 </h3>
-                <p class="text-white">{{ item.location }}</p>
-
-                <p class="text-white">
+                <ul class="list-unstyled" style="color: white">
+                    <li>{{ item.location }}</li>
+                    <li class="far fa-calendar-alt" aria-hidden="true"></li> {{ item.startDate|date("d-m-Y H:m") }}<br>
                     {% for category in eventCategories %}
-                    <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                        <li class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip"
+                            data-placement="top" title="{{ 'categorie: ' }}{{ category.name }}" aria-hidden="true"></li>
                     {% endfor %}
-                </p>
-
-                <p class="text-white">
-                    <i class="far fa-calendar-alt" aria-hidden="true"></i> {{ item.startDate|date("d-m-Y H:m") }}</i>
-                </p>
-
+                    {% for feature in features %}
+                        <i class="{% if feature.icon|default %}{{ feature.icon }}{% endif %}" data-toggle="tooltip"
+                           data-placement="top" title="{{ 'feature: ' }}{{ feature.name }}" aria-hidden="true"></i>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
 
@@ -38,12 +37,14 @@
                             data-placement="top"
                             title=""
                             data-original-title="Favourite this listing" value="{{ item['@id'] }}">
-                        <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
-                        <span id="{{ item['id'] }}">{{  totals.likes }}</span>
+                        <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                            aria-hidden="true"></i>
+                        <span id="{{ item['id'] }}">{{ totals.likes }}</span>
                     </button>
                 </li>
                 <li class="ml-auto">
-                    <a class="px-2" href="{{ path('app_event_event', {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                    <a class="px-2"
+                       href="{{ path('app_organization_organization', {'id': commonground_resource(item.organization).id }) }}">{{ commonground_resource(item.organization).name }}</a>
                 </li>
             </ul>
         </div>

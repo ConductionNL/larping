@@ -1,0 +1,81 @@
+<div class="modal fade"
+     id="offer{{ offer.id }}Modal"
+     tabindex="-1"
+     aria-labelledby="offer{{ offer.id }}Modal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"
+                    id="exampleModalLabel">{{ offer.name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ path('app_shopping_addoffers') }}" method="post" class="p-4">
+
+                {% if offer.products|default %}
+                    {% for product in offer.products|default %}
+                        {% if product.prerequisiteProducts|default %}
+                            {% set counter = 1 %}
+                            {% for product in product.prerequisiteProducts %}
+
+                                {# Check if this product is owned or in session order  #}
+                                {% set ownsThisProduct = owns_this_product(product) %}
+
+                                {% if ownsThisProduct is not null and ownsThisProduct == false %}
+                                    {% set product = commonground_resource(product['@id']) %}
+                                    {% set counter = counter + 1 %}
+                                    <p style="color: indianred">{{ 'to purchase this product, another product is required and will be added to your shopping cart'|trans|capitalize }}:</p>
+                                    <p class="p-3"
+                                       style="border-radius: 6px;background: rgba(205,92,92,0.4);color: white">{{ product.name|capitalize }}
+                                        <span
+                                            class="float-right mr-4">&euro; {{ product.offers.0.price }},-</span>
+                                    </p>
+                                    <input type="hidden" name="offers[{{ counter }}][offer]"
+                                           value="{{ product.offers.0['@id'] }}">
+                                    <input name="offers[{{ counter }}][path]" type="hidden"
+                                           value="{{ app.request.requesturi }}">
+{# Keep this for bugfixing #}
+{#                                {% else %}#}
+{#                                    <div class="form-group p-3"#}
+{#                                         style="border-radius: 6px;background: rgba(144,238,144, 0.8)">#}
+{#                                        <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}#}
+{#                                            :</p>#}
+{#                                        <label#}
+{#                                            style="color: white">{{ product.name|capitalize }}</label>#}
+{#                                    </div>#}
+                                {% endif %}
+                                {% set ownsThisProduct = 'false' %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row">
+                    <div class="form-group col-8">
+                        <h4 class="mt-3">{{ offer.name }}</h4>
+                    </div>
+                    <input name="offers[0][offer]" type="hidden" value="{{ offer['@id'] }}">
+                    <input name="offers[0][path]" type="hidden" value="{{ app.request.requesturi }}">
+                    {% if offer.audience|default and offer.audience == 'personal' and product.type|default and product.type == 'ticket' %}
+
+                        <input value="1" name="offers[0][quantity]"
+                               type="hidden">
+                    {% else %}
+                        <div class="form-group col-4">
+                            <label for="quantityInput">{{ 'quantity'|trans|capitalize }}</label>
+                            <input min="1" value="1" class="form-control" name="offers[0][quantity]"
+                                   type="number"
+                                   id="quantityInput">
+                        </div>
+                    {% endif %}
+                </div>
+
+                <input type="hidden" name="makeOrder" value="true">
+                <button type="submit"
+                        class="btn btn-primary btn-block">{{ 'add to shopping cart and view'|trans|capitalize }}</button>
+            </form>
+        </div>
+    </div>
+</div>

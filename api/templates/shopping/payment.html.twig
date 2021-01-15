@@ -22,7 +22,7 @@
                                 {% set orders = app.session.get('orders') %}
                                 {% if orders|default and orders|length > 0 %}
                                     <p class="mb-0 text-center">{{ 'view your other items in your'|trans|capitalize }}
-                                        <a href="{{ 'app_shopping_index' }}"
+                                        <a href="{{ path('app_shopping_index') }}"
                                            class="link">{{ 'shopping cart'|trans }}</a>
                                     </p>
                                 {% endif %}

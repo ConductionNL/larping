@@ -47,10 +47,28 @@ class DashboardUserController extends AbstractController
      * @Route("/memberships")
      * @Template
      */
-    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ShoppingService $shoppingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
+        $products = $shoppingService->getOwnedProducts($this->getUser()->getPerson());
+        $groups = $this->getUser()->getGroups();
+        if (count($products) > 0) {
+            foreach ($products as &$product) {
+                $product['groups'] = [];
+                if ($product['type'] == 'subscription') {
+                    foreach ($groups as $group) {
+                        if ($product['sourceOrganization'] == $group['organization'] && $group['name'] !== 'root') {
+                            $product['groups'][] = $group['name'];
+                            $product['joined'] = $group['dateJoined'];
+                        }
+                    }
+                    $variables['products'][] = $product;
+                }
+            }
+        }
+
+        return $variables;
     }
 
     /**
@@ -202,8 +220,8 @@ class DashboardUserController extends AbstractController
 
             //make wrc org
             $wrc = [];
-            $wrc['rsin'] ='';
-            $wrc['chamberOfComerce'] ='';
+            $wrc['rsin'] = '';
+            $wrc['chamberOfComerce'] = '';
             $wrc['name'] = $name;
             $wrc['description'] = $description;
             $wrcOrganization = $commonGroundService->saveResource($wrc, ['component' => 'wrc', 'type' => 'organizations']);
@@ -219,7 +237,7 @@ class DashboardUserController extends AbstractController
             $address['name'] = 'address of '.$name;
             $address = array_merge($address, $request->get('addresses'));
             $address = $commonGroundService->saveResource($address, ['component' => 'cc', 'type' => 'addresses']);
-            $cc['address'] =  '/addresses/'.$address['id'];
+            $cc['address'] = '/addresses/'.$address['id'];
 
             //make email
             $emails['name'] = 'email of '.$name;
@@ -239,6 +257,7 @@ class DashboardUserController extends AbstractController
             $wrcOrganization['contact'] = $organizationUrl;
             $commonGroundService->saveResource($wrcOrganization, ['component' => 'wrc', 'type' => 'organizations']);
         }
+
         return $variables;
     }
 
@@ -282,6 +301,34 @@ class DashboardUserController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
         $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/orders")
+     * @Template
+     */
+    public function ordersAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['customer' => $this->getUser()->getPerson()])['hydra:member'];
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/orders/{id}")
+     * @Template
+     */
+    public function orderAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['order'] = $commonGroundService->getResource(['component' => 'orc', 'type' => 'orders', 'id' => $id]);
+
+        if ($this->getUser()->getPerson() != $variables['order']['customer']) {
+            return $this->redirectToRoute('app_default_index');
+        }
 
         return $variables;
     }
