@@ -22,10 +22,12 @@
                         <li class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip"
                             data-placement="top" title="{{ 'categorie: ' }}{{ category.name }}" aria-hidden="true"></li>
                     {% endfor %}
+                    {% if features|default %}
                     {% for feature in features %}
                         <i class="{% if feature.icon|default %}{{ feature.icon }}{% endif %}" data-toggle="tooltip"
                            data-placement="top" title="{{ 'feature: ' }}{{ feature.name }}" aria-hidden="true"></i>
                     {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
         </div>
