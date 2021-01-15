@@ -10,7 +10,7 @@
     <section class="bg-light py-5 height100vh">
         <div class="container">
             <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
-                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'edit event'|trans|capitalize }}</h2>
+                <h2 class="font-weight-normal mb-4 mb-md-0">{% if event['@id'] is defined %}{{ 'edit event'|trans|capitalize }}{% else %}{{ 'add event'|trans|capitalize }}{% endif %}</h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
@@ -21,7 +21,7 @@
                 </ul>
             </nav>
 
-            <form id="EventForm{{ event.id }}" method="post" name="eventForm{{ event.id }}">
+            <form id="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}" method="post" name="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}">
                 <input type="hidden" name="@type" value="Event">
                 {% if event['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ event['id'] }}">{% endif %}
                 {% if event['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ event['@id'] }}">{% endif %}
@@ -30,7 +30,7 @@
                     <div class="card-body px-6 pt-6 pb-1">
                         <div class="row">
                             <div class="form-group  col-md-6 mb-6">
-                                <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ event.name }}</h3>
+                                <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {% if event.name is defined %}{{ event.name }}{% endif %}</h3>
                             </div>
                             <div class="form-group  col-md-6 mb-6">
                                 <button type="submit" class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
@@ -39,24 +39,24 @@
 
                         <div class="row">
                             <div class="form-group  col-md-12 mb-6">
-                                <label for="{{ event.id }}nameInput">{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" value="{{ event.name }}" id="{{ event.id }}nameInput" name="name">
+                                <label for="nameInput">{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" {% if event.name is defined %}value="{{ event.name }}"{% endif %} id="nameInput" name="name">
                             </div>
                             <div class="form-group col-md-12 mb-6">
-                                <label for="{{ event.id }}descriptionTextarea">{{ 'description'|trans|capitalize }}</label>
-                                <textarea class="form-control" rows="6" id="{{ event.id }}descriptionTextarea" name="description">{{ event.description }}</textarea>
+                                <label for="}descriptionTextarea">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="form-control" rows="6" id="descriptionTextarea" name="description">{% if event.description is defined %}{{ event.description }}{% endif %}</textarea>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="form-group col-6">
                                 <label for="startdateInput">{{ 'startdate'|trans|capitalize }}</label>
-                                <input class="form-control" name="startDate" type="datetime-local" id="startdateInput" placeholder="yyyy-mm-dd" {% if event.name is defined %}value="{{ event.startDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} required>
+                                <input class="form-control" name="startDate" type="datetime-local" id="startdateInput" placeholder="yyyy-mm-dd" {% if event.startDate is defined %}value="{{ event.startDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} required>
                             </div>
 
                             <div class="form-group col-6">
                                 <label for="enddateInput">{{ 'enddate'|trans|capitalize }}</label>
-                                <input class="form-control" name="endDate" type="datetime-local" id="enddateInput" placeholder="yyyy-mm-dd" {% if event.name is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} required>
+                                <input class="form-control" name="endDate" type="datetime-local" id="enddateInput" placeholder="yyyy-mm-dd" {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} required>
                             </div>
                         </div>
 
@@ -92,30 +92,32 @@
                 </div>
             </form>
 
-                <!-- Products -->
-                <div class="card">
-                    <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{{ 'products'|trans|capitalize }} </h3>
-                        <div class="row">
-                            {%  include 'dashboard_organization/tables/products.html.twig' with {'id': 'products'} %}
-                        </div>
+            {% if event['@id'] is defined %}
+            <!-- Products -->
+            <div class="card">
+                <div class="card-body px-6 pt-6 pb-1">
+                    <h3 class="h4 mb-4">{{ 'products'|trans|capitalize }} </h3>
+                    <div class="row">
+                        {%  include 'dashboard_organization/tables/products.html.twig' with {'id': 'products'} %}
                     </div>
                 </div>
+            </div>
 
-                <!-- Gallery -->
-                <div class="card">
-                    <div class="card-body p-6">
-                        <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
+            <!-- Gallery -->
+            <div class="card">
+                <div class="card-body p-6">
+                    <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
 
-                        <div class="form-group position-relative mb-6 form-group-dragable">
-                            <input type="file" class="custom-file-input" id="favicon" name="favicon">
-                            <label class="custom-file-label" for="favicon">
-                                {{ 'Click or Drag images here'|trans|capitalize }}
-                            </label>
-                        </div>
-
+                    <div class="form-group position-relative mb-6 form-group-dragable">
+                        <input type="file" class="custom-file-input" id="favicon" name="favicon">
+                        <label class="custom-file-label" for="favicon">
+                            {{ 'Click or Drag images here'|trans|capitalize }}
+                        </label>
                     </div>
+
                 </div>
+            </div>
+            {% endif %}
         </div>
 
     </section>

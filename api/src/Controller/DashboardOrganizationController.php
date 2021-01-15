@@ -71,7 +71,14 @@ class DashboardOrganizationController extends AbstractController
     public function eventAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+        if($id != 'add'){
+            $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+            $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
+        }
+        else {
+            $variables['event'] = [];
+            $variables['products'] = [];
+        }
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
 
         // Update event
@@ -103,6 +110,8 @@ class DashboardOrganizationController extends AbstractController
             $resourceCategory['categories'] = $categories;
 
             $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id'=> $event['id']]);
         }
 
         // Add product
@@ -124,9 +133,10 @@ class DashboardOrganizationController extends AbstractController
             $offer['audience'] = 'public';
 
             $product['offers'][] = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+
+            $variables['products'][] = $product;
         }
 
-        $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
 
         $variables['categories'] = [];
         foreach($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category){
