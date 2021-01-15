@@ -11,6 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Response;
+
+
 
 /**
  * The DashboardController handles any calls about administration and dashboard pages.
@@ -137,14 +141,28 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/event/{id}/tickets")
      * @Template
      */
-    public function eventTicketsAction(CommonGroundService $commonGroundService, Request $request, $id)
+    public function eventTicketsAction(CommonGroundService $commonGroundService, Request $request, SerializerInterface $serializer, $id)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
-        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id']])['hydra:member'];
+        /*@todo change 'tickets' back to 'products' after testing*/
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
+        $results = $variables['products'];
 
+        if ($request->query->has('action') && $request->query->get('action') == 'download'){
+            $responseData = $serializer->serialize(
+                $results,
+                'csv'
+            );
+
+            return new Response(
+                $responseData,
+                Response::HTTP_OK,
+                ['content-type' => 'text/csv', 'Content-Disposition' => "attachment; filename=tickets.csv"]
+            );
+        }
         return $variables;
     }
 

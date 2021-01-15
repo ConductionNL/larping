@@ -10,7 +10,7 @@
             <th>
                 <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#ProductModalAdd">{{ 'add'|trans|capitalize }}</button>
                 {% if app.request.attributes.get('_route') == 'app_dashboardorganization_eventtickets' %}
-                    <button type="button" class="btn btn-warning btn-sm">{{ 'download tickets'|trans|capitalize }}</button>
+                    <a href="{{ path('app_dashboardorganization_eventtickets', {'action': 'download', id: event.id}) }}" class="btn btn-warning btn-sm">{{ 'download tickets'|trans|capitalize }}</a>
                 {% endif %}
             </th>
         </tr>
