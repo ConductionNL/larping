@@ -31,33 +31,35 @@ class EventController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['sorting'] = $request->get('sorting_order');
-        $variables['search'] = $request->get('search');
-        $variables['categories'] = $request->get('categories');
+        $variables['sorting'] = $request->get('sorting_order', false);
+        $variables['search'] = $request->get('search', false);
+        $variables['categories'] = $request->get('categories',[]);
 
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
-        $variables['search'] = $request->get('search', false);
-        $variables['categories'] = $request->get('categories', []);
 
-        // Processing form input
+        // Processing form input by building our search query
+        $query=[];
+        if(!empty($variables['categories'])){
+
+            $categoryQuery['categories.id'] = $variables['categories'];
+            $categoryQuery['filter'] = 'id';
+
+            $resourceIds =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
+
+            var_dump($resourceIds);
+        }
+
+
         if($variables['sorting']){
             $sorting = explode('-',$variables['sorting']);
-            $sorting = ['order['.$sorting[0].']' => $sorting[1]];
-        }
-        else{
-            $sorting = [];
+            $query[] = ['order['.$sorting[0].']' => $sorting[1]];
         }
 
         if($variables['search']){
-            $filter = ['name'=> $variables['search']];
+            $query[] = ['name'=> $variables['search']];
         }
-        else{
-            $filter = [];
-        }
-
-        $query = array_merge($sorting, $filter);
 
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], $query)['hydra:member'];
 
@@ -76,6 +78,7 @@ class EventController extends AbstractController
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['resource' => $variables['event']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['event']['@id']]);
+
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
         // Getting the offers
