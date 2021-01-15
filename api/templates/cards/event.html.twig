@@ -13,7 +13,7 @@
                           style="color: white">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
                 </div>
                 <h3 style="color: white">
-                    {{ item.name|capitalize }}
+                    {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
                 </h3>
                 <ul class="list-unstyled" style="color: white">
                     <li>{{ item.location }}</li>

@@ -17,7 +17,7 @@
                     <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} (Reviews)</span>
                 </div>
                 <h3 style="color: white">
-                    {{ resource.name|capitalize }}
+                    {{ resource.name|capitalize|length > 30 ? resource.name|slice(0, 30) ~ '...' : resource.name }}
                 </h3>
 
                 <p class="text-white">

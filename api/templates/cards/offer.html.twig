@@ -9,11 +9,11 @@
             <div class="card-img-overlay">
                 <h3>
                     <a data-toggle="modal" data-target="#offer{{ offer.id }}Modal" class="stretched-link">
-                        {{ item.name|capitalize }}
+                        {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
                     </a>
                 </h3>
                 {% if item.description|default %}
-                    <p class="text-white">{{ item.description|slice(0, 135) }}</p>
+                    <p class="text-white">{{ item.description|length > 50 ? item.description|slice(0, 50) ~ '...' : item.description }}</p>
                 {% else %}
                     <p style="color:lightgrey">{{ 'no description'|trans|capitalize }}</p>
                 {% endif %}
