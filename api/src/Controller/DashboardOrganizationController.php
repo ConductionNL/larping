@@ -374,9 +374,13 @@ class DashboardOrganizationController extends AbstractController
         // Get clientSecret of larping application
         $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
         $clientSecret = $providers[0]['configuration']['secret'];
+        $clientId = $providers[0]['configuration']['app_id'];
 
-        // Get mailingLists from id-vault with filters: larping application secret and this users organization url
+        // Get mailingLists from id-vault with filters: larping application secret and this users organization url.
         $variables['mailingLists'] = $idVaultService->getSendLists($clientSecret, $organizationUrl);
+
+        // Get UserGroups from id-vault with filters: larping application id and this users organization url.
+        $variables['groups'] = $idVaultService->getGroups($clientId, $organizationUrl)['groups'];
 
         if ($request->isMethod('POST') && $request->request->get('DeleteList') == 'true') {
             // Get the correct sendList to delete
