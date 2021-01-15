@@ -411,6 +411,23 @@ class DashboardOrganizationController extends AbstractController
         // Get UserGroups from id-vault with filters: larping application id and this users organization url.
         $variables['groups'] = $idVaultService->getGroups($clientId, $organizationUrl)['groups'];
 
+        // Get for all mailinglist the subscribers that have a resource set that is an wac/group with id of an group in $variables['group']
+        foreach ($variables['mailingLists'] as &$mailingList) {
+            $groups = [];
+            foreach ($mailingList['subscribers'] as $subscriber) {
+                if (isset($subscriber['resource'])) {
+                    if (strpos($subscriber['resource'], '/wac/groups/')) {
+                        foreach ($variables['groups'] as $group) {
+                            if(strpos($subscriber['resource'], $group['id'])) {
+                                array_push($groups, $group);
+                            }
+                        }
+                    }
+                }
+            }
+            $mailingList['groups'] = $groups;
+        }
+
         if ($request->isMethod('POST') && $request->request->get('DeleteList') == 'true') {
             // Get the correct sendList to delete
             $sendListId = $request->get('id');

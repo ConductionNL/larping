@@ -4,16 +4,19 @@
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
             <th>{{ 'members'|trans|capitalize }}</th>
+            <th>{{ 'groups'|trans|capitalize }}</th>
             <th><a href="#" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#MailinglistModalAdd">{{ 'add'|trans|capitalize }}</a></th>
         </tr>
         </thead>
         <tbody>
         {% for mailingList in mailingLists %}
+            {% set totalsubscribers = (mailingList.subscribers|length - mailingList.groups|length) %}
             <tr>
                 <td class="text-capitalize">
                     <span class="text-muted" >{{ mailingList.name }}</span>
                 </td>
-                <td>{{ mailingList.subscribers|length }}</td>
+                <td>{% if totalsubscribers > 0 %}{{ totalsubscribers }}{% else %}0{% endif %}</td>
+                <td>{{ mailingList.groups|length }}</td>
                 <td>
                     <div class="float-right">
                         {% if mailingList.subscribers|length > 0 %}

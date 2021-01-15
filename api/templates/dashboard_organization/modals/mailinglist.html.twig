@@ -34,7 +34,17 @@
                 <select class="form-control" aria-label="{{ 'test123'|trans|capitalize }}" id="groups{{ id|replace({'-':''}) }}" required>
                     <option hidden selected value>{{ 'select a group'|trans|capitalize }}</option> {# do not remove this option, it will break the javascript code :) #}
                     {% for group in groups %}
-                        <option id="Option{{ id|replace({'-':''}) }}{{ group.id|replace({'-':''}) }}" value="{{ group.id }}">{{ group.name }}</option>
+                        <option
+                            id="Option{{ id|replace({'-':''}) }}{{ group.id|replace({'-':''}) }}"
+                            value="{{ group.id }}"
+                            {% if resource.groups is defined %}
+                                {% for resourceGroup in resource.groups %}
+                                    {% if resourceGroup.id == group.id %}
+                                        hidden disabled
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        >{{ group.name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -45,16 +55,42 @@
     </div>
 
     <div id="groupList{{ id|replace({'-':''}) }}">
+        {% if resource.groups is defined %}
+            {% for resourceGroup in resource.groups %}
+                <div id="formGroup{{ id|replace({'-':''}) }}{{ resourceGroup.id|replace({'-':''}) }}" class="form-group">
+                    <div class="row">
+                        <div class="col-8 pr-0">
+                            <input class="form-control" type="text" value="{{ resourceGroup.name }}" disabled="">
+                        </div>
+                        <div class="col-4 pl-0">
+                            <button
+                                class="input-group-btn btn btn-danger" type="button" style="width: 100%;"
+                                onclick="removeGroup('formGroup{{ id|replace({'-':''}) }}{{ resourceGroup.id|replace({'-':''}) }}', 'Option{{ id|replace({'-':''}) }}{{ resourceGroup.id|replace({'-':''}) }}')"
+                            >{{ 'delete'|trans|capitalize }}</button>
+                        </div>
+                    </div>
+                    <input type="text" value="{{ resourceGroup.id }}" hidden="" name="groups[]">
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 </form>
 
 <script>
-    function addGroup{{ id|replace({'-':''}) }}() {
+    function addGroup{{ id|replace({'-':''}) }}(id=null, name=null) {
         var groupList = document.getElementById('groupList{{ id|replace({'-':''}) }}');
         var selectGroup = document.getElementById('groups{{ id|replace({'-':''}) }}');
-        var selectedGroupValue = selectGroup.value; // = group.id
+        if (id != null) {
+            var selectedGroupValue = id;
+        } else {
+            var selectedGroupValue = selectGroup.value; // = group.id
+        }
         var selectedOption = selectGroup.options[selectGroup.selectedIndex];
-        var selectedGroupText = selectedOption.text;
+        if (name != null) {
+            var selectedGroupText = name;
+        } else {
+            var selectedGroupText = selectedOption.text;
+        }
 
         // Make sure to not do this if the first option with select a group text is selected
         if (selectGroup.selectedIndex === 0) {
