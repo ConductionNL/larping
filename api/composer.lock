@@ -776,12 +776,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/id-vault-php.git",
-                "reference": "2e56eced43fd316571be146f4680483da654736f"
+                "reference": "8a49ab784ba92f51cf37d813262c7bd114491e9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/2e56eced43fd316571be146f4680483da654736f",
-                "reference": "2e56eced43fd316571be146f4680483da654736f",
+                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/8a49ab784ba92f51cf37d813262c7bd114491e9c",
+                "reference": "8a49ab784ba92f51cf37d813262c7bd114491e9c",
                 "shasum": ""
             },
             "require": {
@@ -819,7 +819,7 @@
                 "commonground",
                 "conduction"
             ],
-            "time": "2021-01-12T15:30:55+00:00"
+            "time": "2021-01-14T15:27:55+00:00"
         },
         {
             "name": "conduction/idvaultbundle",
@@ -827,12 +827,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/IdVaultBundle.git",
-                "reference": "4fab27eddf34a02aed351b2db2a5e9483883c3c0"
+                "reference": "5394d1e7f9e66157fe142431d8ecc6819f9d933b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/4fab27eddf34a02aed351b2db2a5e9483883c3c0",
-                "reference": "4fab27eddf34a02aed351b2db2a5e9483883c3c0",
+                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/5394d1e7f9e66157fe142431d8ecc6819f9d933b",
+                "reference": "5394d1e7f9e66157fe142431d8ecc6819f9d933b",
                 "shasum": ""
             },
             "require": {
@@ -872,7 +872,7 @@
                 "commonground",
                 "conduction"
             ],
-            "time": "2021-01-13T10:43:59+00:00"
+            "time": "2021-01-14T15:27:35+00:00"
         },
         {
             "name": "conduction/listybundle",
@@ -10341,7 +10341,6 @@
             "require-dev": {
                 "symfony/phpunit-bridge": "^4.4.9|^5.0.9"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -10818,5 +10817,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }
