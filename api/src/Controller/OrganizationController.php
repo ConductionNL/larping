@@ -32,46 +32,45 @@ class OrganizationController extends AbstractController
         $variables = [];
         $variables['sorting'] = $request->get('sorting_order', false);
         $variables['search'] = $request->get('search', false);
-        $variables['categories'] = $request->get('categories',[]);
+        $variables['categories'] = $request->get('categories', []);
 
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
 
         // Processing form input
-        $query=[];
-        $resourceIds=[];
-        if(!empty($variables['categories'])){
-
+        $query = [];
+        $resourceIds = [];
+        if (!empty($variables['categories'])) {
             $categoryQuery['categories.id'] = $variables['categories'];
             $categoryQuery['filter'] = 'id';
 
-            $resourcecategories =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
+            $resourcecategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
 
             $resourceIds = [];
-            foreach ($resourcecategories as $resourcecategory){
-                $resourceIds[]  = $commonGroundService->getUuidFromUrl($resourcecategory['resource']);
+            foreach ($resourcecategories as $resourcecategory) {
+                $resourceIds[] = $commonGroundService->getUuidFromUrl($resourcecategory['resource']);
             }
             $query['id'] = $resourceIds;
         }
 
-
-        if($variables['sorting']){
-            $sorting = explode('-',$variables['sorting']);
+        if ($variables['sorting']) {
+            $sorting = explode('-', $variables['sorting']);
             $query[] = ['order['.$sorting[0].']' => $sorting[1]];
         }
 
-        if($variables['search']){
+        if ($variables['search']) {
             $query[] = ['name'=> $variables['search']];
         }
 
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'], $query)['hydra:member'];
 
         // hotfix -> remove unwanted evenst
-        foreach($variables['organizations'] as $key => $organization){
-            if(!empty($resourceIds) && !in_array($organization['id'], $resourceIds)) unset($variables['organizations'][$key]);
+        foreach ($variables['organizations'] as $key => $organization) {
+            if (!empty($resourceIds) && !in_array($organization['id'], $resourceIds)) {
+                unset($variables['organizations'][$key]);
+            }
         }
 
         return $variables;
-
     }
 
     /**

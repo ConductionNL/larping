@@ -78,24 +78,24 @@ class DefaultController extends AbstractController
 
             $amountOfLikes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $request->get('resource')])['hydra:totalItems'];
 
-
             if (count($userLike) > 0) {
                 $like = $userLike[0];
                 // Delete this existing like
                 $commonGroundService->deleteResource($like);
 
                 return new JsonResponse([
-                    'status' => 'unliked',
-                    'amountOfLikes' => $amountOfLikes
+                    'status'        => 'unliked',
+                    'amountOfLikes' => $amountOfLikes,
                 ]);
             } else {
                 $like['author'] = $this->getUser()->getPerson();
                 $like['resource'] = $request->get('resource');
                 $like['organization'] = $this->getUser()->getOrganization();
                 $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
+
                 return new JsonResponse([
-                    'status' => 'liked',
-                    'amountOfLikes' => $amountOfLikes
+                    'status'        => 'liked',
+                    'amountOfLikes' => $amountOfLikes,
                 ]);
             }
         } else {
