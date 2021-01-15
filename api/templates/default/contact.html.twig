@@ -1,9 +1,69 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
+    <section class="py-7 pt-md-9 pb-md-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-lg-8">
+                    <div class="mb-2 mb-lg-0">
+                        <h1 class="single-listing-title">{{ 'contact'|trans|capitalize }}</h1>
 
-    <div class="container">
-        {% include 'widgets/contact.html.twig' %}
-    </div>
+                        <!-- Breadcrumb -->
+                        <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
+                            <ul class="list-unstyled d-flex p-0 m-0">
+                                <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                                <li class="breadcrumb-item active"
+                                    aria-current="page">{{ 'contact'|trans|capitalize }}</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </div><!--/.container -->
+    </section>
+    <section class="pt-7 pb-4 pt-md-9 pb-md-8" style="margin-top: -100px">
+        <div class="container">
+            {% include 'widgets/contact.html.twig' %}
+            <div class="row">
+                <div class="col-md-10 col-lg-8 single-listing-content">
+                    <div class="col-md-2 col-lg-4 pl-xl-8">
+                        <div class="card">
+                            <div class="card-body px-6 pt-6 pb-1">
+                                <h3 class="h4 mb-4">{{ 'contact information'|trans|capitalize }}</h3>
+                                <ul class="list-unstyled text-muted">
+                                    <li class="mb-3">
+                                        <i class="fa fa-phone mr-3" aria-hidden="true"></i>
+                                        <a class="text-muted" href="tel:+088-657-524-332">+88 657 524 332</a>
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fa fa-envelope mr-3" aria-hidden="true"></i>
+                                        <a class="text-muted" href="mailto:info@larping.eu">info@larping.eu</a>
+                                    </li>
+                                </ul>
+                                <div class="row pb-md-6">
+                                    <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2"
+                                       href="#facebook">
+                                        <i class="fab fa-facebook" aria-hidden="true"></i>
+                                    </a>
+                                    <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2"
+                                       href="#twitter">
+                                        <i class="fab fa-twitter" aria-hidden="true"></i>
+                                    </a>
+                                    <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2"
+                                       href="#pinterest">
+                                        <i class="fab fa-pinterest-p" aria-hidden="true"></i>
+                                    </a>
+                                    <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2"
+                                       href="#linkedin">
+                                        <i class="fab fa-linkedin" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.col -->
+                </div>
+            </div>
+        </div>
+    </section>
 
 {% endblock %}

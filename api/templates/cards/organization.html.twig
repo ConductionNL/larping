@@ -11,38 +11,41 @@
                     src="https://picsum.photos/300/200"
                 {% endif %}
                  alt="Card image cap">
-        <div class="card-img-overlay">
-            <div class="d-flex align-items-center">
-                {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} (Reviews)</span>
-            </div>
-            <h3>
-                <a href="{{ path('app_organization_organization', {'id': resource.id}) }}" class="stretched-link">
+            <div class="card-img-overlay">
+                <div class="d-flex align-items-center">
+                    {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
+                    <span class="d-inline-block mr-2" style="color: white">{{ totals.reviews }} (Reviews)</span>
+                </div>
+                <h3 style="color: white">
                     {{ resource.name|capitalize }}
-                </a>
-            </h3>
+                </h3>
 
-            <p class="text-white">
-                {% for category in organizationCategories %}
-                    <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
-                {% endfor %}
-            </p>
-
+                <p class="text-white">
+                    {% for category in organizationCategories %}
+                        <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip"
+                           data-placement="top" title="{{ 'categorie: ' }}{{ category.name }}" aria-hidden="true"></i>
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+        <div class="card-footer bg-transparent">
+            <ul class="list-unstyled d-flex mb-0 py-2">
+                <li>
+                    <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
+                            onclick="likeItem(this)" value="{{ resource['@id'] }}"
+                            data-original-title="Favourite this organisation" style="z-index: 2">
+                        <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                            aria-hidden="true"></i>
+                        <span id="{{ resource['id'] }}">{{ totals.likes }}</span>
+                    </button>
+                    <i class="far fa-calendar-alt mr-2" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                       data-original-title="{{ 'upcoming events'|trans|capitalize }}"><span> {{ organizationEvents|length }}</span></i>
+                </li>
+                <li class="ml-auto">
+                    <a class="px-2"
+                       href="{{ path('app_organization_organization', {'id': organization.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                </li>
+            </ul>
         </div>
     </div>
-    <div class="card-footer bg-transparent">
-        <ul class="list-unstyled d-flex mb-0 py-2">
-            <li>
-                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" onclick="likeItem(this)" value="{{ resource['@id'] }}" data-original-title="Favourite this organisation" style="z-index: 2">
-                    <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
-                    <span id="{{ resource['id'] }}">{{ totals.likes }}</span>
-                </button>
-                <i class="far fa-calendar-alt mr-2" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'upcoming events'|trans|capitalize }}"><span> {{ organizationEvents|length }}</span></i>
-            </li>
-            <li class="ml-auto">
-                <a class="px-2"
-                   href="{{ path('app_organization_organization', {'id': organization.id}) }}">{{ 'view'|trans|capitalize }}</a>
-            </li>
-        </ul>
-    </div>
-</div>
+</a>
