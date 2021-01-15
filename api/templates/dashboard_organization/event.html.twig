@@ -20,8 +20,11 @@
                     <li class="breadcrumb-item active" aria-current="page">{{ 'edit event'|trans|capitalize }}</li>
                 </ul>
             </nav>
-            <form id="{{ type }}Form{{ id }}" method="post">
-                <input type="hidden" name="@type" value="Product">
+
+            <form id="EventForm{{ event.id }}" method="post" name="eventForm{{ event.id }}">
+                <input type="hidden" name="@type" value="Event">
+                {% if event['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ event['id'] }}">{% endif %}
+                {% if event['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ event['@id'] }}">{% endif %}
                 <!-- About -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
@@ -36,14 +39,24 @@
 
                         <div class="row">
                             <div class="form-group  col-md-12 mb-6">
-                                <label for="name">{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" value="{{ event.name }}" id="name"
-                                       name="name">
+                                <label for="{{ event.id }}nameInput">{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" value="{{ event.name }}" id="{{ event.id }}nameInput" name="name">
                             </div>
                             <div class="form-group col-md-12 mb-6">
-                                <label for="description">{{ 'description'|trans|capitalize }}</label>
-                                <textarea class="form-control" rows="6" id="description"
-                                          name="description">{{ event.description }}</textarea>
+                                <label for="{{ event.id }}descriptionTextarea">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="form-control" rows="6" id="{{ event.id }}descriptionTextarea" name="description">{{ event.description }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <label for="startdateInput">{{ 'startdate'|trans|capitalize }}</label>
+                                <input class="form-control" name="startDate" type="datetime-local" id="startdateInput" placeholder="yyyy-mm-dd" {% if event.name is defined %}value="{{ event.startDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} required>
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label for="enddateInput">{{ 'enddate'|trans|capitalize }}</label>
+                                <input class="form-control" name="endDate" type="datetime-local" id="enddateInput" placeholder="yyyy-mm-dd" {% if event.name is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} required>
                             </div>
                         </div>
 
@@ -61,10 +74,12 @@
                                         <input
                                             class="form-check-input"
                                             type="checkbox"
-                                            value="{{ category.id }}"
+                                            value="/categories/{{ category.id }}"
                                             id="category{{ category.id }}"
                                             name="categories[]"
-                                            {# if category.id in categories.id %} select {% endif %} #}
+                                            {% if category.id in categories%}
+                                            checked="checked"
+                                            {% endif %}
                                         />
                                         <label class="form-check-label" for="flexCheckDefault">
                                             <i class="{{ category.icon }} mr-2" aria-hidden="true"></i>{{ category.name }}
@@ -75,6 +90,7 @@
                         </ul>
                     </div>
                 </div>
+            </form>
 
                 <!-- Products -->
                 <div class="card">
@@ -100,15 +116,6 @@
 
                     </div>
                 </div>
-
-                <div class="row justify-content-center">
-                    <div class="col-md-7 col-lg-6 col-xl-5">
-                        <div class="mb-6">
-                            <button type="submit" class="btn btn-lg btn-primary btn-block">{{ 'save'|trans|capitalize }}</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
         </div>
 
     </section>

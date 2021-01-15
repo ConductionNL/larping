@@ -75,18 +75,18 @@ class DashboardOrganizationController extends AbstractController
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
 
         // Update event
-        if ($request->isMethod('POST') && $request->request->get('@type') == 'Wvent') {
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Event') {
             // Get the current resource
             $event = $request->request->all();
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
             $event['status'] = 'pending';
 
-            $categories = $event['resource_categories'];
+            $categories = $event['categories'];
             if (!$categories) {
                 $categories = [];
             }
-            unset($event['resource_categories']);
+            unset($event['categories']);
 
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
@@ -101,7 +101,6 @@ class DashboardOrganizationController extends AbstractController
             }
 
             $resourceCategory['categories'] = $categories;
-            $resourceCategory['catagories'] = $categories;
 
             $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
         }
@@ -128,7 +127,11 @@ class DashboardOrganizationController extends AbstractController
         }
 
         $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
+
+        $variables['categories'] = [];
+        foreach($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category){
+            $variables['categories'][] = $category['id'];
+        }
 
         return $variables;
     }
