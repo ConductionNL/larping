@@ -3,7 +3,7 @@ entries:
   larping:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-01-15T15:43:36.2280317Z"
+    created: "2021-01-18T08:53:09.497859Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
     digest: bd313e502de20f7544415ac26d9fe128e0fd292ab96f2507298c923e7dee27a8
@@ -16,7 +16,7 @@ entries:
   stage-platform:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-01-15T15:43:36.2454799Z"
+    created: "2021-01-18T08:53:09.5203571Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
     digest: c1f66c64f25eee68e386ece411c43f23b2fbc0670e9c625d75cb9178d219e9cd
@@ -26,4 +26,4 @@ entries:
     urls:
     - stage-platform-0.1.0.tgz
     version: 0.1.0
-generated: "2021-01-15T15:43:36.2181129Z"
+generated: "2021-01-18T08:53:09.48402Z"
