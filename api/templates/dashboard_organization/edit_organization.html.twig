@@ -180,11 +180,7 @@
                                     <option value="twitter" id="type">{{ 'twitter'|capitalize }}</option>
                                     <option value="instagram" id="type">{{ 'instagram'|capitalize }}</option>
                                 </select>
-                                <input class="form-control" name="url" id="url" type="url"
-                                    {% if socials|default %} value="{{ socials.url }}"
-                                {% else %}
-                                    placeholder="{{ 'add url'|trans|capitalize }}"
-                                    {% endif %}>
+                                <input class="form-control mb-2" name="socials[][url]" id="socials" type="url" {% if socials|default %} value="{{ socials.url }}"{% else %}placeholder="{{ 'add url'|trans|capitalize }}">
                             </div>
                         </div>
                         {% endfor %}
