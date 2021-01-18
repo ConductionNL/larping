@@ -574,7 +574,6 @@
          <source>about larping.eu</source>
          <target>over larping.eu</target>
          </trans-unit>
-
          <trans-unit id="8UyAttA" resname="my memberships">
          <source>my memberships</source>
          <target>mijn lidmaatschappen</target>
@@ -783,7 +782,86 @@
         <source>edit</source>
         <target>bewerken</target>
         </trans-unit>
-
+        <trans-unit id="TyGfDas" resname="my orders">
+        <source>my orders</source>
+        <target>mijn bestellingen</target>
+        </trans-unit>
+        <trans-unit id="RtGfDas" resname="make a order for a member">
+        <source>make a order for a member</source>
+        <target>maak een bestelling voor een lid</target>
+        </trans-unit>
+        <trans-unit id="KaTtDas" resname="gallery">
+        <source>gallery</source>
+        <target>galerij</target>
+        </trans-unit>
+        <trans-unit id="ZaUTaRD" resname="click or  drag images here">
+        <source>click or  drag images here</source>
+        <target>klik of sleep afbeeldingen hierheen</target>
+        </trans-unit>
+        <trans-unit id="UyTtDas" resname="settings">
+        <source>settings</source>
+        <target>instellingen</target>
+        </trans-unit>
+        <trans-unit id="IuYtReW" resname="telephone">
+        <source>telephone</source>
+        <target>telefoon</target>
+        </trans-unit>
+        <trans-unit id="NabTReW" resname="postal code">
+        <source>postal code</source>
+        <target>postcode</target>
+        </trans-unit>
+        <trans-unit id="IUatReW" resname="street">
+        <source>street</source>
+        <target>straat</target>
+        </trans-unit>
+        <trans-unit id="IuLOpeW" resname="house number">
+        <source>house number</source>
+        <target>huisnummer</target>
+        </trans-unit>
+        <trans-unit id="VcXtReW" resname="suffix">
+        <source>suffix</source>
+        <target>achtervoegsel</target>
+        </trans-unit>
+        <trans-unit id="VTgRfeW" resname="locality">
+        <source>locality</source>
+        <target>plaats</target>
+        </trans-unit>
+        <trans-unit id="GtFdseW" resname="no socials found">
+        <source>no socials found</source>
+        <target>geen socials gevonden</target>
+        </trans-unit>
+        <trans-unit id="MnBRfeW" resname="contact info not found">
+        <source>contact info not found</source>
+        <target>contact info niet gevonden</target>
+        </trans-unit>
+        <trans-unit id="HatRfeW" resname="login to contact organizer">
+        <source>login to contact organizer</source>
+        <target>log in om contact op te nemen met de organisator</target>
+        </trans-unit>
+        <trans-unit id="IuNbVeW" resname="other events you might like">
+        <source>other events you might like</source>
+        <target>andere evenementen die je misschien leuk vindt</target>
+        </trans-unit>
+        <trans-unit id="TTrWseW" resname="login to place a review">
+        <source>login to place a review</source>
+        <target>login om een ​review te plaatsen</target>
+        </trans-unit>
+        <trans-unit id="YtReSeW" resname="organized by">
+        <source>organized by</source>
+        <target>georganiseerd door</target>
+        </trans-unit>
+        <trans-unit id="IBBSpeW" resname="add more emails">
+        <source>add more emails</source>
+        <target>voeg meer emails toe</target>
+        </trans-unit>
+        <trans-unit id="VLkJhBW" resname="add more phone numbers">
+        <source>add more phone numbers</source>
+        <target>voeg meer telefoon nummers toe</target>
+        </trans-unit>
+        <trans-unit id="YrFcSeW" resname="add more socials">
+        <source>add more socials</source>
+        <target>voeg meer socials toe</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
