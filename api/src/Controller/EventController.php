@@ -56,7 +56,7 @@ class EventController extends AbstractController
         }
 
         if ($variables['search']) {
-            $query['name'] =  $variables['search'];
+            $query['name'] = $variables['search'];
         }
 
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], $query)['hydra:member'];
@@ -67,10 +67,10 @@ class EventController extends AbstractController
         // hotfix -> remove unwanted evenst
         foreach ($variables['events'] as $key => $event) {
             // if we are sorting by rating lets get the rating
-            if($sorting[0] == 'rating' || $sorting[0] == 'likes'){
+            if ($sorting[0] == 'rating' || $sorting[0] == 'likes') {
                 $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource'=>$event['@id']]);
-                $variables['events'][$key]['rating'] =  $variables['events'][$key]['totals']['rating'];
-                $variables['events'][$key]['likes'] =  $variables['events'][$key]['totals']['likes'];
+                $variables['events'][$key]['rating'] = $variables['events'][$key]['totals']['rating'];
+                $variables['events'][$key]['likes'] = $variables['events'][$key]['totals']['likes'];
             }
             // hotfix -> remove unwanted evenst
             if (!empty($resourceIds) && !in_array($event['id'], $resourceIds)) {
@@ -79,10 +79,9 @@ class EventController extends AbstractController
         }
 
         $columns = array_column($variables['events'], $sorting[0]);
-        if($sorting[1] == 'asc'){
+        if ($sorting[1] == 'asc') {
             array_multisort($columns, SORT_ASC, $variables['events']);
-        }
-        else {
+        } else {
             array_multisort($columns, SORT_DESC, $variables['events']);
         }
 

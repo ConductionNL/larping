@@ -613,7 +613,7 @@ class DashboardOrganizationController extends AbstractController
             if (count($resourceCategories) > 0) {
                 $resourceCategory = $resourceCategories[0];
             } else {
-               $resourceCategory = ['resource'=>$location['@id'], 'catagories'=>[]];
+                $resourceCategory = ['resource'=>$location['@id'], 'catagories'=>[]];
             }
 
             $resourceCategory['categories'] = $categories;
