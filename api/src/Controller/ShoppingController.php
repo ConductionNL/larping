@@ -85,4 +85,48 @@ class ShoppingController extends AbstractController
 
         return $this->redirectToRoute('app_shopping_index');
     }
+
+    /**
+     * @Route("/remove-option")
+     * @Template
+     */
+    public function removeOptionAction(CommonGroundService $commonGroundService, ShoppingService $shoppingService, Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $option = $request->get('option');
+            $redirectUrl = $request->get('redirect');
+
+            if (isset($option)) {
+                $shoppingService->removeOption($option);
+            }
+
+            if (isset($redirectUrl)) {
+                return $this->redirectToRoute($redirectUrl);
+            }
+        }
+
+        return $this->redirectToRoute('app_shopping_index');
+    }
+
+    /**
+     * @Route("/remove-item")
+     * @Template
+     */
+    public function removeItemAction(CommonGroundService $commonGroundService, ShoppingService $shoppingService, Request $request)
+    {
+        if ($request->isMethod('POST')) {
+            $offer = $request->get('offer');
+            $redirectUrl = $request->get('redirect');
+
+            if (isset($offer)) {
+                $shoppingService->removeItem($offer);
+            }
+
+            if (isset($redirectUrl)) {
+                return $this->redirectToRoute($redirectUrl);
+            }
+        }
+
+        return $this->redirectToRoute('app_shopping_index');
+    }
 }
