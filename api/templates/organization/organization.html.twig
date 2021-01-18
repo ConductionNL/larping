@@ -164,7 +164,9 @@
                     <!-- Contact  -->
                     <h5>{{ 'contact'|trans|capitalize }} {{ organization.name }}</h5>
                     <p>{{ organization.description }}</p>
-                    {% include 'widgets/contact.html.twig' %}
+                    {% include 'widgets/contact.html.twig' with {
+                        'contact': organization.contact
+                    } %}
 
                     <!-- You may also like  -->
                     {% if categories is defined and categories is not empty %}

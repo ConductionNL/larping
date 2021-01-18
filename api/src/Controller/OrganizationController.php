@@ -82,7 +82,7 @@ class OrganizationController extends AbstractController
         $variables = [];
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id'=>$id]);
         if (array_key_exists('contact', $variables['organization']) && $variables['organization']['contact']) {
-            $variables['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
+            $variables['organization']['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
         }
 
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['resource' => $variables['organization']['@id']])['hydra:member'];
