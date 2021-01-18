@@ -25,5 +25,142 @@
                   placeholder="{{ 'description'|trans|capitalize }}"
         >{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
     </div>
+
+    <!-- Groups -->
+    <div class="form-group">
+        <label for="name">{{ 'groups'|trans|capitalize }}</label>
+        <div class="row">
+            <div class="col-8 pr-0">
+                <select class="form-control" aria-label="{{ 'test123'|trans|capitalize }}" id="groups{{ id|replace({'-':''}) }}" required>
+                    <option hidden selected value>{{ 'select a group'|trans|capitalize }}</option> {# do not remove this option, it will break the javascript code :) #}
+                    {% for group in groups %}
+                        <option
+                            id="Option{{ id|replace({'-':''}) }}{{ group.id|replace({'-':''}) }}"
+                            value="{{ group.id }}"
+                            {% if resource.groups is defined %}
+                                {% for resourceGroup in resource.groups %}
+                                    {% if resourceGroup.id == group.id %}
+                                        hidden disabled
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        >{{ group.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-4 pl-0">
+                <button onclick="addGroup{{ id|replace({'-':''}) }}()" style="width: 100%;" type="button" class="input-group-btn btn btn-primary">{{ 'add_2'|trans|capitalize }}</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="groupList{{ id|replace({'-':''}) }}">
+        {% if resource.groups is defined %}
+            {% for resourceGroup in resource.groups %}
+                <div id="formGroup{{ id|replace({'-':''}) }}{{ resourceGroup.id|replace({'-':''}) }}" class="form-group">
+                    <div class="row">
+                        <div class="col-8 pr-0">
+                            <input class="form-control" type="text" value="{{ resourceGroup.name }}" disabled="">
+                        </div>
+                        <div class="col-4 pl-0">
+                            <button
+                                class="input-group-btn btn btn-danger" type="button" style="width: 100%;"
+                                onclick="removeGroup('formGroup{{ id|replace({'-':''}) }}{{ resourceGroup.id|replace({'-':''}) }}', 'Option{{ id|replace({'-':''}) }}{{ resourceGroup.id|replace({'-':''}) }}')"
+                            >{{ 'delete'|trans|capitalize }}</button>
+                        </div>
+                    </div>
+                    <input type="text" value="{{ resourceGroup.id }}" hidden="" name="groups[]">
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 </form>
+
+<script>
+    function addGroup{{ id|replace({'-':''}) }}(id=null, name=null) {
+        var groupList = document.getElementById('groupList{{ id|replace({'-':''}) }}');
+        var selectGroup = document.getElementById('groups{{ id|replace({'-':''}) }}');
+        if (id != null) {
+            var selectedGroupValue = id;
+        } else {
+            var selectedGroupValue = selectGroup.value; // = group.id
+        }
+        var selectedOption = selectGroup.options[selectGroup.selectedIndex];
+        if (name != null) {
+            var selectedGroupText = name;
+        } else {
+            var selectedGroupText = selectedOption.text;
+        }
+
+        // Make sure to not do this if the first option with select a group text is selected
+        if (selectGroup.selectedIndex === 0) {
+            return;
+        }
+
+        // Create a form-group <div>
+        var formGroup = document.createElement('div');
+        formGroup.setAttribute('id', 'formGroup{{ id|replace({'-':''}) }}'+selectedGroupValue.replaceAll('-', ''))
+        formGroup.setAttribute('class', 'form-group')
+
+        // Create a row <div>
+        var rowDiv = document.createElement('div');
+        rowDiv.setAttribute('class', 'row')
+
+        // Create a col <div>
+        var inputTextDiv = document.createElement('div');
+        inputTextDiv.setAttribute('class', 'col-8 pr-0')
+
+        // Create a text <input> with selected group
+        var inputText = document.createElement('input');
+        inputText.setAttribute('class', 'form-control');
+        inputText.setAttribute('type', 'text');
+        inputText.setAttribute('value', selectedGroupText);
+        inputText.setAttribute('disabled', '');
+
+        // Create a col <div>
+        var deleteButtonDiv = document.createElement('div');
+        deleteButtonDiv.setAttribute('class', 'col-4 pl-0')
+
+        // Create a delete <button>
+        var deleteButton = document.createElement('button');
+        var deleteButtonText = document.createTextNode('{{ 'delete'|trans|capitalize }}');
+        deleteButton.appendChild(deleteButtonText);
+        deleteButton.setAttribute('class', 'input-group-btn btn btn-danger');
+        deleteButton.setAttribute('type', 'button');
+        deleteButton.setAttribute('style', 'width: 100%;');
+        deleteButton.setAttribute('onclick', 'removeGroup(\"'+ 'formGroup{{ id|replace({'-':''}) }}'+selectedGroupValue.replaceAll('-', '') +'\", \"Option{{ id|replace({'-':''}) }}'+ selectedGroupValue.replaceAll('-', '') +'\")');
+
+        // Create a hidden text <input> with selected group id (dont forget the name to pass through the selected group ids to the controller)
+        var inputValue = document.createElement('input');
+        inputValue.setAttribute('type', 'text');
+        inputValue.setAttribute('value', selectedGroupValue);
+        inputValue.setAttribute('hidden', '');
+        inputValue.setAttribute('name', 'groups[]');
+
+        // Connect the dots :)
+        inputTextDiv.appendChild(inputText)
+        rowDiv.appendChild(inputTextDiv);
+        deleteButtonDiv.appendChild(deleteButton)
+        rowDiv.appendChild(deleteButtonDiv)
+        formGroup.appendChild(rowDiv);
+        formGroup.appendChild(inputValue);
+        groupList.appendChild(formGroup);
+
+        // Make sure the select no longer has the option visible and selected
+        selectedOption.hidden = true;
+        selectedOption.disabled = true;
+        selectGroup.selectedIndex = 0;
+    }
+
+    function removeGroup(id, optionId) {
+        // Remove created divs and inputs for this group
+        var formGroup = document.getElementById(id);
+        formGroup.parentNode.removeChild(formGroup);
+
+        // Make sure this group is selectable again in the select
+        var selectOption = document.getElementById(optionId);
+        selectOption.disabled = false;
+        selectOption.hidden = false;
+    }
+</script>
 {% endblock %}

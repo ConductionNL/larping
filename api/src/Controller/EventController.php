@@ -33,44 +33,44 @@ class EventController extends AbstractController
         $variables = [];
         $variables['sorting'] = $request->get('sorting_order', false);
         $variables['search'] = $request->get('search', false);
-        $variables['categories'] = $request->get('categories',[]);
+        $variables['categories'] = $request->get('categories', []);
 
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
 
         // Processing form input by building our search query
-        $query=[];
-        $resourceIds=[];
-        if(!empty($variables['categories'])){
-
+        $query = [];
+        $resourceIds = [];
+        if (!empty($variables['categories'])) {
             $categoryQuery['categories.id'] = $variables['categories'];
             $categoryQuery['filter'] = 'id';
 
-            $resourcecategories =  $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
+            $resourcecategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
 
             $resourceIds = [];
-            foreach ($resourcecategories as $resourcecategory){
-                $resourceIds[]  = $commonGroundService->getUuidFromUrl($resourcecategory['resource']);
+            foreach ($resourcecategories as $resourcecategory) {
+                $resourceIds[] = $commonGroundService->getUuidFromUrl($resourcecategory['resource']);
             }
             $query['id'] = $resourceIds;
         }
 
-
-        if($variables['sorting']){
-            $sorting = explode('-',$variables['sorting']);
+        if ($variables['sorting']) {
+            $sorting = explode('-', $variables['sorting']);
             $query[] = ['order['.$sorting[0].']' => $sorting[1]];
         }
 
-        if($variables['search']){
+        if ($variables['search']) {
             $query[] = ['name'=> $variables['search']];
         }
 
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], $query)['hydra:member'];
 
         // hotfix -> remove unwanted evenst
-        foreach($variables['events'] as $key => $event){
-            if(!empty($resourceIds) && !in_array($event['id'], $resourceIds)) unset($variables['events'][$key]);
+        foreach ($variables['events'] as $key => $event) {
+            if (!empty($resourceIds) && !in_array($event['id'], $resourceIds)) {
+                unset($variables['events'][$key]);
+            }
         }
 
         return $variables;
