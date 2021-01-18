@@ -68,10 +68,10 @@ class OrganizationController extends AbstractController
 
         foreach ($variables['organizations'] as $key => $organization) {
             // if we are sorting by rating lets get the rating
-            if($sorting[0] == 'rating' || $sorting[0] == 'likes'){
+            if ($sorting[0] == 'rating' || $sorting[0] == 'likes') {
                 $variables['organizations'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization'=>$organization['@id']]);
-                $variables['organizations'][$key]['rating'] =  $variables['organizations'][$key]['totals']['rating'];
-                $variables['organizations'][$key]['likes'] =  $variables['organizations'][$key]['totals']['likes'];
+                $variables['organizations'][$key]['rating'] = $variables['organizations'][$key]['totals']['rating'];
+                $variables['organizations'][$key]['likes'] = $variables['organizations'][$key]['totals']['likes'];
             }
             // hotfix -> remove unwanted evenst
             if (!empty($resourceIds) && !in_array($organization['id'], $resourceIds)) {
@@ -80,10 +80,9 @@ class OrganizationController extends AbstractController
         }
 
         $columns = array_column($variables['organizations'], $sorting[0]);
-        if($sorting[1] == 'asc'){
+        if ($sorting[1] == 'asc') {
             array_multisort($columns, SORT_ASC, $variables['organizations']);
-        }
-        else {
+        } else {
             array_multisort($columns, SORT_DESC, $variables['organizations']);
         }
 
@@ -99,7 +98,7 @@ class OrganizationController extends AbstractController
         $variables = [];
         $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id'=>$id]);
         if (array_key_exists('contact', $variables['organization']) && $variables['organization']['contact']) {
-            $variables['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
+            $variables['organization']['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
         }
 
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['resource' => $variables['organization']['@id']])['hydra:member'];

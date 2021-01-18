@@ -5,6 +5,7 @@
     }) %}
 {%  endif %}
 {% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
+{% set eventOrganizations = commonground_resource(event.organization)%}
 <a href="{{ path('app_event_event', {id: item.id}) }}">
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">

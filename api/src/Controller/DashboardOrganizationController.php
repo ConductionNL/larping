@@ -156,21 +156,16 @@ class DashboardOrganizationController extends AbstractController
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id']])['hydra:member'];
-        /*@todo change 'tickets' back to 'products' after testing*/
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
-        $results = $variables['products'];
 
-        if ($request->query->has('action') && $request->query->get('action') == 'download') {
+        //downloads tickets
+        if ($request->query->has('action') && $request->query->get('action') == 'download'){
+            $results = $variables['products'];
+
             $responseData = $serializer->serialize(
-                $results,
-                'csv'
+                $results, 'csv'
             );
-
-            return new Response(
-                $responseData,
-                Response::HTTP_OK,
-                ['content-type' => 'text/csv', 'Content-Disposition' => 'attachment; filename=tickets.csv']
-            );
+            return new Response($responseData, Response::HTTP_OK, ['content-type' => 'text/csv', 'Content-Disposition' => "attachment; filename=tickets.csv"]);
         }
 
         return $variables;
@@ -613,7 +608,7 @@ class DashboardOrganizationController extends AbstractController
             if (count($resourceCategories) > 0) {
                 $resourceCategory = $resourceCategories[0];
             } else {
-               $resourceCategory = ['resource'=>$location['@id'], 'catagories'=>[]];
+                $resourceCategory = ['resource'=>$location['@id'], 'catagories'=>[]];
             }
 
             $resourceCategory['categories'] = $categories;

@@ -26,7 +26,7 @@
                                 {% if ownsThisProduct is not null and ownsThisProduct == false %}
                                     {% set product = commonground_resource(product['@id']) %}
                                     {% set counter = counter + 1 %}
-                                    <p style="color: indianred">{{ 'to purchase this product, another product is required and will be added to your shopping cart'|trans|capitalize }}
+                                    <p style="color: indianred">{{ 'to purchase this product, another product is required and will be added to your shopping cart if you add this product'|trans|capitalize }}
                                         :</p>
                                     <p class="p-3 mb-3"
                                        style="border-radius: 6px;background: rgba(205,92,92,0.4);color: white">{{ product.name|capitalize }}
@@ -48,25 +48,33 @@
                                     {#                                    </div>#}
 
 
-                                    <div class="row mb-3">
-                                        <div class="form-group col-8">
-                                            <h4 class="pt-6">{{ offer.name }}</h4>
+                                    <div class="row mb-3 pt-6">
+                                        <div class="form-group col-7">
+                                            <h5 class="">{{ offer.name }}</h5>
                                         </div>
                                         <input name="offers[0][offer]" type="hidden" value="{{ offer['@id'] }}">
                                         <input name="offers[0][path]" type="hidden"
                                                value="{{ app.request.requesturi }}">
-                                        {% if offer.audience|default and offer.audience == 'personal' and product.type|default and product.type == 'ticket' %}
 
-                                            <input value="1" name="offers[0][quantity]"
-                                                   type="hidden">
-                                        {% else %}
-                                            <div class="form-group col-4">
-                                                <label for="quantityInput">{{ 'quantity'|trans|capitalize }}</label>
-                                                <input min="1" value="1" class="form-control" name="offers[0][quantity]"
-                                                       type="number"
-                                                       id="quantityInput">
-                                            </div>
-                                        {% endif %}
+                                        <div class="col-5 d-flex justify-content-around">
+                                            <h5>&euro; {{ offer.price }},-</h5>
+
+                                            {% set isTicket = check_for_type_in_products('ticket', offer.products) %}
+                                            {% if offer.audience|default and offer.audience == 'personal' and isTicket|default and isTicket == true %}
+
+                                                <h5>{{ '1'~' '~'item'~' '~'max' }}</h5>
+                                                <input value="1" name="offers[0][quantity]"
+                                                       type="hidden">
+                                            {% else %}
+                                                <div class="form-group">
+                                                    <label for="quantityInput">{{ 'quantity'|trans|capitalize }}</label>
+                                                    <input min="1" value="1" class="form-control"
+                                                           name="offers[0][quantity]"
+                                                           type="number"
+                                                           id="quantityInput">
+                                                </div>
+                                            {% endif %}
+                                        </div>
                                     </div>
 
                                     {% if offer.options|default and offer.options|length > 0 %}
@@ -82,13 +90,20 @@
                                                             <div class="col-8">
                                                                 <input type="checkbox" class="form-check-input"
                                                                        id="options{{ loop.index0 }}"
-                                                                       name="offers[0][options][{{ loop.index0 }}][name]" value="{{ option.name }}">
+                                                                       name="offers[0][options][{{ loop.index0 }}][name]"
+                                                                       value="{{ option.name }}">
                                                                 <label class="form-check-label pl-1"
                                                                        for="options{{ loop.index0 }}">{{ option.name }}</label>
                                                             </div>
                                                             <div class="col-4 text-right">
-                                                                <b class="pr-1">{{ offer.priceCurrency }} {{ option.price }},-</b>
-                                                                <input type="hidden" name="offers[0][options][{{ loop.index0 }}][price]" value="{{ option.price }}">
+                                                                <b class="pr-1">{{ offer.priceCurrency }} {{ option.price }}
+                                                                    ,-</b>
+                                                                <input type="hidden"
+                                                                       name="offers[0][options][{{ loop.index0 }}][price]"
+                                                                       value="{{ option.price }}">
+                                                                <input type="hidden"
+                                                                       name="offers[0][options][{{ loop.index0 }}][offer]"
+                                                                       value="{{ offer['@id'] }}">
                                                             </div>
                                                         </div>
                                                     </div>
