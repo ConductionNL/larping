@@ -731,6 +731,14 @@
          <source>make a order for a membe</source>
          <target>maak een bestelling voor een lid</target>
          </trans-unit>
+         <trans-unit id="Unb123S" resname="your shopping cart is empty">
+         <source>your shopping cart is empty</source>
+         <target>je winkelmand is leeg</target>
+         </trans-unit>
+         <trans-unit id="ASgav12" resname="browse through events">
+         <source>browse through events</source>
+         <target>zoek door evenementen</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
