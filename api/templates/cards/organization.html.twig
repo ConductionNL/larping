@@ -23,7 +23,7 @@
                 <p class="text-white">
                     {% for category in organizationCategories %}
                         <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip"
-                           data-placement="top" title="{{ 'categorie: ' }}{{ category.name }}" aria-hidden="true"></i>
+                           data-placement="top" title="{{ category.name }}" aria-hidden="true"></i>
                     {% endfor %}
                 </p>
             </div>
