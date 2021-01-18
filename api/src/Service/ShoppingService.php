@@ -33,8 +33,7 @@ class ShoppingService
         CommonGroundService $commonGroundService,
         Security $security,
         IdVaultService $idVaultService
-    )
-    {
+    ) {
         $this->params = $params;
         $this->cash = $cache;
         $this->session = $session;
@@ -63,7 +62,7 @@ class ShoppingService
 
         if (isset($object['paymentUrl']) && strpos($object['paymentUrl'], 'https://www.mollie.com') !== false) {
             $this->session->set('invoice@id', $object['@id']);
-            header('Location: ' . $object['paymentUrl']);
+            header('Location: '.$object['paymentUrl']);
             exit;
         }
     }
@@ -223,8 +222,8 @@ class ShoppingService
 
     public function uploadOrder($order, $person)
     {
-        $uploadedOrder['name'] = 'Order for ' . $person['name'];
-        $uploadedOrder['description'] = 'Order for ' . $person['name'];
+        $uploadedOrder['name'] = 'Order for '.$person['name'];
+        $uploadedOrder['description'] = 'Order for '.$person['name'];
         $uploadedOrder['organization'] = $order['organization'];
         $uploadedOrder['customer'] = $person['@id'];
 
@@ -258,7 +257,6 @@ class ShoppingService
             }
             $item['quantity'] = intval($item['quantity']);
 
-
             $item['price'] = strval($offer['price']);
             if (isset($item['options'])) {
                 foreach ($item['options'] as $option) {
@@ -266,7 +264,7 @@ class ShoppingService
                 }
             }
             $item['priceCurrency'] = $offer['priceCurrency'];
-            $item['order'] = '/orders/' . $uploadedOrder['id'];
+            $item['order'] = '/orders/'.$uploadedOrder['id'];
         }
 
         $item = $this->commonGroundService->saveResource($item, ['component' => 'orc', 'type' => 'order_items']);
@@ -323,6 +321,7 @@ class ShoppingService
                         } else {
                             $this->session->set('orders', null);
                         }
+
                         return true;
                     }
                 }
@@ -429,6 +428,7 @@ class ShoppingService
                                     unset($ordersInSession[$k1]['orderItems'][$k2]['options']);
                                 }
                                 $this->session->set('orders', $ordersInSession);
+
                                 return true;
                             }
                         }
@@ -436,7 +436,6 @@ class ShoppingService
                 }
             }
         }
-
 
         return false;
     }
