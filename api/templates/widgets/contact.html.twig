@@ -18,6 +18,20 @@
                         <textarea class="form-control single-date" name="message"></textarea>
                     </div>
                 </div>
+                {% if contact is defined and contact is not empty %}
+                    <div>
+                        {% if contact.telephones is defined and contact.telephones is not empty %}
+                        <span class="d-block"><i class="fas fa-phone-alt"></i> {{ contact.telephones.0.telephone }}</span>
+                        {% endif %}
+                        {% if contact.emails is defined and contact.emails is not empty %}
+                            <span class="d-block"><i class="fas fa-at"></i> {{ contact.emails.0.email }}</span>
+                        {% endif %}
+                        {% if contact.adresses is defined and contact.adresses is not empty %}
+                            <span class="d-block"><i class="fas fa-home"></i> {{ contact.adresses.0.street }} {{ contact.adresses.0.houseNumber }}, {{ contact.adresses.0.postalCode }} {{ contact.adresses.0.locality }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
             </div>
         </div>
         <div class="form-group mb-6">
