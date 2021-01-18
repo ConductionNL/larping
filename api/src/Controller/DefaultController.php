@@ -90,7 +90,7 @@ class DefaultController extends AbstractController
             } else {
                 $like['author'] = $this->getUser()->getPerson();
                 $like['resource'] = $request->get('resource');
-                $like['organization'] = $this->getUser()->getOrganization();
+                $like['organization'] = $request->get('organization');
                 $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
 
                 return new JsonResponse([
