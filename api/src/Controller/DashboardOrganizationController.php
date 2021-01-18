@@ -111,7 +111,7 @@ class DashboardOrganizationController extends AbstractController
             $resourceCategory['categories'] = $categories;
 
             $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
-            
+
             return $this->redirectToRoute('app_dashboardorganization_event', ['id'=> $event['id']]);
         }
 
@@ -435,7 +435,7 @@ class DashboardOrganizationController extends AbstractController
             // Delete the sendList
             $idVaultService->deleteSendList($sendListId);
 
-            $variables['mailingLists'] = $idVaultService->getSendLists($clientSecret, $organizationUrl);
+            return $this->redirect($this->generateUrl('app_dashboardorganization_mailinglists'));
         } elseif ($request->isMethod('POST') && $request->request->get('MailToList') == 'true') {
             // Get the correct sendList to send this mail to
             $sendListId = $request->get('id');
