@@ -781,12 +781,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/id-vault-php.git",
-                "reference": "8a49ab784ba92f51cf37d813262c7bd114491e9c"
+                "reference": "8b94c866df410f1f49c8150830bfc2d18d18d60c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/8a49ab784ba92f51cf37d813262c7bd114491e9c",
-                "reference": "8a49ab784ba92f51cf37d813262c7bd114491e9c",
+                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/8b94c866df410f1f49c8150830bfc2d18d18d60c",
+                "reference": "8b94c866df410f1f49c8150830bfc2d18d18d60c",
                 "shasum": ""
             },
             "require": {
@@ -824,7 +824,7 @@
                 "commonground",
                 "conduction"
             ],
-            "time": "2021-01-14T15:27:55+00:00"
+            "time": "2021-01-18T12:13:14+00:00"
         },
         {
             "name": "conduction/idvaultbundle",
@@ -832,12 +832,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/IdVaultBundle.git",
-                "reference": "5394d1e7f9e66157fe142431d8ecc6819f9d933b"
+                "reference": "d2c7ced4df11f358cb0c4f18c3e07836b59b6706"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/5394d1e7f9e66157fe142431d8ecc6819f9d933b",
-                "reference": "5394d1e7f9e66157fe142431d8ecc6819f9d933b",
+                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/d2c7ced4df11f358cb0c4f18c3e07836b59b6706",
+                "reference": "d2c7ced4df11f358cb0c4f18c3e07836b59b6706",
                 "shasum": ""
             },
             "require": {
@@ -877,7 +877,7 @@
                 "commonground",
                 "conduction"
             ],
-            "time": "2021-01-14T15:27:35+00:00"
+            "time": "2021-01-18T12:14:15+00:00"
         },
         {
             "name": "conduction/listybundle",
@@ -5176,6 +5176,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
+            "abandoned": "https://github.com/fabpot/local-php-security-checker",
             "time": "2019-11-01T13:20:14+00:00"
         },
         {
@@ -10822,5 +10823,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }
