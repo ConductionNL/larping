@@ -20,12 +20,12 @@
                     <li class="far fa-calendar-alt" aria-hidden="true"></li> {{ item.startDate|date("d-m-Y H:m") }}<br>
                     {% for category in eventCategories %}
                         <li class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip"
-                            data-placement="top" title="{{ 'categorie: ' }}{{ category.name }}" aria-hidden="true"></li>
+                            data-placement="top" title="{{ category.name }}" aria-hidden="true"></li>
                     {% endfor %}
                     {% if features|default %}
                     {% for feature in features %}
                         <i class="{% if feature.icon|default %}{{ feature.icon }}{% endif %}" data-toggle="tooltip"
-                           data-placement="top" title="{{ 'feature: ' }}{{ feature.name }}" aria-hidden="true"></i>
+                           data-placement="top" title="{{ feature.name }}" aria-hidden="true"></i>
                     {% endfor %}
                     {% endif %}
                 </ul>
