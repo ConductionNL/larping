@@ -26,7 +26,7 @@
                                 {% if ownsThisProduct is not null and ownsThisProduct == false %}
                                     {% set product = commonground_resource(product['@id']) %}
                                     {% set counter = counter + 1 %}
-                                    <p style="color: indianred">{{ 'to purchase this product, another product is required and will be added to your shopping cart'|trans|capitalize }}
+                                    <p style="color: indianred">{{ 'to purchase this product, another product is required and will be added to your shopping cart if you add this product'|trans|capitalize }}
                                         :</p>
                                     <p class="p-3 mb-3"
                                        style="border-radius: 6px;background: rgba(205,92,92,0.4);color: white">{{ product.name|capitalize }}
