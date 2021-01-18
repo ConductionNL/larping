@@ -22,46 +22,50 @@
             <div class="row">
                 <div class="col-9">
                     <!-- search bar -->
-                    <div class="search-result-bar">
-                        {% if organizations|default %}
-                            <p>{{ 'we found'|trans|capitalize }} <span>{{ organizations|length }}</span> {{ 'results for'|trans }}
-                                <span>{{ 'organizations'|trans|capitalize }}</span>.</p>
-                        {% else %}
-                            <p>{{ 'no results found'|trans|capitalize }}.</p>
-                        {% endif %}
-                        <div class="ml-md-auto d-flex align-items-center justify-content-between">
-                            <div class="select-bg-transparent select-border">
-                                <div class="selectric-wrapper selectric-select-location">
-                                    <div class="selectric-select">
-                                        <select class="select-location" style="text-align: center">
-                                            <option>{{ 'sort'|trans|capitalize }}</option>
-                                            <option><a href="{{ path('app_organization_index') }}?query=likes">{{ 'likes'|trans|capitalize }}</a></option>
-                                            <option><a href="{{ path('app_organization_index') }}?query=rating">{{ 'rating'|trans|capitalize }}</a></option>
-                                            <option><a href="{{ path('app_organization_index') }}?query=alphabet">{{ 'alphabet'|trans|capitalize }}</a></option>
-                                        </select>
-                                    </div>
-                                    <div class="selectric-items" tabindex="-1">
-                                        <div class="selectric-scroll">
-                                            <ul>
-                                                <li data-index="0" class="selected">{{ 'likes'|trans|capitalize }}</li>
-                                                <li data-index="1" class="">{{ 'rating'|trans|capitalize }}</li>
-                                                <li data-index="2" class="last">{{ 'alphabet'|trans|capitalize }}</li>
-                                            </ul>
+                    <form method="get" action="{{ path('app_organization_index', {"categories":categories,"search":search}) }}" id="organizationSortingForm">
+                        <div class="search-result-bar">
+                            {% if organizations|default %}
+                                <p>{{ 'we found'|trans|capitalize }} <span>{{ organizations|length }}</span> {{ 'results for'|trans }}
+                                    <span>{{ 'organizations'|trans|capitalize }}</span>.</p>
+                            {% else %}
+                                <p>{{ 'no results found'|trans|capitalize }}.</p>
+                            {% endif %}
+                            <div class="ml-md-auto d-flex align-items-center justify-content-between">
+                                <div class="select-bg-transparent select-border">
+                                    <div class="selectric-wrapper selectric-select-location">
+                                        <div class="selectric-select">
+                                            <select class="select-location" style="text-align: center" name="sorting_order" onchange="javascript:document.getElementById('organizationSortingForm').submit();">
+                                                <option value="likes-asc" {% if sorting is defined  and sorting == "likes-asc"%} selected {% endif %}>{{ 'likes, ascending'|trans|capitalize }}</option>
+                                                <option value="likes-desc" {% if sorting is defined  and sorting == "likes-desc"%} selected {% endif %}> {{ 'likes, descending'|trans|capitalize }}</option>
+                                                <option value="rating-asc" {% if sorting is defined  and sorting == "rating-asc"%} selected {% endif %}>{{ 'rating, ascending'|trans|capitalize }}</option>
+                                                <option value="rating-desc" {% if sorting is defined  and sorting == "rating-desc"%} selected {% endif %}> {{ 'rating, descending'|trans|capitalize }}</option>
+                                                <option value="name-asc" {% if sorting is defined  and sorting == "name-asc"%} selected {% endif %}>{{ 'name, ascending'|trans|capitalize }}</option>
+                                                <option value="name-desc" {% if sorting is defined  and sorting == "name-desc"%} selected {% endif %}> {{ 'name, descending'|trans|capitalize }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="selectric-items" tabindex="-1">
+                                            <div class="selectric-scroll">
+                                                <ul>
+                                                    <li data-index="0" class="selected">{{ 'likes'|trans|capitalize }}</li>
+                                                    <li data-index="1" class="">{{ 'rating'|trans|capitalize }}</li>
+                                                    <li data-index="2" class="last">{{ 'alphabet'|trans|capitalize }}</li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
+                                    <input class="selectric-input" tabindex="0">
                                 </div>
-                                <input class="selectric-input" tabindex="0">
-                            </div>
-                            <div class="icons">
-                                <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">
-                                    <i class="fa fa-th" aria-hidden="true"></i>
-                                </a>
-                                <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">
-                                    <i class="fa fa-th-list" aria-hidden="true"></i>
-                                </a>
+                                <div class="icons">
+                                    <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">
+                                        <i class="fa fa-th" aria-hidden="true"></i>
+                                    </a>
+                                    <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">
+                                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
 
                     <div id="gridFullwidthDiv" class="fade-in">
                         <div class="row">

@@ -111,7 +111,7 @@ class DashboardOrganizationController extends AbstractController
             $resourceCategory['categories'] = $categories;
 
             $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
-            
+
             return $this->redirectToRoute('app_dashboardorganization_event', ['id'=> $event['id']]);
         }
 
