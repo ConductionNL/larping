@@ -5,6 +5,6 @@
                 <i class="{{ item.icon }}"></i>
             </div>
         {% endif %}
-        <span class="h5">{{ item.name|capitalize }}</span>
+        <span class="h5">{{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}</span>
     </div>
 </a>

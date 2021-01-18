@@ -10,7 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * The DashboardController handles any calls about administration and dashboard pages.
@@ -71,11 +73,10 @@ class DashboardOrganizationController extends AbstractController
     public function eventAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        if($id != 'add'){
+        if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
-        }
-        else {
+        } else {
             $variables['event'] = [];
             $variables['products'] = [];
         }
@@ -137,9 +138,8 @@ class DashboardOrganizationController extends AbstractController
             $variables['products'][] = $product;
         }
 
-
         $variables['categories'] = [];
-        foreach($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category){
+        foreach ($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category) {
             $variables['categories'][] = $category['id'];
         }
 
@@ -150,12 +150,28 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/event/{id}/tickets")
      * @Template
      */
-    public function eventTicketsAction(CommonGroundService $commonGroundService, Request $request, $id)
+    public function eventTicketsAction(CommonGroundService $commonGroundService, Request $request, SerializerInterface $serializer, $id)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
-        $variables['products'] = [];
-        $variables['offers'] = [];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
+        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id']])['hydra:member'];
+        /*@todo change 'tickets' back to 'products' after testing*/
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
+        $results = $variables['products'];
+
+        if ($request->query->has('action') && $request->query->get('action') == 'download') {
+            $responseData = $serializer->serialize(
+                $results,
+                'csv'
+            );
+
+            return new Response(
+                $responseData,
+                Response::HTTP_OK,
+                ['content-type' => 'text/csv', 'Content-Disposition' => 'attachment; filename=tickets.csv']
+            );
+        }
 
         return $variables;
     }
@@ -387,9 +403,30 @@ class DashboardOrganizationController extends AbstractController
         // Get clientSecret of larping application
         $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
         $clientSecret = $providers[0]['configuration']['secret'];
+        $clientId = $providers[0]['configuration']['app_id'];
 
-        // Get mailingLists from id-vault with filters: larping application secret and this users organization url
+        // Get mailingLists from id-vault with filters: larping application secret and this users organization url.
         $variables['mailingLists'] = $idVaultService->getSendLists($clientSecret, $organizationUrl);
+
+        // Get UserGroups from id-vault with filters: larping application id and this users organization url.
+        $variables['groups'] = $idVaultService->getGroups($clientId, $organizationUrl)['groups'];
+
+        // Get for all mailinglist the subscribers that have a resource set that is an wac/group with id of an group in $variables['group']
+        foreach ($variables['mailingLists'] as &$mailingList) {
+            $groups = [];
+            foreach ($mailingList['subscribers'] as $subscriber) {
+                if (isset($subscriber['resource'])) {
+                    if (strpos($subscriber['resource'], '/wac/groups/')) {
+                        foreach ($variables['groups'] as $group) {
+                            if (strpos($subscriber['resource'], $group['id'])) {
+                                array_push($groups, $group);
+                            }
+                        }
+                    }
+                }
+            }
+            $mailingList['groups'] = $groups;
+        }
 
         if ($request->isMethod('POST') && $request->request->get('DeleteList') == 'true') {
             // Get the correct sendList to delete
@@ -576,7 +613,7 @@ class DashboardOrganizationController extends AbstractController
             if (count($resourceCategories) > 0) {
                 $resourceCategory = $resourceCategories[0];
             } else {
-                $resourceCategory = ['resource'=>$event['@id'], 'catagories'=>[]];
+               $resourceCategory = ['resource'=>$location['@id'], 'catagories'=>[]];
             }
 
             $resourceCategory['categories'] = $categories;
@@ -609,27 +646,27 @@ class DashboardOrganizationController extends AbstractController
 //            $categories = $organization['categories'];
 
             $email = [];
-            $email['name'] = 'email for ' . $person['name'];
+            $email['name'] = 'email for '.$person['name'];
             $email['email'] = $request->get('email');
             if (isset($email['id'])) {
                 $commonGroundService->saveResource($email, ['component' => 'cc', 'type' => 'emails']);
-                $organization['emails'][] = '/emails/' . $email['id'];
+                $organization['emails'][] = '/emails/'.$email['id'];
             } elseif (isset($email['email'])) {
                 $organization['emails'][] = $email;
             }
 
             $telephone = [];
-            $telephone['name'] = 'telephone for ' . $person['name'];
+            $telephone['name'] = 'telephone for '.$person['name'];
             $telephone['telephone'] = $request->get('telephone');
             if (isset($telephone['id'])) {
                 $commonGroundService->saveResource($telephone, ['component' => 'cc', 'type' => 'telephones']);
-                $organization['telephones'][] = '/telephones/' . $telephone['id'];
+                $organization['telephones'][] = '/telephones/'.$telephone['id'];
             } elseif (isset($telephone['telephone'])) {
                 $organization['telephones'][] = $telephone;
             }
 
             $address = [];
-            $address['name'] = 'address for ' . $person['name'];
+            $address['name'] = 'address for '.$person['name'];
             $address['street'] = $request->get('street');
             $address['houseNumber'] = $request->get('houseNumber');
             $address['houseNumberSuffix'] = $request->get('houseNumberSuffix');
@@ -637,19 +674,19 @@ class DashboardOrganizationController extends AbstractController
             $address['locality'] = $request->get('locality');
             if (isset($address['id'])) {
                 $commonGroundService->saveResource($address, ['component' => 'cc', 'type' => 'addresses']);
-                $organization['adresses'][] = '/addresses/' . $address['id'];
+                $organization['adresses'][] = '/addresses/'.$address['id'];
             } else {
                 $organization['adresses'][] = $address;
             }
 
             $socials = [];
-            $socials['name'] = $request->get('type') . ' of ' . $person['name'];
-            $socials['description'] = $request->get('type') . ' of ' . $person['name'];
+            $socials['name'] = $request->get('type').' of '.$person['name'];
+            $socials['description'] = $request->get('type').' of '.$person['name'];
             $socials['type'] = $request->get('type');
             $socials['url'] = $request->get('url');
             if (isset($twitter['id'])) {
                 $commonGroundService->saveResource($socials, ['component' => 'cc', 'type' => 'socials']);
-                $organization['socials'][] = '/socials/' . $socials['id'];
+                $organization['socials'][] = '/socials/'.$socials['id'];
             } else {
                 $organization['socials'][] = $socials;
             }
@@ -690,8 +727,19 @@ class DashboardOrganizationController extends AbstractController
 
             $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
             $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
-
         }
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/make-order-for-member")
+     * @Template
+     */
+    public function makeOrderForMemberAction(CommonGroundService $commonGroundService, Request $request)
+    {
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+
         return $variables;
     }
 }

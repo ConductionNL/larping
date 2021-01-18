@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    {% include '/dashboard_organization/menu.html.twig' %}
+
+    <section class="bg-light pt-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'make a order for a member'|trans|capitalize }}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                    </li>
+                    <li class="breadcrumb-item active"
+                        aria-current="page">{{ 'make a order for a member'|trans|capitalize }}</li>
+                </ul>
+            </nav>
+
+            <div class="card">
+                <div class="card-body px-6 pt-6 pb-1">
+                    <h3 class="h4 mb-4">{{ 'create a user or pick a member'|trans|capitalize }}</h3>
+
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="existingMemberSelect">{{ 'existing member'|trans|capitalize }}</label>
+                            <select id="existingMemberSelect" class="form-control" tabindex="-1">
+                                <option value="">{{ 'pick a member'|trans|capitalize }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <p>{{ 'or'|trans|capitalize }}</p>
+                    <p>{{ 'new member'|trans|capitalize }}</p>
+
+
+                    <div class="row">
+                        <div class="form-group col-4">
+                            <label for="givenNameInput">{{ 'first name'|trans|capitalize }}</label>
+                            <input id="givenNameInput" name="newMember[givenName]" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="middleNameInput">{{ 'middle name'|trans|capitalize }}</label>
+                            <input id="middleNameInput" name="newMember[additionalName]" type="text"
+                                   class="form-control">
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="lastNameInput">{{ 'last name'|trans|capitalize }}</label>
+                            <input id="lastNameInput" name="newMember[familyName]" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="emailInput">{{ 'email'|trans|capitalize }}</label>
+                            <input id="emailInput" name="newMember[email]" type="email" class="form-control">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="phoneInput">{{ 'phone number'|trans|capitalize }}</label>
+                            <input id="phoneInput" name="newMember[phone]" type="text" class="form-control">
+                        </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

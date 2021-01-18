@@ -57,6 +57,10 @@
         <source>edit</source>
         <target>wijzig</target>
       </trans-unit>
+      <trans-unit id="Suugx0J" resname="delete">
+        <source>delete</source>
+        <target>verwijderen</target>
+      </trans-unit>
       <trans-unit id="Wzs7uoX" resname="send email">
         <source>send email</source>
         <target>email versturen</target>
@@ -200,6 +204,10 @@
       <trans-unit id="fp5aww8" resname="add">
         <source>add</source>
         <target>aanmaken</target>
+      </trans-unit>
+      <trans-unit id="n4PIkNM" resname="add_2">
+        <source>add</source>
+        <target>toevoegen</target>
       </trans-unit>
       <trans-unit id="XvXvA2S" resname="all">
         <source>all</source>
@@ -635,6 +643,10 @@
          <source>groups</source>
          <target>groepen</target>
          </trans-unit>
+         <trans-unit id="JeEmMOD" resname="select a group">
+         <source>select a group</source>
+         <target>selecteer een groep</target>
+         </trans-unit>
          <trans-unit id="upeosas" resname="member from">
          <source>member from</source>
          <target>lid van</target>
@@ -714,6 +726,10 @@
          <trans-unit id="H21AssD" resname="amount of items">
          <source>amount of items</source>
          <target>aantal items</target>
+         </trans-unit>
+         <trans-unit id="Uh21bas" resname="make a order for a member">
+         <source>make a order for a membe</source>
+         <target>maak een bestelling voor een lid</target>
          </trans-unit>
     </body>
   </file>
