@@ -113,7 +113,7 @@ class ShoppingService
         }
 
         // Only enable on localhost ! Dont forget to disable before pushing !
-        $object['redirectUrl'] = 'http://localhost/payment-status';
+//        $object['redirectUrl'] = 'http://localhost/payment-status';
 
         $object = $this->commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
 
@@ -189,6 +189,9 @@ class ShoppingService
                     } else {
                         $order['orderItems'][$key]['quantity'] += $newOrderItem['quantity'];
                     }
+                    if (isset($newOrderItem['options']) && count($newOrderItem['options']) > 0) {
+                        $order['orderItems'][$key]['options'] = $newOrderItem['options'];
+                    }
                 }
             }
         }
@@ -244,12 +247,15 @@ class ShoppingService
             $newOrderItem['quantity'] = 1;
         }
 
-        $order['orderItems'][] = [
-            'offer'    => $newOrderItem['offer'],
-            'quantity' => $newOrderItem['quantity'],
-            'path'     => $newOrderItem['path'],
-            'price'    => $actualOffer['price'],
-        ];
+        if (!isset($newOrderItem['options'])) {
+            $newOrderItem['price'] = $actualOffer['price'];
+        } else {
+            foreach ($newOrderItem['options'] as $option) {
+                $newOrderItem['price'] = $actualOffer['price'] + intval($option['price']);
+            }
+        }
+
+        $order['orderItems'][] = $newOrderItem;
 
         return $order;
     }

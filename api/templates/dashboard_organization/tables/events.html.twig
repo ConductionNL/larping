@@ -9,7 +9,7 @@
         <th>{{ 'location'|trans|capitalize }}</th>
         <th>{{ 'tickets available'|trans|capitalize }}</th>
         <th>Status</th>
-        <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#EventModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+        <th><a href="{{ path('app_dashboardorganization_event', {id: 'add'}) }}" class="btn btn-success btn-sm">{{ 'add'|trans|capitalize }}</button></th>
     </tr>
     </thead>
     <tbody>
@@ -58,11 +58,5 @@
     </div>
 </div>
 {% endif %}
-
-{% include 'dashboard_organization/modals/event.html.twig' %}
-
-{% for event in events %}
-    {% include 'dashboard_organization/modals/event.html.twig' with {'resource': event} %}
-{% endfor %}
 
 

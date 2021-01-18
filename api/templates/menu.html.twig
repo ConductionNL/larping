@@ -114,6 +114,9 @@
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_mailinglists') }}">{{ 'Mailing Lists'|trans }}</a>
                                         </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_makeorderformember') }}">{{ 'make a order for a member'|trans|capitalize }}</a>
+                                        </li>
                                     </ul>
                                     <!--
                                     <ul class="list-unstyled">
@@ -320,6 +323,13 @@
                                        href="{{ path('app_dashboarduser_favorites') }}">
                                         <i class="fal fa-heart mr-2" aria-hidden="true"></i>
                                         {{ 'my favorites'|trans|capitalize }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="d-flex flex-wrap align-items-center"
+                                       href="{{ path('app_dashboarduser_orders') }}">
+                                        <i class="fal fa-shopping-cart mr-2" aria-hidden="true"></i>
+                                        {{ 'my orders'|trans|capitalize }}
                                     </a>
                                 </li>
                                 <li>

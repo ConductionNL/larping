@@ -49,6 +49,38 @@
         <source>name</source>
         <target>naam</target>
       </trans-unit>
+      <trans-unit id="Nv4k0og" resname="description">
+        <source>description</source>
+        <target>omschrijving</target>
+      </trans-unit>
+      <trans-unit id="VCwOpmc" resname="edit">
+        <source>edit</source>
+        <target>wijzig</target>
+      </trans-unit>
+      <trans-unit id="Suugx0J" resname="delete">
+        <source>delete</source>
+        <target>verwijderen</target>
+      </trans-unit>
+      <trans-unit id="Wzs7uoX" resname="send email">
+        <source>send email</source>
+        <target>email versturen</target>
+      </trans-unit>
+      <trans-unit id="Wn7NjER" resname="send email to">
+        <source>send email to</source>
+        <target>email versturen naar</target>
+      </trans-unit>
+      <trans-unit id="IsFxrUd" resname="send">
+        <source>send</source>
+        <target>versturen</target>
+      </trans-unit>
+      <trans-unit id="vKR8Zb3" resname="subject">
+        <source>subject</source>
+        <target>onderwerp</target>
+      </trans-unit>
+      <trans-unit id="EmrqRCQ" resname="content">
+        <source>content</source>
+        <target>inhoud</target>
+      </trans-unit>
       <trans-unit id="QG7.sen" resname="created">
         <source>created</source>
         <target>aangemaakt</target>
@@ -173,6 +205,10 @@
         <source>add</source>
         <target>aanmaken</target>
       </trans-unit>
+      <trans-unit id="n4PIkNM" resname="add_2">
+        <source>add</source>
+        <target>toevoegen</target>
+      </trans-unit>
       <trans-unit id="XvXvA2S" resname="all">
         <source>all</source>
         <target>alle</target>
@@ -196,6 +232,18 @@
       <trans-unit id="NX5UBJy" resname="Mailing Lists">
         <source>Mailing Lists</source>
         <target>E-mail Lijsten</target>
+      </trans-unit>
+      <trans-unit id="Fbqzni0" resname="Mailinglist">
+        <source>mailing list</source>
+        <target>e-mail lijst</target>
+      </trans-unit>
+      <trans-unit id="TQEGFtY" resname="mailing list">
+        <source>mailing list</source>
+        <target>e-mail lijst</target>
+      </trans-unit>
+      <trans-unit id="OqY7K8k" resname="newsletter">
+        <source>newsletter</source>
+        <target>nieuwsbrief</target>
       </trans-unit>
       <trans-unit id="vx7Qwh." resname="no mailing lists found">
         <source>no mailing lists found</source>
@@ -594,6 +642,10 @@
          <trans-unit id="betskas" resname="groups">
          <source>groups</source>
          <target>groepen</target>
+         </trans-unit>
+         <trans-unit id="JeEmMOD" resname="select a group">
+         <source>select a group</source>
+         <target>selecteer een groep</target>
          </trans-unit>
          <trans-unit id="upeosas" resname="member from">
          <source>member from</source>
