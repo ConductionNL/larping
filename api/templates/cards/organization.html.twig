@@ -34,16 +34,15 @@
         </div>
         <div class="card-footer bg-transparent">
             <ul class="list-unstyled d-flex mb-0 py-2">
-                <li>
-                    <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
-                            onclick="likeItem(this)" value="{{ resource['@id'] }}"
-                            data-original-title="Favourite this organisation" style="z-index: 2">
-                        <i {% if resource.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
-                            aria-hidden="true"></i>
-                        <span id="{{ resource['id'] }}">{{ resource.totals.likes }}</span>
-                    </button>
-                    <i class="far fa-calendar-alt mr-2" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                       data-original-title="{{ 'upcoming events'|trans|capitalize }}"><span> {{ organizationEvents|length }}</span></i>
+                <li onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
+                    liked="{% if resource.totals.liked|default %}true{% else %}false{% endif %}"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title=""
+                    data-original-title="Favourite this event">
+                    <i {% if resource.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                        aria-hidden="true" id="icon_{{ resource['id'] }}"></i>
+                    <span id="counter_{{ resource['id'] }}">{{ resource.totals.likes }}</span>
                 </li>
                 <li class="ml-auto">
                     <a class="px-2"
@@ -52,19 +51,4 @@
             </ul>
         </div>
     </div>
-    <div class="card-footer bg-transparent">
-        <ul class="list-unstyled d-flex mb-0 py-2">
-            <li>
-                <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="" onclick="likeItem(this)" value="{{ resource['@id'] }}" data-original-title="{{ 'favourite this organisation'|trans|capitalize }}" style="z-index: 2">
-                    <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
-                    <span id="{{ resource['id'] }}">{{ totals.likes }}</span>
-                </button>
-                <i class="far fa-calendar-alt mr-2" aria-hidden="true" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'upcoming events'|trans|capitalize }}"><span> {{ organizationEvents|length }}</span></i>
-            </li>
-            <li class="ml-auto">
-                <a class="px-2"
-                   href="{{ path('app_organization_organization', {'id': organization.id}) }}">{{ 'view'|trans|capitalize }}</a>
-            </li>
-        </ul>
-    </div>
-</div>
+</a>

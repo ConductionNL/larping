@@ -170,9 +170,11 @@
                     <!-- Contact  -->
                     <h5>{{ 'contact'|trans|capitalize }} {{ organization.name }}</h5>
                     <p>{{ organization.description }}</p>
-                    {% include 'widgets/contact.html.twig' with {
-                        'contact': organization.contact
-                    } %}
+
+
+                    {% include 'widgets/contact_details.html.twig' %}
+
+                    {% include 'widgets/contact_form.html.twig' %}
 
                     <!-- You may also like  -->
                     {% if categories is defined and categories is not empty %}
@@ -184,25 +186,6 @@
                         {% endfor %}
 
                     {% endif %}
-
-                    <ul class="list-unstyled text-muted">
-                        {% if contact.telephones|default %}
-                            {% for numbers in contact.telephones %}
-                                <i class="fas fa-phone mr-2"
-                                   aria-hidden="true"><span>{{ numbers.telephone }}</span></i>
-                            {% endfor %}
-                        {% endif %}
-                        {% if contact.emails|default %}
-                            {% for emails in contact.emails %}
-                                <i class="fas fa-envelope mr-2"
-                                   aria-hidden="true"><span>{{ emails.email }}</span></i>
-                            {% endfor %}
-                        {% endif %}
-                        {% if contact.adresses|default %}
-                            <i class="fas fa-home-lg mr-2"
-                               aria-hidden="true"><span>{{ adres.street }}{{ adres.houseNumber }}</span></i>
-                        {% endif %}
-                    </ul>
                 </div><!-- /.col -->
             </div> <!-- /.row -->
         </div> <!-- /.container -->
