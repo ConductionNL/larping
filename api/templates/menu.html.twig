@@ -296,7 +296,7 @@
                             {#                                            <span class="avatar-name">{{ app.user.name }}</span>#}
                             {#                                        {% endif %}#}
                             {#                                    </a>#}
-                            <ul class="dropdown-menu" style="min-width: 200px;">
+                            <ul class="dropdown-menu" style="min-width: 220px;">
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="https://id-vault.com/dashboard/general" target="_blank">
@@ -307,8 +307,8 @@
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_memberships') }}">
-                                        <div class="fal fa-address-card mr-2" aria-hidden="true">
-                                            {{ 'my memberships'|trans|capitalize }}</div>
+                                        <div class="fal fa-address-card mr-2" aria-hidden="true"></div>
+                                        {{ 'my memberships'|trans|capitalize }}
                                     </a>
                                 </li>
                                 <li>
