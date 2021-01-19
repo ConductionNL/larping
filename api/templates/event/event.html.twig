@@ -29,11 +29,11 @@
                             <span
                                 class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
                             <a href="#" onclick="likeItem('{{ event['id'] }}','{{ event['@id'] }}','{{ event['organization'] }}', this)"
-                               liked="{% if totals.liked|default %}true{% else %}false{% endif %}"
+                               liked="{% if liked|default %}true{% else %}false{% endif %}"
                                data-toggle="tooltip"
                                data-placement="top"
                                title=""
-                               data-original-title="Favourite this event"><i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                               data-original-title="Favourite this event"><i {% if liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
                                     aria-hidden="true" id="icon_{{ event['id'] }}"></i>
                                 <span id="counter_{{ event['id'] }}">{{ totals.likes }}</span></a>
                         </div>

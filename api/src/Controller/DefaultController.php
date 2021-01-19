@@ -168,7 +168,7 @@ class DefaultController extends AbstractController
     public function contactAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations','id'=>'d24e147f-00b9-4970-9809-6684a3fb965b']);
+        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id'=>'d24e147f-00b9-4970-9809-6684a3fb965b']);
         if (array_key_exists('contact', $variables['organization']) && $variables['organization']['contact']) {
             $variables['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
         }
