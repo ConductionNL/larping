@@ -14,7 +14,7 @@
             <tr>
 
                 <td class="text-capitalize">
-                    <a class="text-hover-primary text-muted" href="listing-rental.html">{{ event.name }}</a>
+                    <a class="text-hover-primary text-muted" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ event.name }}</a>
                 </td>
                 <td>
                     {% if event.startDate|default %}
