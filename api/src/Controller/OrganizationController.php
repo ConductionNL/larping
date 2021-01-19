@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -101,7 +102,7 @@ class OrganizationController extends AbstractController
      * @Route("/{id}")
      * @Template
      */
-    public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
+    public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, IdVaultService $idVaultService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
         $variables = [];
         $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
@@ -129,6 +130,19 @@ class OrganizationController extends AbstractController
                     $variables['events'][$key]['liked'] = true;
                 }
             }
+
+            $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+            $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
+
+            $userCount = 0;
+            foreach ($variables['groups'] as $group) {
+                if ($group['name'] == 'root') {
+                    $variables['userCount'] = count($group['users']);
+                }
+            }
+
+
+
         }
 
         // Getting the offers
