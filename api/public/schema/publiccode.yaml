@@ -6,7 +6,7 @@ url: "https://github.com/ConductionNL/larping"
 landingURL: "dev.larping.eu" 
 isBasedOn: "https://github.com/ConductionNL/Proto-component-commonground.git" 
 softwareVersion: "V1.0"
-releaseDate: "2021-18-01"
+releaseDate: "2021-19-01"
 logo: www.larping.eu 
 monochromeLogo: img/logo-mono.svg
 
