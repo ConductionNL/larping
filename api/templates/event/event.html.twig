@@ -137,60 +137,7 @@
                                         <h5 class="media-heading">{{ organization.name }}</h5>
                                         <p>{{ organization.description }}</p>
                                         <div class="d-flex flex-column flex-lg-row align-items-lg-center">
-                                            {% if contact is defined and contact is not empty %}
-                                                <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
-                                                    {% if contact.telephones is not empty and contact.emails is not empty %}
-                                                        <li class="list-inline-item">
-                                                            <i class="fa fa-phone" aria-hidden="true"></i>
-                                                            <span class="ml-2">
-                                                {{ contact.telephones[0].telephone }}</span>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                                                            <span class="ml-2">{{ contact.emails[0].email }}</span>
-                                                        </li>
-                                                    {% else %}
-                                                        <li class="list-inline-item">
-                                                            {{ "contact info not found"|trans|capitalize }}
-                                                        </li>
-                                                    {% endif %}
-
-                                                </ul>
-                                            {% else %}
-                                                <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
-                                                    <li class="list-inline-item">
-                                                        {{ "contact info not found"|trans|capitalize }}
-                                                    </li>
-                                                </ul>
-                                            {% endif %}
-
-                                            {% if contact.socials is defined and contact.socials is not empty %}
-                                                {% set socials = contact.socials %}
-                                                <ul class="list-inline list-inline-icon ml-lg-auto">
-                                                    <li class="list-inline-item">
-                                                        <a class="mr-2" href="{{ socials.facebook }}">
-                                                            <i class="fa fa-facebook-official" aria-hidden="true"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <a class="mr-2" href="{{ socials.twitter }}">
-                                                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <a class="mr-2" href="{{ socials.instagram }}">
-                                                            <i class="fa fa-instagram" aria-hidden="true"></i>
-                                                        </a>
-                                                    </li>
-
-                                                </ul>
-                                            {% else %}
-                                                <ul class="list-inline list-inline-icon ml-lg-auto">
-                                                    <li class="list-inline-item">
-                                                        {{ 'no socials found'|trans|capitalize }}
-                                                    </li>
-                                                </ul>
-                                            {% endif %}
+                                            {% include 'widgets/contact_details.html.twig' %}
                                         </div>
                                     </div>
                                 {% endif %}
