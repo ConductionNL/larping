@@ -73,14 +73,6 @@ class EventController extends AbstractController
                 $variables['events'][$key]['rating'] = $variables['events'][$key]['totals']['rating'];
                 $variables['events'][$key]['likes'] = $variables['events'][$key]['totals']['likes'];
             }
-            // check if this event is liked by the current user
-            if ($this->getUser()) {
-                $eventUrl = $commonGroundService->cleanUrl(['component' => 'arc', 'type' => 'events', 'id' => $event['id']]);
-                $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $eventUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];
-                if (count($likes) > 0) {
-                    $variables['events'][$key]['liked'] = true;
-                }
-            }
             // hotfix -> remove unwanted evenst
             if (!empty($resourceIds) && !in_array($event['id'], $resourceIds)) {
                 unset($variables['events'][$key]);
@@ -114,7 +106,7 @@ class EventController extends AbstractController
         if ($this->getUser()) {
             $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $eventUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];
             if (count($likes) > 0) {
-                $variables['liked'] = true;
+                $variables['totals']['liked'] = true;
             }
         }
 

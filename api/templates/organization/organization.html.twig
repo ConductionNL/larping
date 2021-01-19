@@ -40,7 +40,7 @@
                                data-toggle="tooltip"
                                data-placement="top"
                                title=""
-                               data-original-title="Favourite this event"><i {% if liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                               data-original-title="{{ 'favourite this organization'|trans|capitalize }}"><i {% if liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
                                     aria-hidden="true" id="icon_{{ organization['id'] }}"></i>
                                 <span id="counter_{{ organization['id'] }}">{{ totals.likes }}</span></a>
                         </div>
