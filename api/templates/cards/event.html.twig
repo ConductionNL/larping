@@ -49,12 +49,11 @@
                     <a
                         {% if app.user|default %}
                             href="#" onclick="likeItem('{{ item['id'] }}','{{ item['@id'] }}','{{ item['organization'] }}', this)"
-                            data-original-title="Favourite this event"
+                            data-original-title="{{ 'favourite this event'|trans|capitalize }}"
                         {% else %}
                             href="{{ path('app_user_idvault') }}"
-                            data-original-title="Login to favourite this event"
+                            data-original-title="{{ 'login to favourite this event'|trans|capitalize }}"
                         {% endif %}
-
                         liked="{% if item.totals.liked|default %}true{% else %}false{% endif %}"
                         data-toggle="tooltip"
                         data-placement="top"

@@ -41,12 +41,18 @@
                 </li>
                 {% endfor %}
                 <li class="ml-auto">
-                    <a href="#" onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
-                       liked="{% if resource.totals.liked|default %}true{% else %}false{% endif %}"
-                       data-toggle="tooltip"
-                       data-placement="top"
-                       title=""
-                       data-original-title="Favourite this event"><i {% if resource.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                    <a
+                        {% if app.user|default %}
+                            href="#" onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
+                            data-original-title="{{ 'favourite this organization'|trans|capitalize }}"
+                        {% else %}
+                            href="{{ path('app_user_idvault') }}"
+                            data-original-title="{{ 'login to favourite this organization'|trans|capitalize }}"
+                        {% endif %}
+                        liked="{% if resource.totals.liked|default %}true{% else %}false{% endif %}"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title=""><i {% if resource.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
                             aria-hidden="true" id="icon_{{ resource['id'] }}"></i>
                         <span id="counter_{{ resource['id'] }}">{{ resource.totals.likes }}</span></a>
 
