@@ -113,14 +113,6 @@ class OrganizationController extends AbstractController
             if (count($likes) > 0) {
                 $variables['totals']['liked'] = true;
             }
-            foreach ($variables['events'] as $key => $event) {
-                // check if this event is liked by the current user
-                $eventUrl = $commonGroundService->cleanUrl(['component' => 'arc', 'type' => 'events', 'id' => $event['id']]);
-                $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $eventUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];
-                if (count($likes) > 0) {
-                    $variables['events'][$key]['totals']['liked'] = true;
-                }
-            }
         }
 
         // Getting the offers
