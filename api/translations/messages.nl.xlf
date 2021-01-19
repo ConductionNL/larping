@@ -542,6 +542,18 @@
          <source>favorieten</source>
          <target>favorieten</target>
          </trans-unit>
+         <trans-unit id="m5hUIS4" resname="login to add this to your favorites">
+         <source>login to add this to your favorites</source>
+         <target>login om dit toe te voegen aan uw favorieten</target>
+         </trans-unit>
+         <trans-unit id="Yku36Xp" resname="add to my favorites">
+         <source>add to my favorites</source>
+         <target>voeg toe aan mijn favorieten</target>
+         </trans-unit>
+         <trans-unit id="6ZR6vtw" resname="remove from my favorites">
+         <source>remove from my favorites</source>
+         <target>verwijderen uit mijn favorieten</target>
+         </trans-unit>
          <trans-unit id="GBYEzZq" resname="enter your keywords">
          <source>enter your keywords</source>
          <target>voer uw zoekwoorden in</target>
