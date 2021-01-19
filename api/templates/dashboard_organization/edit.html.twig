@@ -200,7 +200,7 @@
                                 <input type="email" class="form-control" {% if email.email|default %}value="{{ email.email }}"{% endif %} id="{{ email.id }}_email" name="contact[emails][{{ email.id }}][email]">
                             </div>
                             <div class="col-1">
-                                <a class="btn btn-danger float-right text-white"  onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                                <a class="btn btn-danger float-right text-white" onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
                             </div>
                         </div>
                             {% endfor %}
