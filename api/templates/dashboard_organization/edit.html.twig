@@ -23,7 +23,14 @@
                 <!-- About -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {% if organization.name |default %} {{ organization.name }}{% endif %}</h3>
+                        <div class="row">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {% if organization.name is defined %}{{ organization.name }}{% endif %}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <button type="submit" class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="form-group col-md-12 mb-6">
                                 <label for="name">{{ 'name'|trans|capitalize }}</label>
@@ -41,11 +48,10 @@
                     </div>
                 </div>
                 {% if organization is defined %}
-
                 <!-- Settings -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{{ 'settings'|trans|capitalize }} </h3>
+                        <h3 class="h4 mb-4">{{ 'categories'|trans|capitalize }} </h3>
                         <ul class="list-unstyled mb-6">
                             {% for category in settings %}
                                 <li class="d-inline-block mr-4 mb-2">
@@ -56,7 +62,7 @@
                                             value="/categories/{{ category.id }}"
                                             id="category{{ category.id }}"
                                             name="categories[]"
-                                            {% if category.id in categories%}
+                                            {% if category.id in categories %}
                                                 checked="checked"
                                             {% endif %}
                                         />
@@ -155,41 +161,113 @@
 
                 <!-- emails -->
                 <div class="card">
-                    <div class="card-body p-6">
-                        <h3 class="h4 mb-4">{{ 'emails'|trans|capitalize }}</h3>
+                    <div class="card-body p-6" id="email-list">
+                        <div class="row">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'emails'|trans|capitalize }}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <a  class="btn btn-primary float-right" onclick="addItemToList('email-list');">{{ 'add'|trans|capitalize }}</a>
+                            </div>
+                        </div>
+
+                        <div class="row" id="email-list-new" style="display: none;">
+                            <div class="form-group col-6">
+                                <label>{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" name="contact[emails][][name]">
+                            </div>
+                            <div class="form-group col-5">
+                                <label>{{ 'email'|trans|capitalize }}</label>
+                                <input type="email" class="form-control"name="contact[emails][][email]">
+                            </div>
+                            <div class="col-1">
+                                <a class="btn btn-danger float-right text-white"  onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                            </div>
+                        </div>
+
+                        {% if contact.emails is defined and contact.emails is not empty %}
+                            {% for email in contact.emails %}
+                        <div class="row" id="{{ email.id }}">
+                            <input type="hidden" id={{ email.id }}_id" name="contact[emails][{{ email.id }}][id]" value="{{ organization['id'] }}">
+                            <input type="hidden" id="{{ email.id }}_@id" name="contact[emails][{{ email.id }}][@id]" value="{{ organization['@id'] }}">
+                            <input type="hidden" id="{{ email.id }}_@type" name="contact[emails][{{ email.id }}][@type]" value="Email">
+                            <div class="form-group col-6 mb-6">
+                                <label for="{{ email.id }}_name">{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" {% if email.name|default %}value="{{ email.name }}"{% endif %} id="{{ email.id }}_name" name="contact[emails][{{ email.id }}][name]">
+                            </div>
+                            <div class="form-group col-5 mb-6">
+                                <label for="_email">{{ 'email'|trans|capitalize }}</label>
+                                <input type="email" class="form-control" {% if email.email|default %}value="{{ email.email }}"{% endif %} id="{{ email.id }}_email" name="contact[emails][{{ email.id }}][email]">
+                            </div>
+                            <div class="col-1">
+                                <a class="btn btn-danger float-right text-white"  onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                            </div>
+                        </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
 
                 <!--  phone numbers -->
                 <div class="card">
-                    <div class="card-body p-6">
-                        <h3 class="h4 mb-4">{{ 'phone numbers'|trans|capitalize }}</h3>
+                    <div class="card-body p-6" id="phone-list">
+                        <div class="row">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'phone numbers'|trans|capitalize }}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <a class="btn btn-primary float-right" onclick="addItemToList('phone-list');">{{ 'add'|trans|capitalize }}</a>
+                            </div>
+                        </div>
+                        {% if contact.telephones is defined and contact.telephones is not empty %}
+                            {% for number in contact.telephones %}
+                                <div class="row" id="{{ number.id }}">
+                                    <input type="hidden" id={{ number.id }}_id" name="contact[telephones][{{ number.id }}][id]" value="{{ number['id'] }}">
+                                    <input type="hidden" id="{{ number.id }}_@id" name="contact[telephones][{{ number.id }}][@id]" value="{{ number['@id'] }}">
+                                    <input type="hidden" id="{{ number.id }}_@type" name="contact[telephones][{{ number.id }}][@type]" value="Telephone">
+                                    <div class="form-group col-md-6 mb-6">
+                                        <label for="{{ number.id }}_name">{{ 'name'|trans|capitalize }}</label>
+                                        <input type="text" class="form-control" {% if number.name|default %}value="{{ number.name }}"{% endif %} id="{{ number.id }}_name" name="contact[telephones][{{ number.id }}][name]">
+                                    </div>
+                                    <div class="form-group col-md-6 mb-6">
+                                        <label for="_email">{{ 'telephone'|trans|capitalize }}</label>
+                                        <input type="tel" class="form-control" {% if number.telephone|default %}value="{{ number.telephone }}"{% endif %} id="{{ number.id }}telephone" name="contact[telephones][{{ number.id }}][telephone]">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
 
                 <!-- Social -->
                 <div class="card">
-                    <div class="card-body p-6">
-                        <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>
-
-                        {% if contact.socials is defined and contact.socials is not empty %}
-                        {% for socials in contact.socials %}
+                    <div class="card-body p-6" id="social-list">
                         <div class="row">
-                            <div class="form-group col-md-12 mb-6" id="socials[]">
-                                <div class="form-inline">
-                                    <label for="socials">{{ 'socials'|trans|capitalize }}</label>
-                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('socials[]');"
-                                       data-toggle="tooltip" data-placement="top"
-                                       title="{{ 'add more socials'|trans|capitalize }}"></i>
-                                </div>
-                                <select class="form-control" name="socials[][type]" id="type">
-                                    <option>{% if socials|default %}{{ socials.type }}{% else %}{{ 'select type'|capitalize }}{% endif %}</option>
-                                    <option value="website" id="type">{{ 'website'|capitalize }}</option>
-                                    <option value="facebook" id="type">{{ 'facebook'|capitalize }}</option>
-                                    <option value="twitter" id="type">{{ 'twitter'|capitalize }}</option>
-                                    <option value="instagram" id="type">{{ 'instagram'|capitalize }}</option>
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <a class="btn btn-primary float-right" onclick="addItemToList('social-list');">{{ 'add'|trans|capitalize }}</a>
+                            </div>
+                        </div>
+                        {% if contact.socials is defined and contact.socials is not empty %}
+                        {% for social in contact.socials %}
+                        <div class="row" id="{{ social.id }}">
+                            <input type="hidden" id={{ social.id }}_id" name="contact[telephones][{{ social.id }}][id]" value="{{ social['id'] }}">
+                            <input type="hidden" id="{{ social.id }}_@id" name="contact[telephones][{{ social.id }}][@id]" value="{{ social['@id'] }}">
+                            <input type="hidden" id="{{ social.id }}_@type" name="contact[telephones][{{ social.id }}][@type]" value="Telephone">
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="{{ social.id }}_type">{{ 'name'|trans|capitalize }}</label>
+                                <select class="form-control" name="contact[socials][{{ social.id }}][type]" id="{{ social.id }}_type">
+                                    <option value="website" {% if social.type|default and social.type == "website" %}selected{% endif %}>{{ 'website'|capitalize }}</option>
+                                    <option value="facebook" {% if social.type|default and social.type == "facebook" %}selected{% endif %}>{{ 'facebook'|capitalize }}</option>
+                                    <option value="twitter"  {% if social.type|default and social.type == "twitter" %}selected{% endif %}>{{ 'twitter'|capitalize }}</option>
+                                    <option value="instagram" {% if social.type|default and social.type == "instagram" %}selected{% endif %} >{{ 'instagram'|capitalize }}</option>
                                 </select>
-                                <input class="form-control mb-2" name="socials[][url]" id="socials" type="url" {% if socials|default %} value="{{ socials.url }}"{% else %}placeholder="{{ 'add url'|trans|capitalize }}"{% endif %}>
+                            </div>
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="{{ social.id }}_url">{{ 'url'|trans|capitalize }}</label>
+                                <input type="tel" class="form-control" {% if social.url|default %}value="{{ social.url }}"{% endif %} id="{{ social.id }}_url" name="contact[socials][{{ social.id }}][url]">
                             </div>
                         </div>
                         {% endfor %}
@@ -228,6 +306,28 @@
 
 
     <script>
+
+        function createUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function removeItemFromList(item) {
+            var element = item.parentElement.parentElement;
+            console.log("remove " + element);
+            element.remove();
+        }
+
+        function addItemToList(id) {
+            const formDiv = document.getElementById(id + '-new');
+            var cln = formDiv.cloneNode(true);
+            cln.removeAttribute('id');
+            cln.removeAttribute('style');
+            document.getElementById(id).appendChild(cln);
+        }
+
         function addItem(id) {
             const formDiv = document.getElementById(id);
             const input = document.createElement('input');
