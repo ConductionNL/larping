@@ -542,6 +542,22 @@
          <source>favorieten</source>
          <target>favorieten</target>
          </trans-unit>
+         <trans-unit id="m5hUIS4" resname="favourite this event">
+         <source>favourite this event</source>
+         <target>favoriet dit evenement</target>
+         </trans-unit>
+         <trans-unit id="Yku36Xp" resname="login to favourite this event">
+         <source>login to favourite this event</source>
+         <target>log in om dit evenement favoriet te maken</target>
+         </trans-unit>
+         <trans-unit id="6ZR6vtw" resname="favourite this organization">
+         <source>favourite this organization</source>
+         <target>favoriet deze organisatie</target>
+         </trans-unit>
+         <trans-unit id="BNpxLyf" resname="login to favourite this organization">
+         <source>login to favourite this organization</source>
+         <target>log in om deze organisatie favoriet te maken</target>
+         </trans-unit>
          <trans-unit id="GBYEzZq" resname="enter your keywords">
          <source>enter your keywords</source>
          <target>voer uw zoekwoorden in</target>
