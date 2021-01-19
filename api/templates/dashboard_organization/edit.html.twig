@@ -1,11 +1,4 @@
 {% extends "base.html.twig" %}
-{% if organization is defined %}
-    {% set  id = organization['id'] %}
-    {% set  type = 'Organization' %}
-{% else %}
-    {% set  id = 'Add' %}
-    {% set  type = 'Organization' %}
-{% endif %}
 
 {% block content %}
 
@@ -21,35 +14,34 @@
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">{% if organization|default %}{{ 'edit profile'|trans|capitalize }}{% else %}{{ 'add organization'|trans|capitalize }}{% endif %}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{% if organization['@id']|default %}{{ 'edit organization'|trans|capitalize }}{% else %}{{ 'add organization'|trans|capitalize }}{% endif %}</li>
                 </ul>
             </nav>
-            <form id="{{ type }}Form{{ id }}" method="post">
-                {% if organization['id'] is defined %}<input type="hidden" id="id" name="id"
-                                                         value="{{ organization['id'] }}">{% endif %}
-                {% if organization['@id'] is defined %}<input type="hidden" id="@id" name="@id"
-                                                          value="{{ organization['@id'] }}">{% endif %}
+            <form id="OrganizationForm{{ organization['id'] }}" method="post">
+                {% if organization['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ organization['id'] }}">{% endif %}
+                {% if organization['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ organization['@id'] }}">{% endif %}
                 <!-- About -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{% if organization|default %}{{ 'about'|trans|capitalize }} {{ organization.name }}{% else %}{{ 'basics'|trans|capitalize }}{% endif %}</h3>
+                        <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {% if organization.name |default %} {{ organization.name }}{% endif %}</h3>
                         <div class="row">
                             <div class="form-group col-md-12 mb-6">
                                 <label for="name">{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" {% if organization|default %}value="{{ organization.name }}"{% endif %} id="name"
+                                <input type="text" class="form-control" {% if organization.name|default %}value="{{ organization.name }}"{% endif %} id="name"
                                        name="name">
                             </div>
 
                             <div class="form-group col-md-12 mb-6">
                                 <label for="description">{{ 'description'|trans|capitalize }}</label>
                                 <textarea class="form-control" rows="6" id="description"
-                                          name="description">{% if organization|default %}{{ organization.description }}{% endif %}</textarea>
+                                          name="description">{% if organization.description|default %}{{ organization.description }}{% endif %}</textarea>
                             </div>
                         </div>
 
                     </div>
                 </div>
                 {% if organization is defined %}
+
                 <!-- Settings -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
@@ -61,10 +53,12 @@
                                         <input
                                             class="form-check-input"
                                             type="checkbox"
-                                            value="{{ category.id }}"
+                                            value="/categories/{{ category.id }}"
                                             id="category{{ category.id }}"
                                             name="categories[]"
-                                            {# if category.id in categories.id %} select {% endif %} #}
+                                            {% if category.id in categories%}
+                                                checked="checked"
+                                            {% endif %}
                                         />
                                         <label class="form-check-label" for="flexCheckDefault">
                                             <i class="{{ category.icon }} mr-2" aria-hidden="true"></i>{{ category.name }}
@@ -159,11 +153,26 @@
                     </div>
                 </div>
 
+                <!-- emails -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'emails'|trans|capitalize }}</h3>
+                    </div>
+                </div>
+
+                <!--  phone numbers -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'phone numbers'|trans|capitalize }}</h3>
+                    </div>
+                </div>
+
                 <!-- Social -->
                 <div class="card">
                     <div class="card-body p-6">
                         <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>
 
+                        {% if contact.socials is defined and contact.socials is not empty %}
                         {% for socials in contact.socials %}
                         <div class="row">
                             <div class="form-group col-md-12 mb-6" id="socials[]">
@@ -180,10 +189,11 @@
                                     <option value="twitter" id="type">{{ 'twitter'|capitalize }}</option>
                                     <option value="instagram" id="type">{{ 'instagram'|capitalize }}</option>
                                 </select>
-                                <input class="form-control mb-2" name="socials[][url]" id="socials" type="url" {% if socials|default %} value="{{ socials.url }}"{% else %}placeholder="{{ 'add url'|trans|capitalize }}">
+                                <input class="form-control mb-2" name="socials[][url]" id="socials" type="url" {% if socials|default %} value="{{ socials.url }}"{% else %}placeholder="{{ 'add url'|trans|capitalize }}"{% endif %}>
                             </div>
                         </div>
                         {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
 

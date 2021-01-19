@@ -53,7 +53,7 @@
                                             <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_editorganization') }}">{{ 'edit profile'|trans|capitalize }} </a>
+                                            <a href="{{ path('app_dashboardorganization_edit', {'id':organization.id}) }}">{{ 'edit profile'|trans|capitalize }} </a>
                                         </li>
                                     </ul>
                                 </div>
