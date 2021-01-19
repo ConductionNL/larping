@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-md navbar-dark">
     <div class="container">
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -11,7 +12,8 @@
 
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_memberships') }}">
-                        <i class="fal fa-address-card" aria-hidden="true"></i>{{ 'my memberships'|trans|capitalize }}</a>
+                        <i class="fal fa-address-card" aria-hidden="true"></i>{{ 'my memberships'|trans|capitalize }}
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_organizations') }}">
@@ -27,10 +29,13 @@
                         <i class="fa fa-calendar-o" aria-hidden="true"></i>{{ 'my characters'|trans }}</a>
                 </li>
                 -->
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ path('app_dashboarduser_favorites') }}">
-                        <i class="fal fa-heart" aria-hidden="true"></i>{{ 'my favorites'|trans }}</a>
-                </li>
+                {% set favorite  = commonground_resource_list({'component': 'rc', 'type': 'likes'}, {'author': app.user.person})['hydra:member'] %}
+                {% if favorite|default %}
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{ path('app_dashboarduser_favorites') }}">
+                            <i class="fal fa-heart" aria-hidden="true"></i>{{ 'my favorites'|trans }}</a>
+                    </li>
+                {% endif %}
             </ul>
 
             <form class="form-inline my-2 my-lg-0 position-relative d-none d-md-block">

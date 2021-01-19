@@ -214,7 +214,8 @@
                                                                     {% set optionsSum = optionsSum + option.price %}
                                                                     {% set sum = sum + optionsSum %}
                                                                 {% endfor %}
-                                                                <p class="d-inline-block mb-1 mt-n2 pt-1 float-right text-right">&euro; {{ optionsSum }},-</p>
+                                                                <p class="d-inline-block mb-1 mt-n2 pt-1 float-right text-right">
+                                                                    &euro; {{ optionsSum }},-</p>
                                                             {% endif %}
                                                         </div>
                                                     </div>
@@ -333,13 +334,16 @@
                                     </a>
                                 </li>
                                 -->
-                                <li>
-                                    <a class="d-flex flex-wrap align-items-center"
-                                       href="{{ path('app_dashboarduser_favorites') }}">
-                                        <i class="fal fa-heart mr-2" aria-hidden="true"></i>
-                                        {{ 'my favorites'|trans|capitalize }}
-                                    </a>
-                                </li>
+                                {% set favorite  = commonground_resource_list({'component': 'rc', 'type': 'likes'}, {'author': app.user.person})['hydra:member'] %}
+                                {% if favorite|default %}
+                                    <li>
+                                        <a class="d-flex flex-wrap align-items-center"
+                                           href="{{ path('app_dashboarduser_favorites') }}">
+                                            <i class="fal fa-heart mr-2" aria-hidden="true"></i>
+                                            {{ 'my favorites'|trans|capitalize }}
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_orders') }}">
