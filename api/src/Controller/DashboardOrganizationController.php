@@ -228,12 +228,19 @@ class DashboardOrganizationController extends AbstractController
      */
     public function editProductAction(CommonGroundService $commonGroundService, Request $request,  IdVaultService $idVaultService, ParameterBagInterface $params,  $id)
     {
-        $variables['product'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products', 'id' => $id]);
+        if ($id != 'add') {
+            $variables['product'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products', 'id' => $id]);
+        } else {
+            $variables['product'] = [];
+        }
+
         if ($request->get('action') == 'delete') {
             $commonGroundService->deleteResource($variables['product']);
 
             return $this->redirectToRoute('app_dashboardorganization_products');
         }
+
+
 
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
@@ -631,15 +638,19 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
-     * @Route("/edit_organization")
+     * @Route("/edit/{id}")
      * @Template
      */
-    public function editOrganizationAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params, IdVaultService $idVaultService)
+    public function editAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params, IdVaultService $idVaultService, $id)
     {
-        if ($this->getUser()->getOrganization()) {
-            $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        if ($id != 'add') {
+            $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
+        } else {
+            $variables['organization'] = ['id'=>'add','@type'=>'Organization'];
         }
 
+
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['type'] = 'organization';
 
@@ -721,7 +732,7 @@ class DashboardOrganizationController extends AbstractController
 
             $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $organization['id']])['hydra:member'];
 
-            if (count($categories) > 0) {
+            if (count($resourceCategories) > 0) {
                 $resourceCategory = $resourceCategories[0];
             } else {
                 $resourceCategory = ['resource' => $organization['@id'], 'catagories' => []];
