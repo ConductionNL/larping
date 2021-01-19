@@ -649,7 +649,6 @@ class DashboardOrganizationController extends AbstractController
             $variables['organization'] = ['id'=>'add', '@type'=>'Organization'];
         }
 
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['type'] = 'organization';
 
@@ -729,19 +728,23 @@ class DashboardOrganizationController extends AbstractController
             $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
             $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
 
-            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $organization['id']])['hydra:member'];
-
+            // Setting the categories
+            /*@todo  This should go to a wrc service */
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$organization['id']])['hydra:member'];
             if (count($resourceCategories) > 0) {
                 $resourceCategory = $resourceCategories[0];
             } else {
-                $resourceCategory = ['resource' => $organization['@id'], 'catagories' => []];
+                $resourceCategory = ['resource'=>$organization['@id'], 'catagories'=>[]];
             }
 
             $resourceCategory['categories'] = $categories;
-            $resourceCategory['catagories'] = $categories;
 
-            $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
-            $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
+            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+        }
+
+        $variables['categories'] = [];
+        foreach ($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category) {
+            $variables['categories'][] = $category['id'];
         }
 
         return $variables;
