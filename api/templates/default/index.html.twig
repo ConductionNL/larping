@@ -74,20 +74,32 @@
     ===================================== -->
     <section class="pt-7 pt-md-10">
         <div class="container">
-            <div class="section-title">
+            <div class="title" style="text-align: center">
                 <h2>{{ 'upcoming events'|trans|capitalize }}</h2>
                 <p>{{ 'what should be next on your calander'|trans|capitalize }}</p>
             </div>
-            <div class="row justify-content-center">
-                {% for event in events %}
-                    <div class="col-md-6 col-lg-4">
-                        {% include 'cards/event.html.twig' with {'item': event} %}
+            <div class="w-50 h-50" style="margin-left: 25%">
+                <div id="carouselEventControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for event in events %}
+                            <div class="carousel-item {% if loop.first %} active{% endif %}">
+                                {% include 'cards/event.html.twig' with {'item': event} %}
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                    <a class="carousel-control-prev" href="#carouselEventControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">{{'previous'|trans|capitalize}}</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselEventControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">{{'next'}}</span>
+                    </a>
+                </div>
             </div>
             <div class="text-center pt-5">
                 <a href="{{ path('app_event_index') }}"
-                   class="btn btn-primary">{{ 'see all events'|trans|capitalize }}</a>
+                   class="btn btn-primary">{{ 'all events'|trans|capitalize }}</a>
             </div>
         </div>
     </section>
