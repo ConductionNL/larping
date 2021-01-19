@@ -542,6 +542,22 @@
          <source>favorieten</source>
          <target>favorieten</target>
          </trans-unit>
+         <trans-unit id="m5hUIS4" resname="favourite this event">
+         <source>favourite this event</source>
+         <target>favoriet dit evenement</target>
+         </trans-unit>
+         <trans-unit id="Yku36Xp" resname="login to favourite this event">
+         <source>login to favourite this event</source>
+         <target>log in om dit evenement favoriet te maken</target>
+         </trans-unit>
+         <trans-unit id="6ZR6vtw" resname="favourite this organization">
+         <source>favourite this organization</source>
+         <target>favoriet deze organisatie</target>
+         </trans-unit>
+         <trans-unit id="BNpxLyf" resname="login to favourite this organization">
+         <source>login to favourite this organization</source>
+         <target>log in om deze organisatie favoriet te maken</target>
+         </trans-unit>
          <trans-unit id="GBYEzZq" resname="enter your keywords">
          <source>enter your keywords</source>
          <target>voer uw zoekwoorden in</target>
@@ -594,9 +610,25 @@
          <source>my favorites</source>
          <target>mijn favorieten</target>
          </trans-unit>
+         <trans-unit id="BtSr12g" resname="call">
+         <source>call</source>
+         <target>bell</target>
+         </trans-unit>
+         <trans-unit id="MaTrSgs" resname="email">
+         <source>email</source>
+         <target>email</target>
+         </trans-unit>
+         <trans-unit id="yMakIss" resname="location of">
+         <source>location of</source>
+         <target>locatie van</target>
+         </trans-unit>
          <trans-unit id="yrrtkas" resname="products">
          <source>products</source>
          <target>producten</target>
+         </trans-unit>
+         <trans-unit id="TrEwAas" resname="become a member">
+         <source>become a member</source>
+         <target>word lid</target>
          </trans-unit>
          <trans-unit id="yrKWkas" resname="edit profile">
          <source>edit profile</source>
