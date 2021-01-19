@@ -2,7 +2,11 @@
 {% for review in reviews %}
     <div class="media mb-3">
         <div class="media-img">
-            <img src="/bundles/listy/img/user/user-xs-1.jpg" class="mr-3 media-object rounded-circle" alt="Image User">
+            <img {% if commonground_resource(review.author).personalPhoto|default %}
+                src="{{ commonground_resource(review.author).personalPhoto }}"{% else %}
+                src="https://eu.ui-avatars.com/api/?name={{ commonground_resource(review.author).givenName }}+{{ commonground_resource(review.author).familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"
+                {% endif %}
+                class="mr-3 media-object rounded-circle" alt="Image User">
         </div>
         <div class="media-body">
             <h5 class="media-heading">{{ commonground_resource(review.author).givenName }}</h5>
