@@ -28,7 +28,7 @@
                 <ul class="list-unstyled text-white">
                     {% if item.location is defined and item.location is not empty %}
                         {% set eventLocation  = commonground_resource(item.location) %}
-                    <li><i class="far fa-calendar-alt" aria-hidden="true"></i> <a href="{{ path('app_location_location', {'id':eventLocation.id }) }}" class="text-white">{{ eventLocation.name|length > 35 ? eventLocation.name|slice(0, 35) ~ '...' : eventLocation.name }}</a></li>
+                        <li><i class="far fa-calendar-alt" aria-hidden="true"></i> <a href="{{ path('app_location_location', {'id':eventLocation.id }) }}" class="text-white">{{ eventLocation.name|length > 35 ? eventLocation.name|slice(0, 35) ~ '...' : eventLocation.name }}</a></li>
                     {% endif %}
                     <li><i class="far fa-calendar-alt" aria-hidden="true"></i> {{ item.startDate|date("d-m-Y H:m") }}</li>
                 </ul>
