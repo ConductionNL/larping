@@ -574,7 +574,6 @@
          <source>about larping.eu</source>
          <target>over larping.eu</target>
          </trans-unit>
-
          <trans-unit id="8UyAttA" resname="my memberships">
          <source>my memberships</source>
          <target>mijn lidmaatschappen</target>
@@ -619,9 +618,9 @@
          <source>reviews</source>
          <target>reviews</target>
          </trans-unit>
-         <trans-unit id="U7hb12S" resname="to purchase this product, another product is required and will be added to your shopping cart">
-         <source>to purchase this product, another product is required and will be added to your shopping cart</source>
-         <target>om dit product te kunnen kopen, is er een ander product nodig die dan aan uw winkelmand wordt toegevoegd</target>
+         <trans-unit id="U7hb12S" resname="to purchase the chosen product, these products are required and will be added to your shopping cart">
+         <source>to purchase the chosen product, these products are required and will be added to your shopping cart</source>
+         <target>om het gekozen product te kunnen kopen, zijn deze producten nodig die dan aan uw winkelmand worden toegevoegd</target>
          </trans-unit>
          <trans-unit id="uRRRkas" resname="buy a ticket">
          <source>buy a ticket</source>
@@ -683,6 +682,10 @@
          <source>search</source>
          <target>zoeken</target>
          </trans-unit>
+         <trans-unit id="qTReDas" resname="no memberships found">
+         <source>no memberships found</source>
+         <target>geen lidmaatschappen gevonden</target>
+         </trans-unit>
          <trans-unit id="Qtswras" resname="topic">
          <source>topic</source>
          <target>onderwerp</target>
@@ -719,18 +722,146 @@
          <source>submit message</source>
          <target>verzend bericht</target>
          </trans-unit>
-         <trans-unit id="Afq1234" resname="my orders">
-         <source>my orders</source>
-         <target>mijn bestellingen</target>
+         <trans-unit id="UtRfCvd" resname="favourite this organisation">
+         <source>favourite this organisation</source>
+         <target>favoriet deze organisatie</target>
          </trans-unit>
-         <trans-unit id="H21AssD" resname="amount of items">
-         <source>amount of items</source>
-         <target>aantal items</target>
+         <trans-unit id="TraEXvd" resname="favourite this listing">
+         <source>favourite this listing</source>
+         <target>favoriet deze aanbieding</target>
          </trans-unit>
-         <trans-unit id="Uh21bas" resname="make a order for a member">
-         <source>make a order for a membe</source>
-         <target>maak een bestelling voor een lid</target>
+         <trans-unit id="OPnHHTs" resname="manage organization">
+         <source>manage organization</source>
+         <target>beheer organisatie</target>
          </trans-unit>
+         <trans-unit id="ORtsfas" resname="member managment">
+         <source>member managment</source>
+         <target>ledenbeheer</target>
+         </trans-unit>
+         <trans-unit id="ORtazas" resname="revenue">
+         <source>revenue</source>
+         <target>omzet</target>
+         </trans-unit>
+        <trans-unit id="yetsrCvd" resname="all events">
+        <source>all events</source>
+        <target>alle evenementen</target>
+        </trans-unit>
+        <trans-unit id="PoAEXvd" resname="all reviews">
+        <source>all reviews</source>
+        <target>alle reviews</target>
+        </trans-unit>
+        <trans-unit id="HaYtHTs" resname="all earnings">
+        <source>all earnings</source>
+        <target>alle inkomsten</target>
+        </trans-unit>
+        <trans-unit id="MakXfas" resname="all members">
+        <source>all members</source>
+        <target>alle leden</target>
+        </trans-unit>
+        <trans-unit id="Iayazas" resname="all orders">
+        <source>all orders</source>
+        <target>alle bestellingen</target>
+        </trans-unit>
+        <trans-unit id="IaHatas" resname="financial results">
+        <source>financial results</source>
+        <target>financiële resultaten</target>
+        </trans-unit>
+        <trans-unit id="YWTtDas" resname="add your first order">
+        <source>add your first order</source>
+        <target>voeg je eerste bestelling toe</target>
+        </trans-unit>
+        <trans-unit id="oPaRDas" resname="no orders found">
+        <source>no orders found</source>
+        <target>geen bestellingen gevonden</target>
+        </trans-unit>
+        <trans-unit id="IHatDas" resname="invite">
+        <source>invite</source>
+        <target>uitnodigen</target>
+        </trans-unit>
+        <trans-unit id="KKKtDas" resname="edit">
+        <source>edit</source>
+        <target>bewerken</target>
+        </trans-unit>
+        <trans-unit id="TyGfDas" resname="my orders">
+        <source>my orders</source>
+        <target>mijn bestellingen</target>
+        </trans-unit>
+        <trans-unit id="RtGfDas" resname="make a order for a member">
+        <source>make a order for a member</source>
+        <target>maak een bestelling voor een lid</target>
+        </trans-unit>
+        <trans-unit id="KaTtDas" resname="gallery">
+        <source>gallery</source>
+        <target>galerij</target>
+        </trans-unit>
+        <trans-unit id="ZaUTaRD" resname="click or  drag images here">
+        <source>click or  drag images here</source>
+        <target>klik of sleep afbeeldingen hierheen</target>
+        </trans-unit>
+        <trans-unit id="UyTtDas" resname="settings">
+        <source>settings</source>
+        <target>instellingen</target>
+        </trans-unit>
+        <trans-unit id="IuYtReW" resname="telephone">
+        <source>telephone</source>
+        <target>telefoon</target>
+        </trans-unit>
+        <trans-unit id="NabTReW" resname="postal code">
+        <source>postal code</source>
+        <target>postcode</target>
+        </trans-unit>
+        <trans-unit id="IUatReW" resname="street">
+        <source>street</source>
+        <target>straat</target>
+        </trans-unit>
+        <trans-unit id="IuLOpeW" resname="house number">
+        <source>house number</source>
+        <target>huisnummer</target>
+        </trans-unit>
+        <trans-unit id="VcXtReW" resname="suffix">
+        <source>suffix</source>
+        <target>achtervoegsel</target>
+        </trans-unit>
+        <trans-unit id="VTgRfeW" resname="locality">
+        <source>locality</source>
+        <target>plaats</target>
+        </trans-unit>
+        <trans-unit id="GtFdseW" resname="no socials found">
+        <source>no socials found</source>
+        <target>geen socials gevonden</target>
+        </trans-unit>
+        <trans-unit id="MnBRfeW" resname="contact info not found">
+        <source>contact info not found</source>
+        <target>contact info niet gevonden</target>
+        </trans-unit>
+        <trans-unit id="HatRfeW" resname="login to contact organizer">
+        <source>login to contact organizer</source>
+        <target>log in om contact op te nemen met de organisator</target>
+        </trans-unit>
+        <trans-unit id="IuNbVeW" resname="other events you might like">
+        <source>other events you might like</source>
+        <target>andere evenementen die je misschien leuk vindt</target>
+        </trans-unit>
+        <trans-unit id="TTrWseW" resname="login to place a review">
+        <source>login to place a review</source>
+        <target>login om een ​review te plaatsen</target>
+        </trans-unit>
+        <trans-unit id="YtReSeW" resname="organized by">
+        <source>organized by</source>
+        <target>georganiseerd door</target>
+        </trans-unit>
+        <trans-unit id="IBBSpeW" resname="add more emails">
+        <source>add more emails</source>
+        <target>voeg meer emails toe</target>
+        </trans-unit>
+        <trans-unit id="VLkJhBW" resname="add more phone numbers">
+        <source>add more phone numbers</source>
+        <target>voeg meer telefoon nummers toe</target>
+        </trans-unit>
+        <trans-unit id="YrFcSeW" resname="add more socials">
+        <source>add more socials</source>
+        <target>voeg meer socials toe</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

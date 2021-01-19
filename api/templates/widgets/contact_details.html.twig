@@ -1,0 +1,40 @@
+<ul class="list-unstyled text-muted">
+    {% if contact.telephones|default %}
+        {% for numbers in contact.telephones %}
+            <li class="mb-3">
+                <i class="fas fa-phone mr-3" aria-hidden="true"></i>
+                <a class="text-muted" href="tel:{{ numbers.telephone }}">{{ numbers.telephone }}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+    {% if contact.emails|default %}
+        {% for emails in contact.emails %}
+            <li class="mb-3">
+                <i class="fas fa-envelope mr-3" aria-hidden="true"></i>
+                <a class="text-muted" href="{{ emails.email }}">{{ emails.email }}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+    {% if contact.adresses|default %}
+        {% for adres in contact.adresses %}
+            <li class="mb-3">
+                <i class="fas fa-home-lg mr-3" aria-hidden="true"></i>
+                <a class="text-muted">{{ adres.street }} {{ adres.houseNumber }} <br />{{ adres.postalCode }} {{ adres.locality }}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+</ul>
+{% if contact.socials|default %}
+    <div class="row pb-md-6">
+        {% for social in contact.socials %}
+            <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2"
+               href="{{ social.url}}" target="_blank">
+                {% if social.type == 'website'%}
+                    <i class="fas fa-globe-europe" aria-hidden="true"></i>
+                {% else %}
+                    <i class="fab fa-{{ social.type }}" aria-hidden="true"></i>
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+{% endif %}
