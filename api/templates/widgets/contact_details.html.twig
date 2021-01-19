@@ -22,7 +22,12 @@
             <li class="mb-3">
                 <i class="fas fa-home-lg mr-3" aria-hidden="true" data-toggle="tooltip" data-placement="top"
                    data-original-title="{{ 'location of'|trans|capitalize }} {{ organization.name }}"></i>
-                <a class="text-muted">{{ adres.street }} {{ adres.houseNumber }} <br />{{ adres.postalCode }} {{ adres.locality }}</a>
+                <a class="text-muted d-inline-block">
+                    {% if  adres.street|default %}{{ adres.street }}{% endif %}
+                    {% if adres.houseNumbers|default %}{{ adres.houseNumber }}{% endif %} <br />
+                    {% if adres.postalCode |default %}{{ adres.postalCode }}{% endif %}
+                    {% if adres.locality|default %}{{ adres.locality }}{% endif %}
+                </a>
             </li>
         {% endfor %}
     {% endif %}
@@ -33,9 +38,9 @@
             <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2"
                href="{{ social.url}}" target="_blank">
                 {% if social.type == 'website'%}
-                    <i class="fas fa-globe-europe" aria-hidden="true"></i>
+                    <i class="fas fa-globe-europe" data-toggle="tooltip" data-placement="top" title="{{ social.type }}" aria-hidden="true"></i>
                 {% else %}
-                    <i class="fab fa-{{ social.type }}" aria-hidden="true"></i>
+                    <i class="fab fa-{{ social.type }}" data-toggle="tooltip" data-placement="top" title="{{ social.type }}" aria-hidden="true" ></i>
                 {% endif %}
             </a>
         {% endfor %}

@@ -78,12 +78,24 @@
                 <h2>{{ 'upcoming events'|trans|capitalize }}</h2>
                 <p>{{ 'what should be next on your calander'|trans|capitalize }}</p>
             </div>
-            <div class="row justify-content-center">
-                {% for event in events %}
-                    <div class="col-md-6 col-lg-4">
-                        {% include 'cards/event.html.twig' with {'item': event} %}
+            <div class="w-50 h-50" style="margin-left: 25%">
+                <div id="carouselEventControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for event in events %}
+                            <div class="carousel-item {% if loop.first %} active{% endif %}">
+                                {% include 'cards/event.html.twig' with {'item': event} %}
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                    <a class="carousel-control-prev" href="#carouselEventControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">{{'previous'|trans|capitalize}}</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselEventControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">{{'next'}}</span>
+                    </a>
+                </div>
             </div>
             <div class="text-center pt-5">
                 <a href="{{ path('app_event_index') }}"
@@ -103,11 +115,11 @@
                     <div class="col-sm-4 col-xs-12">
                         <div class="card border-0 text-center">
                             <div class="icon-lg m-auto rounded-circle">
-                                <i class="icon-listy icon-key text-primary"></i>
+                                <i class="fal fa-ticket-alt text-primary "></i>
                             </div>
                             <div class="card-body">
-                                <h2 class="h4 font-weight-normal mb-3">{{ "secure trading"|trans|capitalize }}</h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed eiusmod</p>
+                                <h2 class="h4 font-weight-normal mb-3">{{ "tickets"|trans|capitalize }}</h2>
+                                <p>{{ "sale tickets online and manage event atendence"|trans|capitalize }}</p>
                             </div>
                         </div>
                     </div>
@@ -115,11 +127,11 @@
                     <div class="col-sm-4 col-xs-12">
                         <div class="card border-0 text-center">
                             <div class="icon-lg m-auto rounded-circle">
-                                <i class="icon-listy icon-wreath text-primary"></i>
+                                <i class="fal fa-users-crown text-primary"></i>
                             </div>
                             <div class="card-body">
-                                <h2 class="h4 font-weight-normal mb-3">{{ "24/7 hours support"|trans|capitalize }}</h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed eiusmod</p>
+                                <h2 class="h4 font-weight-normal mb-3">{{ "characters"|trans|capitalize }}</h2>
+                                <p>{{ "keep track of characters and storylines"|trans|capitalize }}</p>
                             </div>
                         </div>
                     </div>
@@ -127,11 +139,11 @@
                     <div class="col-sm-4 col-xs-12">
                         <div class="card border-0 text-center">
                             <div class="icon-lg m-auto rounded-circle">
-                                <i class="icon-listy icon-tag3 text-primary"></i>
+                                <i class="fal fa-user-secret text-primary"></i>
                             </div>
                             <div class="card-body">
-                                <h2 class="h4 font-weight-normal mb-3">{{ "easy trading"|trans|capitalize }}</h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed eiusmod</p>
+                                <h2 class="h4 font-weight-normal mb-3">{{ "privacy"|trans|capitalize }}</h2>
+                                <p>{{ "fully based on the id-vault privacy concept"|trans|capitalize }}</p>
                             </div>
                         </div>
                     </div>

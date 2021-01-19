@@ -22,7 +22,7 @@
                     {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
                 </h3>
                 <p class="text-white">
-                    {{ 'by'|trans|capitalize }}: <a href="{{ path('app_organization_organization', {'id': commonground_resource(item.organization).id }) }}">{{ commonground_resource(item.organization).name }}</a>
+                    {{ 'by'|trans|capitalize }}: <a href="{{ path('app_organization_organization', {'id': commonground_resource(item.organization).id }) }}">{{ commonground_resource(item.organization).name|length > 35 ? item.name|slice(0, 35) ~ '...' : item.name }}</a>
                 </p>
                 <ul class="list-unstyled" style="color: white">
                     <li>{{ item.location }}</li>
@@ -36,22 +36,26 @@
         <div class="card-footer bg-transparent">
             <ul class="list-unstyled d-flex mb-0 py-2">
                 {% for category in eventCategories %}
-                <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip"
-                        data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
+                <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip" data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
                 {% endfor %}
                 {% if features|default %}
                     {% for feature in features %}
-                <li ><i class="{% if feature.icon|default %}{{ feature.icon }}{% endif %} mr-1" data-toggle="tooltip"
-                           data-placement="top" title="{{ feature.name }}" aria-hidden="true"></i> </li>
+                <li ><i class="{% if feature.icon|default %}{{ feature.icon }}{% endif %} mr-1" data-toggle="tooltip" data-placement="top" title="{{ feature.name }}" aria-hidden="true"></i> </li>
                     {% endfor %}
                 {% endif %}
                 <li class="ml-auto">
-                    <a href="#" onclick="likeItem('{{ item['id'] }}','{{ item['@id'] }}','{{ item['organization'] }}', this)"
-                       liked="{% if item.totals.liked|default %}true{% else %}false{% endif %}"
-                       data-toggle="tooltip"
-                       data-placement="top"
-                       title=""
-                       data-original-title="Favourite this event"><i {% if item.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                    <a
+                        {% if app.user|default %}
+                            href="#" onclick="likeItem('{{ item['id'] }}','{{ item['@id'] }}','{{ item['organization'] }}', this)"
+                            data-original-title="{{ 'favourite this event'|trans|capitalize }}"
+                        {% else %}
+                            href="{{ path('app_user_idvault') }}"
+                            data-original-title="{{ 'login to favourite this event'|trans|capitalize }}"
+                        {% endif %}
+                        liked="{% if item.totals.liked|default %}true{% else %}false{% endif %}"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title=""><i {% if item.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
                             aria-hidden="true" id="icon_{{ item['id'] }}"></i>
                         <span id="counter_{{ item['id'] }}">{{ item.totals.likes }}</span></a>
                 </li>
