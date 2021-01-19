@@ -137,38 +137,41 @@
         });
     });
 
-    function updateLikeCounter(id, response) {
-        let counter = document.getElementById(id);
-        counter.innerText = response.amountOfLikes;
-    }
+    function likeItem(id, resource, organization, item){
+        var liked = item.getAttribute("liked");
 
-    var likedIds = [];
-    function preLike(id) {
-        let counter = document.getElementById(id);
-        if (jQuery.inArray(id, likedIds) == -1) {
-            counter.innerText = parseInt(counter.innerText) + 1;
-            likedIds.push(id);
-        } else if (parseInt(counter.innerText) != 0) {
-            counter.innerText = parseInt(counter.innerText) - 1;
+        // Let update the ui
+        if(liked == "false"){
+            document.getElementById("counter_" + id).textContent = Number(document.getElementById("counter_" + id).textContent) + 1;
+            document.getElementById("icon_" + id).classList.remove('fal') ;
+            document.getElementById("icon_" + id).classList.add('fas') ;
+            item.setAttribute("liked","true");
+            console.log("liked " + id);
         }
-    }
+        else {
+            document.getElementById("counter_" + id).textContent = Number(document.getElementById("counter_" + id).textContent) - 1;
+            document.getElementById("icon_" + id).classList.remove('fas') ;
+            document.getElementById("icon_" + id).classList.add('fal') ;
+            item.setAttribute("liked","false");
+            console.log("unliked " + id);
+        }
 
-    function likeItem(button) {
-        let id = button.value.split('/');
-        preLike(id[7]);
+        // And then fire an ajax to do the actual work
         $.ajax({
             type: "POST",
             url: "/like",
             data: {
-                resource: button.value
+                resource: resource,
+                organization: organization
             },
             dataType: "json",
-            success: function (response) {
-                console.log(response);
-
-                updateLikeCounter(id[7], response);
+            complete: function (response) {
+                console.log(response.responseText);
+                console.log("All done");
             }
+
         });
+
     }
 </script>
 </body>

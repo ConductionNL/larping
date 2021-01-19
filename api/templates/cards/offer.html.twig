@@ -1,5 +1,9 @@
 <!-- Offer card -->
-{% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
+{% if item.totals is not defined  %}
+    {% set item = item|merge({
+        "totals": commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']})
+    }) %}
+{%  endif %}
 {% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']}) %}
 <a data-toggle="modal" data-target="#offer{{ offer.id }}Modal">
     <div class="card rounded-0 card-hover-overlay">
