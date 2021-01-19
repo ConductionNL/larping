@@ -13,9 +13,11 @@
     <tbody>
     {% for organization in organizations %}
     <tr>
-        <td>{{ organization.name }} {% if app.user.organization is defined and organization['@id'] == app.user.organization %}<i style="color: green" class="fas fa-check-circle mr-2"></i>{% endif %}</td>
+        <td>{{ organization.name }} {% if app.user.organization is defined and organization['@id'] == app.user.organization %}
+                <i style="color: green" class="fas fa-check-circle mr-2" data-toggle="tooltip" data-placement="top" title="selected"></i>{% endif %}</td>
         <td>
-            <a class="btn btn-outline-primary btn-sm float-right" href="{{ path('app_dashboard_switchorganization', {id: organization.id}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'manage organization'|trans|capitalize }}</a>
+            <a class="btn btn-outline-primary btn-sm float-right" href="{{ path('app_dashboard_switchorganization', {id: organization.id}) }}">
+                <i class="fas fa-edit" aria-hidden="true"></i>{{ 'manage organization'|trans|capitalize }}</a>
         </td>
     </tr>
     {% endfor %}
