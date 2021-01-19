@@ -35,11 +35,14 @@
                             {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
                             <span
                                 class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
-                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top"
-                                    title="Favourite this listing">
-                                <i class="fal fa-heart text-primary" aria-hidden="true"></i>
-                                <span>{{ totals.likes }}</span>
-                            </button>
+                            <a href="#" onclick="likeItem('{{ organization['id'] }}','{{ organization['@id'] }}','{{ organization['@id'] }}', this)"
+                               liked="{% if totals.liked|default %}true{% else %}false{% endif %}"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               title=""
+                               data-original-title="Favourite this event"><i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                                    aria-hidden="true" id="icon_{{ organization['id'] }}"></i>
+                                <span id="counter_{{ organization['id'] }}">{{ totals.likes }}</span></a>
                         </div>
                     </div>
                 </div>
@@ -149,6 +152,7 @@
                     {% endif %}
 
                     <!-- Reviews -->
+                    <a id="reviews">
                     {% if reviews is defined and reviews is not empty %}
                         <div class="fade-in">
                             <h3 class="font-weight-normal mb-6">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</h3>
@@ -159,7 +163,7 @@
                     {% endif %}
 
                     <!-- Add a review -->
-                    <div id="add-review" class="fade-in ">
+                    <div id="add-review" class="fade-in">
                         <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
                         {% include '/sections/review.html.twig' with {'item': organization} %}
                     </div>
