@@ -7,57 +7,50 @@
 {% set organizationEvents = commonground_resource_list({'component':'arc', 'type':'events'}, {'organization':resource['@id']})['hydra:member'] %}
 {% set organizationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource.id})['hydra:member'] %}
 <div class="card rounded-0 card-hover-overlay">
-    <a href="{{ path('app_organization_organization', {id: resource.id}) }}">
-        <div class="position-relative">
-            <img class="card-img rounded-0"
-                {% if resource.style %}  src="{{ organizations.style.favicon.base64 }}"
-                {% else %}
-                    src="https://picsum.photos/300/200"
-                {% endif %}
-                 alt="Card image cap">
-            <div class="card-img-overlay">
-                <div class="d-flex align-items-center">
-                    <a href="{{ path('app_organization_organization', {id: resource.id}) }}#reviews">
-                    {% include 'widgets/rating.html.twig' with {'rating':resource.totals.rating} %}
-                    <span class="d-inline-block mr-2" style="color: white">{{ resource.totals.reviews }} (Reviews)</span>
-                    </a>
+    <div class="position-relative">
+        <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
+        <div class="card-img-overlay" onclick="location.href = '{{ path('app_organization_organization', {id: resource.id}) }}';" style="cursor: pointer;">
+            <div class="d-flex align-items-center">
+                <a href="{{ path('app_organization_organization', {id: resource.id}) }}#reviews">
+                {% include 'widgets/rating.html.twig' with {'rating':resource.totals.rating} %}
+                <span class="d-inline-block mr-2 text-white" >{{ resource.totals.reviews }} (Reviews)</span>
+                </a>
 
-                </div>
-                <h3 class="text-white mb-0">
-                    {{ resource.name|capitalize|length > 30 ? resource.name|slice(0, 30) ~ '...' : resource.name }}
-                </h3>
-
-                <p class="text-white">
-
-                </p>
             </div>
+            <h3 class="text-white mb-0">
+                {{ resource.name|capitalize|length > 30 ? resource.name|slice(0, 30) ~ '...' : resource.name }}
+            </h3>
+
+            <p class="text-white">
+
+            </p>
         </div>
-        <div class="card-footer bg-transparent">
-            <ul class="list-unstyled d-flex mb-0 py-2">
-                {% for category in organizationCategories %}
-                <li >
-                    <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}  mr-1" data-toggle="tooltip"
-                       data-placement="top" title="{{ category.name }}" aria-hidden="true"></i>
-                </li>
-                {% endfor %}
-                <li class="ml-auto">
-                    <a
-                        {% if app.user|default %}
-                            href="#" onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
-                            data-original-title="{{ 'favourite this organization'|trans|capitalize }}"
-                        {% else %}
-                            href="{{ path('app_user_idvault') }}"
-                            data-original-title="{{ 'login to favourite this organization'|trans|capitalize }}"
-                        {% endif %}
-                        liked="{% if resource.liked|default %}true{% else %}false{% endif %}"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title=""><i {% if resource.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
-                            aria-hidden="true" id="icon_{{ resource['id'] }}"></i>
-                        <span id="counter_{{ resource['id'] }}">{{ resource.totals.likes }}</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </a>
+    </div>
+    <div class="card-footer bg-transparent">
+        <ul class="list-unstyled d-flex mb-0 py-2">
+            {% for category in organizationCategories %}
+            <li >
+                <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}  mr-1" data-toggle="tooltip"
+                   data-placement="top" title="{{ category.name }}" aria-hidden="true"></i>
+            </li>
+            {% endfor %}
+            <li class="ml-auto">
+                <a
+                    {% if app.user|default %}
+                        href="#" onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
+                        data-original-title="{{ 'favourite this organization'|trans|capitalize }}"
+                    {% else %}
+                        href="{{ path('app_user_idvault') }}"
+                        data-original-title="{{ 'login to favourite this organization'|trans|capitalize }}"
+                    {% endif %}
+                    liked="{% if resource.totals.liked|default %}true{% else %}false{% endif %}"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title=""><i {% if resource.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                        aria-hidden="true" id="icon_{{ resource['id'] }}"></i>
+                    <span id="counter_{{ resource['id'] }}">{{ resource.totals.likes }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>

@@ -300,7 +300,12 @@ class DashboardUserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
-        $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
+        $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson(), 'order[dateCreated]' => 'desc'])['hydra:member'];
+        foreach ($variables['likes'] as &$like) {
+            if ($commonGroundService->isResource($like['resource'])) {
+                $like['resource'] = $commonGroundService->getResource($like['resource']);
+            }
+        }
 
         return $variables;
     }
