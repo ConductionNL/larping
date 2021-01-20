@@ -38,7 +38,7 @@
             <a class="icon-sm icon-default icon-border hover-bg-primary rounded-circle ml-2"
                href="{{ social.url}}" target="_blank">
                 {% if social.type == 'website'%}
-                    <i class="fas fa-globe-europe" data-toggle="tooltip" data-placement="top" title="{{ social.name }}" aria-hidden="true"></i>
+                    <i class="fas fa-globe" data-toggle="tooltip" data-placement="top" title="{{ social.type }}" aria-hidden="true"></i>
                 {% else %}
                     <i class="fab fa-{{ social.type }}" data-toggle="tooltip" data-placement="top" title="{{ social.name }}" aria-hidden="true" ></i>
                 {% endif %}
