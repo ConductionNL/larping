@@ -125,6 +125,16 @@ class OrganizationController extends AbstractController
                 }
             }
 
+            $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+            $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
+
+            $userCount = 0;
+            foreach ($variables['groups'] as $group) {
+                if ($group['name'] == 'root') {
+                    $variables['userCount'] = count($group['users']);
+                }
+            }
+
 
 
         }
