@@ -60,14 +60,14 @@
                                             </div>
                                             <input class="selectric-input" tabindex="0">
                                         </div>
-                                        <div class="icons">
-                                            <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">
-                                                <i class="fa fa-th" aria-hidden="true"></i>
-                                            </a>
+{#                                        <div class="icons">#}
+{#                                            <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">#}
+{#                                                <i class="fa fa-th" aria-hidden="true"></i>#}
+{#                                            </a>#}
 {#                                            <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">#}
 {#                                                <i class="fa fa-th-list" aria-hidden="true"></i>#}
 {#                                            </a>#}
-                                        </div>
+{#                                        </div>#}
                                     </div>
                             </div>
                     </form>
@@ -82,11 +82,11 @@
                         </div>
                     </div>
 
-                    <div id="listFullwidthDiv" class="fade-in">
-                        {% for event in events %}
-                            {% include '/cards/list/event.html.twig' with {'item': event} %}
-                        {% endfor %}
-                    </div>
+{#                    <div id="listFullwidthDiv" class="fade-in">#}
+{#                        {% for event in events %}#}
+{#                            {% include '/cards/list/event.html.twig' with {'item': event} %}#}
+{#                        {% endfor %}#}
+{#                    </div>#}
                 </div><!-- /.col -->
 
                 <div class="col-lg-3">
@@ -96,32 +96,32 @@
         </div><!-- /.container -->
     </section>
 
-    <script>
-        var gridFullwidthDiv = document.getElementById('gridFullwidthDiv');
-        var listFullwidthDiv = document.getElementById('listFullwidthDiv');
-        var switchToGridA = document.getElementById('switchToGridA');
-        var switchToListA = document.getElementById('switchToListA');
+{#    <script>#}
+{#        var gridFullwidthDiv = document.getElementById('gridFullwidthDiv');#}
+{#        var listFullwidthDiv = document.getElementById('listFullwidthDiv');#}
+{#        var switchToGridA = document.getElementById('switchToGridA');#}
+{#        var switchToListA = document.getElementById('switchToListA');#}
 
-        listFullwidthDiv.style.display = "none";
+{#        listFullwidthDiv.style.display = "none";#}
 
-        function switchToGrid() {
-            if (gridFullwidthDiv.style.display != "block") {
-                gridFullwidthDiv.style.display = "block";
-                listFullwidthDiv.style.display = "none";
-                switchToListA.classList.toggle("active");
-                switchToGridA.classList.toggle("active");
-            }
-        }
+{#        function switchToGrid() {#}
+{#            if (gridFullwidthDiv.style.display != "block") {#}
+{#                gridFullwidthDiv.style.display = "block";#}
+{#                listFullwidthDiv.style.display = "none";#}
+{#                switchToListA.classList.toggle("active");#}
+{#                switchToGridA.classList.toggle("active");#}
+{#            }#}
+{#        }#}
 
-        function switchToList() {
-            if (listFullwidthDiv.style.display != "block") {
-                listFullwidthDiv.style.display = "block";
-                gridFullwidthDiv.style.display = "none";
-                switchToListA.classList.toggle("active");
-                switchToGridA.classList.toggle("active");
-            }
-        }
+{#        function switchToList() {#}
+{#            if (listFullwidthDiv.style.display != "block") {#}
+{#                listFullwidthDiv.style.display = "block";#}
+{#                gridFullwidthDiv.style.display = "none";#}
+{#                switchToListA.classList.toggle("active");#}
+{#                switchToGridA.classList.toggle("active");#}
+{#            }#}
+{#        }#}
 
-    </script>
+{#    </script>#}
 
 {% endblock %}
