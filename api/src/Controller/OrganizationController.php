@@ -96,7 +96,8 @@ class OrganizationController extends AbstractController
     public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
         $variables = [];
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id'=>$id]);
+        $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
+        $variables['organization'] = $commonGroundService->getResource($organizationUrl);
         if (array_key_exists('contact', $variables['organization']) && $variables['organization']['contact']) {
             $variables['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
         }
@@ -105,6 +106,14 @@ class OrganizationController extends AbstractController
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['organization']['id']])['hydra:member'];
+
+        if ($this->getUser()) {
+            // check if this organization is liked by the current user
+            $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $organizationUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];
+            if (count($likes) > 0) {
+                $variables['totals']['liked'] = true;
+            }
+        }
 
         // Getting the offers
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id'], 'products.type' => 'simple'])['hydra:member'];
