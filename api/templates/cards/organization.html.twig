@@ -4,19 +4,19 @@
         "totals": commonground_resource_list({'component':'rc','type':'totals'}, {'resource':resource['@id']})
     }) %}
 {%  endif %}
+{% set organizationMembers = [] %}
 {% set organizationEvents = commonground_resource_list({'component':'arc', 'type':'events'}, {'organization':resource['@id']})['hydra:member'] %}
 {% set organizationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource.id})['hydra:member'] %}
 <div class="card rounded-0 card-hover-overlay">
     <div class="position-relative">
         <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
-        <div class="card-img-overlay" onclick="location.href = '{{ path('app_organization_organization', {id: resource.id}) }}';" style="cursor: pointer;">
-            <div class="d-flex align-items-center">
-                <a href="{{ path('app_organization_organization', {id: resource.id}) }}#reviews">
-                {% include 'widgets/rating.html.twig' with {'rating':resource.totals.rating} %}
-                <span class="d-inline-block mr-2 text-white" >{{ resource.totals.reviews }} (Reviews)</span>
-                </a>
-
-            </div>
+        <div class="card-img-overlay pt-3 pb-0" onclick="location.href = '{{ path('app_organization_organization', {id: resource.id}) }}';" style="cursor: pointer;">
+            <a href="{{ path('app_organization_organization', {id: resource.id}) }}#reviews">
+                <div class="d-flex align-items-center">
+                    {% include 'widgets/rating.html.twig' with {'rating':resource.totals.rating} %}
+                    <span class="d-inline-block mr-2 text-white" >{{ resource.totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
+                </div>
+            </a>
             <h3 class="text-white mb-0">
                 {{ resource.name|capitalize|length > 30 ? resource.name|slice(0, 30) ~ '...' : resource.name }}
             </h3>
@@ -25,43 +25,35 @@
 
             </p>
         </div>
-        <div class="card-footer bg-transparent">
-            <ul class="list-unstyled d-flex mb-0 py-2">
-                <li>
-                    <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
-                            onclick="likeItem(this)" value="{{ resource['@id'] }}"
-                            data-original-title="Favourite this organisation" style="z-index: 2">
-                        <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
-                            aria-hidden="true"></i>
-
-                    </button>
-                    <i class="far fa-calendar-alt mr-2" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                       data-original-title="{{ 'upcoming events'|trans|capitalize }}"><span> {{ organizationEvents|length }}</span></i>
-
-                    <i class="fal fa-id-card mr-2" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                       data-original-title="{{ 'number of members'|trans|capitalize }}"><span>....</span></i>
-                </li>
-                <li class="ml-auto">
-                    <a
-                        {% if app.user|default %}
-                            href="#" onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
-                            data-original-title="{{ 'favourite this organization'|trans|capitalize }}"
-                        {% else %}
-                            href="{{ path('app_user_idvault') }}"
-                            data-original-title="{{ 'login to favourite this organization'|trans|capitalize }}"
-                        {% endif %}
-                        liked="{% if resource.liked|default %}true{% else %}false{% endif %}"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title=""><i {% if resource.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
-                            aria-hidden="true" id="icon_{{ resource['id'] }}"></i>
-                        <span id="counter_{{ resource['id'] }}">{{ resource.totals.likes }}</span></a>
-
-
-                    <a class="px-2"
-                       href="{{ path('app_organization_organization', {'id': organization.id}) }}">{{ 'view'|trans|capitalize }}</a>
-                </li>
-            </ul>
-        </div>
-    </a>
+    </div>
+    <div class="card-footer bg-transparent">
+        <ul class="list-unstyled d-flex mb-0 py-2">
+            {% for category in organizationCategories %}
+            <li>
+                <i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip" data-placement="top" title="{{ category.name }}" aria-hidden="true"></i>
+            </li>
+            {% endfor %}
+            <li>
+                <i class="far fa-calendar-alt" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                   data-original-title="{{ 'upcoming events'|trans|capitalize }}"></i><span class="mr-2"> {{ organizationEvents|length }}</span>
+            </li>
+            <li>
+                <i class="fal fa-users-crown" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                   data-original-title="{{ 'number of members'|trans|capitalize }}"></i><span class="mr-2"> {{ organizationMembers|length }}</span>
+            </li>
+            <li class="ml-auto">
+                <i {% if resource.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ resource['id'] }}" {% if app.user|default %}
+                    onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
+                    data-original-title="{{ 'favourite this organization'|trans|capitalize }}"
+                {% else %}
+                    data-original-title="{{ 'login to favourite this organization'|trans|capitalize }}"
+                {% endif %}
+                    liked="{% if resource.liked|default %}true{% else %}false{% endif %}"
+                     data-toggle="tooltip"
+                     data-placement="top"
+                     title=""></i>
+                <span id="counter_{{ resource['id'] }}">{{ resource.totals.likes }}</span>
+            </li>
+        </ul>
+    </div>
 </div>
