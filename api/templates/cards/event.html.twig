@@ -47,30 +47,24 @@
             <li ><i class="{% if feature.icon|default %}{{ feature.icon }}{% endif %} mr-1" data-toggle="tooltip"
                        data-placement="top" title="{{ feature.name }}" aria-hidden="true"></i> </li>
                 {% endfor %}
-                {% if features|default %}
-                    {% for feature in features %}
-                <li ><i class="{% if feature.icon|default %}{{ feature.icon }}{% endif %} mr-1" data-toggle="tooltip" data-placement="top" title="{{ feature.name }}" aria-hidden="true"></i> </li>
-                    {% endfor %}
-                {% endif %}
-                <li class="ml-auto">
-                    <a
-                        {% if app.user|default %}
-                            href="#" onclick="likeItem('{{ item['id'] }}','{{ item['@id'] }}','{{ item['organization'] }}', this)"
-                            data-original-title="{{ 'favourite this event'|trans|capitalize }}"
-                        {% else %}
-                            href="{{ path('app_user_idvault') }}"
-                            data-original-title="{{ 'login to favourite this event'|trans|capitalize }}"
-                        {% endif %}
-                        liked="{% if item.totals.liked|default %}true{% else %}false{% endif %}"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title=""><i {% if item.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
-                            aria-hidden="true" id="icon_{{ item['id'] }}"></i>
-                        <span id="counter_{{ item['id'] }}">{{ item.totals.likes }}</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+            {% endif %}
+            <li class="ml-auto">
+                <a
+                    {% if app.user|default %}
+                        href="#" onclick="likeItem('{{ item['id'] }}','{{ item['@id'] }}','{{ item['organization'] }}', this)"
+                        data-original-title="{{ 'favourite this event'|trans|capitalize }}"
+                    {% else %}
+                        href="{{ path('app_user_idvault') }}"
+                        data-original-title="{{ 'login to favourite this event'|trans|capitalize }}"
+                    {% endif %}
+                    liked="{% if item.totals.liked|default %}true{% else %}false{% endif %}"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title=""><i {% if item.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                        aria-hidden="true" id="icon_{{ item['id'] }}"></i>
+                    <span id="counter_{{ item['id'] }}">{{ item.totals.likes }}</span></a>
+            </li>
+        </ul>
     </div>
 </div>
 
