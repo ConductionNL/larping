@@ -7,35 +7,32 @@
 {% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
 {% set eventOrganizations = commonground_resource(event.organization)%}
 <div class="card rounded-0 card-hover-overlay">
-    <a href="{{ path('app_event_event', {id: item.id}) }}">
-        <div class="position-relative">
-            <img class="card-img rounded-0" src="https://picsum.photos/300/200"
-                 alt="Card image cap">
-            <div class="card-img-overlay pt-3 pb-0">
-                <a href="{{ path('app_event_event', {id: item.id}) }}#reviews">
-                    <div class="d-flex align-items-center">
-                        {% include 'widgets/rating.html.twig' with {'rating':item.totals.rating} %}
-                        <span class="d-inline-block mr-2" style="color: white">{{ item.totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
-                    </div>
-                </a>
-                <h3 class="text-white mb-0">
-                    {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
-                </h3>
-                <p class="text-white">
-                    {% set eventOrganization = commonground_resource(item.organization) %}
-                    {{ 'by'|trans|capitalize }}: <a href="{{ path('app_organization_organization', {'id': eventOrganization.id }) }}">{{ eventOrganization.name|length > 35 ? eventOrganization.name|slice(0, 35) ~ '...' : eventOrganization.name }}</a>
-                </p>
-                <ul class="list-unstyled text-white">
-                    {% if item.location is defined and item.location is not empty %}
-                        {% set eventLocation  = commonground_resource(item.location) %}
-                        <li><i class="far fa-calendar-alt" aria-hidden="true"></i> <a href="{{ path('app_location_location', {'id':eventLocation.id }) }}" class="text-white">{{ eventLocation.name|length > 35 ? eventLocation.name|slice(0, 35) ~ '...' : eventLocation.name }}</a></li>
-                    {% endif %}
-                    <li><i class="far fa-calendar-alt" aria-hidden="true"></i> {{ item.startDate|date("d-m-Y H:m") }}</li>
-                </ul>
-                </p>
-            </div>
+    <div class="position-relative">
+        <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
+        <div class="card-img-overlay pt-3 pb-0" onclick=" location.href = '{{ path('app_event_event', {id: item.id}) }}';" style="cursor: pointer;">
+            <a href="{{ path('app_event_event', {id: item.id}) }}#reviews">
+                <div class="d-flex align-items-center">
+                    {% include 'widgets/rating.html.twig' with {'rating':item.totals.rating} %}
+                    <span class="d-inline-block mr-2 text-white" >{{ item.totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
+                </div>
+            </a>
+            <h3 class="text-white mb-0">
+                {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
+            </h3>
+            <p class="text-white">
+                {% set eventOrganization = commonground_resource(item.organization) %}
+                {{ 'by'|trans|capitalize }}: <a href="{{ path('app_organization_organization', {'id': eventOrganization.id }) }}">{{ eventOrganization.name|length > 35 ? eventOrganization.name|slice(0, 35) ~ '...' : eventOrganization.name }}</a>
+            </p>
+            <ul class="list-unstyled text-white">
+                {% if item.location is defined and item.location is not empty %}
+                    {% set eventLocation  = commonground_resource(item.location) %}
+                    <li><i class="far fa-calendar-alt" aria-hidden="true"></i> <a href="{{ path('app_location_location', {'id':eventLocation.id }) }}" class="text-white">{{ eventLocation.name|length > 35 ? eventLocation.name|slice(0, 35) ~ '...' : eventLocation.name }}</a></li>
+                {% endif %}
+                <li><i class="far fa-calendar-alt" aria-hidden="true"></i> {{ item.startDate|date("d-m-Y H:m") }}</li>
+            </ul>
+            </p>
         </div>
-    </a>
+    </div>
     <div class="card-footer bg-transparent">
         <ul class="list-unstyled d-flex mb-0 py-2">
             {% for category in eventCategories %}
