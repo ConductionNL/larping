@@ -35,11 +35,11 @@
             {% endfor %}
             <li>
                 <i class="far fa-calendar-alt" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                   data-original-title="{{ 'upcoming events'|trans|capitalize }}"></i><span class="mr-2"> {{ organizationEvents|length }}</span>
+                   data-original-title="{{ 'upcoming events'|trans|capitalize }}"></i><span class="mr-1"> {{ organizationEvents|length }}</span>
             </li>
             <li>
                 <i class="fal fa-users-crown" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                   data-original-title="{{ 'number of members'|trans|capitalize }}"></i><span class="mr-2"> {{ organizationMembers|length }}</span>
+                   data-original-title="{{ 'number of members'|trans|capitalize }}"></i><span class="mr-1"> {{ organizationMembers|length }}</span>
             </li>
             <li class="ml-auto">
                 <i {% if resource.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ resource['id'] }}" {% if app.user|default %}

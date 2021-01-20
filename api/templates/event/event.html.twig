@@ -155,7 +155,7 @@
                         <hr>
 
                         <!-- Contact  -->
-                        <h5 class="mb-4">{{ organization.name }}</h5>
+                        <h5 class="mb-4">{{ 'by'|trans|capitalize }} {{ organization.name }}</h5>
                         {% include 'widgets/contact_details.html.twig' with {'contact': commonground_resource(organization.contact)} %}
 
                         {% include 'widgets/contact_form.html.twig' %}
