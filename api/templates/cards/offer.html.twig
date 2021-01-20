@@ -10,7 +10,7 @@
         <div class="position-relative">
             <img class="card-img rounded-0" src="https://picsum.photos/300/200"
                  alt="Card image cap">
-            <div class="card-img-overlay">
+            <div class="card-img-overlay"  style="cursor: pointer">
                 <h3>
                     <a data-toggle="modal" data-target="#offer{{ offer.id }}Modal" class="stretched-link">
                         {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
@@ -31,7 +31,7 @@
                     {{ (item.price/100)|localizedcurrency(item.priceCurrency) }}
                 </li>
                 <li class="ml-auto">
-                    <a class="px-2" data-toggle="modal" data-target="#offer{{ offer.id }}Modal" >{{ 'buy'|trans|capitalize }}</a>
+                    <a class="px-2"  style="cursor: pointer" data-toggle="modal" data-target="#offer{{ offer.id }}Modal" >{{ 'buy'|trans|capitalize }}</a>
                 </li>
             </ul>
         </div>

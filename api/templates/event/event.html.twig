@@ -28,11 +28,14 @@
                             {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
                             <span
                                 class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
-                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top"
-                                    title="Favourite this listing">
-                                <i class="fal fa-heart text-primary" aria-hidden="true"></i>
-                                <span>{{ totals.likes }}</span>
-                            </button>
+                            <a href="#" onclick="likeItem('{{ event['id'] }}','{{ event['@id'] }}','{{ event['organization'] }}', this)"
+                               liked="{% if liked|default %}true{% else %}false{% endif %}"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               title=""
+                               data-original-title="Favourite this event"><i {% if liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                                    aria-hidden="true" id="icon_{{ event['id'] }}"></i>
+                                <span id="counter_{{ event['id'] }}">{{ totals.likes }}</span></a>
                         </div>
 
                         <div class="d-flex align-items-center">
@@ -51,11 +54,13 @@
                         </div>
                     </div>
                 </div> <!--/.col -->
-                {% if product.offers|default %}
-                <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
-                    <a href="#offers" class="btn btn-primary">{{ 'buy a ticket'|trans|capitalize }}</a>
-                </div><!--/.col -->
+                <div class="col-lg-4 pl-8">
+                {% if tickets|default %}
+                    <a href="#tickets" class="btn btn-primary">{{ 'buy a ticket'|trans|capitalize }}</a>
+                {% elseif products|default %}
+                    <a href="#products" class="btn btn-primary">{{ 'buy a product'|trans|capitalize }}</a>
                 {% endif %}
+                </div><!--/.col -->
             </div><!-- /.row -->
         </div><!--/.container -->
     </section>
@@ -90,7 +95,7 @@
 
                     <!-- Tickets -->
                     {% if tickets is defined and tickets is not empty %}
-                    <div id="gridFullwidthDiv" class="fade-in">
+                    <div id="gridFullwidthDiv" class="fade-in" id="tickets">
                         <h3 class="font-weight-normal mb-6">{{ 'tickets'|trans|capitalize }}</h3>
                         <div class="row">
                             {% for offer in tickets %}
@@ -104,7 +109,7 @@
 
                     <!-- Products -->
                     {% if products is defined and products is not empty %}
-                    <div id="gridFullwidthDiv" class="fade-in">
+                    <div id="gridFullwidthDiv" class="fade-in" id="products">
                         <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
                         <div class="row">
                             {% for offer in products %}
@@ -195,6 +200,7 @@
                         </div>
 
                         <!-- Reviews -->
+                        <a id="reviews">
                         {% if reviews is defined and reviews is not empty %}
                             <div>
                                 <h3 class="font-weight-normal mb-6">({{ totals.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
@@ -220,7 +226,7 @@
 
                         <!-- Contact  -->
                         <h5>{{ 'contact'|trans|capitalize }}</h5>
-                        {% include 'widgets/contact.html.twig' %}
+                        {% include 'widgets/contact_form.html.twig' %}
 
                         <!-- You may also like  -->
                         <h5>{{ 'other events you might like'|trans|capitalize }}</h5>

@@ -1,5 +1,4 @@
 {% if app.user %}
-
     <form class="mb-5" action="{{ path('app_default_contact') }}" method="post">
         <input type="hidden" name="return"
                value="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}">
@@ -10,19 +9,19 @@
                 <div class="row">
                     <div class="form-group col-md-12 mb-6">
                         <label for="name">{{ 'topic'|trans|capitalize }}</label>
-                        <input type="text" class="form-control single-date" name="topic">
+                        <input type="text" class="form-control" name="topic">
                     </div>
 
                     <div class="form-group col-md-12 mb-6">
                         <label for="name">{{ 'description'|trans|capitalize }}</label>
-                        <textarea class="form-control single-date" name="message"></textarea>
+                        <textarea class="form-control" name="message" rows="8"></textarea>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="form-group mb-6">
-            <button type="submit"
-                    class="btn btn-outline-primary btn-block">{{ 'submit message'|trans|capitalize }}</button>
+            <button type="submit" class="btn btn-outline-primary btn-block">{{ 'submit message'|trans|capitalize }}</button>
         </div>
     </form>
 

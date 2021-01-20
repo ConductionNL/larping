@@ -90,7 +90,7 @@ class DefaultController extends AbstractController
             } else {
                 $like['author'] = $this->getUser()->getPerson();
                 $like['resource'] = $request->get('resource');
-                $like['organization'] = $this->getUser()->getOrganization();
+                $like['organization'] = $request->get('organization');
                 $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
 
                 return new JsonResponse([
@@ -168,7 +168,10 @@ class DefaultController extends AbstractController
     public function contactAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-//        $variables['request'] = $commonGroundService->getResourceList(['component' => 'vrc', 'type' => 'requests'])['hydra:member'];
+        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id'=>'d24e147f-00b9-4970-9809-6684a3fb965b']);
+        if (array_key_exists('contact', $variables['organization']) && $variables['organization']['contact']) {
+            $variables['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
+        }
 
         if ($this->getUser() && $request->isMethod('POST')) {
             $resource = $request->request->all();
@@ -181,8 +184,6 @@ class DefaultController extends AbstractController
                 return $this->redirect($request->get('redirect'));
             }
         }
-
-        $variables['organization'] = ['@id'=>'https://www.larping.eu'];
 
         return $variables;
     }
