@@ -5,7 +5,7 @@
     }) %}
 {%  endif %}
 {% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']}) %}
-<a data-toggle="modal" data-target="#offer{{ offer.id }}Modal">
+
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">
             <img class="card-img rounded-0" src="https://picsum.photos/300/200"
@@ -31,7 +31,7 @@
                     {{ (item.price/100)|localizedcurrency(item.priceCurrency) }}
                 </li>
                 <li class="ml-auto">
-                    <a class="px-2"  style="cursor: pointer" data-toggle="modal" data-target="#offer{{ offer.id }}Modal" >{{ 'buy'|trans|capitalize }}</a>
+                    <a class="px-2" style="cursor: pointer" data-toggle="modal" href="#offer{{ offer.id }}Modal" ><span>{{ 'buy'|trans|capitalize }}</span></a>
                 </li>
             </ul>
         </div>
