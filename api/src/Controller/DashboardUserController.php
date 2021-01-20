@@ -300,7 +300,40 @@ class DashboardUserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
-        $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson()])['hydra:member'];
+        $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson(), 'order[dateCreated]' => 'desc'])['hydra:member'];
+        foreach ($variables['likes'] as &$like) {
+            if ($commonGroundService->isResource($like['resource'])) {
+                $like['resource'] = $commonGroundService->getResource($like['resource']);
+            }
+        }
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/orders")
+     * @Template
+     */
+    public function ordersAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['customer' => $this->getUser()->getPerson()])['hydra:member'];
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/orders/{id}")
+     * @Template
+     */
+    public function orderAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['order'] = $commonGroundService->getResource(['component' => 'orc', 'type' => 'orders', 'id' => $id]);
+
+        if ($this->getUser()->getPerson() != $variables['order']['customer']) {
+            return $this->redirectToRoute('app_default_index');
+        }
 
         return $variables;
     }

@@ -44,63 +44,6 @@ class ShoppingService
         $this->idVaultService = $idVaultService;
     }
 
-//    public function makeOrder($person)
-//    {
-//        if ($this->session->get('order')) {
-//            $order = $this->session->get('order');
-//
-//            if (!isset($variables['order']['@id'])) {
-//                $person = $this->commonGroundService->getResource($person);
-//
-//                if (isset($order['items']) && count($order['items']) > 0) {
-//                    $offer = $this->commonGroundService->getResource($order['items'][0]['offer']);
-//
-//                    $items = $order['items'];
-//
-    ////                $sessionOrder = $order;
-//
-//                    $order['name'] = 'Order for ' . $person['name'];
-//                    $order['description'] = 'Order for ' . $person['name'];
-    ////                    $order['organization'] = $offer['offeredBy'];
-//
-//                    // Hardcoded org because of bug in PDC !
-//                    $order['organization'] = 'https://dev.larping.eu/api/v1/wrc/organizations/51eb5628-3b37-497b-a57f-6b039ec776e5';
-//
-//
-//                    $order['customer'] = $person['@id'];
-//                    if ($this->request->get('remarks')) {
-//                        $order['remark'] = $this->request->get('remarks');
-//                    }
-//                    if (isset($order['items'])) {
-//                        unset($order['items']);
-//                    }
-//                    $order = $this->commonGroundService->saveResource($order, ['component' => 'orc', 'type' => 'orders']);
-//
-//                    foreach ($items as $item) {
-//                        $offer = $this->commonGroundService->getResource($item['offer']);
-//
-//                        if (!isset($item['@id'])) {
-//                            $item['name'] = $offer['name'];
-//                            if (!isset($offer['description'])) {
-//                                $item['description'] = $offer['name'];
-//                            } else {
-//                                $item['description'] = $offer['description'];
-//                            }
-//                            $item['quantity'] = intval($item['quantity']);
-//                            $item['price'] = strval($offer['price']);
-//                            $item['priceCurrency'] = $offer['priceCurrency'];
-//                            $item['order'] = '/orders/' . $order['id'];
-//                        }
-//                        $item = $this->commonGroundService->saveResource($item, ['component' => 'orc', 'type' => 'order_items']);
-//                    }
-//                    $order = $this->commonGroundService->getResource($order['@id']);
-//                }
-//                $this->session->set('order', $order);
-//            }
-//        }
-//        return $order;
-//    }
-
     public function redirectToMollie($order)
     {
         $object['url'] = $order['@id'];
@@ -183,27 +126,23 @@ class ShoppingService
             foreach ($order['orderItems'] as $key => $orderItem) {
                 if (isset($orderItem['offer']) && isset($newOrderItem['offer']) &&
                     $orderItem['offer'] == $newOrderItem['offer']) {
-                    if ($this->checkIfIsPersonalTicket($this->commonGroundService->getResource($newOrderItem['offer'])) == true &&
-                            $newOrderItem['quantity'] + $order['orderItems'][$key]['quantity'] > 1) {
+                    $actualOffer = $this->commonGroundService->getResource($newOrderItem['offer']);
+                    // Check if is personal ticket
+                    if ($this->checkForTypeInProducts('ticket', $actualOffer['products']) == true &&
+                        isset($actualOffer['audience']) && $actualOffer['audience'] == 'personal' &&
+                        $newOrderItem['quantity'] + $order['orderItems'][$key]['quantity'] > 1) {
                         $order['orderItems'][$key]['quantity'] = 1;
                     } else {
                         $order['orderItems'][$key]['quantity'] += $newOrderItem['quantity'];
+                    }
+                    if (isset($newOrderItem['options']) && count($newOrderItem['options']) > 0) {
+                        $order['orderItems'][$key]['options'] = $newOrderItem['options'];
                     }
                 }
             }
         }
 
         return $order;
-    }
-
-    public function checkIfIsPersonalTicket($offer)
-    {
-        if (isset($offer['audience']) && $offer['audience'] == 'internal' &&
-            isset($offer['products']) && $this->checkForTypeInProducts('ticket', $offer['products']) == true) {
-            return true;
-        }
-
-        return false;
     }
 
     // Checks if item is in given order if true cumulates quantity
@@ -224,11 +163,9 @@ class ShoppingService
 
     public function checkForTypeInProducts($type, $products)
     {
-        if (count($products) > 0) {
-            foreach ($products as $product) {
-                if (isset($product['type']) == $type) {
-                    return true;
-                }
+        foreach ($products as $product) {
+            if (isset($product['type']) == $type) {
+                return true;
             }
         }
 
@@ -239,17 +176,21 @@ class ShoppingService
     {
         $actualOffer = $this->commonGroundService->getResource($newOrderItem['offer']);
 
-        if ($this->checkIfIsPersonalTicket($actualOffer) == true &&
+        if ($this->checkForTypeInProducts('ticket', $actualOffer['products']) == true &&
+            isset($actualOffer['audience']) && $actualOffer['audience'] == 'personal' &&
             $newOrderItem['quantity'] > 1) {
             $newOrderItem['quantity'] = 1;
         }
 
-        $order['orderItems'][] = [
-            'offer'    => $newOrderItem['offer'],
-            'quantity' => $newOrderItem['quantity'],
-            'path'     => $newOrderItem['path'],
-            'price'    => $actualOffer['price'],
-        ];
+//        if (!isset($newOrderItem['options'])) {
+        $newOrderItem['price'] = $actualOffer['price'];
+//        } else {
+//            foreach ($newOrderItem['options'] as $option) {
+//                $newOrderItem['price'] = $actualOffer['price'] + intval($option['price']);
+//            }
+//        }
+
+        $order['orderItems'][] = $newOrderItem;
 
         return $order;
     }
@@ -315,7 +256,13 @@ class ShoppingService
                 $item['description'] = $offer['description'];
             }
             $item['quantity'] = intval($item['quantity']);
+
             $item['price'] = strval($offer['price']);
+            if (isset($item['options'])) {
+                foreach ($item['options'] as $option) {
+                    $item['price'] = strval(intval($item['price']) + intval($option['price']));
+                }
+            }
             $item['priceCurrency'] = $offer['priceCurrency'];
             $item['order'] = '/orders/'.$uploadedOrder['id'];
         }
@@ -354,24 +301,34 @@ class ShoppingService
         return false;
     }
 
-    public function removeItem($id)
+    public function removeItem($offer)
     {
-        $order = $this->session->get('order');
-        if (isset($order) && isset($order['items'])) {
-            foreach ($order['items'] as $key => $item) {
-                if ($item['id'] == $id) {
-                    unset($order['items'][$key]);
+        $ordersInSession = $this->session->get('orders');
 
-                    // If we have saved the order we also update it when removing a item
-                    if (isset($order['@id'])) {
-                        $order = $this->commonGroundService->saveResource($order, $order['@id']);
+        if (isset($ordersInSession)) {
+            foreach ($ordersInSession as $k1 => $order) {
+                foreach ($order['orderItems'] as $k2 => $item) {
+                    if ($item['offer'] == $offer) {
+                        unset($ordersInSession[$k1]['orderItems'][$k2]);
+                        if (!array_filter($ordersInSession[$k1]['orderItems'])) {
+                            unset($ordersInSession[$k1]);
+                            if (!array_filter($ordersInSession)) {
+                                unset($ordersInSession);
+                            }
+                        }
+                        if (isset($ordersInSession)) {
+                            $this->session->set('orders', $ordersInSession);
+                        } else {
+                            $this->session->set('orders', null);
+                        }
+
+                        return true;
                     }
-                    $this->session->set('order', $order);
                 }
             }
         }
 
-        return $order;
+        return false;
     }
 
     public function ownsThisProduct($product)
@@ -444,5 +401,31 @@ class ShoppingService
         }
 
         return $ownedProducts;
+    }
+
+    public function removeOption($removedOption)
+    {
+        $ordersInSession = $this->session->get('orders');
+        foreach ($ordersInSession as $k1 => $order) {
+            foreach ($order['orderItems'] as $k2 => $item) {
+                if ($item['offer'] == $removedOption['offer']) {
+                    if (isset($item['options'])) {
+                        foreach ($item['options'] as $k3 => $option) {
+                            if ($removedOption['name'] == $option['name']) {
+                                unset($ordersInSession[$k1]['orderItems'][$k2]['options'][$k3]);
+                                if (!array_filter($ordersInSession[$k1]['orderItems'][$k2]['options'])) {
+                                    unset($ordersInSession[$k1]['orderItems'][$k2]['options']);
+                                }
+                                $this->session->set('orders', $ordersInSession);
+
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -50,7 +50,10 @@
                                             <a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }} </a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_editorganization') }}">{{ 'edit profile'|trans|capitalize }} </a>
+                                            <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_edit', {'id':organization.id}) }}">{{ 'edit profile'|trans|capitalize }} </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -114,6 +117,9 @@
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_mailinglists') }}">{{ 'Mailing Lists'|trans }}</a>
                                         </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_makeorderformember') }}">{{ 'make a order for a member'|trans|capitalize }}</a>
+                                        </li>
                                     </ul>
                                     <!--
                                     <ul class="list-unstyled">
@@ -176,7 +182,8 @@
                                                 <a href="{{ path('app_organization_organization', {id: organization.id}) }}">
                                                     <div class="media media-xs align-items-center">
                                                         <div class="media-body">
-                                                            <span style="font-size: 1.4rem" class="font-weight-bold">{{ organization.name }}</span>
+                                                            <span style="font-size: 1.4rem"
+                                                                  class="font-weight-bold">{{ organization.name }}</span>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -196,8 +203,19 @@
                                                                 <span class="font-weight-bold">{{ offer.name }}</span>
                                                                 <b class="mb-1 text-right">&euro; {{ item.price }},-</b>
                                                             </div>
-                                                            <p class="mb-1 mt-n2"
+                                                            <p class="d-inline-block  mb-1 mt-n2 pr-1"
                                                                style="font-size: smaller">{{ item.quantity }} {% if item.quantity > 1 %}items{% else %}item{% endif %}</p>
+
+                                                            {% if item.options|default %}
+                                                                <p class="d-inline-block  mb-1 mt-n2 pl-2"
+                                                                   style="font-size: smaller;border-left: 1px solid lightgrey">{{ item.options|length }} {% if item.quantity > 1 %}{{ 'options'|trans }}{% else %}{{ 'option'|trans }}{% endif %}</p>
+                                                                {% set optionsSum = 0 %}
+                                                                {% for option in item.options %}
+                                                                    {% set optionsSum = optionsSum + option.price %}
+                                                                    {% set sum = sum + optionsSum %}
+                                                                {% endfor %}
+                                                                <p class="d-inline-block mb-1 mt-n2 pt-1 float-right text-right">&euro; {{ optionsSum }},-</p>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                 </a>
@@ -288,8 +306,8 @@
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_memberships') }}">
-                                        <i class="fal fa-building mr-2" aria-hidden="true"></i>
-                                        {{ 'my memberships'|trans|capitalize }}
+                                        <div class="fal fa-address-card mr-2" aria-hidden="true">
+                                            {{ 'my memberships'|trans|capitalize }}</div>
                                     </a>
                                 </li>
                                 <li>
@@ -320,6 +338,13 @@
                                        href="{{ path('app_dashboarduser_favorites') }}">
                                         <i class="fal fa-heart mr-2" aria-hidden="true"></i>
                                         {{ 'my favorites'|trans|capitalize }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="d-flex flex-wrap align-items-center"
+                                       href="{{ path('app_dashboarduser_orders') }}">
+                                        <i class="fal fa-shopping-cart mr-2" aria-hidden="true"></i>
+                                        {{ 'my orders'|trans|capitalize }}
                                     </a>
                                 </li>
                                 <li>

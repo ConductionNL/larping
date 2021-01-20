@@ -35,6 +35,7 @@ class DefaultController extends AbstractController
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
+        $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
 
         return $variables;
     }
@@ -73,23 +74,32 @@ class DefaultController extends AbstractController
     public function likeAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         if ($this->getUser() && $request->isMethod('POST')) {
-            $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $request->get('resource'), 'author' => $this->getUser()->getPerson()])['hydra:member'];
-            if (count($likes) > 0) {
-                $like = $likes[0];
+            $userLike = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $request->get('resource'), 'author' => $this->getUser()->getPerson()])['hydra:member'];
+
+            $amountOfLikes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $request->get('resource')])['hydra:totalItems'];
+
+            if (count($userLike) > 0) {
+                $like = $userLike[0];
                 // Delete this existing like
                 $commonGroundService->deleteResource($like);
 
-                return new JsonResponse(['data' => 'unliked']);
+                return new JsonResponse([
+                    'status'        => 'unliked',
+                    'amountOfLikes' => $amountOfLikes,
+                ]);
             } else {
                 $like['author'] = $this->getUser()->getPerson();
                 $like['resource'] = $request->get('resource');
-                $like['organization'] = 'https://test.com';
-                $like = $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
+                $like['organization'] = $request->get('organization');
+                $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
 
-                return new JsonResponse(['data' => 'liked']);
+                return new JsonResponse([
+                    'status'        => 'liked',
+                    'amountOfLikes' => $amountOfLikes,
+                ]);
             }
         } else {
-            return new JsonResponse(['data' => 'you are not logged in']);
+            return new JsonResponse(['status' => 'you are not logged in']);
         }
     }
 
@@ -158,7 +168,10 @@ class DefaultController extends AbstractController
     public function contactAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-//        $variables['request'] = $commonGroundService->getResourceList(['component' => 'vrc', 'type' => 'requests'])['hydra:member'];
+        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id'=>'d24e147f-00b9-4970-9809-6684a3fb965b']);
+        if (array_key_exists('contact', $variables['organization']) && $variables['organization']['contact']) {
+            $variables['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
+        }
 
         if ($this->getUser() && $request->isMethod('POST')) {
             $resource = $request->request->all();
@@ -171,8 +184,6 @@ class DefaultController extends AbstractController
                 return $this->redirect($request->get('redirect'));
             }
         }
-
-        $variables['organization'] = ['@id'=>'https://www.larping.eu'];
 
         return $variables;
     }

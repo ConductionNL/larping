@@ -5,7 +5,7 @@
 {% endif %}
 {% block content %}
 
-    {% include 'dashboard_organization/menu.html.twig' %}
+    {# include 'dashboard_user/menu.html.twig' #}
 
     <section class="bg-light py-5 height100vh">
         <div class="container">
@@ -69,10 +69,10 @@
                 </div>
 
                 {% if product.type == "ticket"%}
-                    <!-- About -->
+                    <!-- Event -->
                     <div class="card">
                         <div class="card-body px-6 pt-6 pb-1">
-                            <h3 class="h4 mb-4">Voor welk evenement is dit ticket?</h3>
+                            <h3 class="h4 mb-4">{{ 'event'|trans|capitalize }}</h3>
                             <div class="row">
                                 <div class="form-group  col-md-12 mb-6">
                                     <label for="name">{{ 'event'|trans|capitalize }}* </label>
@@ -86,6 +86,24 @@
                         </div>
                     </div>
                 {% endif %}
+
+                <!-- Group -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'group'|trans|capitalize }}</h3>
+                        <div class="row">
+                            <div class="form-group  col-md-12 mb-6">
+                                <label for="name">{{ 'group'|trans|capitalize }}* </label>
+                                <select class="form-control" aria-label="{{ 'the group of this product'|trans|capitalize }}" required id="userGroup" name="userGroup">
+                                    <option value="" >{{ 'none'|trans|capitalize }}</option>
+                                    {% for group in groups %}
+                                        <option value="https://www.id-vault.com/api/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/groups/' ~ group['id']%} selected {% endif %}>{{ group.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- About -->
                 <div class="card">

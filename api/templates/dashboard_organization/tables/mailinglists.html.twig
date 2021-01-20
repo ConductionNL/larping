@@ -4,23 +4,28 @@
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
             <th>{{ 'members'|trans|capitalize }}</th>
+            <th>{{ 'groups'|trans|capitalize }}</th>
             <th><a href="#" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#MailinglistModalAdd">{{ 'add'|trans|capitalize }}</a></th>
         </tr>
         </thead>
         <tbody>
         {% for mailingList in mailingLists %}
+            {% set totalsubscribers = (mailingList.subscribers|length - mailingList.groups|length) %}
             <tr>
                 <td class="text-capitalize">
-                    <a class="text-hover-primary text-muted" >{{ mailingList.name }}</a>
+                    <span class="text-muted" >{{ mailingList.name }}</span>
                 </td>
-                <td>0</td>
+                <td>{% if totalsubscribers > 0 %}{{ totalsubscribers }}{% else %}0{% endif %}</td>
+                <td>{{ mailingList.groups|length }}</td>
                 <td>
                     <div class="float-right">
-                        <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#MailinglistModal{{ mailingList.id }}">Edit</a>
-                        <a class="btn btn-success ml-2 btn-sm" href="#" data-toggle="modal" data-target="#MailingModal{{ mailingList.id }}">Send Email</a>
+                        {% if mailingList.subscribers|length > 0 %}
+                            <a class="btn btn-success btn-sm mr-1" href="#" data-toggle="modal" data-target="#MailinglistModalMailing{{ mailingList.id }}">{{ 'send email'|trans }}</a>
+                        {% endif %}
+                        <a class="btn btn-primary btn-sm mr-1" href="#" data-toggle="modal" data-target="#MailinglistModal{{ mailingList.id }}">{{ 'edit'|trans }}</a>
+                        <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#MailinglistModalDelete{{ mailingList.id }}">{{ 'delete'|trans|capitalize }}</a>
                     </div>
                 </td>
-
             </tr>
         {% endfor %}
         </tbody>
@@ -38,5 +43,8 @@
 
 {% for mailingList in mailingLists %}
     {% include 'dashboard_organization/modals/mailinglist.html.twig' with {'resource': mailingList} %}
-    {% include 'dashboard_organization/modals/mailing.html.twig' with {'resource': mailingList} %}
+    {% include 'dashboard_organization/modals/mailinglist_delete.html.twig' with {'resource': mailingList} %}
+    {% if mailingList.subscribers|length > 0 %}
+        {% include 'dashboard_organization/modals/mailinglist_mailing.html.twig' with {'resource': mailingList} %}
+    {% endif %}
 {% endfor %}
