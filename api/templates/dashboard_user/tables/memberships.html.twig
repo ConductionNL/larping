@@ -14,10 +14,10 @@
     {% for product in products %}
         <tr>
             <td>{{ commonground_resource(product.sourceOrganization).name }}</td>
-            <td>{{ product.type }}</td>
+            <td>{{ product.name }}</td>
             <td>{% for group in product.groups %}{{ group|capitalize }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
             <td>{% if product.joined is defined %}{{ product.joined|date("d-m-Y") }}{% endif %}</td>
-            <td>{{ product.price }}</td>
+            <td>{{ product.orderItem.price }}</td>
             <td>
                 <div class="dropdown">
                     <a href="#" role="button" id="dropdownMenuLink"
@@ -39,3 +39,4 @@
         <p>{{ 'no memberships found'|trans|capitalize }}</p>
     </div>
 {% endif %}
+
