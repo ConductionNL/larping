@@ -25,32 +25,43 @@
 
             </p>
         </div>
-    </div>
-    <div class="card-footer bg-transparent">
-        <ul class="list-unstyled d-flex mb-0 py-2">
-            {% for category in organizationCategories %}
-            <li >
-                <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}  mr-1" data-toggle="tooltip"
-                   data-placement="top" title="{{ category.name }}" aria-hidden="true"></i>
-            </li>
-            {% endfor %}
-            <li class="ml-auto">
-                <a
-                    {% if app.user|default %}
-                        href="#" onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
-                        data-original-title="{{ 'favourite this organization'|trans|capitalize }}"
-                    {% else %}
-                        href="{{ path('app_user_idvault') }}"
-                        data-original-title="{{ 'login to favourite this organization'|trans|capitalize }}"
-                    {% endif %}
-                    liked="{% if resource.totals.liked|default %}true{% else %}false{% endif %}"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title=""><i {% if resource.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
-                        aria-hidden="true" id="icon_{{ resource['id'] }}"></i>
-                    <span id="counter_{{ resource['id'] }}">{{ resource.totals.likes }}</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+        <div class="card-footer bg-transparent">
+            <ul class="list-unstyled d-flex mb-0 py-2">
+                <li>
+                    <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
+                            onclick="likeItem(this)" value="{{ resource['@id'] }}"
+                            data-original-title="Favourite this organisation" style="z-index: 2">
+                        <i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                            aria-hidden="true"></i>
+
+                    </button>
+                    <i class="far fa-calendar-alt mr-2" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                       data-original-title="{{ 'upcoming events'|trans|capitalize }}"><span> {{ organizationEvents|length }}</span></i>
+
+                    <i class="fal fa-id-card mr-2" aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                       data-original-title="{{ 'number of members'|trans|capitalize }}"><span>....</span></i>
+                </li>
+                <li class="ml-auto">
+                    <a
+                        {% if app.user|default %}
+                            href="#" onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
+                            data-original-title="{{ 'favourite this organization'|trans|capitalize }}"
+                        {% else %}
+                            href="{{ path('app_user_idvault') }}"
+                            data-original-title="{{ 'login to favourite this organization'|trans|capitalize }}"
+                        {% endif %}
+                        liked="{% if resource.liked|default %}true{% else %}false{% endif %}"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title=""><i {% if resource.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                            aria-hidden="true" id="icon_{{ resource['id'] }}"></i>
+                        <span id="counter_{{ resource['id'] }}">{{ resource.totals.likes }}</span></a>
+
+
+                    <a class="px-2"
+                       href="{{ path('app_organization_organization', {'id': organization.id}) }}">{{ 'view'|trans|capitalize }}</a>
+                </li>
+            </ul>
+        </div>
+    </a>
 </div>

@@ -6,7 +6,7 @@
         <th>{{ 'name'|trans|capitalize }}</th>
         <th>
 {#            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#OrganizationModalAdd">{{ 'add'|trans|capitalize }}</button>#}
-            <a href="{{ path('app_dashboardorganization_editorganization') }}" class="btn btn-success btn-sm float-right">{{ 'add'|trans|capitalize }}</a>
+            <a href="{{ path('app_dashboardorganization_edit', {'id':'add'}  ) }}" class="btn btn-success btn-sm float-right">{{ 'add'|trans|capitalize }}</a>
         </th>
     </tr>
     </thead>
