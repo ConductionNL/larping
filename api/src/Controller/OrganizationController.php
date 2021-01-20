@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -107,6 +108,7 @@ class OrganizationController extends AbstractController
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['organization']['id']])['hydra:member'];
 
+        /* @todo this is tacky, the totals function on the rc should handle this */
         if ($this->getUser()) {
             // check if this organization is liked by the current user
             $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $organizationUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];

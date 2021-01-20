@@ -95,7 +95,7 @@
                                 <h3 class="h4 mb-4">{{ 'contact'|trans|capitalize }}</h3>
                             </div>
                             <div class="form-group  col-md-6 mb-6">
-                                <a class="btn btn-primary float-right" onclick="addItemToList('contact-list');">{{ 'add'|trans|capitalize }}</a>
+                                <a class="btn btn-success float-right text-white" onclick="addItemToList('contact-list');"><i class="fal fa-plus"></i></a>
                             </div>
                         </div>
 
@@ -169,104 +169,110 @@
                     </div>
                 </div>
 
-                <!-- emails -->
-                <div class="card">
-                    <div class="card-body p-6" id="email-list">
-                        <div class="row">
-                            <div class="form-group  col-md-6 mb-6">
-                                <h3 class="h4 mb-4">{{ 'emails'|trans|capitalize }}</h3>
-                            </div>
-                            <div class="form-group  col-md-6 mb-6">
-                                <a  class="btn btn-primary float-right" onclick="addItemToList('email-list');">{{ 'add'|trans|capitalize }}</a>
-                            </div>
-                        </div>
+                <div class="row">
+                    <!-- emails -->
+                    <div class="col-md-6 ">
+                        <div class="card ">
+                            <div class="card-body p-6" id="email-list">
+                                <div class="row">
+                                    <div class="form-group  col-md-6 mb-6">
+                                        <h3 class="h4 mb-4">{{ 'emails'|trans|capitalize }}</h3>
+                                    </div>
+                                    <div class="form-group  col-md-6 mb-6">
+                                        <a  class="btn btn-success float-right text-white" onclick="addItemToList('email-list');"><i class="fal fa-plus"></i></a>
+                                    </div>
+                                </div>
 
-                        <div class="row" id="email-list-new" style="display: none;">
-                            <div class="form-group col-6">
-                                <label>{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" name="contact[emails][uuid][name]">
-                            </div>
-                            <div class="form-group col-5">
-                                <label>{{ 'email'|trans|capitalize }}</label>
-                                <input type="email" class="form-control" name="contact[emails][uuid][email]">
-                            </div>
-                            <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
-                                <a class="btn btn-danger float-right text-white"  onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
-                            </div>
-                        </div>
-
-                        {% if contact.emails is defined and contact.emails is not empty %}
-                            {% for email in contact.emails %}
-                        <div class="row" id="{{ email.id }}">
-                            <!--
-                            <input type="hidden" id="{{ email.id }}_@type" name="contact[emails][{{ email.id }}][@type]" value="Email">
-                            -->
-                            <input type="hidden" id={{ email.id }}_id" name="contact[emails][{{ email.id }}][id]" value="emails/{{ email['id'] }}">
-                            <input type="hidden" id="{{ email.id }}_@id" name="contact[emails][{{ email.id }}][@id]" value="/emails/{{ email['id'] }}">
-                            <div class="form-group col-6">
-                                <label for="{{ email.id }}_name">{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" {% if email.name|default %}value="{{ email.name }}"{% endif %} id="{{ email.id }}_name" name="contact[emails][{{ email.id }}][name]">
-                            </div>
-                            <div class="form-group col-5">
-                                <label for="_email">{{ 'email'|trans|capitalize }}</label>
-                                <input type="email" class="form-control" {% if email.email|default %}value="{{ email.email }}"{% endif %} id="{{ email.id }}_email" name="contact[emails][{{ email.id }}][email]">
-                            </div>
-                            <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
-                                <a class="btn btn-danger float-right text-white" onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
-                            </div>
-                        </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!--  phone numbers -->
-                <div class="card">
-                    <div class="card-body p-6" id="phone-list">
-                        <div class="row">
-                            <div class="form-group  col-md-6 mb-6">
-                                <h3 class="h4 mb-4">{{ 'phone numbers'|trans|capitalize }}</h3>
-                            </div>
-                            <div class="form-group  col-md-6 mb-6">
-                                <a class="btn btn-primary float-right" onclick="addItemToList('phone-list');">{{ 'add'|trans|capitalize }}</a>
-                            </div>
-                        </div>
-
-                        <div class="row" id="phone-list-new" style="display: none;">
-                            <div class="form-group col-6">
-                                <label>{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" name="contact[telephones][uuid][name]">
-                            </div>
-                            <div class="form-group col-5">
-                                <label>{{ 'telephone'|trans|capitalize }}</label>
-                                <input type="tel" class="form-control"name="contact[telephones][uuid][telephone]">
-                            </div>
-                            <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
-                                <a class="btn btn-danger float-right text-white"  onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
-                            </div>
-                        </div>
-                        {% if contact.telephones is defined and contact.telephones is not empty %}
-                            {% for number in contact.telephones %}
-                                <div class="row" id="{{ number.id }}">
-                                    <!--
-                                    <input type="hidden" id="{{ number.id }}_@type" name="contact[telephones][{{ number.id }}][@type]" value="Telephone">
-                                    -->
-                                    <input type="hidden" id={{ number.id }}_id" name="contact[telephones][{{ number.id }}][id]" value="telephones/{{ number['id'] }}">
-                                    <input type="hidden" id="{{ number.id }}_@id" name="contact[telephones][{{ number.id }}][@id]" value="telephones/{{ number['id'] }}">
+                                <div class="row" id="email-list-new" style="display: none;">
                                     <div class="form-group col-6">
-                                        <label for="{{ number.id }}_name">{{ 'name'|trans|capitalize }}</label>
-                                        <input type="text" class="form-control" {% if number.name|default %}value="{{ number.name }}"{% endif %} id="{{ number.id }}_name" name="contact[telephones][{{ number.id }}][name]">
+                                        <label>{{ 'name'|trans|capitalize }}*</label>
+                                        <input type="text" class="form-control" name="contact[emails][uuid][name]" required>
                                     </div>
                                     <div class="form-group col-5">
-                                        <label for="_email">{{ 'telephone'|trans|capitalize }}</label>
-                                        <input type="tel" class="form-control" {% if number.telephone|default %}value="{{ number.telephone }}"{% endif %} id="{{ number.id }}telephone" name="contact[telephones][{{ number.id }}][telephone]">
+                                        <label>{{ 'email'|trans|capitalize }}</label>
+                                        <input type="email" class="form-control" name="contact[emails][uuid][email]">
                                     </div>
                                     <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
                                         <a class="btn btn-danger float-right text-white"  onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
                                     </div>
                                 </div>
-                            {% endfor %}
-                        {% endif %}
+
+                                {% if contact.emails is defined and contact.emails is not empty %}
+                                    {% for email in contact.emails %}
+                                <div class="row" id="{{ email.id }}">
+                                    <!--
+                                    <input type="hidden" id="{{ email.id }}_@type" name="contact[emails][{{ email.id }}][@type]" value="Email">
+                                    -->
+                                    <input type="hidden" id={{ email.id }}_id" name="contact[emails][{{ email.id }}][id]" value="emails/{{ email['id'] }}">
+                                    <input type="hidden" id="{{ email.id }}_@id" name="contact[emails][{{ email.id }}][@id]" value="/emails/{{ email['id'] }}">
+                                    <div class="form-group col-6">
+                                        <label for="{{ email.id }}_name">{{ 'name'|trans|capitalize }}*</label>
+                                        <input type="text" class="form-control" {% if email.name|default %}value="{{ email.name }}"{% endif %} id="{{ email.id }}_name" name="contact[emails][{{ email.id }}][name]" required>
+                                    </div>
+                                    <div class="form-group col-5">
+                                        <label for="_email">{{ 'email'|trans|capitalize }}</label>
+                                        <input type="email" class="form-control" {% if email.email|default %}value="{{ email.email }}"{% endif %} id="{{ email.id }}_email" name="contact[emails][{{ email.id }}][email]">
+                                    </div>
+                                    <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
+                                        <a class="btn btn-danger float-right text-white" onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                                    </div>
+                                </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--  phone numbers -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body p-6" id="phone-list">
+                                <div class="row">
+                                    <div class="form-group  col-md-6 mb-6">
+                                        <h3 class="h4 mb-4">{{ 'phone numbers'|trans|capitalize }}</h3>
+                                    </div>
+                                    <div class="form-group  col-md-6 mb-6">
+                                        <a class="btn btn-success float-right text-white" onclick="addItemToList('phone-list');"><i class="fal fa-plus"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="phone-list-new" style="display: none;">
+                                    <div class="form-group col-6">
+                                        <label>{{ 'name'|trans|capitalize }}*</label>
+                                        <input type="text" class="form-control" name="contact[telephones][uuid][name]" required>
+                                    </div>
+                                    <div class="form-group col-5">
+                                        <label>{{ 'telephone'|trans|capitalize }}</label>
+                                        <input type="tel" class="form-control"name="contact[telephones][uuid][telephone]">
+                                    </div>
+                                    <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
+                                        <a class="btn btn-danger float-right text-white"  onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                                    </div>
+                                </div>
+                                {% if contact.telephones is defined and contact.telephones is not empty %}
+                                    {% for number in contact.telephones %}
+                                        <div class="row" id="{{ number.id }}">
+                                            <!--
+                                            <input type="hidden" id="{{ number.id }}_@type" name="contact[telephones][{{ number.id }}][@type]" value="Telephone">
+                                            -->
+                                            <input type="hidden" id={{ number.id }}_id" name="contact[telephones][{{ number.id }}][id]" value="telephones/{{ number['id'] }}">
+                                            <input type="hidden" id="{{ number.id }}_@id" name="contact[telephones][{{ number.id }}][@id]" value="telephones/{{ number['id'] }}">
+                                            <div class="form-group col-6">
+                                                <label for="{{ number.id }}_name">{{ 'name'|trans|capitalize }}*</label>
+                                                <input type="text" class="form-control" {% if number.name|default %}value="{{ number.name }}"{% endif %} id="{{ number.id }}_name" name="contact[telephones][{{ number.id }}][name]" required>
+                                            </div>
+                                            <div class="form-group col-5">
+                                                <label for="_email">{{ 'telephone'|trans|capitalize }}</label>
+                                                <input type="tel" class="form-control" {% if number.telephone|default %}value="{{ number.telephone }}"{% endif %} id="{{ number.id }}telephone" name="contact[telephones][{{ number.id }}][telephone]">
+                                            </div>
+                                            <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
+                                                <a class="btn btn-danger float-right text-white"  onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -278,13 +284,13 @@
                                 <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>
                             </div>
                             <div class="form-group  col-md-6 mb-6">
-                                <a class="btn btn-primary float-right" onclick="addItemToList('social-list');">{{ 'add'|trans|capitalize }}</a>
+                                <a class="btn btn-success float-right text-white" onclick="addItemToList('social-list');"><i class="fal fa-plus"></i></a>
                             </div>
                         </div>
                         <div class="row" id="social-list-new" style="display: none;">
                             <div class="form-group col-3">
-                                <label>{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" name="contact[socials][uuid][name]">
+                                <label>{{ 'name'|trans|capitalize }}*</label>
+                                <input type="text" class="form-control" name="contact[socials][uuid][name]" required>
                             </div>
                             <div class="form-group col-3">
                                 <label>{{ 'type'|trans|capitalize }}</label>
@@ -312,8 +318,8 @@
                             <input type="hidden" id={{ social.id }}_id" name="contact[socials][{{ social.id }}][id]" value="socials/{{ social['id'] }}">
                             <input type="hidden" id="{{ social.id }}_@id" name="contact[socials][{{ social.id }}][@id]" value="socials/{{ social['id'] }}">
                             <div class="form-group col-3">
-                                <label for="{{ social.id }}_name">{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" {% if social.name|default %}value="{{ social.name }}"{% endif %} id="{{ social.id }}_name" name="contact[socials][{{ social.id }}][name]">
+                                <label for="{{ social.id }}_name">{{ 'name'|trans|capitalize }}*</label>
+                                <input type="text" class="form-control" {% if social.name|default %}value="{{ social.name }}"{% endif %} id="{{ social.id }}_name" name="contact[socials][{{ social.id }}][name]" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="{{ social.id }}_type">{{ 'type'|trans|capitalize }}</label>
