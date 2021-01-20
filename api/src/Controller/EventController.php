@@ -125,7 +125,7 @@ class EventController extends AbstractController
         $resources = array_column ($resourcecategories, 'resource');
 
         foreach($variables['events'] as $key => $event){
-            if(!in_array($event['id'], $resources)) {
+            if(!in_array($event['@id'], $resources) || $event['id'] == $id) {
                 unset($variables['events'][$key]);
                 continue;
             }
