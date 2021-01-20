@@ -25,9 +25,6 @@
 
             </p>
         </div>
-                    <i class="far fa-calendar-alt" data-toggle="tooltip" data-placement="top"
-                       data-original-title="{{ 'upcoming events'|trans|capitalize }}">&nbsp;{{ organizationEvents|length }}</i>
-                </li>
     </div>
     <div class="card-footer bg-transparent">
         <ul class="list-unstyled d-flex mb-0 py-2">
@@ -37,6 +34,11 @@
                    data-placement="top" title="{{ category.name }}" aria-hidden="true"></i>
             </li>
             {% endfor %}
+            <li>
+                <i class="far fa-calendar-alt" data-toggle="tooltip" data-placement="top"
+                   data-original-title="{{ 'upcoming events'|trans|capitalize }}">&nbsp;{{ organizationEvents|length }}
+                </i>
+            </li>
             <li class="ml-auto">
                 <a
                     {% if app.user|default %}
@@ -56,5 +58,4 @@
             </li>
         </ul>
     </div>
-                <li>
 </div>
