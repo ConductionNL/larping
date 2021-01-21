@@ -74,14 +74,6 @@ class OrganizationController extends AbstractController
                 $variables['organizations'][$key]['rating'] = $variables['organizations'][$key]['totals']['rating'];
                 $variables['organizations'][$key]['likes'] = $variables['organizations'][$key]['totals']['likes'];
             }
-            // check if this organization is liked by the current user
-            if ($this->getUser()) {
-                $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
-                $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $organizationUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];
-                if (count($likes) > 0) {
-                    $variables['organizations'][$key]['liked'] = true;
-                }
-            }
             // hotfix -> remove unwanted evenst
             if (!empty($resourceIds) && !in_array($organization['id'], $resourceIds)) {
                 unset($variables['organizations'][$key]);
@@ -102,7 +94,7 @@ class OrganizationController extends AbstractController
      * @Route("/{id}")
      * @Template
      */
-    public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, IdVaultService $idVaultService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
+    public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
         $variables = [];
         $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
@@ -116,33 +108,13 @@ class OrganizationController extends AbstractController
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['organization']['id']])['hydra:member'];
 
+        /* @todo this is tacky, the totals function on the rc should handle this */
         if ($this->getUser()) {
             // check if this organization is liked by the current user
             $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $organizationUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];
             if (count($likes) > 0) {
-                $variables['liked'] = true;
+                $variables['totals']['liked'] = true;
             }
-            foreach ($variables['events'] as $key => $event) {
-                // check if this event is liked by the current user
-                $eventUrl = $commonGroundService->cleanUrl(['component' => 'arc', 'type' => 'events', 'id' => $event['id']]);
-                $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $eventUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];
-                if (count($likes) > 0) {
-                    $variables['events'][$key]['liked'] = true;
-                }
-            }
-
-            $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
-            $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
-
-            $userCount = 0;
-            foreach ($variables['groups'] as $group) {
-                if ($group['name'] == 'root') {
-                    $variables['userCount'] = count($group['users']);
-                }
-            }
-
-
-
         }
 
         // Getting the offers

@@ -29,11 +29,11 @@
                             <span
                                 class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
                             <a href="#" onclick="likeItem('{{ event['id'] }}','{{ event['@id'] }}','{{ event['organization'] }}', this)"
-                               liked="{% if liked|default %}true{% else %}false{% endif %}"
+                               liked="{% if totals.liked|default %}true{% else %}false{% endif %}"
                                data-toggle="tooltip"
                                data-placement="top"
                                title=""
-                               data-original-title="Favourite this event"><i {% if liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                               data-original-title="{{ 'favourite this event'|trans|capitalize }}"><i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
                                     aria-hidden="true" id="icon_{{ event['id'] }}"></i>
                                 <span id="counter_{{ event['id'] }}">{{ totals.likes }}</span></a>
                         </div>
@@ -65,12 +65,16 @@
         </div><!--/.container -->
     </section>
 
+    <section>
+        {% include 'widgets/carusel.html.twig' %}
+    </section>
     <!-- ====================================
     ———	MAIN CONTENT
     ===================================== -->
     <section class="pt-7 pb-4 pt-md-9 pb-md-8">
         <div class="container">
             <div class="row">
+
                 <!--======= Main =======-->
                 <div class="col-md-8 col-lg-8 single-listing-content">
                     <!-- About -->
@@ -86,7 +90,7 @@
                     <!-- Catagories -->
                     {% if categories is defined and categories is not empty %}
                     <div>
-                        <h3 class="font-weight-normal mb-6">{{ 'settings'|trans|capitalize }}</h3>
+                        <h3 class="font-weight-normal mb-6">{{ 'categories'|trans|capitalize }}</h3>
                         {% include '/sections/categories.html.twig' with {'categories': categories} %}
                     </div>
 
@@ -119,104 +123,28 @@
                             {% endfor %}
                         </div><!-- /.row -->
                     </div>
+
+                    <hr>
                     {% endif %}
 
-                        <!-- Added by -->
-                        <div>
-                            <h3 class="font-weight-normal mb-6">{{ 'organized by'|trans|capitalize }}</h3>
-                            <div class="media mb-7">
-                                {% if organization.style.favicon.base64|default %}
-                                    <div class="media-img">
-                                        <img src="
-                                {{ organization.style.favicon.base64 }}"
-                                             class="mr-3 media-object rounded-circle" alt="Image User">
-                                    </div>
-                                {% endif %}
-                                {% if organization|default %}
-                                    <div class="media-body">
-                                        <h5 class="media-heading">{{ organization.name }}</h5>
-                                        <p>{{ organization.description }}</p>
-                                        <div class="d-flex flex-column flex-lg-row align-items-lg-center">
-                                            {% if contact is defined and contact is not empty %}
-                                                <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
-                                                    {% if contact.telephones is not empty and contact.emails is not empty %}
-                                                        <li class="list-inline-item">
-                                                            <i class="fa fa-phone" aria-hidden="true"></i>
-                                                            <span class="ml-2">
-                                                {{ contact.telephones[0].telephone }}</span>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                                                            <span class="ml-2">{{ contact.emails[0].email }}</span>
-                                                        </li>
-                                                    {% else %}
-                                                        <li class="list-inline-item">
-                                                            {{ "contact info not found"|trans|capitalize }}
-                                                        </li>
-                                                    {% endif %}
 
-                                                </ul>
-                                            {% else %}
-                                                <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
-                                                    <li class="list-inline-item">
-                                                        {{ "contact info not found"|trans|capitalize }}
-                                                    </li>
-                                                </ul>
-                                            {% endif %}
-
-                                            {% if contact.socials is defined and contact.socials is not empty %}
-                                                {% set socials = contact.socials %}
-                                                <ul class="list-inline list-inline-icon ml-lg-auto">
-                                                    <li class="list-inline-item">
-                                                        <a class="mr-2" href="{{ socials.facebook }}">
-                                                            <i class="fa fa-facebook-official" aria-hidden="true"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <a class="mr-2" href="{{ socials.twitter }}">
-                                                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <a class="mr-2" href="{{ socials.instagram }}">
-                                                            <i class="fa fa-instagram" aria-hidden="true"></i>
-                                                        </a>
-                                                    </li>
-
-                                                </ul>
-                                            {% else %}
-                                                <ul class="list-inline list-inline-icon ml-lg-auto">
-                                                    <li class="list-inline-item">
-                                                        {{ 'no socials found'|trans|capitalize }}
-                                                    </li>
-                                                </ul>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            <hr>
-                        </div>
-
-                        <!-- Reviews -->
-                        <a id="reviews">
-                        {% if reviews is defined and reviews is not empty %}
-                            <div>
-                                <h3 class="font-weight-normal mb-6">({{ totals.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
-                                {% include '/sections/reviews.html.twig' %}
-                            </div>
-
-                            <hr>
-                        {% endif %}
-
-                        <!-- Add a review -->
-                        <div id="add-review">
-                            <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
-                            {% include '/sections/review.html.twig' with {'item': event} %}
-                        </div>
-
+                    <!-- Reviews -->
+                    <a id="reviews">
+                    {% if reviews is defined and reviews is not empty %}
+                    <div>
+                        <h3 class="font-weight-normal mb-6">({{ totals.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
+                        {% include '/sections/reviews.html.twig' %}
                     </div>
+
+                    <hr>
+                    {% endif %}
+
+                    <!-- Add a review -->
+                    <div id="add-review">
+                        <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
+                        {% include '/sections/review.html.twig' with {'item': event} %}
+                    </div>
+                </div><!-- /.col -->
 
 
                     <!--======= Sidebar =======-->
@@ -224,12 +152,18 @@
                         <!-- Single listing Map -->
                         {% include 'widgets/map.html.twig' %}
 
+                        <hr>
+
                         <!-- Contact  -->
-                        <h5>{{ 'contact'|trans|capitalize }}</h5>
+                        <h5 class="mb-4">{{ 'by'|trans|capitalize }} {{ organization.name }}</h5>
+                        {% include 'widgets/contact_details.html.twig' with {'contact': commonground_resource(organization.contact)} %}
+
                         {% include 'widgets/contact_form.html.twig' %}
 
+                        <hr>
+
                         <!-- You may also like  -->
-                        <h5>{{ 'other events you might like'|trans|capitalize }}</h5>
+                        <h5 class="mb-4">{{ 'other events you might like'|trans|capitalize }}</h5>
                         {% for event in events %}
                             {% include '/cards/event.html.twig' with {'item': event} %}
                         {% endfor %}

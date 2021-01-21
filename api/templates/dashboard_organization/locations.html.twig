@@ -2,9 +2,8 @@
 
 {% block content %}
 
-    {% include 'dashboard_organization/menu.html.twig' %}
+    {# include 'dashboard_organization/menu.html.twig' #}
 
-    <!-- Breadcrumb -->
     <section class="pb-8 pt-5 bg-light height100vh">
         <div class="container">
             <!-- Breadcrumb -->
@@ -12,14 +11,14 @@
                 <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'locations'|trans|capitalize }}</h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
                     <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_dashboard_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item active"
                         aria-current="page">{{ 'locations'|trans|capitalize }}</li>
                 </ul>
             </nav>
 
-            <!-- locations -->
-            {%  include 'dashboard_organization/tables/locations.html.twig'%}
+            <!-- Products -->
+            {%  include 'dashboard_organization/tables/locations.html.twig' %}
         </div>
     </section>
 

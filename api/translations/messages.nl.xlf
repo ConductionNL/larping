@@ -546,6 +546,10 @@
          <source>favourite this event</source>
          <target>favoriet dit evenement</target>
          </trans-unit>
+         <trans-unit id="YterVrL" resname="remove this favourite">
+         <source>remove this favourite</source>
+         <target>verwijder deze favoriet</target>
+         </trans-unit>
          <trans-unit id="Yku36Xp" resname="login to favourite this event">
          <source>login to favourite this event</source>
          <target>log in om dit evenement favoriet te maken</target>
@@ -913,6 +917,10 @@
         <trans-unit id="YrFcSeW" resname="add more socials">
         <source>add more socials</source>
         <target>voeg meer socials toe</target>
+        </trans-unit>
+        <trans-unit id="2On21sg" resname="is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.">
+        <source>is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.</source>
+        <target>is een online platform dat als doel heeft, het verbinden en ondersteunen van spelers en organisatoren betrokken bij LARP events. Dit doet het door spelers makkelijk te laten verbinden met events en organisatoren met diverse tools zoals een ticketsysteem, character creatie en social campagnes.</target>
         </trans-unit>
     </body>
   </file>
