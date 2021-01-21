@@ -24,7 +24,7 @@
                 <div class="col-9">
 
                     <!-- search bar -->
-                    <form method="get" action="{{ path('app_event_index', {"categories":categories,"search":search}) }}" id="eventSortingForm">
+                    <form method="get" action="{{ path('app_event_index', {"categories":categories,"search":search, "startDate":startDate}) }}" id="eventSortingForm">
                           <div class="search-result-bar">
                                 {% if events|default %}
                                     <p>{{ 'we found'|trans|capitalize }}
@@ -33,6 +33,7 @@
                                 {% else %}
                                     <p>{{ 'no results found'|trans|capitalize }}.</p>
                                 {% endif %}
+
                                     <div class="ml-md-auto d-flex align-items-center justify-content-between">
                                         <div class="select-bg-transparent select-border">
                                             <div class="selectric-wrapper selectric-select-location">
