@@ -138,7 +138,7 @@ class EventController extends AbstractController
         // Nu hebbenw e een array van eventsd die een cat delel met het huidige event én zijn voorzien van totals
         $columns = array_column($variables['events'], 'rating');
         array_multisort($columns, SORT_DESC, $variables['events']);
-        // Gezoreerd op rating aflopend
+        // Events zijn nu gesorteerd op rating aflopend
 
         return $variables;
     }
