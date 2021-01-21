@@ -37,7 +37,9 @@ class ShoppingController extends AbstractController
             if ($order != false) {
                 $person = $commonGroundService->getResource($this->getUser()->getPerson());
                 $order = $shoppingService->uploadOrder($order, $person);
-                if (isset($order['@id'])) {
+                if ($order === false) {
+                    return $variables;
+                } elseif (isset($order['@id'])) {
                     $shoppingService->redirectToMollie($order);
                 }
             }
@@ -95,8 +97,11 @@ class ShoppingController extends AbstractController
     {
         if ($request->isMethod('POST')) {
             $offers = $request->get('offers');
+            $redirectUrl = $request->get('redirectUrl');
 
-            $shoppingService->addItemsToCart($offers);
+            if ($shoppingService->addItemsToCart($offers, $redirectUrl) === false) {
+                return $this->redirect($redirectUrl);
+            }
         }
 
         return $this->redirectToRoute('app_shopping_index');
