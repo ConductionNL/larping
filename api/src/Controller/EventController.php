@@ -75,7 +75,7 @@ class EventController extends AbstractController
 
             // if we are sorting by rating lets get the rating
             if ($sorting[0] == 'rating' || $sorting[0] == 'likes') {
-                $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $event['organization'],'resource'=>$event['@id'], 'author'=>$author]);
+                $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $event['organization'], 'resource'=>$event['@id'], 'author'=>$author]);
                 $variables['events'][$key]['rating'] = $variables['events'][$key]['totals']['rating'];
                 $variables['events'][$key]['likes'] = $variables['events'][$key]['totals']['likes'];
                 $variables['events'][$key]['liked'] = $variables['events'][$key]['totals']['liked'];
@@ -126,13 +126,13 @@ class EventController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
         // Prepare for filter
-        $variables['categoriesId'] = array_column ($variables['categories'], 'id');
+        $variables['categoriesId'] = array_column($variables['categories'], 'id');
         $categoryQuery['categories.id'] = $variables['categoriesId'];
         $resourcecategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
-        $resources = array_column ($resourcecategories, 'resource');
+        $resources = array_column($resourcecategories, 'resource');
 
-        foreach($variables['events'] as $key => $event){
-            if(!in_array($event['id'], $resources)) {
+        foreach ($variables['events'] as $key => $event) {
+            if (!in_array($event['id'], $resources)) {
                 unset($variables['events'][$key]);
                 continue;
             }
