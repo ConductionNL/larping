@@ -102,7 +102,13 @@ class EventController extends AbstractController
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['resource' => $variables['event']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['event']['@id']]);
+
+        // Getting the offers
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'], 'products.type' => 'simple'])['hydra:member']; // The product array is PUPRUSLY filled with offers instead of products
+        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+
         // check if this event is liked by the current user
+        // /* @todo dont use the rc component */
         if ($this->getUser()) {
             $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $eventUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];
             if (count($likes) > 0) {
@@ -112,9 +118,27 @@ class EventController extends AbstractController
 
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
-        // Getting the offers
-        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'], 'products.type' => 'simple'])['hydra:member']; // The product array is PUPRUSLY filled with offers instead of products
-        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+        // Prepare for filter
+        $variables['categoriesId'] = array_column ($variables['categories'], 'id');
+        $categoryQuery['categories.id'] = $variables['categoriesId'];
+        $resourcecategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
+        $resources = array_column ($resourcecategories, 'resource');
+
+        foreach($variables['events'] as $key => $event){
+            if(!in_array($event['id'], $resources)) {
+                unset($variables['events'][$key]);
+                continue;
+            }
+            // Voor alles wat we wel gevonden hebben
+            $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource'=>$event['@id']]);
+            $variables['events'][$key]['rating'] = $variables['events'][$key]['totals']['rating'];
+            $variables['events'][$key]['likes'] = $variables['events'][$key]['totals']['likes'];
+        }
+
+        // Nu hebbenw e een array van eventsd die een cat delel met het huidige event én zijn voorzien van totals
+        $columns = array_column($variables['events'], 'rating');
+        array_multisort($columns, SORT_DESC, $variables['events']);
+        // Events zijn nu gesorteerd op rating aflopend
 
         return $variables;
     }

@@ -622,6 +622,22 @@
          <source>email</source>
          <target>email</target>
          </trans-unit>
+         <trans-unit id="MaBTSgs" resname="number of members">
+         <source>number of memberss</source>
+         <target>Aantal leden</target>
+         </trans-unit>
+         <trans-unit id="NbaTkas" resname="keep track of characters and storylines">
+         <source>keep track of characters and storylines</source>
+         <target>houd personages en verhaallijnen bij</target>
+         </trans-unit>
+         <trans-unit id="MaTS12g" resname="fully based on the id-vault privacy concept">
+         <source>fully based on the id-vault privacy concept</source>
+         <target>volledig gebaseerd op het privacyconcept van id-vault</target>
+         </trans-unit>
+         <trans-unit id="KJarSgs" resname="sale tickets online and manage event atendence">
+         <source>sale tickets online and manage event atendence</source>
+         <target>verkoop tickets online en beheer de aanwezigheid van evenementen</target>
+         </trans-unit>
          <trans-unit id="yMakIss" resname="location of">
          <source>location of</source>
          <target>locatie van</target>
@@ -637,6 +653,10 @@
          <trans-unit id="yrKWkas" resname="edit profile">
          <source>edit profile</source>
          <target>bewerk profiel</target>
+         </trans-unit>
+         <trans-unit id="BfsRAas" resname="locations">
+         <source>locations</source>
+         <target>locaties</target>
          </trans-unit>
          <trans-unit id="terskas" resname="locations">
          <source>locations</source>
@@ -897,6 +917,10 @@
         <trans-unit id="YrFcSeW" resname="add more socials">
         <source>add more socials</source>
         <target>voeg meer socials toe</target>
+        </trans-unit>
+        <trans-unit id="2On21sg" resname="is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.">
+        <source>is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.</source>
+        <target>is een online platform dat als doel heeft, het verbinden en ondersteunen van spelers en organisatoren betrokken bij LARP events. Dit doet het door spelers makkelijk te laten verbinden met events en organisatoren met diverse tools zoals een ticketsysteem, character creatie en social campagnes.</target>
         </trans-unit>
     </body>
   </file>

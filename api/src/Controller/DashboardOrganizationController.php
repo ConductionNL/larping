@@ -594,44 +594,64 @@ class DashboardOrganizationController extends AbstractController
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/locations/{id}")
+     * @Template
+     */
+    public function locationAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params, $id)
+    {
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
+        $variables['activeCategories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
+        $variables['activeCategories'] = array_column($variables['activeCategories'], 'id');
+
+        if ($id != 'add') {
+            $variables['location'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places', 'id' => $id]);
+        } else {
+            $variables['location'] = [];
+        }
+
+        if ($request->get('action') == 'delete') {
+            $commonGroundService->deleteResource($variables['location']);
+
+            return $this->redirectToRoute('app_dashboardorganization_locations');
+        }
+
 
         if ($request->isMethod('POST')) {
-            // Get the current resource
-            $location = $request->get('location');
-            $address = $request->get('address');
-            $categories = $request->get('categories');
-            // Set the current organization as owner
+            $location = $request->request->all();
             $location['organization'] = $variables['organization']['@id'];
-
-            if (!$categories) {
-                $categories = [];
-            }
-
-            if (!empty($address)) {
-                if (!isset($address['name'])) {
-                    $address['name'] = $location['name'];
-                }
-                $address = $commonGroundService->saveResource($address, ['component' => 'lc', 'type' => 'addresses']);
-                $location['address'] = '/addresses/'.$address['id'];
-            }
-            // Save the resource
-            $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
 
             // Setting the categories
             /*@todo  This should go to a wrc service */
-            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$location['id']])['hydra:member'];
-
-            if (count($resourceCategories) > 0) {
-                $resourceCategory = $resourceCategories[0];
-            } else {
-                $resourceCategory = ['resource'=>$location['@id'], 'catagories'=>[]];
+            if (isset($location['categories'])) {
+                $categories = $location['categories'];
+                unset($location['categories']);
             }
 
-            $resourceCategory['categories'] = $categories;
-            $resourceCategory['catagories'] = $categories;
+            // Lets save te organization
+            $variables['location'] = $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
 
-            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+            if (isset($categories)) {
+                /*@todo  This should go to a wrc service */
+                $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $variables['location']['id']])['hydra:member'];
+                if (count($resourceCategories) > 0) {
+                    $resourceCategory = $resourceCategories[0];
+                } else {
+                    $resourceCategory = ['resource' => $variables['location']['@id'], 'catagories' => []];
+                }
+
+                $resourceCategory['categories'] = $categories;
+
+                $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+            }
+
+            return $this->redirectToRoute('app_dashboardorganization_location', ['id'=> $location['id']]);
         }
 
         return $variables;
@@ -654,68 +674,54 @@ class DashboardOrganizationController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $organization = $request->request->all();
+
+            // Let set some aditional data
             $organization['rsin'] = '';
             $organization['chamberOfComerce'] = '';
-            $person = $commonGroundService->getResource($this->getUser()->getPerson());
-//            $categories = $organization['categories'];
 
-            $email = [];
-            $email['name'] = 'email for '.$person['name'];
-            $email['email'] = $request->get('email');
-            if (isset($email['id'])) {
-                $commonGroundService->saveResource($email, ['component' => 'cc', 'type' => 'emails']);
-                $organization['emails'][] = '/emails/'.$email['id'];
-            } elseif (isset($email['email'])) {
-                $organization['emails'][] = $email;
-            }
-
-            $telephone = [];
-            $telephone['name'] = 'telephone for '.$person['name'];
-            $telephone['telephone'] = $request->get('telephone');
-            if (isset($telephone['id'])) {
-                $commonGroundService->saveResource($telephone, ['component' => 'cc', 'type' => 'telephones']);
-                $organization['telephones'][] = '/telephones/'.$telephone['id'];
-            } elseif (isset($telephone['telephone'])) {
-                $organization['telephones'][] = $telephone;
-            }
-
-            $address = [];
-            $address['name'] = 'address for '.$person['name'];
-            $address['street'] = $request->get('street');
-            $address['houseNumber'] = $request->get('houseNumber');
-            $address['houseNumberSuffix'] = $request->get('houseNumberSuffix');
-            $address['postalCode'] = $request->get('postalCode');
-            $address['locality'] = $request->get('locality');
-            if (isset($address['id'])) {
-                $commonGroundService->saveResource($address, ['component' => 'cc', 'type' => 'addresses']);
-                $organization['adresses'][] = '/addresses/'.$address['id'];
-            } else {
-                $organization['adresses'][] = $address;
-            }
-
-            $socials = [];
-            $socials['name'] = $request->get('type').' of '.$person['name'];
-            $socials['description'] = $request->get('type').' of '.$person['name'];
-            $socials['type'] = $request->get('type');
-            $socials['url'] = $request->get('url');
-            if (isset($twitter['id'])) {
-                $commonGroundService->saveResource($socials, ['component' => 'cc', 'type' => 'socials']);
-                $organization['socials'][] = '/socials/'.$socials['id'];
-            } else {
-                $organization['socials'][] = $socials;
-            }
+            // lets clear up the non used example forms
+            unset($organization['contact']['addresses']['uuid']);
+            unset($organization['contact']['socials']['uuid']);
+            unset($organization['contact']['emails']['uuid']);
+            unset($organization['contact']['telephones']['uuid']);
 
             // Setting the categories
             /*@todo  This should go to a wrc service */
             if (isset($organization['categories'])) {
                 $categories = $organization['categories'];
+                unset($organization['categories']);
             }
-            if (!isset($categories)) {
-                $categories = [];
-            }
-            unset($organization['categories']);
 
+            // removing UUID's from contact data
+            $subobjects = ['emails'=> [],'adresses'=> [],'telephones'=> [],'socials'=> []];
+            foreach($subobjects as $subobject => $subobjectArray){
+                // let see if we have values
+                if(array_key_exists($subobject, $organization['contact'])){
+                    // transefer the vlaues to holder array without the uuuid as an index
+                    foreach($organization['contact'][$subobject] as $key => $tocopy){
+                        if($key!='uuid'){
+                            $subobjects[$subobject][] = $tocopy;
+                        }
+                    }
+                }
+                // replace the values in the original array
+                $organization['contact'][$subobject] = $subobjects[$subobject];
+            }
+
+            // Lets save the contact
+            if (isset($organization['contact'])) {
+                $contact = $organization['contact'];
+                $contact['name'] = $organization['name'];
+                $contact['description'] = $organization['description'];
+                $contact['sourceOrganization'] = $organization['@id']; /* @todo the hell? */
+                //var_dump(json_encode($contact));
+                $organization['contact'] = $commonGroundService->saveResource($contact, ['component' => 'cc', 'type' => 'organizations'])['@id'];
+            }
+
+            // Lets save te organization
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
+
+            /*
             $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
             $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
@@ -727,19 +733,25 @@ class DashboardOrganizationController extends AbstractController
             $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
             $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
             $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
+            */
 
             // Setting the categories
-            /*@todo  This should go to a wrc service */
-            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$organization['id']])['hydra:member'];
-            if (count($resourceCategories) > 0) {
-                $resourceCategory = $resourceCategories[0];
-            } else {
-                $resourceCategory = ['resource'=>$organization['@id'], 'catagories'=>[]];
+
+            if (!isset($categories)) {
+                /*@todo  This should go to a wrc service */
+                $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $organization['id']])['hydra:member'];
+                if (count($resourceCategories) > 0) {
+                    $resourceCategory = $resourceCategories[0];
+                } else {
+                    $resourceCategory = ['resource' => $organization['@id'], 'catagories' => []];
+                }
+
+                $resourceCategory['categories'] = $categories;
+
+                $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
             }
 
-            $resourceCategory['categories'] = $categories;
-
-            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+            return $this->redirectToRoute('app_dashboardorganization_edit', ['id'=>$organization['id']]);
         }
 
         $variables['categories'] = [];
