@@ -6,16 +6,13 @@ namespace App\Service;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
-use Exception;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\RouterInterface;
-
+use Symfony\Component\Security\Core\Security;
 
 class ShoppingService
 {
@@ -39,8 +36,7 @@ class ShoppingService
         Security $security,
         IdVaultService $idVaultService,
         RouterInterface $router
-    )
-    {
+    ) {
         $this->params = $params;
         $this->cash = $cache;
         $this->session = $session;
@@ -70,7 +66,7 @@ class ShoppingService
 
         if (isset($object['paymentUrl']) && strpos($object['paymentUrl'], 'https://www.mollie.com') !== false) {
             $this->session->set('invoice@id', $object['@id']);
-            header('Location: ' . $object['paymentUrl']);
+            header('Location: '.$object['paymentUrl']);
             exit;
         }
     }
@@ -245,8 +241,8 @@ class ShoppingService
             return false;
         }
 
-        $uploadedOrder['name'] = 'Order for ' . $person['name'];
-        $uploadedOrder['description'] = 'Order for ' . $person['name'];
+        $uploadedOrder['name'] = 'Order for '.$person['name'];
+        $uploadedOrder['description'] = 'Order for '.$person['name'];
         $uploadedOrder['organization'] = $order['organization'];
         $uploadedOrder['customer'] = $person['@id'];
 
@@ -292,7 +288,7 @@ class ShoppingService
                 }
             }
             $item['priceCurrency'] = $offer['priceCurrency'];
-            $item['order'] = '/orders/' . $uploadedOrder['id'];
+            $item['order'] = '/orders/'.$uploadedOrder['id'];
         }
 
         $item = $this->commonGroundService->saveResource($item, ['component' => 'orc', 'type' => 'order_items']);
@@ -467,7 +463,7 @@ class ShoppingService
                 foreach ($objects as $properties) {
                     if (is_array($properties)) {
                         foreach ($properties as $property) {
-                            if (!is_array($property) && strpos($property, 'https')  !== false && strpos($property, '/api/v1/') !== false && $this->commonGroundService->isResource($property) == false) {
+                            if (!is_array($property) && strpos($property, 'https') !== false && strpos($property, '/api/v1/') !== false && $this->commonGroundService->isResource($property) == false) {
                                 return true;
                             } elseif (is_array($property)) {
                                 foreach ($property as $prop) {
@@ -482,10 +478,8 @@ class ShoppingService
             } elseif (!is_array($objects) && strpos($objects, 'https') && strpos($objects, '/api/v1/') && $this->commonGroundService->isResource($objects) != false) {
                 return true;
             }
-
         }
 
         return false;
     }
-
 }
