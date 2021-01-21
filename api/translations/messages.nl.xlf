@@ -449,12 +449,12 @@
          <source>my</source>
          <target>mijn</target>
          </trans-unit>
-         <trans-unit id="R3s2gBz" resname="favourites">
-         <source>favourites</source>
+         <trans-unit id="R3s2gBz" resname="favorites">
+         <source>favorites</source>
          <target>favorieten</target>
          </trans-unit>
-         <trans-unit id="k2mN2ba" resname="no favourites found">
-         <source>no favourites found</source>
+         <trans-unit id="k2mN2ba" resname="no favorites found">
+         <source>no favorites found</source>
          <target>geen favorieten gevonden</target>
          </trans-unit>
          <trans-unit id="U8Uj2nS" resname="find">
@@ -542,24 +542,24 @@
          <source>favorieten</source>
          <target>favorieten</target>
          </trans-unit>
-         <trans-unit id="m5hUIS4" resname="favourite this event">
-         <source>favourite this event</source>
+         <trans-unit id="m5hUIS4" resname="favorite this event">
+         <source>favorite this event</source>
          <target>favoriet dit evenement</target>
          </trans-unit>
-         <trans-unit id="YterVrL" resname="remove this favourite">
-         <source>remove this favourite</source>
+         <trans-unit id="YterVrL" resname="remove this favorite">
+         <source>remove this favorite</source>
          <target>verwijder deze favoriet</target>
          </trans-unit>
-         <trans-unit id="Yku36Xp" resname="login to favourite this event">
-         <source>login to favourite this event</source>
+         <trans-unit id="Yku36Xp" resname="login to favorite this event">
+         <source>login to favorite this event</source>
          <target>log in om dit evenement favoriet te maken</target>
          </trans-unit>
-         <trans-unit id="6ZR6vtw" resname="favourite this organization">
-         <source>favourite this organization</source>
+         <trans-unit id="6ZR6vtw" resname="favorite this organization">
+         <source>favorite this organization</source>
          <target>favoriet deze organisatie</target>
          </trans-unit>
-         <trans-unit id="BNpxLyf" resname="login to favourite this organization">
-         <source>login to favourite this organization</source>
+         <trans-unit id="BNpxLyf" resname="login to favorite this organization">
+         <source>login to favorite this organization</source>
          <target>log in om deze organisatie favoriet te maken</target>
          </trans-unit>
          <trans-unit id="GBYEzZq" resname="enter your keywords">
@@ -778,12 +778,12 @@
          <source>submit message</source>
          <target>verzend bericht</target>
          </trans-unit>
-         <trans-unit id="UtRfCvd" resname="favourite this organisation">
-         <source>favourite this organisation</source>
+         <trans-unit id="UtRfCvd" resname="favorite this organisation">
+         <source>favorite this organisation</source>
          <target>favoriet deze organisatie</target>
          </trans-unit>
-         <trans-unit id="TraEXvd" resname="favourite this listing">
-         <source>favourite this listing</source>
+         <trans-unit id="TraEXvd" resname="favorite this listing">
+         <source>favorite this listing</source>
          <target>favoriet deze aanbieding</target>
          </trans-unit>
          <trans-unit id="OPnHHTs" resname="manage organization">
