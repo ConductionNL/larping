@@ -119,13 +119,13 @@ class EventController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
         // Prepare for filter
-        $variables['categoriesId'] = array_column ($variables['categories'], 'id');
+        $variables['categoriesId'] = array_column($variables['categories'], 'id');
         $categoryQuery['categories.id'] = $variables['categoriesId'];
         $resourcecategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
-        $resources = array_column ($resourcecategories, 'resource');
+        $resources = array_column($resourcecategories, 'resource');
 
-        foreach($variables['events'] as $key => $event){
-            if(!in_array($event['id'], $resources)) {
+        foreach ($variables['events'] as $key => $event) {
+            if (!in_array($event['id'], $resources)) {
                 unset($variables['events'][$key]);
                 continue;
             }
