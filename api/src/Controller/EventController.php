@@ -64,14 +64,21 @@ class EventController extends AbstractController
         // Lets sort (we do this post query so that we might filter on ratins
         $sorting = explode('-', $variables['sorting']);
 
+        // if logged in set the author for checking if this user liked an event.
+        $author = false;
+        if ($this->getUser()) {
+            $author = $this->getUser()->getPerson();
+        }
+
         // hotfix -> remove unwanted events
         foreach ($variables['events'] as $key => $event) {
 
             // if we are sorting by rating lets get the rating
             if ($sorting[0] == 'rating' || $sorting[0] == 'likes') {
-                $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource'=>$event['@id']]);
+                $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $event['organization'],'resource'=>$event['@id'], 'author'=>$author]);
                 $variables['events'][$key]['rating'] = $variables['events'][$key]['totals']['rating'];
                 $variables['events'][$key]['likes'] = $variables['events'][$key]['totals']['likes'];
+                $variables['events'][$key]['liked'] = $variables['events'][$key]['totals']['liked'];
             }
             // hotfix -> remove unwanted evenst
             if (!empty($resourceIds) && !in_array($event['id'], $resourceIds)) {
@@ -133,6 +140,7 @@ class EventController extends AbstractController
             $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource'=>$event['@id']]);
             $variables['events'][$key]['rating'] = $variables['events'][$key]['totals']['rating'];
             $variables['events'][$key]['likes'] = $variables['events'][$key]['totals']['likes'];
+            $variables['events'][$key]['liked'] = $variables['events'][$key]['totals']['liked'];
         }
 
         // Nu hebbenw e een array van eventsd die een cat delel met het huidige event én zijn voorzien van totals
