@@ -673,13 +673,13 @@ class DashboardOrganizationController extends AbstractController
             }
 
             // removing UUID's from contact data
-            $subobjects = ['emails'=> [],'adresses'=> [],'telephones'=> [],'socials'=> []];
-            foreach($subobjects as $subobject => $subobjectArray){
+            $subobjects = ['emails'=> [], 'adresses'=> [], 'telephones'=> [], 'socials'=> []];
+            foreach ($subobjects as $subobject => $subobjectArray) {
                 // let see if we have values
-                if(array_key_exists($subobject, $organization['contact'])){
+                if (array_key_exists($subobject, $organization['contact'])) {
                     // transefer the vlaues to holder array without the uuuid as an index
-                    foreach($organization['contact'][$subobject] as $key => $tocopy){
-                        if($key!='uuid'){
+                    foreach ($organization['contact'][$subobject] as $key => $tocopy) {
+                        if ($key != 'uuid') {
                             $subobjects[$subobject][] = $tocopy;
                         }
                     }
