@@ -265,7 +265,7 @@ class ShoppingService
         foreach ($order['orderItems'] as $item) {
             $offer = $this->commonGroundService->getResource($item['offer']);
 
-            $offer['products'][0]['org'] = 'https://dev.larping.eu/api/v1/pdc/1235456';
+//            $offer['products'][0]['org'] = 'https://dev.larping.eu/api/v1/pdc/1235456';
             if ($this->checkForBrokenObjects($offer) == true ||
                 $this->checkForBrokenObjects($offer['products']) == true) {
                 $this->flash->add('danger', 'there is a problem with certain data');

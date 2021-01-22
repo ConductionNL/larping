@@ -28,7 +28,12 @@
 
             <div class="d-flex justify-content-between">
                 <h4 class="mb-2">{{ 'items'|trans|capitalize }}</h4>
-                <button class="btn btn-sm btn-primary mb-2 mr-2">{{ 'download'|trans|capitalize~' '~'invoice'|trans }}</button>
+                <form action="{{ path('app_dashboarduser_downloadinvoice') }}" method="post">
+                    <input type="hidden" name="redirectUrl" value="/dashboard/user/orders/{{ order.id }}">
+                    <input type="hidden" name="order" value="{{ order['@id'] }}">
+                    <button
+                        class="btn btn-sm btn-primary mb-2 mr-2">{{ 'download'|trans|capitalize~' '~'invoice'|trans }}</button>
+                </form>
             </div>
 
             <!-- My Events -->
