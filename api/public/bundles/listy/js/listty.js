@@ -558,8 +558,8 @@
     });
   }
 
-  // My favourites
-  var adminListing = $('#my-favourites');
+  // My favorites
+  var adminListing = $('#my-favorites');
   if (adminListing.length !== 0) {
     adminListing.DataTable({
       language: {

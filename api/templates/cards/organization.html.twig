@@ -42,13 +42,13 @@
                    data-original-title="{{ 'number of members'|trans|capitalize }}"></i><span class="mr-1"> {{ organizationMembers|length }}</span>
             </li>
             <li class="ml-auto">
-                <i {% if resource.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ resource['id'] }}" {% if app.user|default %}
+                <i {% if resource.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ resource['id'] }}" {% if app.user|default %}
                     onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
-                    data-original-title="{{ 'favourite this organization'|trans|capitalize }}"
+                    data-original-title="{{ 'favorite this organization'|trans|capitalize }}"
                 {% else %}
-                    data-original-title="{{ 'login to favourite this organization'|trans|capitalize }}"
+                    data-original-title="{{ 'login to favorite this organization'|trans|capitalize }}"
                 {% endif %}
-                    liked="{% if resource.liked|default %}true{% else %}false{% endif %}"
+                    liked="{% if resource.totals.liked|default %}true{% else %}false{% endif %}"
                      data-toggle="tooltip"
                      data-placement="top"
                      title=""></i>

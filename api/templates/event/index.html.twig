@@ -24,7 +24,7 @@
                 <div class="col-9">
 
                     <!-- search bar -->
-                    <form method="get" action="{{ path('app_event_index', {"categories":categories,"search":search}) }}" id="eventSortingForm">
+                    <form method="get" action="{{ path('app_event_index', {"categories":categories,"search":search, "startDate":startDate}) }}" id="eventSortingForm">
                           <div class="search-result-bar">
                                 {% if events|default %}
                                     <p>{{ 'we found'|trans|capitalize }}
@@ -33,19 +33,21 @@
                                 {% else %}
                                     <p>{{ 'no results found'|trans|capitalize }}.</p>
                                 {% endif %}
+
                                     <div class="ml-md-auto d-flex align-items-center justify-content-between">
                                         <div class="select-bg-transparent select-border">
                                             <div class="selectric-wrapper selectric-select-location">
                                                 <div class="selectric-select">
-                                                    <select class="select-location" style="text-align: center" name="sorting_order" onchange="javascript:document.getElementById('eventSortingForm').submit();">
-                                                        <option value="likes-asc"  {% if sorting is defined  and sorting == "likes-asc"%} selected {% endif %}>{{ 'likes, >'|trans|capitalize }}</option>
-                                                        <option value="likes-desc" {% if sorting is defined  and sorting == "likes-desc"%} selected {% endif %}><i class="fal fa-sort-down"></i> {{ 'likes, <'|trans|capitalize }}</option>
-                                                        <option value="rating-asc" {% if sorting is defined  and sorting == "rating-asc"%} selected {% endif %}>&#xf0de; {{ 'rating, >'|trans|capitalize }}</option>
-                                                        <option value="rating-desc" {% if sorting is defined  and sorting == "rating-desc"%} selected {% endif %}>&#xf0dd; {{ 'rating, <'|trans|capitalize }}</option>
-                                                        <option value="name-asc" {% if sorting is defined  and sorting == "name-asc"%} selected {% endif %}>{{ 'name, >'|trans|capitalize }}</option>
-                                                        <option value="name-desc" {% if sorting is defined  and sorting == "name-desc"%} selected {% endif %}> {{ 'name, <'|trans|capitalize }}</option>
-                                                        <option value="startDate-asc" {% if sorting is defined  and sorting == "startDate-asc"%} selected {% endif %}>{{ 'date, >'|trans|capitalize }}</option>
-                                                        <option value="startDate-desc" {% if sorting is defined  and sorting == "startDate-desc"%} selected {% endif %}>{{ 'date, <'|trans|capitalize }}</option>
+                                                    <select class="selectpicker select-location" style="text-align: center" name="sorting_order"
+                                                            onchange="javascript:document.getElementById('eventSortingForm').submit();">
+                                                        <option data-icon="fa fa-arrow-up" value="likes-asc" {% if sorting is defined  and sorting == "likes-asc"%} selected {% endif %}>{{ 'likes'|trans|capitalize }}</option>
+                                                        <option data-icon="fa fa-arrow-down" value="likes-desc" {% if sorting is defined  and sorting == "likes-desc"%} selected {% endif %}> {{ 'likes'|trans|capitalize }}</option>
+                                                        <option data-icon="fa fa-arrow-up" value="rating-asc" {% if sorting is defined  and sorting == "rating-asc"%} selected {% endif %}>{{ 'rating'|trans|capitalize }}</option>
+                                                        <option data-icon="fa fa-arrow-down" value="rating-desc" {% if sorting is defined  and sorting == "rating-desc"%} selected {% endif %}> {{ 'rating'|trans|capitalize }}</option>
+                                                        <option data-icon="fa fa-arrow-up" value="name-asc" {% if sorting is defined  and sorting == "name-asc"%} selected {% endif %}>{{ 'name'|trans|capitalize }}</option>
+                                                        <option data-icon="fa fa-arrow-down" value="name-desc" {% if sorting is defined  and sorting == "name-desc"%} selected {% endif %}> {{ 'name'|trans|capitalize }}</option>
+                                                        <option data-icon="fa fa-arrow-up" value="startDate-asc" {% if sorting is defined  and sorting == "startDate-asc"%} selected {% endif %}>{{ 'date'|trans|capitalize }}</option>
+                                                        <option data-icon="fa fa-arrow-down" value="startDate-desc" {% if sorting is defined  and sorting == "startDate-desc"%} selected {% endif %}>{{ 'date'|trans|capitalize }}</option>
                                                     </select>
                                                 </div>
                                                 <div class="selectric-items" tabindex="-1">
@@ -60,16 +62,14 @@
                                             </div>
                                             <input class="selectric-input" tabindex="0">
                                         </div>
-                                        {#
-                                        <div class="icons">
-                                            <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">
-                                                <i class="fa fa-th" aria-hidden="true"></i>
-                                            </a>
-                                            <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">
-                                                <i class="fa fa-th-list" aria-hidden="true"></i>
-                                           </a>
-                                        </div>
-                                        #}
+{#                                        <div class="icons">#}
+{#                                            <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">#}
+{#                                                <i class="fa fa-th" aria-hidden="true"></i>#}
+{#                                            </a>#}
+{#                                            <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">#}
+{#                                                <i class="fa fa-th-list" aria-hidden="true"></i>#}
+{#                                            </a>#}
+{#                                        </div>#}
                                     </div>
                             </div>
                     </form>
@@ -84,11 +84,11 @@
                         </div>
                     </div>
 
-                    <div id="listFullwidthDiv" class="fade-in">
-                        {% for event in events %}
-                            {% include '/cards/list/event.html.twig' with {'item': event} %}
-                        {% endfor %}
-                    </div>
+{#                    <div id="listFullwidthDiv" class="fade-in">#}
+{#                        {% for event in events %}#}
+{#                            {% include '/cards/list/event.html.twig' with {'item': event} %}#}
+{#                        {% endfor %}#}
+{#                    </div>#}
                 </div><!-- /.col -->
 
                 <div class="col-lg-3">
@@ -98,32 +98,32 @@
         </div><!-- /.container -->
     </section>
 
-    <script>
-        var gridFullwidthDiv = document.getElementById('gridFullwidthDiv');
-        var listFullwidthDiv = document.getElementById('listFullwidthDiv');
-        var switchToGridA = document.getElementById('switchToGridA');
-        var switchToListA = document.getElementById('switchToListA');
+{#    <script>#}
+{#        var gridFullwidthDiv = document.getElementById('gridFullwidthDiv');#}
+{#        var listFullwidthDiv = document.getElementById('listFullwidthDiv');#}
+{#        var switchToGridA = document.getElementById('switchToGridA');#}
+{#        var switchToListA = document.getElementById('switchToListA');#}
 
-        listFullwidthDiv.style.display = "none";
+{#        listFullwidthDiv.style.display = "none";#}
 
-        function switchToGrid() {
-            if (gridFullwidthDiv.style.display != "block") {
-                gridFullwidthDiv.style.display = "block";
-                listFullwidthDiv.style.display = "none";
-                switchToListA.classList.toggle("active");
-                switchToGridA.classList.toggle("active");
-            }
-        }
+{#        function switchToGrid() {#}
+{#            if (gridFullwidthDiv.style.display != "block") {#}
+{#                gridFullwidthDiv.style.display = "block";#}
+{#                listFullwidthDiv.style.display = "none";#}
+{#                switchToListA.classList.toggle("active");#}
+{#                switchToGridA.classList.toggle("active");#}
+{#            }#}
+{#        }#}
 
-        function switchToList() {
-            if (listFullwidthDiv.style.display != "block") {
-                listFullwidthDiv.style.display = "block";
-                gridFullwidthDiv.style.display = "none";
-                switchToListA.classList.toggle("active");
-                switchToGridA.classList.toggle("active");
-            }
-        }
+{#        function switchToList() {#}
+{#            if (listFullwidthDiv.style.display != "block") {#}
+{#                listFullwidthDiv.style.display = "block";#}
+{#                gridFullwidthDiv.style.display = "none";#}
+{#                switchToListA.classList.toggle("active");#}
+{#                switchToGridA.classList.toggle("active");#}
+{#            }#}
+{#        }#}
 
-    </script>
+{#    </script>#}
 
 {% endblock %}

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6eda0c3f9a2dc3c6c5e358bef233f408",
+    "content-hash": "d597e3695dde76991f5526909345da35",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -685,12 +685,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/CommonGroundBundle.git",
-                "reference": "2168950d9912ece7bb644cf04d3d85ea01abc4a2"
+                "reference": "0cc2c87327d7ac1c037e6cb7fadae478f593db3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/2168950d9912ece7bb644cf04d3d85ea01abc4a2",
-                "reference": "2168950d9912ece7bb644cf04d3d85ea01abc4a2",
+                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/0cc2c87327d7ac1c037e6cb7fadae478f593db3e",
+                "reference": "0cc2c87327d7ac1c037e6cb7fadae478f593db3e",
                 "shasum": ""
             },
             "require": {
@@ -768,12 +768,7 @@
                 "postcode",
                 "rsin"
             ],
-            "support": {
-                "email": "ruben@conduction.nl",
-                "issues": "https://github.com/ConductionNL/ConductionCommonGroundBundle/issues",
-                "source": "https://github.com/ConductionNL/ConductionCommonGroundBundle"
-            },
-            "time": "2021-01-15T09:25:54+00:00"
+            "time": "2021-01-21T16:19:21+00:00"
         },
         {
             "name": "conduction/id-vault-php",
@@ -5178,6 +5173,51 @@
             "description": "A security checker for your composer.lock",
             "abandoned": "https://github.com/fabpot/local-php-security-checker",
             "time": "2019-11-01T13:20:14+00:00"
+        },
+        {
+            "name": "snapappointments/bootstrap-select",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/snapappointments/bootstrap-select.git",
+                "reference": "ec243882c07ea16bef828a908c753366636dd634"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/snapappointments/bootstrap-select/zipball/ec243882c07ea16bef828a908c753366636dd634",
+                "reference": "ec243882c07ea16bef828a908c753366636dd634",
+                "shasum": ""
+            },
+            "suggest": {
+                "components/jquery": ">=1.8",
+                "twbs/bootstrap": "~3.0.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Silvio Moreto",
+                    "homepage": "https://github.com/silviomoreto"
+                }
+            ],
+            "description": "Bootstrap-select is a jQuery plugin that utilizes Bootstrap's dropdown.js to style and bring additional functionality to standard select elements.",
+            "homepage": "https://silviomoreto.github.io/bootstrap-select",
+            "keywords": [
+                "bootstrap",
+                "form",
+                "replacement",
+                "select"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/caseyjhol",
+                    "type": "github"
+                }
+            ],
+            "time": "2018-10-16T20:09:56+00:00"
         },
         {
             "name": "stof/doctrine-extensions-bundle",
@@ -10533,12 +10573,12 @@
             "version": "1.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "shasum": ""
             },
@@ -10813,6 +10853,7 @@
         "conduction/id-vault-php": 20,
         "conduction/idvaultbundle": 20,
         "conduction/listybundle": 20,
+        "snapappointments/bootstrap-select": 20,
         "twig/intl-extra": 20
     },
     "prefer-stable": false,

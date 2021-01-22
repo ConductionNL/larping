@@ -28,7 +28,7 @@
                     <button class="btn-like px-2" onclick="likeItem(this)" data-toggle="tooltip"
                             data-placement="top"
                             title=""
-                            data-original-title="Favourite this listing" value="{{ item['@id'] }}">
+                            data-original-title="Favorite this listing" value="{{ item['@id'] }}">
                         <i {% if isLiked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true"></i>
                         <span id="{{ item['id'] }}">{{ totals.likes }}</span>
                     </button>
