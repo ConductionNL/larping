@@ -22,7 +22,7 @@
                         <a href="{{ path('app_organization_organization', {'id': item.id}) }}" >{{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}</a>
                     </h3>
                     <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
-                            data-original-title="Favourite this listing">
+                            data-original-title="Favorite this listing">
                         <i class="fal fa-heart text-primary" aria-hidden="true"></i>
                         <span>{{  totals.likes }}</span>
                     </button>

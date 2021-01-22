@@ -46,13 +46,13 @@
                 {% endfor %}
             {% endif %}
             <li class="ml-auto">
-                <i {% if item.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ item['id'] }}" {% if app.user|default %}
+                <i {% if item.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ item['id'] }}" {% if app.user|default %}
                     onclick="likeItem('{{ item['id'] }}','{{ item['@id'] }}','{{ eventOrganization['@id'] }}', this)"
-                    data-original-title="{{ 'favourite this event'|trans|capitalize }}"
+                    data-original-title="{{ 'favorite this event'|trans|capitalize }}"
                 {% else %}
-                    data-original-title="{{ 'login to favourite this event'|trans|capitalize }}"
+                    data-original-title="{{ 'login to favorite this event'|trans|capitalize }}"
                 {% endif %}
-                     liked="{% if item.liked|default %}true{% else %}false{% endif %}"
+                     liked="{% if item.totals.liked|default %}true{% else %}false{% endif %}"
                      data-toggle="tooltip"
                      data-placement="top"
                      title=""></i>
