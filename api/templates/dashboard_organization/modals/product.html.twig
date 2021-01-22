@@ -2,11 +2,11 @@
 
 {% if resource is defined %}
     {% set  id = resource['id'] %}
-    {% set  type = 'Product' %}
 {% else %}
     {% set  id = 'Add' %}
-    {% set  type = 'Product' %}
 {% endif %}
+
+{% set  type = 'Product' %}
 
 {% block body %}
 <form id="{{ type }}Form{{ id }}" method="post">
