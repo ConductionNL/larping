@@ -337,6 +337,10 @@
          <source>you have to be logged in to continue</source>
          <target>je moet ingelogd zijn om verder te gaan</target>
          </trans-unit>
+        <trans-unit id="kyRrps1" resname="total">
+         <source>total</source>
+         <target>totaal</target>
+         </trans-unit>
         <trans-unit id="Oa2nnba" resname="sum">
          <source>sum</source>
          <target>totaal</target>
@@ -417,9 +421,13 @@
          <source>enter your review</source>
          <target>voer uw review in</target>
          </trans-unit>
-         <trans-unit id="nayMMbG" resname="submit review">
+         <trans-unit id="cuEJ6g8" resname="submit review">
          <source>submit review</source>
          <target>review versturen</target>
+         </trans-unit>
+         <trans-unit id="nayMMbG" resname="average rating">
+         <source>average rating</source>
+         <target>gemiddelde score</target>
          </trans-unit>
          <trans-unit id="Uhb123S" resname="what are you looking for">
          <source>what are you looking for</source>
@@ -577,6 +585,10 @@
          <trans-unit id="Gbaystq" resname="easy trading">
          <source>easy trading</source>
          <target>gemakkelijk handelen</target>
+         </trans-unit>
+         <trans-unit id="dzuGt2D" resname="upcoming">
+         <source>upcoming</source>
+         <target>aankomend</target>
          </trans-unit>
          <trans-unit id="NNrtaZq" resname="upcoming events">
          <source>upcoming events</source>
@@ -798,6 +810,18 @@
          <source>revenue</source>
          <target>omzet</target>
          </trans-unit>
+        <trans-unit id="hiqtO-2" resname="last month">
+        <source>last month</source>
+        <target>vorige maand</target>
+        </trans-unit>
+        <trans-unit id="tzqKdWh" resname="monthly">
+        <source>monthly</source>
+        <target>maandelijks</target>
+        </trans-unit>
+        <trans-unit id="3mq-H6g" resname="weekly">
+        <source>weekly</source>
+        <target>wekelijks</target>
+        </trans-unit>
         <trans-unit id="yetsrCvd" resname="all events">
         <source>all events</source>
         <target>alle evenementen</target>
