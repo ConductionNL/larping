@@ -306,6 +306,10 @@ class DashboardUserController extends AbstractController
                 $like['resource'] = $commonGroundService->getResource($like['resource']);
             }
         }
+        //don't display page if there aren't any likes from the user
+        if (!$variables['likes'] > 0){
+            return $this->redirect($this->generateUrl('app_default_index'));
+        }
 
         return $variables;
     }
