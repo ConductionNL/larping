@@ -41,7 +41,6 @@ class EventController extends AbstractController
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
 
-
         // Processing form input by building our search query
         $query = [];
         $resourceIds = [];
@@ -88,21 +87,21 @@ class EventController extends AbstractController
                 unset($variables['events'][$key]);
             }
 
-            $startDate = new \ DateTime($variables['startDate']);
+            $startDate = new \DateTime($variables['startDate']);
             $startDate = $startDate->format('Y-m-d');
-            $eventStartDate = new \ DateTime($event['startDate']);
-            $eventStartDate = $eventStartDate ->format('Y-m-d');
+            $eventStartDate = new \DateTime($event['startDate']);
+            $eventStartDate = $eventStartDate->format('Y-m-d');
 
-            if ($eventStartDate < $startDate){
+            if ($eventStartDate < $startDate) {
                 unset($variables['events'][$key]);
             }
 
-            $endDate = new \ DateTime($variables['endDate']);
+            $endDate = new \DateTime($variables['endDate']);
             $endDate = $endDate->format('Y-m-d');
-            $eventendDate = new \ DateTime($event['endDate']);
-            $eventendDate = $eventendDate ->format('Y-m-d');
+            $eventendDate = new \DateTime($event['endDate']);
+            $eventendDate = $eventendDate->format('Y-m-d');
 
-            if ($eventendDate > $endDate){
+            if ($eventendDate > $endDate) {
                 unset($variables['events'][$key]);
             }
         }
