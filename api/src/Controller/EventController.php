@@ -41,7 +41,6 @@ class EventController extends AbstractController
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
 
-
         // Processing form input by building our search query
         $query = [];
         $resourceIds = [];
@@ -157,7 +156,7 @@ class EventController extends AbstractController
         $resources = array_column($resourcecategories, 'resource');
 
         foreach ($variables['events'] as $key => $event) {
-            if (!in_array($event['id'], $resources)) {
+            if (!in_array($event['@id'], $resources) || $event['id'] == $id) {
                 unset($variables['events'][$key]);
                 continue;
             }
