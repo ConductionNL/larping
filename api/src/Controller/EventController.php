@@ -88,23 +88,23 @@ class EventController extends AbstractController
             }
 
             if ($variables['startDate']) {
-                $startDate = new \ DateTime($variables['startDate']);
+                $startDate = new \DateTime($variables['startDate']);
                 $startDate = $startDate->format('Y-m-d');
-                $eventStartDate = new \ DateTime($event['startDate']);
-                $eventStartDate = $eventStartDate ->format('Y-m-d');
+                $eventStartDate = new \DateTime($event['startDate']);
+                $eventStartDate = $eventStartDate->format('Y-m-d');
 
-                if ($eventStartDate < $startDate){
+                if ($eventStartDate < $startDate) {
                     unset($variables['events'][$key]);
                 }
             }
 
             if ($variables['endDate']) {
-                $endDate = new \ DateTime($variables['endDate']);
+                $endDate = new \DateTime($variables['endDate']);
                 $endDate = $endDate->format('Y-m-d');
-                $eventendDate = new \ DateTime($event['endDate']);
-                $eventendDate = $eventendDate ->format('Y-m-d');
+                $eventendDate = new \DateTime($event['endDate']);
+                $eventendDate = $eventendDate->format('Y-m-d');
 
-                if ($eventendDate > $endDate){
+                if ($eventendDate > $endDate) {
                     unset($variables['events'][$key]);
                 }
             }
