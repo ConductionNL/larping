@@ -152,8 +152,8 @@ class EventController extends AbstractController
         $resourcecategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
         $resources = array_column($resourcecategories, 'resource');
 
-        foreach($variables['events'] as $key => $event){
-            if(!in_array($event['@id'], $resources) || $event['id'] == $id) {
+        foreach ($variables['events'] as $key => $event) {
+            if (!in_array($event['@id'], $resources) || $event['id'] == $id) {
                 unset($variables['events'][$key]);
                 continue;
             }
