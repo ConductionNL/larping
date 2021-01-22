@@ -66,12 +66,19 @@ class OrganizationController extends AbstractController
         // Lets sort (we do this post query so that we might filter on ratins
         $sorting = explode('-', $variables['sorting']);
 
+        // if logged in set the author for checking if this user liked an organization
+        $author = false;
+        if ($this->getUser()) {
+            $author = $this->getUser()->getPerson();
+        }
+
         foreach ($variables['organizations'] as $key => $organization) {
             // if we are sorting by rating lets get the rating
             if ($sorting[0] == 'rating' || $sorting[0] == 'likes') {
-                $variables['organizations'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization'=>$organization['@id']]);
+                $variables['organizations'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization'=>$organization['@id'], 'resource'=>$organization['@id'], 'author'=>$author]);
                 $variables['organizations'][$key]['rating'] = $variables['organizations'][$key]['totals']['rating'];
                 $variables['organizations'][$key]['likes'] = $variables['organizations'][$key]['totals']['likes'];
+                $variables['organizations'][$key]['liked'] = $variables['organizations'][$key]['totals']['liked'];
             }
             // hotfix -> remove unwanted evenst
             if (!empty($resourceIds) && !in_array($organization['id'], $resourceIds)) {
@@ -102,19 +109,18 @@ class OrganizationController extends AbstractController
             $variables['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
         }
 
+        // if logged in set the author for checking if this user liked this organization or any of it's events
+        $author = false;
+        if ($this->getUser()) {
+            $author = $this->getUser()->getPerson();
+        }
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['resource' => $variables['organization']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $variables['organization']['@id']]);
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['organization']['id']])['hydra:member'];
-
-        /* @todo this is tacky, the totals function on the rc should handle this */
-        if ($this->getUser()) {
-            // check if this organization is liked by the current user
-            $likes = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['resource' => $organizationUrl, 'author' => $this->getUser()->getPerson()])['hydra:member'];
-            if (count($likes) > 0) {
-                $variables['totals']['liked'] = true;
-            }
+        foreach ($variables['events'] as $key => $event) {
+            $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $event['organization'], 'resource'=>$event['@id'], 'author'=>$author]);
         }
+        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $variables['organization']['@id'], 'resource' => $variables['organization']['@id'], 'author' => $author]);
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['organization']['id']])['hydra:member'];
 
         // Getting the offers
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id'], 'products.type' => 'simple'])['hydra:member'];

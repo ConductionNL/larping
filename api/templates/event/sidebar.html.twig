@@ -10,6 +10,20 @@
         </div><!-- /.col -->
     </div><!-- /.row -->
 
+    <div>
+        {{ 'Start Date :'|trans|capitalize }}
+        <input class="form-control" id="startDate" type="date" name="startDate"
+               value=""
+               min="2021-01-01" max="2021-12-31" style="width: 200px;">
+    </div>
+    <br>
+    <div>
+        {{ 'End Date :'|trans|capitalize }}
+        <input class="form-control" id="endDate" type="date" name="endDate"
+               value=""
+               min="2021-01-01" max="2021-12-31" style="width: 200px;">
+    </div>
+<br>
     <div class="mb-6">
         <h5 class="mb-4 font-weight-normal">{{ 'regions'|trans|title }}</h5>
         <ul class="list-unstyled list-gray">
