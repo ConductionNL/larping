@@ -15,9 +15,12 @@
                             </div>
                             <div class="card-body p-7">
 
-                                <p class="mb-0 text-center">{{ 'view your'|trans|capitalize }} <a href="#"
-                                                                                                  class="link">{{ 'invoice'|trans }}</a>
-                                </p>
+                                {% if invoice|default and invoice.order|default %}
+                                    <p class="mb-0 text-center">{{ 'view your'|trans|capitalize }}
+                                        <a href="{{ path('app_dashboarduser_order', {id: invoice.order|split('/')[7]}) }}"
+                                        class="link">{{ 'invoice'|trans }}</a>
+                                    </p>
+                                {% endif %}
 
                                 {% set orders = app.session.get('orders') %}
                                 {% if orders|default and orders|length > 0 %}

@@ -221,6 +221,12 @@
     "moneyphp/money": {
         "version": "v3.3.1"
     },
+    "mpdf/mpdf": {
+        "version": "dev-master"
+    },
+    "myclabs/deep-copy": {
+        "version": "1.x-dev"
+    },
     "myclabs/php-enum": {
         "version": "1.7.6"
     },
@@ -331,6 +337,9 @@
         "files": [
             "config/packages/security_checker.yaml"
         ]
+    },
+    "setasign/fpdi": {
+        "version": "v2.3.5"
     },
     "snapappointments/bootstrap-select": {
         "version": "dev-master"
