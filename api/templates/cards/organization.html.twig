@@ -33,7 +33,7 @@
                 <i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip" data-placement="top" title="{{ category.name }}" aria-hidden="true"></i>
             </li>
             {% endfor %}
-            <li>
+            <li class="ml-auto">
                 <i class="far fa-calendar-alt" aria-hidden="true" data-toggle="tooltip" data-placement="top"
                    data-original-title="{{ 'upcoming events'|trans|capitalize }}"></i><span class="mr-1"> {{ organizationEvents|length }}</span>
             </li>
@@ -41,14 +41,14 @@
                 <i class="fal fa-users-crown" aria-hidden="true" data-toggle="tooltip" data-placement="top"
                    data-original-title="{{ 'number of members'|trans|capitalize }}"></i><span class="mr-1"> {{ organizationMembers|length }}</span>
             </li>
-            <li class="ml-auto">
-                <i {% if resource.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ resource['id'] }}" {% if app.user|default %}
+            <li >
+                <i {% if resource.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ resource['id'] }}" {% if app.user|default %}
                     onclick="likeItem('{{ resource['id'] }}','{{ resource['@id'] }}','{{ resource['@id'] }}', this)"
-                    data-original-title="{{ 'favourite this organization'|trans|capitalize }}"
+                    data-original-title="{{ 'favorite this organization'|trans|capitalize }}"
                 {% else %}
-                    data-original-title="{{ 'login to favourite this organization'|trans|capitalize }}"
+                    data-original-title="{{ 'login to favorite this organization'|trans|capitalize }}"
                 {% endif %}
-                    liked="{% if resource.liked|default %}true{% else %}false{% endif %}"
+                    liked="{% if resource.totals.liked|default %}true{% else %}false{% endif %}"
                      data-toggle="tooltip"
                      data-placement="top"
                      title=""></i>

@@ -50,7 +50,7 @@
                                             <a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }} </a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch organization'|trans|capitalize }}</a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_edit', {'id':organization.id}) }}">{{ 'edit profile'|trans|capitalize }} </a>
@@ -336,6 +336,8 @@
                                     </a>
                                 </li>
                                 -->
+                                {% set hasLikes =  commonground_resource_list({'component':'rc','type':'likes'}, {'author':app.user.person})['hydra:member'] %}
+                                {% if hasLikes|default %}
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_favorites') }}">
@@ -343,6 +345,7 @@
                                         {{ 'my favorites'|trans|capitalize }}
                                     </a>
                                 </li>
+                                {% endif %}
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_orders') }}">

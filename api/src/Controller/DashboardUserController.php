@@ -171,12 +171,12 @@ class DashboardUserController extends AbstractController
             $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
             $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
 
-            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$organization['id']])['hydra:member'];
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $organization['id']])['hydra:member'];
 
             if (count($categories) > 0) {
                 $resourceCategory = $resourceCategories[0];
             } else {
-                $resourceCategory = ['resource'=>$organization['@id'], 'catagories'=>[]];
+                $resourceCategory = ['resource' => $organization['@id'], 'catagories' => []];
             }
 
             $resourceCategory['categories'] = $categories;
@@ -269,7 +269,7 @@ class DashboardUserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
-        $variables['events'] = $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
 
         return $variables;
     }
@@ -306,6 +306,10 @@ class DashboardUserController extends AbstractController
                 $like['resource'] = $commonGroundService->getResource($like['resource']);
             }
         }
+        //don't display page if there aren't any likes from the user
+        if (!$variables['likes'] > 0){
+            return $this->redirect($this->generateUrl('app_default_index'));
+        }
 
         return $variables;
     }
@@ -336,5 +340,54 @@ class DashboardUserController extends AbstractController
         }
 
         return $variables;
+    }
+
+    /**
+     * @Route("/dowload-invoice")
+     * @Template
+     */
+    public function downloadInvoiceAction(Session $session, Request $request, CommonGroundService $commonGroundService)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($request->isMethod('POST')) {
+            $redirectUrl = $request->get('redirectUrl');
+            $order = $commonGroundService->getResource($request->get('order'));
+
+            $customer = $commonGroundService->getResource($order['customer']);
+            $organization = $commonGroundService->getResource($order['organization']);
+//        $invoice = $commonGroundService->getResource($order['invoice']);
+
+            // The pdf
+            $mpdf = new \Mpdf\Mpdf();
+
+            $data = '';
+            $data .= '<h1>Order for '.$customer['name'].'</h1>';
+            $data .= '<h3>Ordered at '.$organization['name'].'</h3>';
+//        $data .= '<span>'.$invoice['dateCreated'].'</span>';
+            $data .= '<div style="height:30px"></div>';
+
+            if (isset($variables['order']['items'])) {
+                $data .= '<h3>Items</h3>';
+                $data .= '<table>';
+                $data .= '<thead><tr><th>Name<th><th>Quantity</th><th>Price</th></tr></thead>';
+                $data .= '<tbody>';
+                foreach ($variables['order']['items'] as $item) {
+                    $data .= '<tr><td>'.$item['name'].'<td><td>'.$item['quantity'].'</td><td>'.$item['priceCurrency'].' '.$item['price'].',-</td></tr>';
+                }
+                $data .= '<tr><td></td><td></td><td><b>'.$variables['order']['priceCurrency'].' '.$variables['order']['price'].',-</b></td></tr>';
+                $data .= '</tbody>';
+                $data .= '</table>';
+            }
+            $mpdf->WriteHtml($data);
+            $mpdf->Output('invoice.pdf', 'D');
+
+            if ($redirectUrl) {
+                return $this->redirect($redirectUrl);
+            } else {
+                return $this->redirectToRoute('app_dashboarduser_orders');
+            }
+        }
+
+        return $this->redirectToRoute('app_dashboarduser_orders');
     }
 }

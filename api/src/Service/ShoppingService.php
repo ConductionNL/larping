@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Security;
 
 class ShoppingService
@@ -23,6 +24,7 @@ class ShoppingService
     private $commonGroundService;
     private $requestService;
     private $idVaultService;
+    private $router;
 
     public function __construct(
         ParameterBagInterface $params,
@@ -32,7 +34,8 @@ class ShoppingService
         RequestStack $requestStack,
         CommonGroundService $commonGroundService,
         Security $security,
-        IdVaultService $idVaultService
+        IdVaultService $idVaultService,
+        RouterInterface $router
     ) {
         $this->params = $params;
         $this->cash = $cache;
@@ -42,6 +45,7 @@ class ShoppingService
         $this->commonGroundService = $commonGroundService;
         $this->security = $security;
         $this->idVaultService = $idVaultService;
+        $this->router = $router;
     }
 
     public function redirectToMollie($order)
@@ -67,9 +71,17 @@ class ShoppingService
         }
     }
 
-    public function addItemsToCart($offers)
+    public function addItemsToCart($offers, $redirectUrl)
     {
         $ordersInSession = $this->session->get('orders');
+
+        // Checks for nonexisting objects
+        if ($this->checkForBrokenObjects($offers) === true) {
+            $this->flash->add('danger', 'there is a problem with certain data');
+
+            return false;
+        }
+
 //        var_dump($ordersInSession);
         foreach ($offers as $newOrderItem) {
             // Check if new item has accpetable quantity
@@ -222,6 +234,13 @@ class ShoppingService
 
     public function uploadOrder($order, $person)
     {
+        if ($this->checkForBrokenObjects($person) == true ||
+            $this->checkForBrokenObjects($order['orderItems']) == true) {
+            $this->flash->add('danger', 'there is a problem with certain data');
+
+            return false;
+        }
+
         $uploadedOrder['name'] = 'Order for '.$person['name'];
         $uploadedOrder['description'] = 'Order for '.$person['name'];
         $uploadedOrder['organization'] = $order['organization'];
@@ -230,9 +249,6 @@ class ShoppingService
         if ($this->request->get('remarks') != null or !empty($this->request->get('remarks'))) {
             $uploadedOrder['remarks'] = $this->request->get('remarks');
         }
-
-        // Hardcoded org because of bug in PDC !
-//        $uploadedOrder['organization'] = 'https://dev.larping.eu/api/v1/wrc/organizations/51eb5628-3b37-497b-a57f-6b039ec776e5';
 
         $uploadedOrder = $this->commonGroundService->saveResource($uploadedOrder, ['component' => 'orc', 'type' => 'orders']);
 
@@ -248,6 +264,14 @@ class ShoppingService
 
         foreach ($order['orderItems'] as $item) {
             $offer = $this->commonGroundService->getResource($item['offer']);
+
+//            $offer['products'][0]['org'] = 'https://dev.larping.eu/api/v1/pdc/1235456';
+            if ($this->checkForBrokenObjects($offer) == true ||
+                $this->checkForBrokenObjects($offer['products']) == true) {
+                $this->flash->add('danger', 'there is a problem with certain data');
+
+                return false;
+            }
 
             $item['name'] = $offer['name'];
             if (!isset($offer['description'])) {
@@ -423,6 +447,36 @@ class ShoppingService
                         }
                     }
                 }
+            }
+        }
+
+        return false;
+    }
+
+    public function checkForBrokenObjects($objects)
+    {
+        // Usefull for testing
+//        $objects[0]['org'] = 'https://dev.larping.eu/api/v1/orc/order/123523';
+
+        if (isset($objects)) {
+            if (is_array($objects)) {
+                foreach ($objects as $properties) {
+                    if (is_array($properties)) {
+                        foreach ($properties as $property) {
+                            if (!is_array($property) && strpos($property, 'https') !== false && strpos($property, '/api/v1/') !== false && $this->commonGroundService->isResource($property) == false) {
+                                return true;
+                            } elseif (is_array($property)) {
+                                foreach ($property as $prop) {
+                                    if (!is_array($prop) && strpos($prop, 'https') !== false && strpos($prop, '/api/v1/') !== false && $this->commonGroundService->isResource($prop) == false) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } elseif (!is_array($objects) && strpos($objects, 'https') && strpos($objects, '/api/v1/') && $this->commonGroundService->isResource($objects) != false) {
+                return true;
             }
         }
 

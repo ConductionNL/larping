@@ -41,7 +41,6 @@ class EventController extends AbstractController
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
 
-
         // Processing form input by building our search query
         $query = [];
         $resourceIds = [];
@@ -67,36 +66,47 @@ class EventController extends AbstractController
         // Lets sort (we do this post query so that we might filter on ratins
         $sorting = explode('-', $variables['sorting']);
 
+        // if logged in set the author for checking if this user liked an event.
+        $author = false;
+        if ($this->getUser()) {
+            $author = $this->getUser()->getPerson();
+        }
+
         // hotfix -> remove unwanted events
         foreach ($variables['events'] as $key => $event) {
 
             // if we are sorting by rating lets get the rating
             if ($sorting[0] == 'rating' || $sorting[0] == 'likes') {
-                $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource'=>$event['@id']]);
+                $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $event['organization'], 'resource'=>$event['@id'], 'author'=>$author]);
                 $variables['events'][$key]['rating'] = $variables['events'][$key]['totals']['rating'];
                 $variables['events'][$key]['likes'] = $variables['events'][$key]['totals']['likes'];
+                $variables['events'][$key]['liked'] = $variables['events'][$key]['totals']['liked'];
             }
             // hotfix -> remove unwanted evenst
             if (!empty($resourceIds) && !in_array($event['id'], $resourceIds)) {
                 unset($variables['events'][$key]);
             }
 
-            $startDate = new \ DateTime($variables['startDate']);
-            $startDate = $startDate->format('Y-m-d');
-            $eventStartDate = new \ DateTime($event['startDate']);
-            $eventStartDate = $eventStartDate ->format('Y-m-d');
+            if ($variables['startDate']) {
+                $startDate = new \DateTime($variables['startDate']);
+                $startDate = $startDate->format('Y-m-d');
+                $eventStartDate = new \DateTime($event['startDate']);
+                $eventStartDate = $eventStartDate->format('Y-m-d');
 
-            if ($eventStartDate < $startDate){
-                unset($variables['events'][$key]);
+                if ($eventStartDate < $startDate) {
+                    unset($variables['events'][$key]);
+                }
             }
 
-            $endDate = new \ DateTime($variables['endDate']);
-            $endDate = $endDate->format('Y-m-d');
-            $eventendDate = new \ DateTime($event['endDate']);
-            $eventendDate = $eventendDate ->format('Y-m-d');
+            if ($variables['endDate']) {
+                $endDate = new \DateTime($variables['endDate']);
+                $endDate = $endDate->format('Y-m-d');
+                $eventendDate = new \DateTime($event['endDate']);
+                $eventendDate = $eventendDate->format('Y-m-d');
 
-            if ($eventendDate > $endDate){
-                unset($variables['events'][$key]);
+                if ($eventendDate > $endDate) {
+                    unset($variables['events'][$key]);
+                }
             }
         }
 
@@ -140,13 +150,13 @@ class EventController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
         // Prepare for filter
-        $variables['categoriesId'] = array_column ($variables['categories'], 'id');
+        $variables['categoriesId'] = array_column($variables['categories'], 'id');
         $categoryQuery['categories.id'] = $variables['categoriesId'];
         $resourcecategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], $categoryQuery)['hydra:member'];
-        $resources = array_column ($resourcecategories, 'resource');
+        $resources = array_column($resourcecategories, 'resource');
 
-        foreach($variables['events'] as $key => $event){
-            if(!in_array($event['id'], $resources)) {
+        foreach ($variables['events'] as $key => $event) {
+            if (!in_array($event['@id'], $resources) || $event['id'] == $id) {
                 unset($variables['events'][$key]);
                 continue;
             }
@@ -154,6 +164,7 @@ class EventController extends AbstractController
             $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource'=>$event['@id']]);
             $variables['events'][$key]['rating'] = $variables['events'][$key]['totals']['rating'];
             $variables['events'][$key]['likes'] = $variables['events'][$key]['totals']['likes'];
+            $variables['events'][$key]['liked'] = $variables['events'][$key]['totals']['liked'];
         }
 
         // Nu hebbenw e een array van eventsd die een cat delel met het huidige event én zijn voorzien van totals
