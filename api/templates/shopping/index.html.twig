@@ -26,6 +26,12 @@
                                     aria-label="Listing: activate to sort column ascending">
                                     {{ 'name'|trans|capitalize }}
                                 </th>
+                                <th class="sorting" tabindex="0" aria-controls="my-booking" rowspan="1"
+                                    colspan="1"
+                                    style="width: 188px;"
+                                    aria-label="Listing: activate to sort column ascending">
+                                    {{ 'type'|trans|capitalize }}
+                                </th>
                                 <th class="sorting text-center" tabindex="0" aria-controls="my-booking"
                                     rowspan="1"
                                     colspan="1"
@@ -53,12 +59,33 @@
                             {% if order.orderItems|default and order.orderItems > 0 %}
                                 {% set sum = 0 %}
                                 {% for item in order.orderItems %}
+                                    {% set ownsThisProduct = null %}
                                     {% set offer = commonground_resource(item.offer) %}
+
+                                    {% if offer.products|default %}
+                                        {% for prod in offer.products %}
+                                            {% if prod.productsThatAreDependent|default %}
+                                                {% set ownsThisProduct = owns_this_product(prod) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+
                                     <tr style="border-top: #f6f6f6 1px solid" role="row" class="odd">
                                         <td class="text-capitalize">
                                             <a class="text-hover-primary text-muted"
                                                href="{% if item.path|default %}{{ item.path }}{% endif %}">{{ offer.name|capitalize }}</a>
+                                            {% if ownsThisProduct|default and ownsThisProduct == true %}
+                                                <span data-toggle="tooltip"
+                                                      data-placement="top" title=""
+                                                      data-original-title="This product is not required for other products">
+                    <i style="color: red" class="fa fa-info-circle" aria-hidden="true"></i>
+                  </span>
+                                            {% endif %}
                                         </td>
+                                        <td class="text-capitalize">
+                                            {% if offer.products|default %}
+                                                {{ offer.products.0.type|capitalize }}
+                                            {% endif %}</td>
                                         <td class="text-capitalize text-center">
                                             {% if item.price|default %}
                                                 {{ item.quantity }}
@@ -98,6 +125,8 @@
                                                 <td class="text-capitalize text-center">
                                                 <td>
                                                 </td>
+                                                <td>
+                                                </td>
                                                 <td class=" text-center">
                                                     &euro; {{ option.price }},-
                                                 </td>
@@ -124,6 +153,8 @@
                                 <tr style="border-top: #f6f6f6 1px solid" role="row" class="odd">
                                     <td>
                                         <b>{{ 'sum'|trans|capitalize }}:</b>
+                                    </td>
+                                    <td>
                                     </td>
                                     <td>
                                     </td>
