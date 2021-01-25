@@ -336,6 +336,8 @@
                                     </a>
                                 </li>
                                 -->
+                                {% set hasLikes =  commonground_resource_list({'component':'rc','type':'likes'}, {'author':app.user.person})['hydra:member'] %}
+                                {% if hasLikes|default %}
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_favorites') }}">
@@ -343,6 +345,7 @@
                                         {{ 'my favorites'|trans|capitalize }}
                                     </a>
                                 </li>
+                                {% endif %}
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_orders') }}">

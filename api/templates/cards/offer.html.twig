@@ -18,10 +18,14 @@
                 </h3>
                 {% if item.description|default %}
                     <p class="text-white">{{ item.description|length > 50 ? item.description|slice(0, 50) ~ '...' : item.description }}</p>
-                {% else %}
-                    <p style="color:lightgrey">{{ 'no description'|trans|capitalize }}</p>
                 {% endif %}
-                <p class="text-white">{{ item.dateCreated }}</p>
+
+                {% if item.products|default and item.products|length > 0 %}
+                <p class="text-white">{{ 'contains'|trans|capitalize }}:
+                    {% for product in item.products %}{{ product.name }}
+                    {% endfor %}
+                </p>
+                {% endif %}
             </div>
         </div>
 
@@ -31,7 +35,7 @@
                     {{ (item.price/100)|localizedcurrency(item.priceCurrency) }}
                 </li>
                 <li class="ml-auto">
-                    <a class="px-2" style="cursor: pointer" data-toggle="modal" href="#offer{{ offer.id }}Modal" ><span>{{ 'buy'|trans|capitalize }}</span></a>
+                    <a class="px-2" style="cursor: pointer" data-toggle="modal" href="#offer{{ offer.id }}Modal" ><span>{{ 'add to cart'|trans|capitalize }}</span></a>
                 </li>
             </ul>
         </div>

@@ -99,9 +99,9 @@
 
                     <!-- Tickets -->
                     {% if tickets is defined and tickets is not empty %}
-                    <div id="gridFullwidthDiv" class="fade-in" id="tickets">
+                    <div id="gridFullwidthDiv" class="fade-in">
                         <h3 class="font-weight-normal mb-6">{{ 'tickets'|trans|capitalize }}</h3>
-                        <div class="row">
+                        <div class="row" id="tickets">
                             {% for offer in tickets %}
                                 <div class="col-md-6" id="organization">
                                     {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
