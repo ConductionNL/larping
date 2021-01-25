@@ -27,10 +27,13 @@
                         <i class="fa fa-calendar-o" aria-hidden="true"></i>{{ 'my characters'|trans }}</a>
                 </li>
                 -->
+                {% set hasLikes =  commonground_resource_list({'component':'rc','type':'likes'}, {'author':app.user.person})['hydra:member'] %}
+                {% if hasLikes|default %}
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('app_dashboarduser_favorites') }}">
                         <i class="fal fa-heart" aria-hidden="true"></i>{{ 'my favorites'|trans }}</a>
                 </li>
+                {% endif %}
             </ul>
 
             <form class="form-inline my-2 my-lg-0 position-relative d-none d-md-block">

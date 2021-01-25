@@ -18,10 +18,44 @@
                 </ul>
             </nav>
 
+            <table id="tickets" class="display nowrap table" style="width:100%">
+                <thead>
+                <tr>
+                    <th>{{ 'reference'|trans|capitalize }}</th>
+                    <th>{{ 'name'|trans|capitalize }}</th>
+                    <th>{{ 'paid'|trans|capitalize }}</th>
+                    <th>{{ 'type'|trans|capitalize }}</th>
+                    <th>
+                        {{ 'other products'|trans|capitalize }}
+                        {% if app.request.attributes.get('_route') == 'app_dashboardorganization_eventtickets' %}
+                            <a href="{{ path('app_dashboardorganization_eventtickets', {'action': 'download', id: event.id}) }}" class="btn btn-warning btn-sm ml-2">{{ 'download tickets'|trans|capitalize }}</a>
+                        {% endif %}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ticket in tickets %}
+                    {% set order = ticket.order %}
+                    <tr>
+                        <td>{{ order.reference }}</td>
+                        <td>{{ commonground_resource(order.customer).name }}</td>
+                        <td>
+                            {% if commonground_resource(order.invoice).paid == true %}
+                                <span  class="text-success">{{ 'paid'|trans|capitalize }}</span>
+                            {% else %}
+                                <span  class="text-danger">{{ 'unpaid'|trans|capitalize }}</span>
+                            {% endif %}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
             <!-- events -->
-            {%  include 'dashboard_organization/tables/products.html.twig' %}
+{#            {%  include 'dashboard_organization/tables/products.html.twig' %}#}
 
-            {%  include 'dashboard_organization/tables/offers.html.twig'  with {'offers': offers} %}
+{#            {%  include 'dashboard_organization/tables/offers.html.twig'  with {'offers': offers} %}#}
 
         </div>
     </section>

@@ -29,11 +29,87 @@ class DashboardOrganizationController extends AbstractController
      */
     public function indexAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $variables['organization']['id']]);
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
+
+        $organizationUrl = $this->getUser()->getOrganization();
+        $variables['organization'] = $commonGroundService->getResource($organizationUrl);
+
+//        // Get all events for this organization (order is important for getting the next upcomming event!)
+//        $events = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $organizationUrl, 'order[startDate]' => 'asc'])['hydra:member'];
+//
+//        $today = new \ DateTime("now");
+//        $today = $today->format('Y-m-d');
+//        // Now only get the upcoming events
+//        foreach ($events as $key => $event){
+//            // maybe use endDate here? so you still count/see events that are currently ongoing
+//            $eventStartDate = new \ DateTime($event['startDate']);
+//            $eventStartDate = $eventStartDate ->format('Y-m-d');
+//
+//            if ($eventStartDate < $today){
+//                unset($events[$key]);
+//            }
+//        }
+////        $events = array_filter($events, function ($event) {
+////            $today = new \ DateTime("now");
+////            // maybe use endDate here? so you still count/see events that are currently ongoing
+////            $eventStartDate = new \ DateTime($event['startDate']);
+////            return $eventStartDate->format('Y-m-d') > $today->format('Y-m-d');
+////        });
+        $variables['upcomingEventsCount'] = 0;//count($events);
+
+        // Get review component totals for this organization
+        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $organizationUrl]);
+
+        // Get all members from id-vault
+        //...
+
+        // Get all orders of this organization
+        $orders = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organizationUrl])['hydra:member'];
+
+        // Filter out the orders of this month
+        $ordersThisMonth = array_filter($orders, function($order) {
+            $dateCreated = new \DateTime($order['dateCreated']);
+            $today = new \DateTime("now");
+            return $dateCreated->format('Y-m') == $today->format('Y-m');
+        });
+        // ...and last month
+        $ordersLastMonth = array_filter($orders, function($order) {
+            $dateCreated = new \DateTime($order['dateCreated']);
+            $today = new \DateTime("now");
+            $today->sub(new \DateInterval('P1M'));
+            return $dateCreated->format('Y-m') == $today->format('Y-m');
+        });
+
+        // Calculate revenue
+        $variables['revenue']['thisMonth'] = $variables['revenue']['lastMonth'] = '€ 0,00';
+        if (count($ordersThisMonth) > 0) {
+            // Calculate revenue of this organization, this month
+            $prices = array_column($ordersThisMonth, 'price');
+            $variables['revenue']['thisMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
+        }
+        if (count($ordersLastMonth) > 0) {
+            // Calculate revenue of this organization, last month
+            $prices = array_column($ordersLastMonth, 'price');
+            $variables['revenue']['lastMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
+        }
+
+//        // get next event from arc (if it exists) (what to do if none exists?)
+//        if (count($events) > 0) {
+//            // The first one should be the next one because of order in the getResourceList for events above^
+//            $upcomingEvent = $events[0];
+//
+//            // Get bought tickets/max tickets for upcoming event
+//            //...
+//
+//            // Calculate revenue for the $upcomingEvent? :
+//            // get all products of the next event from pdc
+//            // get all productIds: array_column('id') actie
+//            // get all orders for these products from orc
+//            // calculate revenue
+//        }
 
         return $variables;
     }
@@ -162,8 +238,18 @@ class DashboardOrganizationController extends AbstractController
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
-        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id']])['hydra:member'];
-        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
+        $variables['product'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
+        /*@todo make this better*/
+        if (count($variables['product']) > 0){
+            $variables['product'] = $variables['product'][0];
+            $variables['product']['offers'] = $variables['product']['offers'][0];
+        }
+        $offers = $variables['product']['offers'];
+        //orders op het offer van het event
+        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['order.organization' => $variables['organization']['@id'], 'offer' => $offers['@id']])['hydra:member'];
+//        var_dump($variables['orders']);
+
+
 
         //downloads tickets
         if ($request->query->has('action') && $request->query->get('action') == 'download') {
