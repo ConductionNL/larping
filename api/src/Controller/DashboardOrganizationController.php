@@ -247,8 +247,6 @@ class DashboardOrganizationController extends AbstractController
         $offers = $variables['product']['offers'];
         //orders op het offer van het event
         $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['order.organization' => $variables['organization']['@id'], 'offer' => $offers['@id']])['hydra:member'];
-//        var_dump($variables['orders']);
-
 
 
         //downloads tickets
