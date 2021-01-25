@@ -176,11 +176,6 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             $event['status'] = 'pending';
 
-            // Only do categories stuff when aplicable
-            if (!array_key_exists('categories', $event)) {
-                return $this->redirectToRoute('app_dashboardorganization_event', ['id'=> $event['id']]);
-            }
-
             $categories = $event['categories'];
             if (!$categories) {
                 $categories = [];
@@ -189,6 +184,11 @@ class DashboardOrganizationController extends AbstractController
 
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
+
+            // Only do categories stuff when aplicable
+            if (!array_key_exists('categories', $event)) {
+                return $this->redirectToRoute('app_dashboardorganization_event', ['id'=> $event['id']]);
+            }
 
             // Setting the categories
             /*@todo  This should go to a wrc service */
