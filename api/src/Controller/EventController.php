@@ -137,6 +137,7 @@ class EventController extends AbstractController
         // Getting the offers
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'], 'products.type' => 'simple'])['hydra:member']; // The product array is PUPRUSLY filled with offers instead of products
         $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+        $variables['subscriptions'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' =>  $variables['event']['@id'], 'products.type' => 'subscription'])['hydra:member'];
 
         // check if this event is liked by the current user
         // /* @todo dont use the rc component */
