@@ -27,7 +27,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/")
      * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService, Request $request)
+    public function indexAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params)
     {
         // Make sure the user is logged in
         if (!$this->getUser()) {
@@ -57,14 +57,25 @@ class DashboardOrganizationController extends AbstractController
 ////            // maybe use endDate here? so you still count/see events that are currently ongoing
 ////            $eventStartDate = new \ DateTime($event['startDate']);
 ////            return $eventStartDate->format('Y-m-d') > $today->format('Y-m-d');
-////        });
+//        });
         $variables['upcomingEventsCount'] = 0;//count($events);
 
         // Get review component totals for this organization
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $organizationUrl]);
 
         // Get all members from id-vault
-        //...
+        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+        $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
+
+        $users = [];
+        foreach ($variables['groups'] as $group) {
+            foreach ($group['users'] as $user) {
+                if (!in_array($user, $users)) {
+                    $users[$user]['name'] = $user;
+                }
+            }
+        }
+        $variables['totalUsers'] = count($users);
 
         // Get all orders of this organization
         $orders = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organizationUrl])['hydra:member'];
