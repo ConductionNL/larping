@@ -39,10 +39,10 @@
                         </div>
 
                         <div class="card-body widget-content">
-                            <span class="widget-content-title">+15%</span>
+                            <span class="widget-content-title">x</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">Compare to last week</p>
-                                <span class="text-danger"> 5% <i class="fa fa-level-up" aria-hidden="true"></i> </span>
+                                <span class="text-danger"> x <i class="fa fa-level-up" aria-hidden="true"></i> </span>
                             </div>
                             <a href="{{ path('app_dashboardorganization_orders') }}" class="btn btn-link">{{'all orders'|trans|capitalize}}</a>
                         </div>
@@ -92,14 +92,14 @@
                     <div class="card">
                         <div class="card-header bg-white">
                             <span class="text-content">{{ 'members'|trans|capitalize }}</span>
-                            <span class="badge badge-primary">{{'weekly'|trans|capitalize}}</span>
+                            <span class="badge badge-primary">{{'total'|trans}}</span>
                         </div>
 
                         <div class="card-body widget-content">
-                            <span class="widget-content-title">5238</span>
+                            <span class="widget-content-title">{{ totalUsers }}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'members since last week'|trans }}</p>
-                                <span class="text-success"> 25 <i class="fa fa-level-up" aria-hidden="true"></i> </span>
+                                <span class="text-success"> x <i class="fa fa-level-up" aria-hidden="true"></i> </span>
                             </div>
                             <a href="{{ path('app_dashboardorganization_members') }}" class="btn btn-link">{{'all members'|trans|capitalize}}</a>
                         </div>

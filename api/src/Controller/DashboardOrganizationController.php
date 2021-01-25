@@ -37,28 +37,17 @@ class DashboardOrganizationController extends AbstractController
         $organizationUrl = $this->getUser()->getOrganization();
         $variables['organization'] = $commonGroundService->getResource($organizationUrl);
 
-//        // Get all events for this organization (order is important for getting the next upcomming event!)
-//        $events = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $organizationUrl, 'order[startDate]' => 'asc'])['hydra:member'];
-//
-//        $today = new \ DateTime("now");
-//        $today = $today->format('Y-m-d');
-//        // Now only get the upcoming events
-//        foreach ($events as $key => $event){
-//            // maybe use endDate here? so you still count/see events that are currently ongoing
-//            $eventStartDate = new \ DateTime($event['startDate']);
-//            $eventStartDate = $eventStartDate ->format('Y-m-d');
-//
-//            if ($eventStartDate < $today){
-//                unset($events[$key]);
-//            }
-//        }
-////        $events = array_filter($events, function ($event) {
-////            $today = new \ DateTime("now");
-////            // maybe use endDate here? so you still count/see events that are currently ongoing
-////            $eventStartDate = new \ DateTime($event['startDate']);
-////            return $eventStartDate->format('Y-m-d') > $today->format('Y-m-d');
-//        });
-        $variables['upcomingEventsCount'] = 0;//count($events);
+        // Get all events for this organization (order is important for getting the next upcoming event!)
+        $events = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $organizationUrl, 'order[startDate]' => 'asc'])['hydra:member'];
+
+        // Get upcoming events only
+        $events = array_filter($events, function ($event) {
+            $today = new \ DateTime("now");
+            // maybe use endDate here? so you still count/see events that are currently ongoing
+            $eventStartDate = new \ DateTime($event['startDate']);
+            return $eventStartDate->format('Y-m-d') > $today->format('Y-m-d');
+        });
+        $variables['upcomingEventsCount'] = count($events);
 
         // Get review component totals for this organization
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $organizationUrl]);
@@ -67,8 +56,9 @@ class DashboardOrganizationController extends AbstractController
         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
         $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
 
+        // Count users
         $users = [];
-        foreach ($variables['groups'] as $group) {
+        foreach ($groups as $group) {
             foreach ($group['users'] as $user) {
                 if (!in_array($user, $users)) {
                     $users[$user]['name'] = $user;
@@ -77,7 +67,7 @@ class DashboardOrganizationController extends AbstractController
         }
         $variables['totalUsers'] = count($users);
 
-        // Get all orders of this organization
+        // Get all orders of this organization to calculate revenue
         $orders = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organizationUrl])['hydra:member'];
 
         // Filter out the orders of this month
