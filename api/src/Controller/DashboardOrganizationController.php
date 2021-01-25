@@ -699,21 +699,45 @@ class DashboardOrganizationController extends AbstractController
             $variables['location'] = [];
         }
 
-        if ($request->get('action') == 'delete') {
-            $commonGroundService->deleteResource($variables['location']);
-
-            return $this->redirectToRoute('app_dashboardorganization_locations');
-        }
 
         if ($request->isMethod('POST')) {
             $location = $request->request->all();
             $location['organization'] = $variables['organization']['@id'];
+
+            // lets clear up the non used example forms
+            unset($location['adresses']['uuid']);
 
             // Setting the categories
             /*@todo  This should go to a wrc service */
             if (isset($location['categories'])) {
                 $categories = $location['categories'];
                 unset($location['categories']);
+            }
+
+            // removing UUID's from contact data
+            $subobjects = ['adresses'=> []];
+            foreach ($subobjects as $subobject => $subobjectArray) {
+                // let see if we have values
+                if (array_key_exists($subobject, $location['adresses'])) {
+                    // transefer the vlaues to holder array without the uuuid as an index
+                    foreach ($location['adresses'][$subobject] as $key => $tocopy) {
+                        if ($key != 'uuid') {
+                            $subobjects[$subobject][] = $tocopy;
+                        }
+                    }
+                }
+                // replace the values in the original array
+                $location['adresses'][$subobject] = $subobjects[$subobject];
+                var_dump($location);die();
+            }
+
+            // Lets save the contact
+            if (isset($location['address'])) {
+                $contact = $location['address'];
+                $contact['name'] = $location['name'];
+                $contact['description'] = $location['description'];
+                //var_dump(json_encode($contact));
+                $location['address'] = $commonGroundService->saveResource($contact, ['component' => 'lc', 'type' => 'organizations'])['@id'];
             }
 
             // Lets save te organization
