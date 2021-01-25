@@ -60,12 +60,19 @@ class DashboardOrganizationController extends AbstractController
         $users = [];
         foreach ($groups as $group) {
             foreach ($group['users'] as $user) {
-                if (!in_array($user, $users)) {
-                    $users[$user]['name'] = $user;
+                if (!in_array($user['username'], $users)) {
+                    $users[$user['username']]['dateAccepted'] = $user['dateAccepted'];
                 }
             }
         }
         $variables['totalUsers'] = count($users);
+
+        // Now get the total new users sinds last month.
+        $variables['newUsersThisMonth'] = count(array_filter($users, function ($user){
+            $dateAccepted = new \DateTime($user['dateAccepted']);
+            $today = new \DateTime("now");
+            return $dateAccepted->format('Y-m') == $today->format('Y-m');
+        }));
 
         // Get all orders of this organization to calculate revenue
         $orders = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organizationUrl])['hydra:member'];
@@ -443,11 +450,11 @@ class DashboardOrganizationController extends AbstractController
         $users = [];
         foreach ($variables['groups'] as $group) {
             foreach ($group['users'] as $user) {
-                if (in_array($user, $users)) {
-                    $users[$user]['groups'][] = $group['name'];
+                if (in_array($user['username'], $users)) {
+                    $users[$user['username']]['groups'][] = $group['name'];
                 } else {
-                    $users[$user]['name'] = $user;
-                    $users[$user]['groups'][] = $group['name'];
+                    $users[$user['username']]['name'] = $user['username'];
+                    $users[$user['username']]['groups'][] = $group['name'];
                 }
             }
         }
@@ -467,13 +474,13 @@ class DashboardOrganizationController extends AbstractController
             $selectedGroup = $request->get('group');
 
             foreach ($variables['groups'] as $group) {
-                if ($group['name'] == 'root' && !in_array($email, $group['users'])) {
+                if ($group['name'] == 'root' && !in_array($email, array_column($group['users'], 'username'))) {
                     $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, true);
                 }
-                if ($group['id'] == $selectedGroup && !in_array($email, $group['users'])) {
+                if ($group['id'] == $selectedGroup && !in_array($email, array_column($group['users'], 'username'))) {
                     $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, true);
                     $this->addFlash('success', 'gebruiker is toegevoegd aan groep');
-                } elseif ($group['id'] == $selectedGroup && in_array($email, $group['users']) && $group['name'] !== 'root') {
+                } elseif ($group['id'] == $selectedGroup && in_array($email, array_column($group['users'], 'username')) && $group['name'] !== 'root') {
                     $this->addFlash('error', 'Gebruiker zit al in de gekozen groep');
                 }
             }

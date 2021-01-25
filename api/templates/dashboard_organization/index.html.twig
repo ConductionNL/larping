@@ -35,7 +35,7 @@
                     <div class="card">
                         <div class="card-header bg-white">
                             <span class="text-content">{{ 'orders'|trans|capitalize }}</span>
-                            <span class="badge badge-primary">{{'weekly'|trans|capitalize}}</span>
+                            <span class="badge badge-primary">{{'upcoming'|trans|capitalize}}</span>
                         </div>
 
                         <div class="card-body widget-content">
@@ -98,8 +98,12 @@
                         <div class="card-body widget-content">
                             <span class="widget-content-title">{{ totalUsers }}</span>
                             <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0">{{ 'members since last week'|trans }}</p>
-                                <span class="text-success"> x <i class="fa fa-level-up" aria-hidden="true"></i> </span>
+                                <p class="mb-0">{{ 'new members this month'|trans }}</p>
+                                {% if newUsersThisMonth > 0 %}
+                                    <span class="text-success"> {{ newUsersThisMonth }} <i class="fa fa-level-up" aria-hidden="true"></i> </span>
+                                {% else %}
+                                    <b>{{ newUsersThisMonth }}</b>
+                                {% endif %}
                             </div>
                             <a href="{{ path('app_dashboardorganization_members') }}" class="btn btn-link">{{'all members'|trans|capitalize}}</a>
                         </div>

@@ -638,6 +638,10 @@
          <source>number of memberss</source>
          <target>Aantal leden</target>
          </trans-unit>
+         <trans-unit id="NWo24-Z" resname="new members this month">
+         <source>new members this month</source>
+         <target>nieuwe leden deze maand</target>
+         </trans-unit>
          <trans-unit id="NbaTkas" resname="keep track of characters and storylines">
          <source>keep track of characters and storylines</source>
          <target>houd personages en verhaallijnen bij</target>
