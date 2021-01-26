@@ -120,6 +120,7 @@ class DashboardOrganizationController extends AbstractController
      */
     public function eventsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
@@ -148,6 +149,7 @@ class DashboardOrganizationController extends AbstractController
      */
     public function eventAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
 
         if ($id != 'add') {
