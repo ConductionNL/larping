@@ -19,7 +19,7 @@
                 <td>
                     {% if location.address|default %}
                     <span class="d-block">{{ location.address.street ~' '~ location.address.houseNumber }}</span>
-                    <span class="d-block">{{ location.address.postalCode ~' '~ location.address.region }}</span>
+                    <span class="d-block">{{ location.address.postalCode ~' '~ location.address.locality }}</span>
                     {% endif %}
                 </td>
                 <td>
