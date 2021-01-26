@@ -728,6 +728,7 @@ class DashboardOrganizationController extends AbstractController
                         }
                     }
                 }
+
                 // replace the values in the original array
                 $location['adresses'][$subobject] = $subobjects[$subobject];
                 var_dump($location);die();
@@ -795,9 +796,12 @@ class DashboardOrganizationController extends AbstractController
 
             // Setting the categories
             /*@todo  This should go to a wrc service */
-            if (isset($organization['categories'])) {
+            if(array_key_exists('categories', $organization)){
                 $categories = $organization['categories'];
                 unset($organization['categories']);
+            }
+            else{
+                $categories = [];
             }
 
             // removing UUID's from contact data
@@ -816,18 +820,29 @@ class DashboardOrganizationController extends AbstractController
                 $organization['contact'][$subobject] = $subobjects[$subobject];
             }
 
-            // Lets save the contact
-            if (isset($organization['contact'])) {
+            if(array_key_exists('contact', $organization)){
                 $contact = $organization['contact'];
-                $contact['name'] = $organization['name'];
-                $contact['description'] = $organization['description'];
-                $contact['sourceOrganization'] = $organization['@id']; /* @todo the hell? */
-                //var_dump(json_encode($contact));
-                $organization['contact'] = $commonGroundService->saveResource($contact, ['component' => 'cc', 'type' => 'organizations'])['@id'];
+                unset($organization['contact']);
+            }
+            else{
+                $contact = [];
+            }
+            $contact['name'] = $organization['name'];
+            $contact['description'] = $organization['description'];
+
+
+            $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
+
+            // Lets save the contact
+            $contact['sourceOrganization'] = $organization['@id'];
+            $contact = $commonGroundService->saveResource($contact, ['component' => 'cc', 'type' => 'organizations']);
+            // If the current contact is difrend then the one saved in the organisation we need to save that
+            if($organization['contact'] != $contact['@id']){
+                $organization['contact'] = $contact['@id'];
+                $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
             }
 
             // Lets save te organization
-            $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
 
             /*
             $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
@@ -845,19 +860,17 @@ class DashboardOrganizationController extends AbstractController
 
             // Setting the categories
 
-            if (!isset($categories)) {
-                /*@todo  This should go to a wrc service */
-                $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $organization['id']])['hydra:member'];
-                if (count($resourceCategories) > 0) {
-                    $resourceCategory = $resourceCategories[0];
-                } else {
-                    $resourceCategory = ['resource' => $organization['@id'], 'catagories' => []];
-                }
-
-                $resourceCategory['categories'] = $categories;
-
-                $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+            /*@todo  This should go to a wrc service */
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $organization['id']])['hydra:member'];
+            if (count($resourceCategories) > 0) {
+                $resourceCategory = $resourceCategories[0];
+            } else {
+                $resourceCategory = ['resource' => $organization['@id'], 'catagories' => []];
             }
+
+            $resourceCategory['categories'] = $categories;
+            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id'=>$organization['id']]);
         }
