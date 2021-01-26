@@ -36,22 +36,92 @@ class DashboardOrganizationController extends AbstractController
 
         $organizationUrl = $this->getUser()->getOrganization();
         $variables['organization'] = $commonGroundService->getResource($organizationUrl);
-
+        // Get review component totals for this organization
+        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $organizationUrl]);
+        // Get all orders of this organization to get amount of sold tickets and calculate revenue
+        $orders = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organizationUrl])['hydra:member'];
         // Get all events for this organization (order is important for getting the next upcoming event!)
         $events = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $organizationUrl, 'order[startDate]' => 'asc'])['hydra:member'];
 
         // Get upcoming events only
-        $events = array_filter($events, function ($event) {
-            $today = new \DateTime('now');
-            // maybe use endDate here? so you still count/see events that are currently ongoing
-            $eventStartDate = new \DateTime($event['startDate']);
+        $today = new \DateTime('now');
+        $events = array_filter($events, function ($event) use ($today) {
+            // use endDate so you still count/see events that are currently ongoing
+            $eventEndDate = new \DateTime($event['endDate']);
 
-            return $eventStartDate->format('Y-m-d') > $today->format('Y-m-d');
+            return $eventEndDate->format('Y-m-d') > $today->format('Y-m-d');
         });
         $variables['upcomingEventsCount'] = count($events);
 
-        // Get review component totals for this organization
-        $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $organizationUrl]);
+        // get next event from arc (if it exists) (what to do if none exists?)
+        if (count($events) > 0) {
+            // The first one should be the next one because of order in the getResourceList for events above^
+            $variables['upcomingEvent'] = $events[0];
+
+            // Get bought tickets/max tickets for upcoming event
+            // First get all tickets of this upcoming event
+            $tickets = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $variables['upcomingEvent']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+            $ticketUrls = array_column($tickets, '@id');
+
+            // Calculate the sold tickets
+            $ticketsSold = $ticketsSoldLastWeek = 0;
+            if (count($orders) > 0) {
+                foreach ($orders as $order) {
+                    // Now get all orderItems where item.offer == one of the tickets^
+                    $items = array_filter($order['items'], function ($item) use ($ticketUrls) {
+                        return in_array($item['offer'], $ticketUrls);
+                    });
+                    // Add amount of tickets sold in this order to the counter
+                    if (count($items) > 0) {
+                        $ticketsInOrder = array_sum(array_column($items, 'quantity'));
+                        $ticketsSold += $ticketsInOrder;
+
+                        // Check if these tickets were sold last week
+                        $dateCreated = new \DateTime($order['dateCreated']);
+                        $dateCreated->format('Y-m-d');
+                        $lastWeekMonday = new\DateTime('last week monday');
+                        $lastWeekMonday->format('Y-m-d');
+                        $lastWeekSunday = new\DateTime('last week sunday');
+                        $lastWeekSunday->format('Y-m-d');
+                        if ($dateCreated >= $lastWeekMonday && $dateCreated <= $lastWeekSunday) {
+                            $ticketsSoldLastWeek += $ticketsInOrder;
+                        }
+                    }
+                }
+            }
+            $variables['ticketsSold'] = $ticketsSold;
+            $variables['ticketsSoldLastWeek'] = $ticketsSoldLastWeek;
+        }
+
+        $variables['revenue']['thisMonth'] = $variables['revenue']['lastMonth'] = '€ 0,00';
+        if (count($orders) > 0) {
+            // Filter out the orders of this month
+            $today = new \DateTime('now');
+            $ordersThisMonth = array_filter($orders, function ($order) use ($today) {
+                $dateCreated = new \DateTime($order['dateCreated']);
+
+                return $dateCreated->format('Y-m') == $today->format('Y-m');
+            });
+            // ...and last month
+            $today->sub(new \DateInterval('P1M'));
+            $ordersLastMonth = array_filter($orders, function ($order) use ($today) {
+                $dateCreated = new \DateTime($order['dateCreated']);
+
+                return $dateCreated->format('Y-m') == $today->format('Y-m');
+            });
+
+            // Calculate revenue
+            if (count($ordersThisMonth) > 0) {
+                // Calculate revenue of this organization, this month
+                $prices = array_column($ordersThisMonth, 'price');
+                $variables['revenue']['thisMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
+            }
+            if (count($ordersLastMonth) > 0) {
+                // Calculate revenue of this organization, last month
+                $prices = array_column($ordersLastMonth, 'price');
+                $variables['revenue']['lastMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
+            }
+        }
 
         // Get all members from id-vault
         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
@@ -75,53 +145,6 @@ class DashboardOrganizationController extends AbstractController
 
             return $dateAccepted->format('Y-m') == $today->format('Y-m');
         }));
-
-        // Get all orders of this organization to calculate revenue
-        $orders = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organizationUrl])['hydra:member'];
-
-        // Filter out the orders of this month
-        $ordersThisMonth = array_filter($orders, function ($order) {
-            $dateCreated = new \DateTime($order['dateCreated']);
-            $today = new \DateTime('now');
-
-            return $dateCreated->format('Y-m') == $today->format('Y-m');
-        });
-        // ...and last month
-        $ordersLastMonth = array_filter($orders, function ($order) {
-            $dateCreated = new \DateTime($order['dateCreated']);
-            $today = new \DateTime('now');
-            $today->sub(new \DateInterval('P1M'));
-
-            return $dateCreated->format('Y-m') == $today->format('Y-m');
-        });
-
-        // Calculate revenue
-        $variables['revenue']['thisMonth'] = $variables['revenue']['lastMonth'] = '€ 0,00';
-        if (count($ordersThisMonth) > 0) {
-            // Calculate revenue of this organization, this month
-            $prices = array_column($ordersThisMonth, 'price');
-            $variables['revenue']['thisMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
-        }
-        if (count($ordersLastMonth) > 0) {
-            // Calculate revenue of this organization, last month
-            $prices = array_column($ordersLastMonth, 'price');
-            $variables['revenue']['lastMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
-        }
-
-//        // get next event from arc (if it exists) (what to do if none exists?)
-//        if (count($events) > 0) {
-//            // The first one should be the next one because of order in the getResourceList for events above^
-//            $upcomingEvent = $events[0];
-//
-//            // Get bought tickets/max tickets for upcoming event
-//            //...
-//
-//            // Calculate revenue for the $upcomingEvent? :
-//            // get all products of the next event from pdc
-//            // get all productIds: array_column('id') actie
-//            // get all orders for these products from orc
-//            // calculate revenue
-//        }
 
         return $variables;
     }

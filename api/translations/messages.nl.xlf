@@ -594,6 +594,10 @@
          <source>upcoming events</source>
          <target>aankomende evenementen</target>
          </trans-unit>
+         <trans-unit id="2p0PWxK" resname="next event">
+         <source>next event</source>
+         <target>eerstvolgende evenement</target>
+         </trans-unit>
          <trans-unit id="Opatstq" resname="see all events">
          <source>see all events</source>
          <target>bekijk alle evenementen</target>
@@ -857,6 +861,10 @@
         <trans-unit id="hiqtO-2" resname="last month">
         <source>last month</source>
         <target>vorige maand</target>
+        </trans-unit>
+        <trans-unit id="pcxi-rR" resname="last week">
+        <source>last week</source>
+        <target>vorige week</target>
         </trans-unit>
         <trans-unit id="tzqKdWh" resname="monthly">
         <source>monthly</source>
