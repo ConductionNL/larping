@@ -175,8 +175,9 @@ class ShoppingService
 
     public function checkForTypeInProducts($type, $products)
     {
+
         foreach ($products as $product) {
-            if (isset($product['type']) == $type) {
+            if (isset($product['type']) && $product['type'] == $type) {
                 return true;
             }
         }
@@ -359,6 +360,27 @@ class ShoppingService
     {
         $thisProductIsOwned = false;
 
+        // Checks if required product is in array of owned products | Needs to be logged in
+        if ($thisProductIsOwned == false && $this->security->getUser() && $this->security->getUser()->getPerson()) {
+            // Fetches owned products
+            $ownedProducts = $this->getOwnedProducts($this->security->getUser()->getPerson());
+            if (isset($ownedProducts) && count($ownedProducts) > 0) {
+                foreach ($ownedProducts as $ownedProduct) {
+                    if ($ownedProduct['id'] == $product['id']) {
+                        $thisProductIsOwned = true;
+                    }
+                }
+            }
+        }
+
+        return $thisProductIsOwned;
+    }
+
+
+    public function productInCart($product)
+    {
+        $thisProductIsOwned = false;
+
         // Checks if required product is in one of the session orders
         // @todo kijken naar fix voor minder loops
         $orders = $this->session->get('orders');
@@ -379,19 +401,6 @@ class ShoppingService
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
-
-        // Checks if required product is in array of owned products | Needs to be logged in
-        if ($thisProductIsOwned == false && $this->security->getUser() && $this->security->getUser()->getPerson()) {
-            // Fetches owned products
-            $ownedProducts = $this->getOwnedProducts($this->security->getUser()->getPerson());
-            if (isset($ownedProducts) && count($ownedProducts) > 0) {
-                foreach ($ownedProducts as $ownedProduct) {
-                    if ($ownedProduct['id'] == $product['id']) {
-                        $thisProductIsOwned = true;
                     }
                 }
             }

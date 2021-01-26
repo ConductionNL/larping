@@ -31,4 +31,9 @@ class ShoppingRuntime implements RuntimeExtensionInterface
     {
         return $this->ss->checkForTypeInProducts($type, $products);
     }
+
+    public function productInCart($product)
+    {
+        return $this->ss->productInCart($product);
+    }
 }

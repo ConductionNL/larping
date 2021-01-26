@@ -7,14 +7,14 @@
     <section class="bg-light py-5 height100vh">
         <div class="container">
             <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
-                <h2 class="font-weight-normal mb-4 mb-md-0">{% if location['@id']|default %}{{ 'edit profile'|trans|capitalize }}{% else %}{{ 'add location'|trans|capitalize }}{% endif %}</h2>
+                <h2 class="font-weight-normal mb-4 mb-md-0">{% if location['@id']|default %}{{ 'edit location'|trans|capitalize }}{% else %}{{ 'add location'|trans|capitalize }}{% endif %}</h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">{% if location['@id']|default %}{{ 'edit location'|trans|capitalize }}{% else %}{{ 'add organization'|trans|capitalize }}{% endif %}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{% if location['@id']|default %}{{ 'edit location'|trans|capitalize }}{% else %}{{ 'add location'|trans|capitalize }}{% endif %}</li>
                 </ul>
             </nav>
             <form id="LocationForm{% if location.id|default %}{{ location['id'] }}{% else %}Add{% endif %}" method="post">
@@ -37,14 +37,12 @@
                         <div class="row">
                             <div class="form-group col-md-12 mb-6">
                                 <label for="name">{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" {% if location.name|default %}value="{{ location.name }}"{% endif %} id="name"
-                                       name="name">
+                                <input type="text" class="form-control" {% if location.name is defined %}value="{{ location.name }}"{% endif %} id="name" name="name">
                             </div>
 
                             <div class="form-group col-md-12 mb-6">
                                 <label for="description">{{ 'description'|trans|capitalize }}</label>
-                                <textarea class="form-control" rows="6" id="description"
-                                          name="description">{% if location.description|default %}{{ location.description }}{% endif %}</textarea>
+                                <textarea class="form-control" rows="6" id="description" name="description">{% if location.description is defined %}{{ location.description }}{% endif %}</textarea>
                             </div>
                         </div>
 
@@ -79,6 +77,88 @@
                     </div>
                 </div>
 
+                <!-- Contact -->
+                <div class="card">
+                    <div class="card-body p-6" id="contact-list">
+                        <div class="row">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'address'|trans|capitalize }}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <a class="btn btn-success float-right text-white" onclick="addItemToList('contact-list');"><i class="fal fa-plus"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="row" id="contact-list-new" style="display: none;">
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" name="adresses[uuid][postalCode]">
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="street">{{ 'street'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"  name="adresses[uuid][street]">
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="houseNumber">{{ 'house number'|trans|capitalize }}</label>
+                                <input type="number" class="form-control" name="adresses[uuid][houseNumber]">
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="suffix">{{ 'suffix'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" name="adresses[uuid][suffix]">
+                            </div>
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="locality">{{ 'locality'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"  name="adresses[uuid][locality]">
+                            </div>
+                        </div>
+                        {% if location.adress is defined and location.adress is not empty %}
+                            {% for adress in location.adress %}
+                                <div class="row" id="{{ adress.id}}">
+                                    <input type="hidden" id={{ adress.id }}_id" name="adresses[{{ adress.id }}][id]" value="/addresses/{{ adress['id'] }}">
+                                    <input type="hidden" id="{{ adress.id }}_@id" name="adresses[{{ adress.id }}][@id]" value="/addresses/{{ adress['id'] }}">
+                                    <input type="hidden" id="{{ adress.id }}_@type" name="adresses[{{ adress.id }}][@type]" value="Adress">
+                                    <div class="form-group col-md-6 mb-6">
+                                        <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                        <input type="text" class="form-control"
+                                               {% if adress.postalCode|default %}value="{{ adress.postalCode }}"{% endif %}
+                                               id="{{ adress.id}}_postalCode" name="adresses[{{ adress.id}}][postalCode]">
+                                    </div>
+
+                                    <div class="form-group col-md-6 mb-6">
+                                        <label for="street">{{ 'street'|trans|capitalize }}</label>
+                                        <input type="text" class="form-control"
+                                               {% if adress.street|default %}value="{{ adress.street }}"{% endif %}
+                                               id="{{ adress.id}}_street" name="adresses[{{ adress.id}}][street]">
+                                    </div>
+
+                                    <div class="form-group col-md-6 mb-6">
+                                        <label for="houseNumber">{{ 'house number'|trans|capitalize }}</label>
+                                        <input type="number" class="form-control"
+                                               {% if adress.houseNumber|default %}value="{{ adress.houseNumber }}"{% endif %}
+                                               id="{{ adress.id}}_houseNumber" name="adresses[{{ adress.id}}][houseNumber]">
+                                    </div>
+
+                                    <div class="form-group col-md-6 mb-6">
+                                        <label for="suffix">{{ 'suffix'|trans|capitalize }}</label>
+                                        <input type="text" class="form-control"
+                                               {% if adress.suffix|default %}value="{{ adress.suffix }}"{% endif %}
+                                               id="{{ adress.id}}_suffix" name="adresses[{{ adress.id}}][suffix]">
+                                    </div>
+                                    <div class="form-group col-md-12 mb-6">
+                                        <label for="locality">{{ 'locality'|trans|capitalize }}</label>
+                                        <input type="text" class="form-control"
+                                               {% if adress.locality|default %}value="{{ adress.locality }}"{% endif %}
+                                               id="{{ adress.id}}_locality" name="adresses[{{ adress.id}}][locality]">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
                 {% if location['@id']|default %}
                 <!-- Gallery -->
                 <div class="card">
@@ -98,4 +178,49 @@
             </form>
         </div>
     </section>
+
+    <script>
+
+        function createUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function removeItemFromList(item) {
+            var element = item.parentElement.parentElement;
+            console.log("remove " + element);
+            element.remove();
+        }
+
+        function addItemToList(id) {
+            const formDiv = document.getElementById(id + '-new');
+            var cln = formDiv.cloneNode(true);
+            var uuid = createUUID();
+
+            // Let clear up some atributes
+            cln.setAttribute('id', createUUID());
+            cln.removeAttribute('style');
+
+            // Lets update al the names
+            cln.childNodes.forEach((item, index) => {
+                if(item.nodeType == 1){
+                    item.childNodes.forEach((input, index) => {
+                        if(input.nodeType == 1){
+                            var name = input.getAttribute('name');
+                            if(name){
+                                input.setAttribute('name', name.replace('uuid', uuid));
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Atach the now prepared form
+            document.getElementById(id).appendChild(cln);
+            console.log('added:' + uuid);
+        }
+    </script>
+
 {% endblock %}

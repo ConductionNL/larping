@@ -634,6 +634,14 @@
          <source>email</source>
          <target>email</target>
          </trans-unit>
+         <trans-unit id="BdhT12g" resname="dutch">
+         <source>dutch</source>
+         <target>nederlands</target>
+         </trans-unit>
+         <trans-unit id="MNMsjgs" resname="english">
+         <source>english</source>
+         <target>engels</target>
+         </trans-unit>
          <trans-unit id="MaBTSgs" resname="number of members">
          <source>number of memberss</source>
          <target>Aantal leden</target>
@@ -681,6 +689,30 @@
          <trans-unit id="uiopkas" resname="orders">
          <source>orders</source>
          <target>bestellingen</target>
+         </trans-unit>
+         <trans-unit id="NMsskas" resname="enter your minimum price">
+         <source>enter your minimum price</source>
+         <target>voer uw minimumprijs in</target>
+         </trans-unit>
+         <trans-unit id="TrApkas" resname="enter your maximum price">
+         <source>enter your maximum price</source>
+         <target>voer uw maximale prijs in</target>
+         </trans-unit>
+         <trans-unit id="HatFsas" resname="start date">
+         <source>start date</source>
+         <target>start datum</target>
+         </trans-unit>
+         <trans-unit id="NabTkas" resname="end date">
+         <source>end date</source>
+         <target>eind datum</target>
+         </trans-unit>
+         <trans-unit id="YwtRkas" resname="min price">
+         <source>minimal price</source>
+         <target>minimale prijs</target>
+         </trans-unit>
+         <trans-unit id="Aqrpkas" resname="max price">
+         <source>maximum price</source>
+         <target>maximale prijs</target>
          </trans-unit>
          <trans-unit id="uRRpkas" resname="members">
          <source>members</source>
@@ -945,6 +977,14 @@
         <trans-unit id="YrFcSeW" resname="add more socials">
         <source>add more socials</source>
         <target>voeg meer socials toe</target>
+        </trans-unit>
+        <trans-unit id="Hb21n3S" resname="subscriptions">
+        <source>subscriptions</source>
+        <target>abonnementen</target>
+        </trans-unit>
+        <trans-unit id="GASfd14" resname="subscriptions">
+        <source>subscription</source>
+        <target>abonnement</target>
         </trans-unit>
         <trans-unit id="2On21sg" resname="is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.">
         <source>is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.</source>
