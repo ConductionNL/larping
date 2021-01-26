@@ -24,7 +24,7 @@
         <td>
             {{ event.endDate|date("Y/d/m") }}
         </td>
-        <td class="text-capitalize">{{ event.location }}</td>
+        <td class="text-capitalize">{% if event.location|default %}{{ commonground_resource(event.location).name }}{% endif %}</td>
 
         <td>
             80 / 120

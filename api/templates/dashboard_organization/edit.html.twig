@@ -7,7 +7,7 @@
     <section class="bg-light py-5 height100vh">
         <div class="container">
             <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
-                <h2 class="font-weight-normal mb-4 mb-md-0">{% if organization|default %}{{ 'edit profile'|trans|capitalize }}{% else %}{{ 'add organization'|trans|capitalize }}{% endif %}</h2>
+                <h2 class="font-weight-normal mb-4 mb-md-0">{% if organization['@id']|default %}{{ 'edit profile'|trans|capitalize }}{% else %}{{ 'add organization'|trans|capitalize }}{% endif %}</h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
