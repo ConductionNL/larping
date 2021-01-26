@@ -35,9 +35,9 @@ class EventController extends AbstractController
         $variables['search'] = $request->get('search', false);
         $variables['categories'] = $request->get('categories', []);
         $variables['startDate'] = $request->get('startDate', false);
-        $variables['endDate'] = $request->get('endDate', false);;
-        $variables['minPrice'] = (float)($request->get('minPrice', null)*100);
-        $variables['maxPrice'] = (float)($request->get('maxPrice', null)*100);
+        $variables['endDate'] = $request->get('endDate', false);
+        $variables['minPrice'] = (float) ($request->get('minPrice', null) * 100);
+        $variables['maxPrice'] = (float) ($request->get('maxPrice', null) * 100);
 
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
@@ -65,7 +65,6 @@ class EventController extends AbstractController
 
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], $query)['hydra:member'];
 
-
         // Lets sort (we do this post query so that we might filter on ratins
         $sorting = explode('-', $variables['sorting']);
 
@@ -77,7 +76,6 @@ class EventController extends AbstractController
 
         // hotfix -> remove unwanted
         foreach ($variables['events'] as $key => $event) {
-
             $tickets = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $event['@id'], 'products.type' => 'ticket'])['hydra:member'];
 
             // if we are sorting by rating lets get the rating

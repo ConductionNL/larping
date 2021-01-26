@@ -42,9 +42,10 @@ class DashboardOrganizationController extends AbstractController
 
         // Get upcoming events only
         $events = array_filter($events, function ($event) {
-            $today = new \ DateTime("now");
+            $today = new \DateTime('now');
             // maybe use endDate here? so you still count/see events that are currently ongoing
-            $eventStartDate = new \ DateTime($event['startDate']);
+            $eventStartDate = new \DateTime($event['startDate']);
+
             return $eventStartDate->format('Y-m-d') > $today->format('Y-m-d');
         });
         $variables['upcomingEventsCount'] = count($events);
@@ -68,9 +69,10 @@ class DashboardOrganizationController extends AbstractController
         $variables['totalUsers'] = count($users);
 
         // Now get the total new users sinds last month.
-        $variables['newUsersThisMonth'] = count(array_filter($users, function ($user){
+        $variables['newUsersThisMonth'] = count(array_filter($users, function ($user) {
             $dateAccepted = new \DateTime($user['dateAccepted']);
-            $today = new \DateTime("now");
+            $today = new \DateTime('now');
+
             return $dateAccepted->format('Y-m') == $today->format('Y-m');
         }));
 
@@ -78,16 +80,18 @@ class DashboardOrganizationController extends AbstractController
         $orders = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organizationUrl])['hydra:member'];
 
         // Filter out the orders of this month
-        $ordersThisMonth = array_filter($orders, function($order) {
+        $ordersThisMonth = array_filter($orders, function ($order) {
             $dateCreated = new \DateTime($order['dateCreated']);
-            $today = new \DateTime("now");
+            $today = new \DateTime('now');
+
             return $dateCreated->format('Y-m') == $today->format('Y-m');
         });
         // ...and last month
-        $ordersLastMonth = array_filter($orders, function($order) {
+        $ordersLastMonth = array_filter($orders, function ($order) {
             $dateCreated = new \DateTime($order['dateCreated']);
-            $today = new \DateTime("now");
+            $today = new \DateTime('now');
             $today->sub(new \DateInterval('P1M'));
+
             return $dateCreated->format('Y-m') == $today->format('Y-m');
         });
 
@@ -250,14 +254,13 @@ class DashboardOrganizationController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
         $variables['product'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
         /*@todo make this better*/
-        if (count($variables['product']) > 0){
+        if (count($variables['product']) > 0) {
             $variables['product'] = $variables['product'][0];
             $variables['product']['offers'] = $variables['product']['offers'][0];
         }
         $offers = $variables['product']['offers'];
         //orders op het offer van het event
         $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['order.organization' => $variables['organization']['@id'], 'offer' => $offers['@id']])['hydra:member'];
-
 
         //downloads tickets
         if ($request->query->has('action') && $request->query->get('action') == 'download') {
@@ -709,7 +712,6 @@ class DashboardOrganizationController extends AbstractController
             $variables['location'] = [];
         }
 
-
         if ($request->isMethod('POST')) {
             $location = $request->request->all();
             $location['organization'] = $variables['organization']['@id'];
@@ -739,7 +741,8 @@ class DashboardOrganizationController extends AbstractController
 
                 // replace the values in the original array
                 $location['adresses'][$subobject] = $subobjects[$subobject];
-                var_dump($location);die();
+                var_dump($location);
+                exit();
             }
 
             // Lets save the contact
@@ -804,11 +807,10 @@ class DashboardOrganizationController extends AbstractController
 
             // Setting the categories
             /*@todo  This should go to a wrc service */
-            if(array_key_exists('categories', $organization)){
+            if (array_key_exists('categories', $organization)) {
                 $categories = $organization['categories'];
                 unset($organization['categories']);
-            }
-            else{
+            } else {
                 $categories = [];
             }
 
@@ -828,16 +830,14 @@ class DashboardOrganizationController extends AbstractController
                 $organization['contact'][$subobject] = $subobjects[$subobject];
             }
 
-            if(array_key_exists('contact', $organization)){
+            if (array_key_exists('contact', $organization)) {
                 $contact = $organization['contact'];
                 unset($organization['contact']);
-            }
-            else{
+            } else {
                 $contact = [];
             }
             $contact['name'] = $organization['name'];
             $contact['description'] = $organization['description'];
-
 
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
 
@@ -845,7 +845,7 @@ class DashboardOrganizationController extends AbstractController
             $contact['sourceOrganization'] = $organization['@id'];
             $contact = $commonGroundService->saveResource($contact, ['component' => 'cc', 'type' => 'organizations']);
             // If the current contact is difrend then the one saved in the organisation we need to save that
-            if($organization['contact'] != $contact['@id']){
+            if ($organization['contact'] != $contact['@id']) {
                 $organization['contact'] = $contact['@id'];
                 $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
             }
@@ -878,7 +878,6 @@ class DashboardOrganizationController extends AbstractController
 
             $resourceCategory['categories'] = $categories;
             $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
-
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id'=>$organization['id']]);
         }
