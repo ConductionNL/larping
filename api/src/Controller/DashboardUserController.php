@@ -307,7 +307,7 @@ class DashboardUserController extends AbstractController
             }
         }
         //don't display page if there aren't any likes from the user
-        if (!$variables['likes'] > 0){
+        if (!$variables['likes'] > 0) {
             return $this->redirect($this->generateUrl('app_default_index'));
         }
 
