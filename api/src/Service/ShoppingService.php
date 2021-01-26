@@ -175,7 +175,6 @@ class ShoppingService
 
     public function checkForTypeInProducts($type, $products)
     {
-
         foreach ($products as $product) {
             if (isset($product['type']) && $product['type'] == $type) {
                 return true;
@@ -375,7 +374,6 @@ class ShoppingService
 
         return $thisProductIsOwned;
     }
-
 
     public function productInCart($product)
     {
