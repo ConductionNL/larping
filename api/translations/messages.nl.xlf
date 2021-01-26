@@ -686,6 +686,14 @@
          <source>orders</source>
          <target>bestellingen</target>
          </trans-unit>
+         <trans-unit id="BfCdXAs" resname="find a event">
+         <source>find a event</source>
+         <target>vind een evenement</target>
+         </trans-unit>
+         <trans-unit id="HyTgFrD" resname="you have not placed any orders yet. If you want to place an order, search for your event below">
+         <source>you have not placed any orders yet. If you want to place an order, search for your event below</source>
+         <target>je hebt nog geen bestellingen gedaan. Wil je een bestelling doen , zoek dan hieronder naar je evenement</target>
+         </trans-unit>
          <trans-unit id="NMsskas" resname="enter your minimum price">
          <source>enter your minimum price</source>
          <target>voer uw minimumprijs in</target>

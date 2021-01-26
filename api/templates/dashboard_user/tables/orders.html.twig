@@ -62,8 +62,11 @@
     </table>
 {% else %}
     <div class="card-body  text-center">
-        <p>{{ 'no results found'|trans|capitalize }}</p>
+        <p>{{ 'no results found'|trans|capitalize }}<br>
+            {{ 'you have not placed any orders yet. If you want to place an order, search for your event below'|trans|capitalize }}
+        </p>
+
         <a href="{{ path('app_event_index') }}"
-           class="btn btn-primary">{{ 'find'|trans|capitalize~' '~'a'|trans~' '~'event'|trans }}</a>
+           class="btn btn-primary">{{ 'find a event'|trans }}</a>
     </div>
 {% endif %}
