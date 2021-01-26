@@ -175,7 +175,6 @@ class ShoppingService
 
     public function checkForTypeInProducts($type, $products)
     {
-
         foreach ($products as $product) {
             if (isset($product['type']) && $product['type'] == $type) {
                 return true;
@@ -258,7 +257,7 @@ class ShoppingService
         $groups = $this->idVaultService->getGroups($provider['configuration']['app_id'], $order['organization'])['groups'];
 
         foreach ($groups as $group) {
-            if ($group['name'] == 'clients' || $group['name'] == 'root' && !in_array($this->security->getUser()->getUsername(), $group['users'])) {
+            if ($group['name'] == 'clients' || $group['name'] == 'root' && !in_array($this->security->getUser()->getUsername(), array_column($group['users'], 'username'))) {
                 $this->idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $this->security->getUser()->getUsername(), true);
             }
         }
@@ -375,7 +374,6 @@ class ShoppingService
 
         return $thisProductIsOwned;
     }
-
 
     public function productInCart($product)
     {
