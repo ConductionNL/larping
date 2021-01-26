@@ -111,6 +111,20 @@
                     </div>
                     {% endif %}
 
+                    <!-- Subscriptions -->
+                    {% if subscriptions is defined and subscriptions is not empty %}
+                    <div id="gridFullwidthDiv" class="fade-in">
+                        <h3 class="font-weight-normal mb-6">{{ 'subscriptions'|trans|capitalize }}</h3>
+                        <div class="row" id="tickets">
+                            {% for offer in subscriptions %}
+                                <div class="col-md-6" id="organization">
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                                </div>
+                            {% endfor %}
+                        </div><!-- /.row -->
+                    </div>
+                    {% endif %}
+
                     <!-- Products -->
                     {% if products is defined and products is not empty %}
                     <div id="gridFullwidthDiv" class="fade-in" id="products">

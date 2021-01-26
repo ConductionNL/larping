@@ -974,6 +974,14 @@
         <source>add more socials</source>
         <target>voeg meer socials toe</target>
         </trans-unit>
+        <trans-unit id="Hb21n3S" resname="subscriptions">
+        <source>subscriptions</source>
+        <target>abonnementen</target>
+        </trans-unit>
+        <trans-unit id="GASfd14" resname="subscriptions">
+        <source>subscription</source>
+        <target>abonnement</target>
+        </trans-unit>
         <trans-unit id="2On21sg" resname="is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.">
         <source>is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.</source>
         <target>is een online platform dat als doel heeft, het verbinden en ondersteunen van spelers en organisatoren betrokken bij LARP events. Dit doet het door spelers makkelijk te laten verbinden met events en organisatoren met diverse tools zoals een ticketsysteem, character creatie en social campagnes.</target>

@@ -54,7 +54,7 @@ class ShoppingController extends AbstractController
      */
     public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params)
     {
-        if ($session->get('invoice@id')) {
+        if ($session->get('invoice@id') && $this->getUser()) {
             $variables['invoice'] = $commonGroundService->getResource($session->get('invoice@id'));
 
             // Get invoice with updated status from mollie
@@ -106,6 +106,24 @@ class ShoppingController extends AbstractController
 
         return $this->redirectToRoute('app_shopping_index');
     }
+
+//    /**
+//     * @Route("/add-item")
+//     * @Template
+//     */
+//    public function addItemAction(CommonGroundService $commonGroundService, ShoppingService $shoppingService, Request $request)
+//    {
+//        if ($request->isMethod('POST')) {
+//            $offers = $request->get('offers');
+//            $redirectUrl = $request->get('redirectUrl');
+//
+//            if ($shoppingService->addItemsToCart($offers, $redirectUrl) === false) {
+//                return $this->redirect($redirectUrl);
+//            }
+//        }
+//
+//        return $this->redirectToRoute('app_shopping_index');
+//    }
 
     /**
      * @Route("/remove-option")
