@@ -40,13 +40,13 @@
                         <td>{{ order.reference }}</td>
                         <td>{{ commonground_resource(order.customer).name }}</td>
                         <td>
-                            {% if commonground_resource(order.invoice).paid == true %}
-                                <span  class="text-success">{{ 'paid'|trans|capitalize }}</span>
-                            {% else %}
-                                <span  class="text-danger">{{ 'unpaid'|trans|capitalize }}</span>
-                            {% endif %}
+{#                            {% if commonground_resource(order.invoice).paid == true %}#}
+{#                                <span  class="text-success">{{ 'paid'|trans|capitalize }}</span>#}
+{#                            {% else %}#}
+{#                                <span  class="text-danger">{{ 'unpaid'|trans|capitalize }}</span>#}
+{#                            {% endif %}#}
                         </td>
-                        <td></td>
+                        <td>{{ product.type }}</td>
                         <td></td>
                     </tr>
                 {% endfor %}

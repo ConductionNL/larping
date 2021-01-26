@@ -253,6 +253,18 @@ class DashboardOrganizationController extends AbstractController
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
         $variables['product'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
+
+//        $variables['ticket'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+//        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+//
+//        $ticketorders = [];
+//        foreach ($variables['orders'] as $order){
+//            $var = array_column($order['items'], 'offer');
+//            if (in_array($variables['ticket'], $var)){
+//
+//            }
+//        }
+
         /*@todo make this better*/
         if (count($variables['product']) > 0) {
             $variables['product'] = $variables['product'][0];
