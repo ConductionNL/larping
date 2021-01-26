@@ -45,9 +45,10 @@ class DashboardOrganizationController extends AbstractController
 
         // Get upcoming events only
         $today = new \DateTime('now');
-        $events = array_filter($events, function ($event) use($today) {
+        $events = array_filter($events, function ($event) use ($today) {
             // use endDate so you still count/see events that are currently ongoing
             $eventEndDate = new \DateTime($event['endDate']);
+
             return $eventEndDate->format('Y-m-d') > $today->format('Y-m-d');
         });
         $variables['upcomingEventsCount'] = count($events);
@@ -67,7 +68,7 @@ class DashboardOrganizationController extends AbstractController
             if (count($orders) > 0) {
                 foreach ($orders as $order) {
                     // Now get all orderItems where item.offer == one of the tickets^
-                    $items = array_filter($order['items'], function ($item) use($ticketUrls) {
+                    $items = array_filter($order['items'], function ($item) use ($ticketUrls) {
                         return in_array($item['offer'], $ticketUrls);
                     });
                     // Add amount of tickets sold in this order to the counter
@@ -76,9 +77,12 @@ class DashboardOrganizationController extends AbstractController
                         $ticketsSold += $ticketsInOrder;
 
                         // Check if these tickets were sold last week
-                        $dateCreated = new \DateTime($order['dateCreated']); $dateCreated->format('Y-m-d');
-                        $lastWeekMonday = new\DateTime('last week monday'); $lastWeekMonday->format('Y-m-d');
-                        $lastWeekSunday = new\DateTime('last week sunday'); $lastWeekSunday->format('Y-m-d');
+                        $dateCreated = new \DateTime($order['dateCreated']);
+                        $dateCreated->format('Y-m-d');
+                        $lastWeekMonday = new\DateTime('last week monday');
+                        $lastWeekMonday->format('Y-m-d');
+                        $lastWeekSunday = new\DateTime('last week sunday');
+                        $lastWeekSunday->format('Y-m-d');
                         if ($dateCreated >= $lastWeekMonday && $dateCreated <= $lastWeekSunday) {
                             $ticketsSoldLastWeek += $ticketsInOrder;
                         }
@@ -93,14 +97,16 @@ class DashboardOrganizationController extends AbstractController
         if (count($orders) > 0) {
             // Filter out the orders of this month
             $today = new \DateTime('now');
-            $ordersThisMonth = array_filter($orders, function ($order) use($today) {
+            $ordersThisMonth = array_filter($orders, function ($order) use ($today) {
                 $dateCreated = new \DateTime($order['dateCreated']);
+
                 return $dateCreated->format('Y-m') == $today->format('Y-m');
             });
             // ...and last month
             $today->sub(new \DateInterval('P1M'));
-            $ordersLastMonth = array_filter($orders, function ($order) use($today) {
+            $ordersLastMonth = array_filter($orders, function ($order) use ($today) {
                 $dateCreated = new \DateTime($order['dateCreated']);
+
                 return $dateCreated->format('Y-m') == $today->format('Y-m');
             });
 
