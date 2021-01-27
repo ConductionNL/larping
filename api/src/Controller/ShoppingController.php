@@ -75,7 +75,7 @@ class ShoppingController extends AbstractController
                         $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
 
                         foreach ($groups as $group) {
-                            if ($group['name'] == 'members' || $group['name'] == 'root' && !in_array($this->getUser()->getUsername(), $group['users'])) {
+                            if ($group['name'] == 'members' || $group['name'] == 'root' && !in_array($this->getUser()->getUsername(), array_column($group['users'], 'username'))) {
                                 $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $this->getUser()->getUsername(), true);
                             }
                         }

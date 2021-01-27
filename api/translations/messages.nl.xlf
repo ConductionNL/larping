@@ -594,6 +594,10 @@
          <source>upcoming events</source>
          <target>aankomende evenementen</target>
          </trans-unit>
+         <trans-unit id="2p0PWxK" resname="next event">
+         <source>next event</source>
+         <target>eerstvolgende evenement</target>
+         </trans-unit>
          <trans-unit id="Opatstq" resname="see all events">
          <source>see all events</source>
          <target>bekijk alle evenementen</target>
@@ -634,9 +638,21 @@
          <source>email</source>
          <target>email</target>
          </trans-unit>
+         <trans-unit id="BdhT12g" resname="dutch">
+         <source>dutch</source>
+         <target>nederlands</target>
+         </trans-unit>
+         <trans-unit id="MNMsjgs" resname="english">
+         <source>english</source>
+         <target>engels</target>
+         </trans-unit>
          <trans-unit id="MaBTSgs" resname="number of members">
          <source>number of memberss</source>
          <target>Aantal leden</target>
+         </trans-unit>
+         <trans-unit id="NWo24-Z" resname="new members this month">
+         <source>new members this month</source>
+         <target>nieuwe leden deze maand</target>
          </trans-unit>
          <trans-unit id="NbaTkas" resname="keep track of characters and storylines">
          <source>keep track of characters and storylines</source>
@@ -677,6 +693,30 @@
          <trans-unit id="uiopkas" resname="orders">
          <source>orders</source>
          <target>bestellingen</target>
+         </trans-unit>
+         <trans-unit id="NMsskas" resname="enter your minimum price">
+         <source>enter your minimum price</source>
+         <target>voer uw minimumprijs in</target>
+         </trans-unit>
+         <trans-unit id="TrApkas" resname="enter your maximum price">
+         <source>enter your maximum price</source>
+         <target>voer uw maximale prijs in</target>
+         </trans-unit>
+         <trans-unit id="HatFsas" resname="start date">
+         <source>start date</source>
+         <target>start datum</target>
+         </trans-unit>
+         <trans-unit id="NabTkas" resname="end date">
+         <source>end date</source>
+         <target>eind datum</target>
+         </trans-unit>
+         <trans-unit id="YwtRkas" resname="min price">
+         <source>minimal price</source>
+         <target>minimale prijs</target>
+         </trans-unit>
+         <trans-unit id="Aqrpkas" resname="max price">
+         <source>maximum price</source>
+         <target>maximale prijs</target>
          </trans-unit>
          <trans-unit id="uRRpkas" resname="members">
          <source>members</source>
@@ -813,6 +853,10 @@
         <trans-unit id="hiqtO-2" resname="last month">
         <source>last month</source>
         <target>vorige maand</target>
+        </trans-unit>
+        <trans-unit id="pcxi-rR" resname="last week">
+        <source>last week</source>
+        <target>vorige week</target>
         </trans-unit>
         <trans-unit id="tzqKdWh" resname="monthly">
         <source>monthly</source>

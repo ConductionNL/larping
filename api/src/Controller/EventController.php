@@ -36,6 +36,8 @@ class EventController extends AbstractController
         $variables['categories'] = $request->get('categories', []);
         $variables['startDate'] = $request->get('startDate', false);
         $variables['endDate'] = $request->get('endDate', false);
+        $variables['minPrice'] = (float) ($request->get('minPrice', null) * 100);
+        $variables['maxPrice'] = (float) ($request->get('maxPrice', null) * 100);
 
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
@@ -72,8 +74,9 @@ class EventController extends AbstractController
             $author = $this->getUser()->getPerson();
         }
 
-        // hotfix -> remove unwanted events
+        // hotfix -> remove unwanted
         foreach ($variables['events'] as $key => $event) {
+            $tickets = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $event['@id'], 'products.type' => 'ticket'])['hydra:member'];
 
             // if we are sorting by rating lets get the rating
             if ($sorting[0] == 'rating' || $sorting[0] == 'likes') {
@@ -105,6 +108,26 @@ class EventController extends AbstractController
                 $eventendDate = $eventendDate->format('Y-m-d');
 
                 if ($eventendDate > $endDate) {
+                    unset($variables['events'][$key]);
+                }
+            }
+
+            if (($variables['minPrice'] || $variables['maxPrice'])) {
+                $hasPricedTicket = false;
+                if (isset($tickets) && count($tickets) > 0) {
+                    foreach ($tickets as $ticket) {
+                        if ($variables['minPrice'] && $variables['maxPrice']
+                            && ($ticket['price'] >= $variables['minPrice'])
+                            && ($ticket['price'] <= $variables['maxPrice'])) {
+                            $hasPricedTicket = true;
+                        } elseif ($variables['minPrice'] && !$variables['maxPrice'] && ($ticket['price'] >= $variables['minPrice'])) {
+                            $hasPricedTicket = true;
+                        } elseif ($variables['maxPrice'] && !$variables['minPrice'] && ($ticket['price'] <= $variables['maxPrice'])) {
+                            $hasPricedTicket = true;
+                        }
+                    }
+                }
+                if (!$hasPricedTicket) {
                     unset($variables['events'][$key]);
                 }
             }
