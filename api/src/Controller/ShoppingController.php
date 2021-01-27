@@ -74,6 +74,14 @@ class ShoppingController extends AbstractController
                         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
                         $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
 
+                        $organization = $commonGroundService->getResource($variables['invoice']['targetOrganization']);
+
+                        if (count($groups) < 1) {
+                            $memberGroup = $idVaultService->createGroup($provider['configuration']['app_id'], 'members', 'User group for members of ' . $organization['name'], $organization['@id']);
+                            $idVaultService->inviteUser($provider['configuration']['app_id'], $memberGroup['id'], $this->getUser()->getUsername(), true);
+
+                            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', 'User group for the root/admins of ' . $organization['name'], $organization['@id']);
+                        }
                         foreach ($groups as $group) {
                             if ($group['name'] == 'members' || $group['name'] == 'root' && !in_array($this->getUser()->getUsername(), array_column($group['users'], 'username'))) {
                                 $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $this->getUser()->getUsername(), true);
