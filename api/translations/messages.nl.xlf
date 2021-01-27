@@ -678,6 +678,26 @@
          <source>become a member</source>
          <target>word lid</target>
          </trans-unit>
+         <trans-unit id="ReWqaas" resname="phone numbers">
+         <source>phone numbers</source>
+         <target>telefoon numers</target>
+         </trans-unit>
+         <trans-unit id="NVCRAas" resname="click or drag images here">
+         <source>click or drag images here</source>
+         <target>klik of sleep afbeeldingen hierheen</target>
+         </trans-unit>
+         <trans-unit id="PoLsk3s" resname="submit">
+         <source>submit</source>
+         <target>indienen</target>
+         </trans-unit>
+         <trans-unit id="47hdbas" resname="switch organization">
+         <source>switch organization</source>
+         <target>switch organisatie</target>
+         </trans-unit>
+         <trans-unit id="2h5sk3s" resname="edit organization">
+         <source>edit organization</source>
+         <target>edit organisatie</target>
+         </trans-unit>
          <trans-unit id="yrKWkas" resname="edit profile">
          <source>edit profile</source>
          <target>bewerk profiel</target>
