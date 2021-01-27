@@ -289,9 +289,9 @@ class ShoppingService
             }
             $item['priceCurrency'] = $offer['priceCurrency'];
             $item['order'] = '/orders/'.$uploadedOrder['id'];
-        }
 
-        $item = $this->commonGroundService->saveResource($item, ['component' => 'orc', 'type' => 'order_items']);
+            $item = $this->commonGroundService->saveResource($item, ['component' => 'orc', 'type' => 'order_items']);
+        }
         $uploadedOrder = $this->commonGroundService->getResource($uploadedOrder['@id']);
 
         $order['@id'] = $uploadedOrder['@id'];
