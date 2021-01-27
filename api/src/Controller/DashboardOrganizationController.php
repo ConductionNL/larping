@@ -40,8 +40,13 @@ class DashboardOrganizationController extends AbstractController
         $variables['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $organizationUrl]);
         // Get all orders of this organization to get amount of sold tickets and calculate revenue
         $orders = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $organizationUrl])['hydra:member'];
-        // Get all events for this organization (order is important for getting the next upcoming event!)
-        $events = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $organizationUrl, 'order[startDate]' => 'asc'])['hydra:member'];
+        // Get all events for this organization (order is important for getting the next upcoming event!) (adding order to the query will result in a 502 error for some weird reason:)
+        $events = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $organizationUrl])['hydra:member']; // 'order[startDate]' => 'asc'
+
+        // Hotfix for sorting events because adding query paramater to getResourceList results in a weird 502 error.
+        $keys = array_keys($events);
+        array_multisort(array_column($events, 'startDate'), SORT_ASC, $events, $keys);
+        $events = array_combine($keys, $events);
 
         // Get upcoming events only
         $today = new \DateTime('now');
@@ -54,7 +59,7 @@ class DashboardOrganizationController extends AbstractController
         $variables['upcomingEventsCount'] = count($events);
 
         // get next event from arc (if it exists) (what to do if none exists?)
-        if (count($events) > 0) {
+        if ($variables['upcomingEventsCount'] > 0) {
             // The first one should be the next one because of order in the getResourceList for events above^
             $variables['upcomingEvent'] = $events[0];
 
@@ -276,6 +281,18 @@ class DashboardOrganizationController extends AbstractController
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
         $variables['product'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
+
+//        $variables['ticket'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+//        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+//
+//        $ticketorders = [];
+//        foreach ($variables['orders'] as $order){
+//            $var = array_column($order['items'], 'offer');
+//            if (in_array($variables['ticket'], $var)){
+//
+//            }
+//        }
+
         /*@todo make this better*/
         if (count($variables['product']) > 0) {
             $variables['product'] = $variables['product'][0];
@@ -739,45 +756,22 @@ class DashboardOrganizationController extends AbstractController
             $location = $request->request->all();
             $location['organization'] = $variables['organization']['@id'];
 
-            // lets clear up the non used example forms
-            unset($location['adresses']['uuid']);
-
             // Setting the categories
             /*@todo  This should go to a wrc service */
             if (isset($location['categories'])) {
                 $categories = $location['categories'];
                 unset($location['categories']);
             }
-
-            // removing UUID's from contact data
-            $subobjects = ['adresses'=> []];
-            foreach ($subobjects as $subobject => $subobjectArray) {
-                // let see if we have values
-                if (array_key_exists($subobject, $location['adresses'])) {
-                    // transefer the vlaues to holder array without the uuuid as an index
-                    foreach ($location['adresses'][$subobject] as $key => $tocopy) {
-                        if ($key != 'uuid') {
-                            $subobjects[$subobject][] = $tocopy;
-                        }
-                    }
-                }
-
-                // replace the values in the original array
-                $location['adresses'][$subobject] = $subobjects[$subobject];
-                var_dump($location);
-                exit();
-            }
-
-            // Lets save the contact
+            // Lets save the address
             if (isset($location['address'])) {
                 $contact = $location['address'];
                 $contact['name'] = $location['name'];
                 $contact['description'] = $location['description'];
-                //var_dump(json_encode($contact));
-                $location['address'] = $commonGroundService->saveResource($contact, ['component' => 'lc', 'type' => 'organizations'])['@id'];
+                $contact = $commonGroundService->saveResource($contact, ['component' => 'lc', 'type' => 'addresses']);
+                $location['address'] = '/addresses/'.$contact['id'];
             }
 
-            // Lets save te organization
+            // Lets save the location
             $variables['location'] = $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
 
             if (isset($categories)) {
@@ -794,7 +788,7 @@ class DashboardOrganizationController extends AbstractController
                 $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
             }
 
-            return $this->redirectToRoute('app_dashboardorganization_location', ['id'=> $location['id']]);
+            return $this->redirectToRoute('app_dashboardorganization_location', ['id'=> $variables['location']['id']]);
         }
 
         return $variables;
