@@ -117,12 +117,12 @@ class DashboardOrganizationController extends AbstractController
             if (count($ordersThisMonth) > 0) {
                 // Calculate revenue of this organization, this month
                 $prices = array_column($ordersThisMonth, 'price');
-                $variables['revenue']['thisMonth'] = '€ ' . number_format(array_sum($prices), 2, ',', '.');
+                $variables['revenue']['thisMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
             }
             if (count($ordersLastMonth) > 0) {
                 // Calculate revenue of this organization, last month
                 $prices = array_column($ordersLastMonth, 'price');
-                $variables['revenue']['lastMonth'] = '€ ' . number_format(array_sum($prices), 2, ',', '.');
+                $variables['revenue']['lastMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
             }
         }
 
@@ -252,7 +252,7 @@ class DashboardOrganizationController extends AbstractController
             $offer['price'] = $request->get('price');
             $offer['name'] = $product['name'];
             $offer['description'] = $product['description'];
-            $offer['products'] = ['/products/' . $product['id']];
+            $offer['products'] = ['/products/'.$product['id']];
             $offer['offeredBy'] = $variables['organization']['@id'];
             $offer['audience'] = 'public';
 
@@ -401,7 +401,7 @@ class DashboardOrganizationController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Offer') {
             $offer = $request->request->all();
             // Add the current product to het offer
-            $offer['products'] = ['/products/' . $id];
+            $offer['products'] = ['/products/'.$id];
             $offer['offeredBy'] = $variables['organization']['@id'];
 
             if (!array_key_exists('audience', $offer) || !$offer['audience']) {
@@ -591,7 +591,7 @@ class DashboardOrganizationController extends AbstractController
             $mail = [];
             $mail['title'] = $request->get('title');
             $mail['html'] = $request->get('html');
-            $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']) . '@larping.eu';
+            $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']).'@larping.eu';
 
             // Send email to all subscribers of this mailing list.
             $idVaultService->sendToSendList($sendListId, $mail);
@@ -813,7 +813,7 @@ class DashboardOrganizationController extends AbstractController
                 $contact['name'] = $location['name'];
                 $contact['description'] = $location['description'];
                 $contact = $commonGroundService->saveResource($contact, ['component' => 'lc', 'type' => 'addresses']);
-                $location['address'] = '/addresses/' . $contact['id'];
+                $location['address'] = '/addresses/'.$contact['id'];
             }
 
             // Lets save the location
@@ -950,15 +950,14 @@ class DashboardOrganizationController extends AbstractController
                 $template['@id'] = $variables['organization']['termsAndConditions']['@id'];
             }
 
-            $template['name'] = 'Terms and conditions for ' . $variables['organization']['name'];
+            $template['name'] = 'Terms and conditions for '.$variables['organization']['name'];
             $template['templateEngine'] = 'twig';
-            $template['organization'] = '/organizations/' . $organization['id'];
+            $template['organization'] = '/organizations/'.$organization['id'];
 
             $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
 
-            $organization['termsAndConditions'] = '/templates/' . $template['id'];
+            $organization['termsAndConditions'] = '/templates/'.$template['id'];
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
-
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
         }

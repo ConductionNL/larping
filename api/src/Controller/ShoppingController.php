@@ -77,10 +77,10 @@ class ShoppingController extends AbstractController
                         $organization = $commonGroundService->getResource($variables['invoice']['targetOrganization']);
 
                         if (count($groups) < 1) {
-                            $memberGroup = $idVaultService->createGroup($provider['configuration']['app_id'], 'members', 'User group for members of ' . $organization['name'], $organization['@id']);
+                            $memberGroup = $idVaultService->createGroup($provider['configuration']['app_id'], 'members', 'User group for members of '.$organization['name'], $organization['@id']);
                             $idVaultService->inviteUser($provider['configuration']['app_id'], $memberGroup['id'], $this->getUser()->getUsername(), true);
 
-                            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', 'User group for the root/admins of ' . $organization['name'], $organization['@id']);
+                            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', 'User group for the root/admins of '.$organization['name'], $organization['@id']);
                         }
                         foreach ($groups as $group) {
                             if ($group['name'] == 'members' || $group['name'] == 'root' && !in_array($this->getUser()->getUsername(), array_column($group['users'], 'username'))) {
