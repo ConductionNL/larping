@@ -5,6 +5,10 @@
     }) %}
 {% endif %}
 {% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
+{% if item.location is defined and item.location is not empty %}
+    {% set eventLocation  = commonground_resource(item.location) %}
+    {% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':eventLocation['id']})['hydra:member'] %}
+{% endif %}
 {% set eventOrganizations = commonground_resource(event.organization)%}
 <div class="card rounded-0 card-hover-overlay">
     <div class="position-relative">
@@ -23,13 +27,11 @@
                 {% set eventOrganization = commonground_resource(item.organization) %}
                 {{ 'by'|trans|capitalize }}: <a href="{{ path('app_organization_organization', {'id': eventOrganization.id }) }}">{{ eventOrganization.name|length > 35 ? eventOrganization.name|slice(0, 35) ~ '...' : eventOrganization.name }}</a>
             </p>
-
             <ul class="list-unstyled text-white">
-                {% if item.location is defined and item.location is not empty %}
-                    {% set eventLocation  = commonground_resource(item.location) %}
+                {% if eventLocation|default %}
                     <li>
                         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                       <a href="{{ path('app_location_location', {'id':eventLocation.id }) }}" class="text-white">{{ eventLocation.name|length > 35 ? eventLocation.name|slice(0, 35) ~ '...' : eventLocation.name }}</a>
+                        <a href="{{ path('app_location_location', {'id':eventLocation.id }) }}" class="text-white">{{ eventLocation.name|length > 35 ? eventLocation.name|slice(0, 35) ~ '...' : eventLocation.name }}</a>
                     </li>
                 {% endif %}
                 <li><i class="far fa-calendar-alt" aria-hidden="true" id="{{ item.id }}_date"></i> {{ item.startDate|date("d-m-Y H:m") }}</li>
@@ -42,10 +44,10 @@
                 <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip"
                         data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
             {% endfor %}
-            {% if features|default %}
-                {% for feature in features %}
-                    <li ><i class="{% if feature.icon|default %}{{ feature.icon }}{% endif %} mr-1" data-toggle="tooltip"
-                            data-placement="top" title="{{ feature.name }}" aria-hidden="true"></i> </li>
+            {% if locationCategories|default %}
+                {% for category in locationCategories %}
+                    <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip"
+                            data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
                 {% endfor %}
             {% endif %}
             <li class="ml-auto">
