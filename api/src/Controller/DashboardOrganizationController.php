@@ -44,7 +44,7 @@ class DashboardOrganizationController extends AbstractController
         $events = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $organizationUrl])['hydra:member']; // 'order[startDate]' => 'asc'
 
         // Hotfix for sorting events because adding query paramater to getResourceList results in a weird 502 error.
-        array_multisort(array_column($events, 'startDate'),$events);
+        array_multisort(array_column($events, 'startDate'), $events);
 
         // Get upcoming events only
         $today = new \DateTime('now');
