@@ -1006,6 +1006,14 @@
         <source>is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.</source>
         <target>is een online platform dat als doel heeft, het verbinden en ondersteunen van spelers en organisatoren betrokken bij LARP events. Dit doet het door spelers makkelijk te laten verbinden met events en organisatoren met diverse tools zoals een ticketsysteem, character creatie en social campagnes.</target>
         </trans-unit>
+        <trans-unit id="Hjb12b4" resname="you haven't made any orders.">
+        <source>you haven't made any orders.</source>
+        <target>je hebt nog geen bestellingen gedaan.</target>
+        </trans-unit>
+        <trans-unit id="pzqm5qS" resname="if you want to make a order, search here for a event.">
+        <source>if you want to make a order, search here for a event.</source>
+        <target>wil je een bestelling doen, zoek dan hier naar je evenement.</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

@@ -202,16 +202,20 @@
                                     </div>
                                     <div class="col-6">
 
-                                        <div class="form-group mb-3 text-center">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input required type="checkbox">
-                                                    I agree to the <a href="#">Terms of Use</a> &amp; <a
-                                                        href="#">Privacy
-                                                        Policy</a>.
-                                                </label>
+                                        {% if organization.termsAndConditions|default and organization.termsAndConditions.content|default %}
+                                            <div class="form-group mb-3 text-center">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input required type="checkbox">
+                                                        I agree to the <a target="_blank" href="{{ path('app_default_termsandconditionsfororg', {'id': organization.id}) }}">Terms of Use</a> &amp; <a
+                                                            href="#">Privacy
+                                                            Policy</a>.
+                                                    </label>
+                                                </div>
                                             </div>
-                                        </div>
+                                        {% else %}
+                                            <p>{{ 'this organization has no terms and conditions.'|trans|capitalize }}</p>
+                                        {% endif %}
                                         <button type="submit" name="makeOrder" value="true"
                                                 class="btn btn-lg btn-primary btn-block">{{ 'pay'|trans|capitalize }}</button>
                                     </div>
@@ -230,9 +234,12 @@
 
                 {% endfor %}
             {% else %}
-                <h3 class="mb-4">{{ 'your shopping cart is empty'|trans|capitalize }}</h3>
-                <a href="{{ path('app_event_index') }}"
-                   class="btn btn-primary">{{ 'browse through events'|trans|capitalize }}</a>
+                <div class="card text-center p-5">
+                    <p class="mb-4">{{ 'no results found'|trans|capitalize }}</p>
+                    <p class="mb-4">{{ 'you haven\'t made any orders.'|trans|capitalize~' '~'if you want to make a order, search here for a event.'|trans|capitalize }}</p>
+                    <a style="width: 33%; margin: auto" href="{{ path('app_event_index') }}"
+                       class="btn btn-primary">{{ 'find a event'|trans|capitalize }}</a>
+                </div>
             {% endif %}
 
         </div>
