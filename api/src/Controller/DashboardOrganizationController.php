@@ -637,7 +637,7 @@ class DashboardOrganizationController extends AbstractController
             $reviewedResources = array_unique(array_column($reviews, 'resource'));
 
             // Make sure these resources do actually exist
-            // TODO: maybe just still show the reviews but with a warning that the resource no longer exists
+            // maybe just still show the reviews but with a warning that the resource no longer exists? and a option to delete these reviews.
             foreach ($reviewedResources as $key => $reviewedResource) {
                 if (!$commonGroundService->isResource($reviewedResource)) {
                     $reviews = array_filter($reviews, function ($review) use($reviewedResource){

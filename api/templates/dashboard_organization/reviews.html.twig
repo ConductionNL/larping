@@ -6,10 +6,24 @@
         <div class="container">
             <!-- Breadcrumb -->
             <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
-                <h2 class="font-weight-normal mb-4 mb-md-0">{% if resource|default %}{{ 'all reviews of'|trans|capitalize }} {{ resource.name }}{% else %}{{ 'all reviews'|trans|capitalize }}{% endif %}</h2>
+                <h2 class="font-weight-normal mb-4 mb-md-0">
+                    {% if resource|default %}
+                        {{ 'all reviews of'|trans|capitalize }} <a class="text-hover-primary" style="color: black" target="_blank"
+                        {% if resource['@type'] == 'https://schema.org/Event' %}
+                            href="{{ path('app_event_event', {id: resource.id}) }}"
+                        {% elseif resource['@type'] == 'Organization' %}
+                            href="{{ path('app_organization_organization', {id: resource.id}) }}"
+                        {% else %}
+                            href="#"
+                        {% endif %}
+                    >{{ resource.name }}</a>
+                    {% else %}
+                        {{ 'all reviews'|trans|capitalize }}
+                    {% endif %}
+                </h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
                     <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_dashboard_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
                     {% if resource|default %}
                         <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_reviews') }}">{{ 'all reviews'|trans|capitalize }}</a></li>
                         <li class="breadcrumb-item active"
