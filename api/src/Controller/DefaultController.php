@@ -61,7 +61,7 @@ class DefaultController extends AbstractController
                 $dev = 'dev.';
             }
 
-            return $this->redirect('http://id-vault.com/sendlist/authorize?client_id=' . $provider['configuration']['app_id'] . '&send_lists=8b929e53-1e16-4e59-a254-6af6b550bd08&redirect_uri=' . $redirect);
+            return $this->redirect('http://id-vault.com/sendlist/authorize?client_id='.$provider['configuration']['app_id'].'&send_lists=8b929e53-1e16-4e59-a254-6af6b550bd08&redirect_uri='.$redirect);
         } else {
             return $this->render('500.html.twig');
         }
@@ -84,7 +84,7 @@ class DefaultController extends AbstractController
                 $commonGroundService->deleteResource($like);
 
                 return new JsonResponse([
-                    'status' => 'unliked',
+                    'status'        => 'unliked',
                     'amountOfLikes' => $amountOfLikes,
                 ]);
             } else {
@@ -94,7 +94,7 @@ class DefaultController extends AbstractController
                 $commonGroundService->saveResource($like, ['component' => 'rc', 'type' => 'likes'], [], [], false, false);
 
                 return new JsonResponse([
-                    'status' => 'liked',
+                    'status'        => 'liked',
                     'amountOfLikes' => $amountOfLikes,
                 ]);
             }
@@ -162,7 +162,7 @@ class DefaultController extends AbstractController
             $resource = $request->request->all();
 
             $resource['author'] = $this->getUser()->getPerson();
-            $resource['rating'] = (int)$resource['rating'];
+            $resource['rating'] = (int) $resource['rating'];
 
             // Save to the commonground component
             $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews'], [], [], false, false);
