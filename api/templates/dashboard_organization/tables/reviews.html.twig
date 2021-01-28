@@ -2,14 +2,27 @@
     <table id="reviews" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
-            <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'rating'|trans|capitalize }}</th>
+            <th>{{ 'review'|trans|capitalize }}</th>
+            <th>{{ 'author'|trans|capitalize }}</th>
+            <th class="text-align-center">{{ 'date'|trans|capitalize }} & {{ 'time'|trans|capitalize }}</th>
         </tr>
         </thead>
         <tbody>
         {% for review in reviews %}
             <tr>
-                <td class="text-capitalize">
-                    <a class="text-hover-primary text-muted" >{{ review.id }}</a>
+                <td style="min-width: 120px">
+                    {% include 'widgets/rating.html.twig' with {'rating':review.rating} %}
+                </td>
+                <td>
+                    {{ review.review }}
+                </td>
+                <td style="min-width: 150px">
+                    {{ commonground_resource(review.author).name }}
+                </td>
+                <td class="text-align-center" style="min-width: 120px">
+                    {{ review.dateCreated|date('d-m-Y') }}<br>
+                    {{ review.dateCreated|date('H:i') }}
                 </td>
             </tr>
         {% endfor %}

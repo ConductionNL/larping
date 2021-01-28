@@ -621,8 +621,55 @@ class DashboardOrganizationController extends AbstractController
      */
     public function reviewsAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['reviews'] = [];
+        // If we are showing reviews of a specific resource, do so:
+        if ($request->get('resource')) {
+            $variables['resource'] = $commonGroundService->getResource($request->get('resource'));
+            $reviews = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['resource' => $request->get('resource'), 'order[dateCreated]' => 'desc'])['hydra:member'];
+        }
+        // If we are not showing reviews of a specific resource or the given resource has no reviews:
+        if (!isset($reviews) || (isset($reviews) && count($reviews) == 0)) {
+            $organizationUrl = $this->getUser()->getOrganization();
+
+            // Get all reviews for this organization
+            $reviews = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['organization' => $organizationUrl, 'order[dateCreated]' => 'desc'])['hydra:member'];
+
+            // Get all unique reviewed resources
+            $reviewedResources = array_unique(array_column($reviews, 'resource'));
+
+            // Make sure these resources do actually exist
+            // TODO: maybe just still show the reviews but with a warning that the resource no longer exists
+            foreach ($reviewedResources as $key => $reviewedResource) {
+                if (!$commonGroundService->isResource($reviewedResource)) {
+                    $reviews = array_filter($reviews, function ($review) use($reviewedResource){
+                        return $review['resource'] != $reviewedResource;
+                    });
+                    unset($reviewedResources[$key]);
+                }
+            }
+
+            // Check if more than 1 resources has been reviewed for this organization (can include the organization resource itself)
+            if (count($reviewedResources) > 1) {
+                // Show the resources and info about their total reviews with links to specific pages.
+                foreach ($reviewedResources as $key => &$reviewedResource) {
+                    // Check if the organization (resource!) has been reviewed.
+                    if ($reviewedResource == $organizationUrl) {
+                        $variables['organization'] = $commonGroundService->getResource($organizationUrl);
+                        // Get totals for this organization (resource!)
+                        $variables['organization']['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $organizationUrl]);
+                        unset($reviewedResources[$key]);
+                    } else {
+                        $reviewedResource = $commonGroundService->getResource($reviewedResource);
+                        $reviewedResource['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['resource' => $reviewedResource['@id']]);
+                    }
+                }
+                $variables['reviewedResources'] = $reviewedResources;
+            } elseif($reviewedResources == 1) {
+                $variables['resource'] = $commonGroundService->getResource($reviewedResources[0]);
+            }
+            // If only 1 resource has been reviewed for this organization, then all reviews for this organization are on that resource... and in $reviews
+        }
+
+        $variables['reviews'] = $reviews;
 
         return $variables;
     }

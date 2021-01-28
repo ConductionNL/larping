@@ -150,7 +150,7 @@ class DefaultController extends AbstractController
             $resource['rating'] = (int) $resource['rating'];
 
             // Save to the commonground component
-            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews'], [], [], false, false);
 
             // redirects externally
             if ($request->get('redirect')) {
