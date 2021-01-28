@@ -674,6 +674,10 @@
          <source>products</source>
          <target>producten</target>
          </trans-unit>
+         <trans-unit id="JSRtkas" resname="enter keyword">
+         <source>enter keyword</source>
+         <target>voer het trefwoord in</target>
+         </trans-unit>
          <trans-unit id="TrEwAas" resname="become a member">
          <source>become a member</source>
          <target>word lid</target>
@@ -723,12 +727,12 @@
          <target>je hebt nog geen bestellingen gedaan. Wil je een bestelling doen , zoek dan hieronder naar je evenement</target>
          </trans-unit>
          <trans-unit id="NMsskas" resname="enter your minimum price">
-         <source>enter your minimum price</source>
-         <target>voer uw minimumprijs in</target>
+         <source>your minimum price</source>
+         <target>uw minimum prijs</target>
          </trans-unit>
          <trans-unit id="TrApkas" resname="enter your maximum price">
-         <source>enter your maximum price</source>
-         <target>voer uw maximale prijs in</target>
+         <source>your maximum price</source>
+         <target>uw maximale prijs</target>
          </trans-unit>
          <trans-unit id="HatFsas" resname="start date">
          <source>start date</source>
