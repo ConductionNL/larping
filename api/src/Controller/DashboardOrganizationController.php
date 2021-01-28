@@ -640,7 +640,7 @@ class DashboardOrganizationController extends AbstractController
             // maybe just still show the reviews but with a warning that the resource no longer exists? and a option to delete these reviews.
             foreach ($reviewedResources as $key => $reviewedResource) {
                 if (!$commonGroundService->isResource($reviewedResource)) {
-                    $reviews = array_filter($reviews, function ($review) use($reviewedResource){
+                    $reviews = array_filter($reviews, function ($review) use ($reviewedResource) {
                         return $review['resource'] != $reviewedResource;
                     });
                     unset($reviewedResources[$key]);
@@ -663,7 +663,7 @@ class DashboardOrganizationController extends AbstractController
                     }
                 }
                 $variables['reviewedResources'] = $reviewedResources;
-            } elseif($reviewedResources == 1) {
+            } elseif ($reviewedResources == 1) {
                 $variables['resource'] = $commonGroundService->getResource($reviewedResources[0]);
             }
             // If only 1 resource has been reviewed for this organization, then all reviews for this organization are on that resource... and in $reviews
