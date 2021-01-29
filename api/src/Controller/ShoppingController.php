@@ -71,10 +71,10 @@ class ShoppingController extends AbstractController
 
                 //add user to the clients group
                 $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
-                $clientsGroup = array_filter($groups, function ($group){
+                $clientsGroup = array_filter($groups, function ($group) {
                     return $group['name'] == 'clients';
                 });
-                if (count($clientsGroup) > 0  && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
+                if (count($clientsGroup) > 0 && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
                     $this->idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
                 }
 
@@ -88,7 +88,7 @@ class ShoppingController extends AbstractController
 
                         // Get groups from id-vault to check if the group^ exists and if this user is already in this group or not (must be in foreach to get up to date groups!)
                         $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
-                        $group = array_filter($groups, function ($group) use($groupId){
+                        $group = array_filter($groups, function ($group) use ($groupId) {
                             return $group['id'] == $groupId;
                         });
                         // Check if the group exists and if this user is not in this group
