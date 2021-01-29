@@ -195,7 +195,7 @@ class ShoppingService
         }
 
 //        if (!isset($newOrderItem['options'])) {
-        $newOrderItem['price'] = (string)($actualOffer['price']/100);
+        $newOrderItem['price'] = (string) ($actualOffer['price'] / 100);
 //        } else {
 //            foreach ($newOrderItem['options'] as $option) {
 //                $newOrderItem['price'] = $actualOffer['price'] + intval($option['price']);
@@ -272,10 +272,10 @@ class ShoppingService
             }
             $item['quantity'] = intval($item['quantity']);
 
-            $item['price'] = strval($offer['price']/100);
+            $item['price'] = strval($offer['price'] / 100);
             if (isset($item['options'])) {
                 foreach ($item['options'] as $option) {
-                    $item['price'] = strval(intval($item['price']) + intval($option['price']/100));
+                    $item['price'] = strval(intval($item['price']) + intval($option['price'] / 100));
                 }
             }
             $item['priceCurrency'] = $offer['priceCurrency'];
