@@ -249,7 +249,7 @@ class DashboardOrganizationController extends AbstractController
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
-            $offer['price'] = (string)((float)$request->get('price')*100);
+            $offer['price'] = (string) ((float) $request->get('price') * 100);
             $offer['name'] = $product['name'];
             $offer['description'] = $product['description'];
             $offer['products'] = ['/products/'.$product['id']];
@@ -414,10 +414,10 @@ class DashboardOrganizationController extends AbstractController
             // Add the current product to het offer
             $offer['products'] = ['/products/'.$id];
             $offer['offeredBy'] = $variables['organization']['@id'];
-            $offer['price'] = (string)((float)$offer['price']*100);
+            $offer['price'] = (string) ((float) $offer['price'] * 100);
             if (isset($offer['options'])) {
                 foreach ($offer['options'] as &$option) {
-                    $option['price'] = (string)((float)$option['price']*100);
+                    $option['price'] = (string) ((float) $option['price'] * 100);
                 }
             }
 
@@ -429,6 +429,7 @@ class DashboardOrganizationController extends AbstractController
                 $variables['product']['offers'] = [];
             }
             $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+
             return $this->redirectToRoute('app_dashboardorganization_editproduct', ['id' => $id]);
         }
 
