@@ -103,7 +103,7 @@
                                         <td class=" text-center">
                                             <div></div>
                                             {% if item.price|default %}
-                                                &euro; {{ item.price }},-
+                                                {{ (item.price)|localizedcurrency('EUR') }}
                                             {% endif %}
                                         </td>
                                         <td>
@@ -128,7 +128,7 @@
                                                 <td>
                                                 </td>
                                                 <td class=" text-center">
-                                                    &euro; {{ option.price }},-
+                                                    {{ (option.price)|localizedcurrency('EUR') }}
                                                 </td>
                                                 <td>
                                                     <form action="{{ path('app_shopping_removeoption') }}"
@@ -163,7 +163,7 @@
                                     <td class="text-center pt-0">
                                         <div class="text-center pt-4 mx-auto"
                                              style="width: 50%;border-top: 1px solid grey">
-                                            <b>&euro; {{ sum }},-</b>
+                                            <b>{{ (sum)|localizedcurrency('EUR') }}</b>
                                         </div>
                                     </td>
                                     <td>
