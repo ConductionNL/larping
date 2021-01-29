@@ -345,7 +345,6 @@ class DashboardOrganizationController extends AbstractController
             $product = $request->request->all();
             // Set the current organization as owner
             $product['requiresAppointment'] = false;
-            $product['organization'] = $variables['organization']['@id'];
             $product['sourceOrganization'] = $variables['organization']['@id'];
             // Save the resource
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
@@ -383,17 +382,29 @@ class DashboardOrganizationController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
 
         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
-        $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['organization']['@id'])['groups'];
+        $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['organization']['@id'])['groups'];
+        $variables['groups'] = array_filter($groups, function ($group) {
+            return $group['name'] != 'root' && $group['name'] != 'clients';
+        });
 
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
             // Get the current resource
-            //$product = array_merge($variables['product'],$request->request->all()) ;
-            $product = $request->request->all();
-            // Set the current organization as owner equiresAppointment
-            //$product['id'] =  $id;
-            //$product['requiresAppointment'] = false;
-            //$product['organization'] = $variables['organization']['@id'];
-            //$product['sourceOrganization'] = $variables['organization']['@id'];
+            $product = array_merge($variables['product'], $request->request->all());
+            $product['sourceOrganization'] = $variables['organization']['@id'];
+            // Remove offers (wont do any harm with an updateResource)
+            unset($product['offers']);
+            // Option for cascade updating offers without unset product.offers ^:
+//            // Symfony doesn't like it if we do a cascade put with id's (update product with product.offers with id's)
+//            foreach ($product['offers'] as $key => &$offer) {
+//                if (isset($offer['id'])){
+//                    unset($product['offers'][$key]['id']);
+//                }
+//                // ...and prices should be a string
+//                if (isset($offer['price'])){
+//                    $offer['price'] = (string)$offer['price'];
+//                }
+//                // Still need to make sure none of the offers have a variable that is null
+//            }
             // Save the resource
             $variables['product'] = $commonGroundService->updateResource($product, ['component' => 'pdc', 'type' => 'products', 'id' => $id]);
         }
