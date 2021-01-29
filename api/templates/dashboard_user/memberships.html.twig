@@ -17,7 +17,9 @@
                 </ul>
             </nav>
             <!-- My Memberships -->
-            <div class="card border-light shadow-sm">
+            <div class="card border-light shadow-sm p-3">
+                {% include 'dashboard_user/tables/root_groups.html.twig' %}
+
                 {% include 'dashboard_user/tables/memberships.html.twig' %}
             </div>
         </div>

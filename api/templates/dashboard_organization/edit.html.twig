@@ -444,11 +444,11 @@
                                     <label for="contentInput">{{ 'content'|trans|capitalize }}</label>
                                     <textarea oninput="renderTermsAndConditions()" class="form-control" rows="10"
                                               id="contentInput" name="template[content]"
-                                              required>{% if resource.template.content is defined %}{{ resource.template.content }}{% endif %}</textarea>
+                                              required>{% if organization.termsAndConditions.content is defined %}{{ organization.termsAndConditions.content|raw }}{% endif %}</textarea>
                                 </div>
 
                                 <div id="renderedContentDiv">
-
+                                    {% if organization.termsAndConditions.content is defined %}{{ organization.termsAndConditions.content|raw }}{% endif %}
                                 </div>
                             </div>
 
