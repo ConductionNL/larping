@@ -383,13 +383,13 @@ class DashboardOrganizationController extends AbstractController
 
         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
         $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['organization']['@id'])['groups'];
-        $variables['groups'] = array_filter($groups, function ($group){
+        $variables['groups'] = array_filter($groups, function ($group) {
             return $group['name'] != 'root' && $group['name'] != 'clients';
         });
 
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Product') {
             // Get the current resource
-            $product = array_merge($variables['product'],$request->request->all());
+            $product = array_merge($variables['product'], $request->request->all());
             $product['sourceOrganization'] = $variables['organization']['@id'];
             // Remove offers (wont do any harm with an updateResource)
             unset($product['offers']);
