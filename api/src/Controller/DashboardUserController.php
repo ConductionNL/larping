@@ -53,6 +53,9 @@ class DashboardUserController extends AbstractController
         $variables = [];
         $products = $shoppingService->getOwnedProducts($this->getUser()->getPerson());
         $groups = $this->getUser()->getGroups();
+
+        $rootGroupIds = [];
+
         if (count($products) > 0) {
             foreach ($products as &$product) {
                 $product['groups'] = [];
@@ -61,6 +64,10 @@ class DashboardUserController extends AbstractController
                         if ($product['sourceOrganization'] == $group['organization'] && $group['name'] !== 'root') {
                             $product['groups'][] = $group['name'];
                             $product['joined'] = $group['dateJoined'];
+                        } elseif ($product['sourceOrganization'] == $group['organization'] && $group['name'] == 'root' &&
+                            !in_array($group['id'], $rootGroupIds)) {
+                            $variables['rootGroups'][] = $group;
+                            $rootGroupIds[] = $group['id'];
                         }
                     }
                     $variables['products'][] = $product;

@@ -1,0 +1,36 @@
+{% if rootGroups|default and rootGroups|length > 0 %}
+    <h4 class="mb-3">{{ 'admin groups'|trans|capitalize }}</h4>
+<table id="events" class="display nowrap table mb-0 mb-3" style="width:100%">
+    <thead class="thead-light">
+    <tr>
+        <th>{{ 'organization'|trans|capitalize }}</th>
+        <th>{{ 'admin since'|trans|capitalize }}</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for group in rootGroups %}
+        <tr>
+            <td>{{ commonground_resource(group.organization).name }}</td>
+            <td>{% if group.dateJoined is defined %}{{ group.dateJoined|date("d-m-Y") }}{% endif %}</td>
+            <td style="float: right; padding-right: 20px">
+                <div class="dropdown">
+                    <a href="#" role="button" id="dropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i class="fas fa-ellipsis-v"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">{{ 'member page'|trans|capitalize }}</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <div class="card-body  text-center">
+        <p>{{ 'no admin groups found'|trans|capitalize }}</p>
+    </div>
+{% endif %}
+
