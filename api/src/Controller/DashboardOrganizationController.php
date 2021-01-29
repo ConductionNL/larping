@@ -192,7 +192,7 @@ class DashboardOrganizationController extends AbstractController
 
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
-            $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
+            $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
         } else {
             $variables['event'] = [];
             $variables['products'] = [];
