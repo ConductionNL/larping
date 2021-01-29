@@ -1,4 +1,4 @@
-{% if locations is defined and locations|length > 0 %}
+{% if locations is not defined and locations|length > 0 %}
     <table id="events" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
