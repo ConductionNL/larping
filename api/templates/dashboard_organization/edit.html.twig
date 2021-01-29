@@ -407,7 +407,7 @@
                                             <input type="tel" class="form-control"
                                                    {% if social.url|default %}value="{{ social.url }}"{% endif %}
                                                    id="{{ social.id }}_url"
-                                                   name="contact[socials][{{ social.id }}][url]">
+                                                   name="contact[socials][{{ social.id }}][url]" onblur="checkURL(this)">
                                         </div>
                                         <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
                                             <a class="btn btn-danger float-right text-white"
@@ -517,6 +517,14 @@
             // Atach the now prepared form
             document.getElementById(id).appendChild(cln);
             console.log('added:' + uuid);
+        }
+        function checkURL (url) {
+            var string = url.value;
+            if (!~string.indexOf("http")) {
+                string = "http://" + string;
+            }
+            url.value = string;
+            console.log(url);
         }
     </script>
 {% endblock %}
