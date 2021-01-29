@@ -67,7 +67,7 @@
                                    value="{{ app.request.requesturi }}">
 
                             <div class="col-6 d-flex justify-content-around">
-                                <h5>&euro; {{ offer.price }},-</h5>
+                                <h5>{{ (offer.price/100)|localizedcurrency(offer.priceCurrency) }}</h5>
 
                                 {% set isTicket = check_for_type_in_products('ticket', offer.products) %}
                                 {#                                {{ dump(isTicket) }}#}

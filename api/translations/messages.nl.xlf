@@ -778,6 +778,10 @@
          <source>select a group</source>
          <target>selecteer een groep</target>
          </trans-unit>
+         <trans-unit id="q0r9yC6" resname="none">
+         <source>none</source>
+         <target>geen</target>
+         </trans-unit>
          <trans-unit id="upeosas" resname="member from">
          <source>member from</source>
          <target>lid van</target>
