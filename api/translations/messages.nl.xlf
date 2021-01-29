@@ -481,6 +481,10 @@
          <source>date</source>
          <target>datum</target>
          </trans-unit>
+         <trans-unit id="GIEiRRs" resname="time">
+         <source>time</source>
+         <target>tijd</target>
+         </trans-unit>
          <trans-unit id="j2B214X" resname="remarks">
          <source>remarks</source>
          <target>opmerkingen</target>
@@ -694,6 +698,14 @@
          <source>orders</source>
          <target>bestellingen</target>
          </trans-unit>
+         <trans-unit id="BfCdXAs" resname="find a event">
+         <source>find a event</source>
+         <target>vind een evenement</target>
+         </trans-unit>
+         <trans-unit id="HyTgFrD" resname="you have not placed any orders yet. If you want to place an order, search for your event below">
+         <source>you have not placed any orders yet. If you want to place an order, search for your event below</source>
+         <target>je hebt nog geen bestellingen gedaan. Wil je een bestelling doen , zoek dan hieronder naar je evenement</target>
+         </trans-unit>
          <trans-unit id="NMsskas" resname="enter your minimum price">
          <source>enter your minimum price</source>
          <target>voer uw minimumprijs in</target>
@@ -725,6 +737,18 @@
          <trans-unit id="uNgfkas" resname="reviews">
          <source>reviews</source>
          <target>reviews</target>
+         </trans-unit>
+         <trans-unit id="8NzuxpR" resname="view reviews">
+         <source>view reviews</source>
+         <target>reviews bekijken</target>
+         </trans-unit>
+         <trans-unit id="FNR7_Ap" resname="rating">
+         <source>rating</source>
+         <target>beoordeling</target>
+         </trans-unit>
+         <trans-unit id="4kCs3LO" resname="author">
+         <source>author</source>
+         <target>schrijver</target>
          </trans-unit>
          <trans-unit id="U7hb12S" resname="to purchase the chosen product, these products are required and will be added to your shopping cart">
          <source>to purchase the chosen product, these products are required and will be added to your shopping cart</source>
@@ -874,6 +898,10 @@
         <source>all reviews</source>
         <target>alle reviews</target>
         </trans-unit>
+        <trans-unit id="JN8FVNh" resname="all reviews of">
+        <source>all reviews of</source>
+        <target>alle reviews van</target>
+        </trans-unit>
         <trans-unit id="HaYtHTs" resname="all earnings">
         <source>all earnings</source>
         <target>alle inkomsten</target>
@@ -997,6 +1025,14 @@
         <trans-unit id="2On21sg" resname="is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.">
         <source>is an online platform that aims to connect and support players and organizers around LARP events. It does so by connecting players to events that they might like and support organizers with tools to host their events like a ticket system, character creation and social campaigns.</source>
         <target>is een online platform dat als doel heeft, het verbinden en ondersteunen van spelers en organisatoren betrokken bij LARP events. Dit doet het door spelers makkelijk te laten verbinden met events en organisatoren met diverse tools zoals een ticketsysteem, character creatie en social campagnes.</target>
+        </trans-unit>
+        <trans-unit id="Hjb12b4" resname="you haven't made any orders.">
+        <source>you haven't made any orders.</source>
+        <target>je hebt nog geen bestellingen gedaan.</target>
+        </trans-unit>
+        <trans-unit id="pzqm5qS" resname="if you want to make a order, search here for a event.">
+        <source>if you want to make a order, search here for a event.</source>
+        <target>wil je een bestelling doen, zoek dan hier naar je evenement.</target>
         </trans-unit>
     </body>
   </file>

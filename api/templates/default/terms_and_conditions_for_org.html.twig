@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    <section class="py-7 py-md-10">
+        <div class="container">
+            {% if organization.termsAndConditions|default and organization.termsAndConditions.content|default %}
+                {{ organization.termsAndConditions.name }}
+                {{ organization.termsAndConditions.content|raw }}
+            {% endif %}
+        </div><!-- /.container -->
+    </section>
+
+{% endblock %}
