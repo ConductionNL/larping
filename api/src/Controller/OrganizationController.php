@@ -80,7 +80,7 @@ class OrganizationController extends AbstractController
                 $variables['organizations'][$key]['likes'] = $variables['organizations'][$key]['totals']['likes'];
                 $variables['organizations'][$key]['liked'] = $variables['organizations'][$key]['totals']['liked'];
             }
-            // hotfix -> remove unwanted evenst
+            // hotfix -> remove unwanted organizations
             if (!empty($resourceIds) && !in_array($organization['id'], $resourceIds)) {
                 unset($variables['organizations'][$key]);
             }
