@@ -174,7 +174,7 @@ class DashboardOrganizationController extends AbstractController
 
             // redirects externally
             if (array_key_exists('id', $event) && $event['id']) {
-                return $this->redirectToRoute('app_dashboardorganization_event', ['id'=> $event['id']]);
+                return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $event['id']]);
             }
         }
 
@@ -197,7 +197,7 @@ class DashboardOrganizationController extends AbstractController
             $variables['event'] = [];
             $variables['products'] = [];
         }
-        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
         $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'])['hydra:member'];
 
         // Update event
@@ -219,23 +219,23 @@ class DashboardOrganizationController extends AbstractController
 
             // Only do categories stuff when aplicable
             if (!array_key_exists('categories', $event)) {
-                return $this->redirectToRoute('app_dashboardorganization_event', ['id'=> $event['id']]);
+                return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $event['id']]);
             }
 
             // Setting the categories
             /*@todo  This should go to a wrc service */
-            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$event['id']])['hydra:member'];
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $event['id']])['hydra:member'];
             if (count($resourceCategories) > 0) {
                 $resourceCategory = $resourceCategories[0];
             } else {
-                $resourceCategory = ['resource'=>$event['@id'], 'catagories'=>[]];
+                $resourceCategory = ['resource' => $event['@id'], 'catagories' => []];
             }
 
             $resourceCategory['categories'] = $categories;
 
             $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
 
-            return $this->redirectToRoute('app_dashboardorganization_event', ['id'=> $event['id']]);
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $event['id']]);
         }
 
         // Add product
@@ -352,7 +352,7 @@ class DashboardOrganizationController extends AbstractController
 
             // redirects externally
             if ($product['id']) {
-                return $this->redirectToRoute('app_dashboardorganization_editproduct', ['id'=>$product['id']]);
+                return $this->redirectToRoute('app_dashboardorganization_editproduct', ['id' => $product['id']]);
             }
         }
 
@@ -787,7 +787,7 @@ class DashboardOrganizationController extends AbstractController
     public function locationAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params, $id)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];
         $variables['activeCategories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
         $variables['activeCategories'] = array_column($variables['activeCategories'], 'id');
 
@@ -833,7 +833,7 @@ class DashboardOrganizationController extends AbstractController
                 $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
             }
 
-            return $this->redirectToRoute('app_dashboardorganization_location', ['id'=> $variables['location']['id']]);
+            return $this->redirectToRoute('app_dashboardorganization_location', ['id' => $variables['location']['id']]);
         }
 
         return $variables;
@@ -848,14 +848,17 @@ class DashboardOrganizationController extends AbstractController
         if ($id != 'add') {
             $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
         } else {
-            $variables['organization'] = ['id'=>'add', '@type'=>'Organization'];
+            $variables['organization'] = ['id' => 'add', '@type' => 'Organization'];
         }
 
-        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
         $variables['type'] = 'organization';
 
         if ($request->isMethod('POST')) {
             $organization = $request->request->all();
+            if ($organization['template']) {
+                unset($organization['template']);
+            }
 
             // Let set some aditional data
             $organization['rsin'] = '';
@@ -877,7 +880,7 @@ class DashboardOrganizationController extends AbstractController
             }
 
             // removing UUID's from contact data
-            $subobjects = ['emails'=> [], 'adresses'=> [], 'telephones'=> [], 'socials'=> []];
+            $subobjects = ['emails' => [], 'adresses' => [], 'telephones' => [], 'socials' => []];
             foreach ($subobjects as $subobject => $subobjectArray) {
                 // let see if we have values
                 if (array_key_exists($subobject, $organization['contact'])) {
@@ -941,7 +944,22 @@ class DashboardOrganizationController extends AbstractController
             $resourceCategory['categories'] = $categories;
             $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
 
-            return $this->redirectToRoute('app_dashboardorganization_edit', ['id'=>$organization['id']]);
+            $template = $request->get('template');
+
+            if (isset($variables['organization']['termsAndConditions'])) {
+                $template['@id'] = $variables['organization']['termsAndConditions']['@id'];
+            }
+
+            $template['name'] = 'Terms and conditions for '.$variables['organization']['name'];
+            $template['templateEngine'] = 'twig';
+            $template['organization'] = '/organizations/'.$organization['id'];
+
+            $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
+
+            $organization['termsAndConditions'] = '/templates/'.$template['id'];
+            $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
+
+            return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
         }
 
         $variables['categories'] = [];
