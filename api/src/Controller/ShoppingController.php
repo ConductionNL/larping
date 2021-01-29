@@ -69,21 +69,30 @@ class ShoppingController extends AbstractController
                 // Get provider for when we need to get groups from id-vault
                 $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
-                //lets see if we need to add the user to the members group of the organization
+                //add user to the clients group
+                $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
+                $clientsGroup = array_filter($groups, function ($group){
+                    return $group['name'] == 'clients';
+                });
+                if (count($clientsGroup) > 0  && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
+                    $this->idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
+                }
+
+                //lets see if we need to add the user to an userGroup of a any bought products
                 foreach ($variables['invoice']['items'] as $item) {
                     $offer = $commonGroundService->getResource($item['offer']);
 
                     // Check if the product of this offer has a userGroup this user should be added to.
                     if (isset($offer['products'][0]['userGroup'])) {
-                        $groupId = str_replace('https://www.id-vault.com/api/groups/', '', $offer['products'][0]['userGroup']);
+                        $groupId = str_replace('https://www.id-vault.com/api/v1/wac/groups/', '', $offer['products'][0]['userGroup']);
 
-                        // Get groups from id-vault to check if the group^ exists and if this user is already in this group or not
+                        // Get groups from id-vault to check if the group^ exists and if this user is already in this group or not (must be in foreach to get up to date groups!)
                         $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
                         $group = array_filter($groups, function ($group) use($groupId){
                             return $group['id'] == $groupId;
                         });
                         // Check if the group exists and if this user is not in this group
-                        if (count($group) == 1 && !in_array($this->getUser()->getUsername(), array_column($group[0]['users'], 'username'))) {
+                        if (count($group) == 1 && !in_array($this->getUser()->getUsername(), array_column($group[array_key_first($group)]['users'], 'username'))) {
                             $idVaultService->inviteUser($provider['configuration']['app_id'], $groupId, $this->getUser()->getUsername(), true);
                         }
                     }

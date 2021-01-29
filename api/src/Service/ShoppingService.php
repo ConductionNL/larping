@@ -252,20 +252,11 @@ class ShoppingService
 
         $uploadedOrder = $this->commonGroundService->saveResource($uploadedOrder, ['component' => 'orc', 'type' => 'orders']);
 
-        //add user to clients group
-        $provider = $this->commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $this->params->get('app_id')])['hydra:member'][0];
-        $groups = $this->idVaultService->getGroups($provider['configuration']['app_id'], $order['organization'])['groups'];
-
-        foreach ($groups as $group) {
-            if ($group['name'] == 'clients' || $group['name'] == 'root' && !in_array($this->security->getUser()->getUsername(), array_column($group['users'], 'username'))) {
-                $this->idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $this->security->getUser()->getUsername(), true);
-            }
-        }
-
         foreach ($order['orderItems'] as $item) {
             $offer = $this->commonGroundService->getResource($item['offer']);
 
 //            $offer['products'][0]['org'] = 'https://dev.larping.eu/api/v1/pdc/1235456';
+
             if ($this->checkForBrokenObjects($offer) == true ||
                 $this->checkForBrokenObjects($offer['products']) == true) {
                 $this->flash->add('danger', 'there is a problem with certain data');
@@ -470,11 +461,11 @@ class ShoppingService
                 foreach ($objects as $properties) {
                     if (is_array($properties)) {
                         foreach ($properties as $property) {
-                            if (!is_array($property) && strpos($property, 'https') !== false && strpos($property, '/api/v1/') !== false && $this->commonGroundService->isResource($property) == false) {
+                            if (!is_array($property) && strpos($property, 'https') !== false && strpos($property, '/api/v1/') !== false && $this->commonGroundService->isResource($property) == false && strpos($property, 'https://www.id-vault.com/api/v1/wac/groups/') === false) {
                                 return true;
                             } elseif (is_array($property)) {
                                 foreach ($property as $prop) {
-                                    if (!is_array($prop) && strpos($prop, 'https') !== false && strpos($prop, '/api/v1/') !== false && $this->commonGroundService->isResource($prop) == false) {
+                                    if (!is_array($prop) && strpos($prop, 'https') !== false && strpos($prop, '/api/v1/') !== false && $this->commonGroundService->isResource($prop) == false && strpos($prop, 'https://www.id-vault.com/api/v1/wac/groups/') === false) {
                                         return true;
                                     }
                                 }
