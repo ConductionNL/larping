@@ -1,4 +1,4 @@
-{% if locations is defined and locations|length > 0 %}
+{% if locations is not defined and locations|length > 0 %}
     <table id="events" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
@@ -36,7 +36,7 @@
     <div class="card border-light shadow-sm">
         <div class="card-body text-center">
             <p>{{ 'no locations found'|trans|capitalize }}</p>
-            <a href="{{ path('location', { id: 'add'}) }}" class="btn btn-primary" >{{ 'add your first location'|trans|capitalize }}!</a>
+            <a href="{{ path('app_dashboardorganization_location', { id: 'add'}) }}" class="btn btn-primary" >{{ 'add your first location'|trans|capitalize }}!</a>
         </div>
     </div>
 {% endif %}

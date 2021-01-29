@@ -105,13 +105,13 @@
                             <div class="form-group  col-md-12 mb-6">
                                 <label for="name">{{ 'group'|trans|capitalize }}* </label>
                                 <select class="form-control"
-                                        aria-label="{{ 'the group of this product'|trans|capitalize }}" required
+                                        aria-label="{{ 'the group of this product'|trans|capitalize }}"
                                         id="userGroup" name="userGroup">
                                     <option value="">{{ 'none'|trans|capitalize }}</option>
                                     {% if groups|default %}
                                         {% for group in groups %}
                                             <option
-                                                value="https://www.id-vault.com/api/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/groups/' ~ group['id'] %} selected {% endif %}>{{ group.name }}</option>
+                                                value="https://www.id-vault.com/api/v1/wac/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/v1/wac/groups/' ~ group['id'] %} selected {% endif %}>{{ group.name }}</option>
                                         {% endfor %}
                                     {% endif %}
                                 </select>
@@ -181,7 +181,7 @@
                         <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
 
                         <div class="form-group position-relative mb-6 form-group-dragable">
-                            <input type="file" class="custom-file-input" id="favicon" name="favicon">
+                            <input type="file" class="custom-file-input" id="images" name="images">
                             <label class="custom-file-label" for="favicon">
                                 {{ 'Click or Drag images here'|trans|capitalize }}
                             </label>
