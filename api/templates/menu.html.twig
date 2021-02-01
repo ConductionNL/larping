@@ -204,7 +204,7 @@
                                                         <div class="media-body">
                                                             <div class="d-flex justify-content-between">
                                                                 <span class="font-weight-bold">{{ offer.name }}</span>
-                                                                <b class="mb-1 text-right">&euro; {{ item.price }},-</b>
+                                                                <b class="mb-1 text-right">{{ (item.price)|localizedcurrency('EUR') }}</b>
                                                             </div>
                                                             <p class="d-inline-block  mb-1 mt-n2 pr-1"
                                                                style="font-size: smaller">{{ item.quantity }} {% if item.quantity > 1 %}items{% else %}item{% endif %}</p>
@@ -217,7 +217,7 @@
                                                                     {% set optionsSum = optionsSum + option.price %}
                                                                     {% set sum = sum + optionsSum %}
                                                                 {% endfor %}
-                                                                <p class="d-inline-block mb-1 mt-n2 pt-1 float-right text-right">&euro; {{ optionsSum }},-</p>
+                                                                <p class="d-inline-block mb-1 mt-n2 pt-1 float-right text-right">{{ (optionsSum)|localizedcurrency('EUR') }}</p>
                                                             {% endif %}
                                                         </div>
                                                     </div>
@@ -234,7 +234,7 @@
                                                             <span
                                                                 class="font-weight-bold">{{ 'sum'|trans|capitalize }}:</span>
                                                             <b class="mb-1 text-right"
-                                                               style="color: black">&euro; {{ sum }},-</b>
+                                                               style="color: black">{{ (sum)|localizedcurrency('EUR') }}</b>
                                                         </div>
                                                     </div>
                                                 </div>

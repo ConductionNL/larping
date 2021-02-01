@@ -192,7 +192,7 @@ class DashboardOrganizationController extends AbstractController
 
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
-            $variables['products'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['id']])['hydra:member'];
+            $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
         } else {
             $variables['event'] = [];
             $variables['products'] = [];
@@ -249,7 +249,7 @@ class DashboardOrganizationController extends AbstractController
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
-            $offer['price'] = $request->get('price');
+            $offer['price'] = (string) ((float) $request->get('price') * 100);
             $offer['name'] = $product['name'];
             $offer['description'] = $product['description'];
             $offer['products'] = ['/products/'.$product['id']];
@@ -414,6 +414,12 @@ class DashboardOrganizationController extends AbstractController
             // Add the current product to het offer
             $offer['products'] = ['/products/'.$id];
             $offer['offeredBy'] = $variables['organization']['@id'];
+            $offer['price'] = (string) ((float) $offer['price'] * 100);
+            if (isset($offer['options'])) {
+                foreach ($offer['options'] as &$option) {
+                    $option['price'] = (string) ((float) $option['price'] * 100);
+                }
+            }
 
             if (!array_key_exists('audience', $offer) || !$offer['audience']) {
                 $offer['audience'] = 'audience';
@@ -422,7 +428,9 @@ class DashboardOrganizationController extends AbstractController
             if (!array_key_exists('offers', $variables['product'])) {
                 $variables['product']['offers'] = [];
             }
-            $variables['product']['offers'][] = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+            $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+
+            return $this->redirectToRoute('app_dashboardorganization_editproduct', ['id' => $id]);
         }
 
         return $variables;
