@@ -205,7 +205,20 @@ class DashboardUserController extends AbstractController
 //
 //            }
         }
-        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+//        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+
+        $groups = $this->getUser()->getGroups();
+        $variables['organizations'] = [];
+        $organizationIds = [];
+
+        if (isset($groups) && is_array($groups)) {
+            foreach ($groups as $group) {
+                if (($group['name'] == 'admin' || $group['name'] == 'root') && !in_array($group['organization'], $organizationIds)) {
+                    $variables['organizations'][] = $commonGroundService->getResource($group['organization']);
+                    $organizationIds[] = $group['organization'];
+                }
+            }
+        }
 
         return $variables;
     }
