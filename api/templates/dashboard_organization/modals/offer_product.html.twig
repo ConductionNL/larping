@@ -32,18 +32,18 @@
         <div class="form-group">
             <label for="name">{{ 'price'|trans|capitalize }}*</label>
             <input type="text" class="form-control" id="price" name="price"
-                   {% if resource.price is defined %}value="{{ resource.price|capitalize }}"{% endif %} required>
+                   {% if resource.price is defined %}value="{{ (resource.price/100) }}"{% endif %} required>
         </div>
         <div class="form-group">
             <label for="name">{{ 'audience'|trans|capitalize }}*</label>
             <select class="form-control" aria-label="{{ 'the audience of this product'|trans|capitalize }}" required
                     id="audience" name="audience" required>
                 <option
-                    value="internal" {% if product.audience|default  and product.audience == "internal" %} selected {% endif %}>{{ 'internal'|trans|capitalize }}</option>
+                    value="internal" {% if resource.audience|default  and resource.audience == "internal" %} selected {% endif %}>{{ 'internal'|trans|capitalize }}</option>
                 <option
-                    value="public" {% if product.audience|default  and product.audience == "public" %} selected {% endif %}>{{ 'public'|trans|capitalize }}</option>
+                    value="public" {% if resource.audience|default  and resource.audience == "public" %} selected {% endif %}>{{ 'public'|trans|capitalize }}</option>
                 <option
-                    value="personal" {% if product.audience|default  and product.audience == "personal" %} selected {% endif %}>{{ 'personal'|trans|capitalize }}</option>
+                    value="personal" {% if resource.audience|default  and resource.audience == "personal" %} selected {% endif %}>{{ 'personal'|trans|capitalize }}</option>
             </select>
         </div>
         {% if resource is defined %}
@@ -82,13 +82,13 @@
                 {% if resource.options|default %}
                     {% for option in resource.options %}
                         <div id="optionDiv{{ resource.id }}{{ loop.index0 }}">
-                            <p>{{ option.name }}  {{ offer.priceCurrency }} {{ option.price }},-
+                            <p>{{ option.name }}  {{ (option.price/100)|localizedcurrency(offer.priceCurrency) }}
                                 <button value="{{ loop.index0 }}" style="background: none; border: none" onclick="removeOption{{ resource.id|replace({'-': "" }) }}(this.value)" type="button">
                                     <i style="color: red" class="fa fa-trash"></i>
                                 </button></p>
                             <input type="hidden" name="options[{{ loop.index0 }}][name]" value="{{ option.name }}">
                             <input type="hidden" name="options[{{ loop.index0 }}][price]"
-                                   value="{{ option.price }}">
+                                   value="{{ (option.price/100)|localizedcurrency(offer.priceCurrency) }}">
                         </div>
                     {% endfor %}
                 {% endif %}

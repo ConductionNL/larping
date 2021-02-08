@@ -6,6 +6,12 @@
 {%  endif %}
 {% set organizationMembers = [] %}
 {% set organizationEvents = commonground_resource_list({'component':'arc', 'type':'events'}, {'organization':resource['@id']})['hydra:member'] %}
+{% set upcomingEvents = [] %}
+{% for event in organizationEvents %}
+    {% if event.endDate|date("Y-m-d") > "now"|date("Y-m-d") %}
+        {% set upcomingEvents = upcomingEvents|merge([event]) %}
+    {% endif %}
+{% endfor %}
 {% set organizationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource.id})['hydra:member'] %}
 <div class="card rounded-0 card-hover-overlay">
     <div class="position-relative">
@@ -35,7 +41,7 @@
             {% endfor %}
             <li class="ml-auto">
                 <i class="far fa-calendar-alt" aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                   data-original-title="{{ 'upcoming events'|trans|capitalize }}"></i><span class="mr-1"> {{ organizationEvents|length }}</span>
+                   data-original-title="{{ 'upcoming events'|trans|capitalize }}"></i><span class="mr-1"> {{ upcomingEvents|length }}</span>
             </li>
             <li>
                 <i class="fal fa-users-crown" aria-hidden="true" data-toggle="tooltip" data-placement="top"

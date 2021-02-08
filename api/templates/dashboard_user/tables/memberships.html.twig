@@ -1,39 +1,43 @@
 {% if products|default and products|length > 0 %}
-<table id="events" class="display nowrap table mb-0" style="width:100%">
-    <thead class="thead-light">
-    <tr>
-        <th>{{ 'organization'|trans|capitalize }}</th>
-        <th>{{ 'membership'|trans|capitalize }}</th>
-        <th>{{ 'groups'|trans|capitalize }}</th>
-        <th>{{ 'member from'|trans|capitalize }}</th>
-        <th>{{ 'contribution'|trans|capitalize }}</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for product in products %}
+    <h4 class="mb-3">{{ 'memberships'|trans|capitalize }}</h4>
+    <table id="events" class="display nowrap table mb-0" style="width:100%">
+        <thead class="thead-light">
         <tr>
-            <td>{{ commonground_resource(product.sourceOrganization).name }}</td>
-            <td>{{ product.name }}</td>
-            <td>{% for group in product.groups %}{{ group|capitalize }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
-            <td>{% if product.joined is defined %}{{ product.joined|date("d-m-Y") }}{% endif %}</td>
-            <td>{{ product.orderItem.price }}</td>
-            <td>
-                <div class="dropdown">
-                    <a href="#" role="button" id="dropdownMenuLink"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i class="fas fa-ellipsis-v"></i>
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">{{ 'member page'|trans|capitalize }}</a>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">{{ 'unsubscribe'|trans|capitalize }}</a>
-                    </div>
-                </div>
-            </td>
+            <th>{{ 'organization'|trans|capitalize }}</th>
+            <th>{{ 'membership'|trans|capitalize }}</th>
+            <th>{{ 'groups'|trans|capitalize }}</th>
+            <th>{{ 'member from'|trans|capitalize }}</th>
+            <th>{{ 'contribution'|trans|capitalize }}</th>
+            <th></th>
         </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ commonground_resource(product.sourceOrganization).name }}</td>
+                <td>{{ product.name }}</td>
+                <td>{% for group in product.groups %}{{ group|capitalize }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
+                <td>{% if product.joined is defined %}{{ product.joined|date("d-m-Y") }}{% endif %}</td>
+                <td>{{ product.orderItem.price }}</td>
+                <td>
+                    <div class="dropdown">
+                        <a href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i
+                                class="fas fa-ellipsis-v"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#" data-toggle="modal"
+                               data-target="#">{{ 'member page'|trans|capitalize }}</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal"
+                               data-target="#">{{ 'unsubscribe'|trans|capitalize }}</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% else %}
     <div class="card-body  text-center">
         <p>{{ 'no memberships found'|trans|capitalize }}</p>
