@@ -280,8 +280,9 @@ class DashboardOrganizationController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
         $variables['product'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
 
-//        $variables['ticket'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
-//        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['ticket'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        var_dump($variables['orders']);die;
 //
 //        $ticketorders = [];
 //        foreach ($variables['orders'] as $order){
@@ -291,14 +292,14 @@ class DashboardOrganizationController extends AbstractController
 //            }
 //        }
 
-        /*@todo make this better*/
-        if (count($variables['product']) > 0) {
-            $variables['product'] = $variables['product'][0];
-            $variables['product']['offers'] = $variables['product']['offers'][0];
-        }
-        $offers = $variables['product']['offers'];
-        //orders op het offer van het event
-        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['order.organization' => $variables['organization']['@id'], 'offer' => $offers['@id']])['hydra:member'];
+//        /*@todo make this better*/
+//        if (count($variables['product']) > 0) {
+//            $variables['product'] = $variables['product'][0];
+//            $variables['product']['offers'] = $variables['product']['offers'][0];
+//        }
+//        $offers = $variables['product']['offers'];
+//        //orders op het offer van het event
+//        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['order.organization' => $variables['organization']['@id'], 'offer' => $offers['@id']])['hydra:member'];
 
         //downloads tickets
         if ($request->query->has('action') && $request->query->get('action') == 'download') {
