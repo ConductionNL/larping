@@ -999,4 +999,48 @@ class DashboardOrganizationController extends AbstractController
 
         return $variables;
     }
+
+    /**
+     * @Route("/payment-providers")
+     * @Template
+     */
+    public function paymentProvidersAction(CommonGroundService $commonGroundService, Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+
+//        $variables['providers'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'services'], ['organization' => $variables['organization']['id']])['hydra:member'];
+        $variables['providers'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'services'])['hydra:member'];
+
+        return $variables;
+    }
+    /**
+     * @Route("/payment-providers/{id}")
+     * @Template
+     */
+    public function paymentProviderAction(CommonGroundService $commonGroundService, Request $request, $id)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+
+        if ($id != 'add') {
+            $variables['provider'] = $commonGroundService->getResource(['component' => 'bc', 'type' => 'services', 'id' => $id]);
+        } else {
+            $variables['provider'] = [];
+        }
+
+        // Update provider
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Provider') {
+            // Get the current resource
+            $provider = $request->request->all();
+            // Set the current organization as owner
+            $provider['organization'] = $variables['organization']['@id'];
+
+            // Save the resource
+            $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $provider['id']]);
+        }
+
+        return $variables;
+    }
 }
