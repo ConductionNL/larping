@@ -1,0 +1,162 @@
+{# Offer modale #}
+
+{% if resource is defined %}
+    {% set  id = resource['id'] %}
+    {% set  type = 'Offer' %}
+{% else %}
+    {% set  id = 'Add' %}
+    {% set  type = 'Offer' %}
+{% endif %}
+
+{% set  modalClass = 'modal-lg' %}
+
+{% extends "dashboard_organization/modals/modal.html.twig" %}
+
+{% block body %}
+    <form id="{{ type }}Form{{ id }}" method="post">
+        {% if resource['id'] is defined %}<input type="hidden" id="id" name="id"
+                                                 value="{{ resource['id'] }}">{% endif %}
+        {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id"
+                                                  value="{{ resource['@id'] }}">{% endif %}
+        <input type="hidden" name="@type" value="Offer">
+        <div class="form-group">
+            <label for="name">{{ 'name'|trans|capitalize }}*</label>
+            <input type="text" class="form-control" id="name" name="name"
+                   {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+        </div>
+        <div class="form-group">
+            <label for="description">{{ 'description'|trans|capitalize }}</label>
+            <textarea class="form-control" rows="5" id="description"
+                      name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="name">{{ 'price'|trans|capitalize }}*</label>
+            <input type="text" class="form-control" id="price" name="price"
+                   {% if resource.price is defined %}value="{{ (resource.price/100) }}"{% endif %} required>
+        </div>
+        <div class="form-group">
+            <label for="name">{{ 'audience'|trans|capitalize }}*</label>
+            <select class="form-control" aria-label="{{ 'the audience of this product'|trans|capitalize }}" required
+                    id="audience" name="audience" required>
+                <option
+                    value="internal" {% if resource.audience|default  and resource.audience == "internal" %} selected {% endif %}>{{ 'internal'|trans|capitalize }}</option>
+                <option
+                    value="public" {% if resource.audience|default  and resource.audience == "public" %} selected {% endif %}>{{ 'public'|trans|capitalize }}</option>
+                <option
+                    value="personal" {% if resource.audience|default  and resource.audience == "personal" %} selected {% endif %}>{{ 'personal'|trans|capitalize }}</option>
+            </select>
+        </div>
+        {% if resource is defined %}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-8">
+                        <label for="options">{{ 'options'|trans|capitalize }}*</label>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" onclick="showOptionInputs{{ resource.id|replace({'-': "" }) }}()"
+                                class="btn btn-success btn-sm">{{ 'add option'|trans|capitalize }}</button>
+                    </div>
+                </div>
+            </div>
+            <div id="optionInputsDiv{{ resource.id }}">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="optionNameInput">{{ 'name'|trans|capitalize }}</label>
+                            <input id="optionNameInput{{ resource.id }}" class="form-control" name="optionName"
+                                   type="text">
+                        </div>
+                        <div class="col-6">
+                            <label for="optionPriceInput">{{ 'price'|trans|capitalize }}</label>
+                            <input id="optionPriceInput{{ resource.id }}" class="form-control" name="optionPrice"
+                                   type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="button" class="btn btn-sm btn-primary float-right"
+                            onclick="addNewOption{{ resource.id|replace({'-': "" }) }}()">{{ 'add'|trans|capitalize }}</button>
+                </div>
+            </div>
+            <div id="optionsDiv{{ resource.id }}">
+                {% if resource.options|default %}
+                    {% for option in resource.options %}
+                        <div id="optionDiv{{ resource.id }}{{ loop.index0 }}">
+                            <p>{{ option.name }}  {{ (option.price/100)|localizedcurrency(offer.priceCurrency) }}
+                                <button value="{{ loop.index0 }}" style="background: none; border: none" onclick="removeOption{{ resource.id|replace({'-': "" }) }}(this.value)" type="button">
+                                    <i style="color: red" class="fa fa-trash"></i>
+                                </button></p>
+                            <input type="hidden" name="options[{{ loop.index0 }}][name]" value="{{ option.name }}">
+                            <input type="hidden" name="options[{{ loop.index0 }}][price]"
+                                   value="{{ (option.price/100)|localizedcurrency(offer.priceCurrency) }}">
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </form>
+
+    {% if resource is defined %}
+        <script>
+            var optionInputsDiv{{ resource.id|replace({'-': "" }) }} = document.getElementById('optionInputsDiv{{ resource.id }}');
+            var optionsDiv{{ resource.id|replace({'-': "" }) }} = document.getElementById('optionsDiv{{ resource.id }}');
+            var newOptionName{{ resource.id|replace({'-': "" }) }} = document.getElementById('optionNameInput{{ resource.id }}');
+            var newOptionPrice{{ resource.id|replace({'-': "" }) }} = document.getElementById('optionPriceInput{{ resource.id }}');
+            optionInputsDiv{{ resource.id|replace({'-': "" }) }}.style.display = 'none';
+
+            {% if resource.options|default %}
+            var optionsCounter{{ resource.id|replace({'-': "" }) }} = {{ resource.options|length }} -1;
+            {% else %}
+            var optionsCounter{{ resource.id|replace({'-': "" }) }} = -1;
+            {% endif %}
+
+            function showOptionInputs{{ resource.id|replace({'-': "" }) }}() {
+                optionInputsDiv{{ resource.id|replace({'-': "" }) }}.style.display = "block";
+            }
+
+            function addNewOption{{ resource.id|replace({'-': "" }) }}() {
+                optionsCounter{{ resource.id|replace({'-': "" }) }} = optionsCounter{{ resource.id|replace({'-': "" }) }} + 1;
+
+                let newOptionDiv = document.createElement('div');
+                newOptionDiv.id = 'optionDiv{{ resource.id }}' + optionsCounter{{ resource.id|replace({'-': "" }) }};
+
+                let newOptionP = document.createElement('p');
+                newOptionP.innerText = newOptionName{{ resource.id|replace({'-': "" }) }}.value + ' ' + '{{ resource.priceCurrency }}'+ ' ' + newOptionPrice{{ resource.id|replace({'-': "" }) }}.value;
+                newOptionDiv.appendChild(newOptionP);
+
+                let newDeleteButton = document.createElement('button');
+                newDeleteButton.type = 'button';
+                newDeleteButton.value = optionsCounter{{ resource.id|replace({'-': "" }) }};
+                newDeleteButton.style = 'background: none; border: none';
+                newDeleteButton.setAttribute('onclick', 'removeOption{{ resource.id|replace({'-': "" }) }}(this.value)' );
+
+                let newDeleteButtonI = document.createElement('i');
+                newDeleteButtonI.style = 'color: red';
+                newDeleteButtonI.className = 'fa fa-trash float-right';
+                newDeleteButton.appendChild(newDeleteButtonI);
+
+                newOptionP.appendChild(newDeleteButton);
+
+                let newNameInput = document.createElement('input');
+                newNameInput.type = 'hidden';
+                newNameInput.name = 'options[' + optionsCounter{{ resource.id|replace({'-': "" }) }} + '][name]';
+                newOptionDiv.appendChild(newNameInput);
+
+                let newPriceInput = document.createElement('input');
+                newPriceInput.type = 'hidden';
+                newPriceInput.name = 'options[' + optionsCounter{{ resource.id|replace({'-': "" }) }} + '][price]';
+                newOptionDiv.appendChild(newPriceInput);
+
+                optionsDiv{{ resource.id|replace({'-': "" }) }}.appendChild(newOptionDiv);
+                newOptionName{{ resource.id|replace({'-': "" }) }}.value = '';
+                newOptionPrice{{ resource.id|replace({'-': "" }) }}.value = '';
+                optionInputsDiv{{ resource.id|replace({'-': "" }) }}.style.display = 'none';
+            }
+
+            function removeOption{{ resource.id|replace({'-': "" }) }}(index) {
+                let deletedElem = document.getElementById('optionDiv{{ resource.id }}'+index);
+                deletedElem.parentNode.removeChild(deletedElem);
+            }
+        </script>
+    {% endif %}
+{% endblock %}

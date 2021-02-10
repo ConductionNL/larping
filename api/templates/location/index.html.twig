@@ -1,0 +1,147 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <!-- ====================================
+    ———	LISTING HALF MAP GRID
+    ===================================== -->
+    <section class="main-contentiner map-half-content grid-two-items">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 order-lg-2 pl-lg-0">
+                    <!-- Half Map -->
+                    <div class="inner-container">
+                        <div class="map-lg-fixed">
+                            <div class="map-container">
+                                <div id="listing-main-map" class="map-half"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 px-xl-6">
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- Search Box 2 -->
+                            <div class="search-box-2 bg-light pb-3 pb-md-1">
+                                <form class="row "method="GET">
+
+                                    <div class="form-group col-md-6 col-lg-12 col-xl-6">
+                                        <div class="input-group mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">{{ 'search'|trans|title }}</div>
+                                            </div>
+                                            <input type="text" class="form-control" id="search" name="search"
+                                                   placeholder="Enter Keyword" {% if search|default %} value="{{ search }}"{% endif %} >
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group prepend-append col-md-6 col-lg-12 col-xl-6">
+                                        <div class="input-group mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">{{ 'regions'|trans|title }}</div>
+                                            </div>
+
+                                            <div class="select-default">
+                                                <select class="select-location">
+                                                    <option>{{ 'all regions'|trans|title }}</option>
+                                                    {% for category in regions %}
+                                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group prepend-append col-md-6 col-lg-12 col-xl-6">
+                                        <div class="input-group mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">{{ 'features'|trans|title }}</div>
+                                            </div>
+
+                                            <div class="select-default">
+                                                <select class="select-location">
+                                                    <option>{{ 'all features'|trans|title }}</option>
+                                                    {% for category in features %}
+                                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-6 col-lg-12 col-xl-3">
+                                        <button type="submit" class="btn btn-block btn-primary"> Update </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Result Bar -->
+                    <div class="search-result-bar">
+                        {% if locations|default %}
+                            <p>{{ 'we found'|trans|capitalize }} <span>{{ locations|length }}</span> {{ 'results for'|trans }}
+                                <span>{{ 'locations'|trans|capitalize }}</span>.</p>
+                        {% else %}
+                            <p>{{ 'no results found'|trans|capitalize }}.</p>
+                        {% endif %}
+                        <div class="ml-md-auto d-flex align-items-center justify-content-between">
+                            <div class="select-bg-transparent select-border">
+                                <select class="select-location">
+                                    <option>Popular</option>
+                                    <option>Nearest</option>
+                                    <option>Recent</option>
+                                </select>
+                            </div>
+                            <div class="icons">
+                                <a class="mr-2 active" href="listings-half-screen-map-grid.html">
+                                    <i class="fa fa-th" aria-hidden="true"></i>
+                                </a>
+                                <a href="listings-half-screen-map-list.html">
+                                    <i class="fa fa-th-list" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% for location in locations %}
+                            <div class="col-md-6" id="organization">
+                                {% include '/cards/location.html.twig' with {'item': location} %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- ====================================
+                    ———	pagination
+                    ===================================== -->
+                    <div class="mb-5">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item mr-2">
+                                    <a class="page-link" href="#">
+                                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item active mr-2"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item mr-2"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item mr-2"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item mr-2"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item mr-2"><a class="page-link" href="#">5</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                    {% include 'footer.html.twig'  with {'containerClass': ''}  %}
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+{% endblock %}

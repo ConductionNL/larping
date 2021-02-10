@@ -8,14 +8,17 @@
         "api-platform/api-pack": "^1.1",
         "conduction/balancebundle": "dev-master",
         "conduction/commongroundbundle": "dev-symfony51",
+        "conduction/id-vault-php": "dev-main",
         "conduction/idvaultbundle": "dev-master",
         "conduction/listybundle": "dev-master",
         "dompdf/dompdf": "^0.8.5",
         "endroid/qr-code-bundle": "^3.4",
+        "mpdf/mpdf": "dev-master",
         "phpdocumentor/reflection-docblock": "^4.3",
         "phpoffice/phpword": "^0.17.0",
         "sensio/framework-extra-bundle": "^5.5",
         "sensiolabs/security-checker": "^6.0",
+        "snapappointments/bootstrap-select": "dev-master",
         "symfony/asset": "5.1.*",
         "symfony/console": "5.1.*",
         "symfony/dotenv": "5.1.*",
@@ -26,6 +29,7 @@
         "symfony/translation": "5.1.*",
         "symfony/yaml": "5.1.*",
         "tbbc/money-bundle": "^4.0",
+        "twig/intl-extra": "2.x-dev",
         "webonyx/graphql-php": "^0.13.8"
     },
     "require-dev" : {
@@ -60,6 +64,7 @@
     "conflict" : {
         "symfony/symfony" : "*"
     },
+    "minimum-stability" : "dev",
     "extra" : {
         "symfony" : {
             "allow-contrib" : false,

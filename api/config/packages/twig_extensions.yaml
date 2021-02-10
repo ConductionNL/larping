@@ -7,7 +7,8 @@ services:
     # Uncomment any lines below to activate that Twig extension
     #Twig\Extensions\ArrayExtension: null
     #Twig\Extensions\DateExtension: null
-    #Twig\Extensions\IntlExtension: null
+    Twig\Extensions\IntlExtension: null
     #Twig\Extensions\TextExtension: null
+    App\Twig\ShoppingExtension: null
     Twig\Extension\StringLoaderExtension: null
 

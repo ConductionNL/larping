@@ -43,6 +43,9 @@
     "conduction/commongroundbundle": {
         "version": "dev-symfony51"
     },
+    "conduction/id-vault-php": {
+        "version": "dev-main"
+    },
     "conduction/idvaultbundle": {
         "version": "dev-master"
     },
@@ -218,6 +221,12 @@
     "moneyphp/money": {
         "version": "v3.3.1"
     },
+    "mpdf/mpdf": {
+        "version": "dev-master"
+    },
+    "myclabs/deep-copy": {
+        "version": "1.x-dev"
+    },
     "myclabs/php-enum": {
         "version": "1.7.6"
     },
@@ -328,6 +337,12 @@
         "files": [
             "config/packages/security_checker.yaml"
         ]
+    },
+    "setasign/fpdi": {
+        "version": "v2.3.5"
+    },
+    "snapappointments/bootstrap-select": {
+        "version": "dev-master"
     },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
@@ -665,6 +680,9 @@
         "files": [
             "config/packages/twig_extensions.yaml"
         ]
+    },
+    "twig/intl-extra": {
+        "version": "2.x-dev"
     },
     "twig/twig": {
         "version": "v2.13.1"

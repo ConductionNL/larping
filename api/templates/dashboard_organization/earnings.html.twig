@@ -1,0 +1,386 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {# include 'dashboard_user/menu.html.twig' #}
+
+    <section class="pb-8 pt-5 bg-light height100vh">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'financial results'|trans|capitalize }}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_dashboard_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item active"
+                        aria-current="page">{{ 'financial results'|trans|capitalize }}</li>
+                </ul>
+            </nav>
+
+            <div class="row">
+                <!-- Listings -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">Total Profit</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">150</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">Withdrawal Balance</p>
+                                <span class="text-success">50</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visits -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">Balance</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">100</span>
+                            <a href="withdrawal-balance.html" class="btn btn-link">Withdraw#</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">Total Orders</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">200</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">Curent month orders</p>
+                                <span class="text-success">20</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="map-half-content grid-two-items">
+                        <!-- Search Box 2 -->
+                        <div class="search-box-2 bg-light p-0 m-0">
+                            <form class="row " action="#">
+                                <div class="form-group prepend-append col-lg-5">
+                                    <div class="input-group mb-2">
+                                        <div class="select-default w-100">
+                                            <div class="selectric-wrapper selectric-select-location selectric-above"><div class="selectric-hide-select"><select class="select-location" tabindex="-1">
+                                                        <option>All Categories</option>
+                                                        <option>Restaurants</option>
+                                                        <option>Hotels</option>
+                                                        <option>Nightclubs</option>
+                                                        <option>Automotive</option>
+                                                        <option>Museums</option>
+                                                    </select></div><div class="selectric"><span class="label">All Categories</span><div class="arrow-button"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div><div class="selectric-items" tabindex="-1" style="width: 457.5px;"><div class="selectric-scroll"><ul><li data-index="0" class="selected highlighted">All Categories</li><li data-index="1" class="">Restaurants</li><li data-index="2" class="">Hotels</li><li data-index="3" class="">Nightclubs</li><li data-index="4" class="">Automotive</li><li data-index="5" class="last">Museums</li></ul></div></div><input class="selectric-input" tabindex="0"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group prepend-append col-md-8 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text px-4">Show first</div>
+                                        </div>
+
+                                        <div class="select-default">
+                                            <div class="selectric-wrapper selectric-select-location selectric-above"><div class="selectric-hide-select"><select class="select-location" tabindex="-1">
+                                                        <option>Last month</option>
+                                                        <option>January</option>
+                                                        <option>February</option>
+                                                        <option>March</option>
+                                                        <option>April</option>
+                                                        <option>May</option>
+                                                    </select></div><div class="selectric"><span class="label">Last month</span><div class="arrow-button"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div><div class="selectric-items" tabindex="-1" style="width: 250.988px;"><div class="selectric-scroll"><ul><li data-index="0" class="selected highlighted">Last month</li><li data-index="1" class="">January</li><li data-index="2" class="">February</li><li data-index="3" class="">March</li><li data-index="4" class="">April</li><li data-index="5" class="last">May</li></ul></div></div><input class="selectric-input" tabindex="0"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-4 col-lg-3">
+                                    <button type="submit" class="btn btn-block btn-primary"> Export Statistics </button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body" style="position: relative;">
+                            <div id="line-chart-1" style="min-height: 364px;"><div id="apexchartsokqdbc0i" class="apexcharts-canvas apexchartsokqdbc0i" style="width: 678px; height: 350px;"><svg id="SvgjsSvg1160" width="678" height="350" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG1162" class="apexcharts-inner apexcharts-graphical" transform="translate(49.53125, 30)"><defs id="SvgjsDefs1161"><clipPath id="gridRectMaskokqdbc0i"><rect id="SvgjsRect1167" width="604.1171875" height="280.95475" x="-1.5" y="-1.5" rx="0" ry="0" fill="#ffffff" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0"></rect></clipPath><clipPath id="gridRectMarkerMaskokqdbc0i"><rect id="SvgjsRect1168" width="625.1171875" height="301.95475" x="-12" y="-12" rx="0" ry="0" fill="#ffffff" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0"></rect></clipPath></defs><line id="SvgjsLine1166" x1="0" y1="0" x2="0" y2="277.95475" stroke="#b6b6b6" stroke-dasharray="3" class="apexcharts-xcrosshairs" x="0" y="0" width="1" height="277.95475" fill="#b1b9c4" filter="none" fill-opacity="0.9" stroke-width="1"></line><g id="SvgjsG1192" class="apexcharts-xaxis" transform="translate(0, 0)"><g id="SvgjsG1193" class="apexcharts-xaxis-texts-g" transform="translate(0, -4)"><text id="SvgjsText1194" font-family="Helvetica, Arial, sans-serif" x="0" y="306.95475" text-anchor="middle" dominant-baseline="central" font-size="12px" fill="#373d3f" class="apexcharts-xaxis-label " style="font-family: Helvetica, Arial, sans-serif;"><tspan id="SvgjsTspan1195" style="font-family: Helvetica, Arial, sans-serif;">04 jan</tspan><title>04 jan</title></text><text id="SvgjsText1196" font-family="Helvetica, Arial, sans-serif" x="100.18619791666666" y="306.95475" text-anchor="middle" dominant-baseline="central" font-size="12px" fill="#373d3f" class="apexcharts-xaxis-label " style="font-family: Helvetica, Arial, sans-serif;"><tspan id="SvgjsTspan1197" style="font-family: Helvetica, Arial, sans-serif;">05 jan</tspan><title>05 jan</title></text><text id="SvgjsText1198" font-family="Helvetica, Arial, sans-serif" x="200.37239583333334" y="306.95475" text-anchor="middle" dominant-baseline="central" font-size="12px" fill="#373d3f" class="apexcharts-xaxis-label " style="font-family: Helvetica, Arial, sans-serif;"><tspan id="SvgjsTspan1199" style="font-family: Helvetica, Arial, sans-serif;">06 jan</tspan><title>06 jan</title></text><text id="SvgjsText1200" font-family="Helvetica, Arial, sans-serif" x="300.55859375000006" y="306.95475" text-anchor="middle" dominant-baseline="central" font-size="12px" fill="#373d3f" class="apexcharts-xaxis-label " style="font-family: Helvetica, Arial, sans-serif;"><tspan id="SvgjsTspan1201" style="font-family: Helvetica, Arial, sans-serif;">07 jan</tspan><title>07 jan</title></text><text id="SvgjsText1202" font-family="Helvetica, Arial, sans-serif" x="400.74479166666674" y="306.95475" text-anchor="middle" dominant-baseline="central" font-size="12px" fill="#373d3f" class="apexcharts-xaxis-label " style="font-family: Helvetica, Arial, sans-serif;"><tspan id="SvgjsTspan1203" style="font-family: Helvetica, Arial, sans-serif;">08 jan</tspan><title>08 jan</title></text><text id="SvgjsText1204" font-family="Helvetica, Arial, sans-serif" x="500.9309895833334" y="306.95475" text-anchor="middle" dominant-baseline="central" font-size="12px" fill="#373d3f" class="apexcharts-xaxis-label " style="font-family: Helvetica, Arial, sans-serif;"><tspan id="SvgjsTspan1205" style="font-family: Helvetica, Arial, sans-serif;">09 jan</tspan><title>09 jan</title></text><text id="SvgjsText1206" font-family="Helvetica, Arial, sans-serif" x="601.1171875" y="306.95475" text-anchor="middle" dominant-baseline="central" font-size="12px" fill="#373d3f" class="apexcharts-xaxis-label " style="font-family: Helvetica, Arial, sans-serif;"><tspan id="SvgjsTspan1207" style="font-family: Helvetica, Arial, sans-serif;">10 jan</tspan><title>10 jan</title></text></g></g><g id="SvgjsG1216" class="apexcharts-grid"><line id="SvgjsLine1217" x1="0" y1="0" x2="601.1171875" y2="0" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1218" x1="0" y1="55.59095" x2="601.1171875" y2="55.59095" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1219" x1="0" y1="111.1819" x2="601.1171875" y2="111.1819" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1220" x1="0" y1="166.77285" x2="601.1171875" y2="166.77285" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1221" x1="0" y1="222.3638" x2="601.1171875" y2="222.3638" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1222" x1="0" y1="277.95475" x2="601.1171875" y2="277.95475" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1224" x1="0" y1="277.95475" x2="601.1171875" y2="277.95475" stroke="transparent" stroke-dasharray="0"></line><line id="SvgjsLine1223" x1="0" y1="1" x2="0" y2="277.95475" stroke="transparent" stroke-dasharray="0"></line></g><g id="SvgjsG1170" class="apexcharts-line-series apexcharts-plot-series"><g id="SvgjsG1188" class="apexcharts-series seriesx2" data:longestSeries="true" rel="2" data:realIndex="1"><path id="apexcharts-line-1" d="M 0 259.42443333333335C 35.06516927083333 259.42443333333335 65.12102864583335 277.95475 100.18619791666667 277.95475C 135.2513671875 277.95475 165.3072265625 194.56832500000002 200.37239583333334 194.56832500000002C 235.43756510416668 194.56832500000002 265.49342447916666 240.89411666666666 300.55859375 240.89411666666666C 335.62376302083334 240.89411666666666 365.67962239583335 101.91674166666667 400.7447916666667 101.91674166666667C 435.8099609375 101.91674166666667 465.8658203125 259.42443333333335 500.9309895833333 259.42443333333335C 535.9961588541667 259.42443333333335 566.0520182291666 37.06063333333333 601.1171875 37.06063333333333" fill="none" fill-opacity="1" stroke="rgba(254,196,0,0.85)" stroke-opacity="1" stroke-linecap="butt" stroke-width="3" stroke-dasharray="5" class="apexcharts-line" index="1" clip-path="url(#gridRectMaskokqdbc0i)" pathTo="M 0 259.42443333333335C 35.06516927083333 259.42443333333335 65.12102864583335 277.95475 100.18619791666667 277.95475C 135.2513671875 277.95475 165.3072265625 194.56832500000002 200.37239583333334 194.56832500000002C 235.43756510416668 194.56832500000002 265.49342447916666 240.89411666666666 300.55859375 240.89411666666666C 335.62376302083334 240.89411666666666 365.67962239583335 101.91674166666667 400.7447916666667 101.91674166666667C 435.8099609375 101.91674166666667 465.8658203125 259.42443333333335 500.9309895833333 259.42443333333335C 535.9961588541667 259.42443333333335 566.0520182291666 37.06063333333333 601.1171875 37.06063333333333" pathFrom="M -1 333.5457L -1 333.5457L 100.18619791666667 333.5457L 200.37239583333334 333.5457L 300.55859375 333.5457L 400.7447916666667 333.5457L 500.9309895833333 333.5457L 601.1171875 333.5457"></path><g id="SvgjsG1189" class="apexcharts-series-markers-wrap"></g><g id="SvgjsG1190" class="apexcharts-datalabels"></g></g><g id="SvgjsG1171" class="apexcharts-series seriesx1" data:longestSeries="true" rel="1" data:realIndex="0"><path id="apexcharts-line-0" d="M 0 277.95475C 35.06516927083333 277.95475 65.12102864583335 240.89411666666666 100.18619791666667 240.89411666666666C 135.2513671875 240.89411666666666 165.3072265625 259.42443333333335 200.37239583333334 259.42443333333335C 235.43756510416668 259.42443333333335 265.49342447916666 148.24253333333334 300.55859375 148.24253333333334C 335.62376302083334 148.24253333333334 365.67962239583335 194.56832500000002 400.7447916666667 194.56832500000002C 435.8099609375 194.56832500000002 465.8658203125 277.95475 500.9309895833333 277.95475C 535.9961588541667 277.95475 566.0520182291666 138.97737500000002 601.1171875 138.97737500000002" fill="none" fill-opacity="1" stroke="rgba(34,186,160,0.85)" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-line" index="0" clip-path="url(#gridRectMaskokqdbc0i)" pathTo="M 0 277.95475C 35.06516927083333 277.95475 65.12102864583335 240.89411666666666 100.18619791666667 240.89411666666666C 135.2513671875 240.89411666666666 165.3072265625 259.42443333333335 200.37239583333334 259.42443333333335C 235.43756510416668 259.42443333333335 265.49342447916666 148.24253333333334 300.55859375 148.24253333333334C 335.62376302083334 148.24253333333334 365.67962239583335 194.56832500000002 400.7447916666667 194.56832500000002C 435.8099609375 194.56832500000002 465.8658203125 277.95475 500.9309895833333 277.95475C 535.9961588541667 277.95475 566.0520182291666 138.97737500000002 601.1171875 138.97737500000002" pathFrom="M -1 333.5457L -1 333.5457L 100.18619791666667 333.5457L 200.37239583333334 333.5457L 300.55859375 333.5457L 400.7447916666667 333.5457L 500.9309895833333 333.5457L 601.1171875 333.5457"></path><g id="SvgjsG1172" class="apexcharts-series-markers-wrap"><g id="SvgjsG1174" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskokqdbc0i)"><circle id="SvgjsCircle1175" r="5" cx="0" cy="277.95475" class="apexcharts-marker no-pointer-events wrd2s29q4" stroke="#ffffff" fill="#22baa0" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" rel="0" j="0" index="0" default-marker-size="5"></circle><circle id="SvgjsCircle1176" r="5" cx="100.18619791666667" cy="240.89411666666666" class="apexcharts-marker no-pointer-events wo5xlcpn3" stroke="#ffffff" fill="#22baa0" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" rel="1" j="1" index="0" default-marker-size="5"></circle></g><g id="SvgjsG1177" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskokqdbc0i)"><circle id="SvgjsCircle1178" r="5" cx="200.37239583333334" cy="259.42443333333335" class="apexcharts-marker no-pointer-events w0itd6bq8" stroke="#ffffff" fill="#22baa0" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" rel="2" j="2" index="0" default-marker-size="5"></circle></g><g id="SvgjsG1179" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskokqdbc0i)"><circle id="SvgjsCircle1180" r="5" cx="300.55859375" cy="148.24253333333334" class="apexcharts-marker no-pointer-events wwcjp5ecz" stroke="#ffffff" fill="#22baa0" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" rel="3" j="3" index="0" default-marker-size="5"></circle></g><g id="SvgjsG1181" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskokqdbc0i)"><circle id="SvgjsCircle1182" r="5" cx="400.7447916666667" cy="194.56832500000002" class="apexcharts-marker no-pointer-events wz9d2smo2" stroke="#ffffff" fill="#22baa0" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" rel="4" j="4" index="0" default-marker-size="5"></circle></g><g id="SvgjsG1183" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskokqdbc0i)"><circle id="SvgjsCircle1184" r="5" cx="500.9309895833333" cy="277.95475" class="apexcharts-marker no-pointer-events wpaqtgtnq" stroke="#ffffff" fill="#22baa0" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" rel="5" j="5" index="0" default-marker-size="5"></circle></g><g id="SvgjsG1185" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskokqdbc0i)"><circle id="SvgjsCircle1186" r="5" cx="601.1171875" cy="138.97737500000002" class="apexcharts-marker no-pointer-events wqunfduc6" stroke="#ffffff" fill="#22baa0" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" rel="6" j="6" index="0" default-marker-size="5"></circle></g></g><g id="SvgjsG1173" class="apexcharts-datalabels"></g></g></g><line id="SvgjsLine1225" x1="0" y1="0" x2="601.1171875" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine1226" x1="0" y1="0" x2="601.1171875" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line><g id="SvgjsG1227" class="apexcharts-yaxis-annotations"></g><g id="SvgjsG1228" class="apexcharts-xaxis-annotations"></g><g id="SvgjsG1229" class="apexcharts-point-annotations"></g></g><rect id="SvgjsRect1165" width="0" height="0" x="0" y="0" rx="0" ry="0" fill="#fefefe" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0"></rect><g id="SvgjsG1208" class="apexcharts-yaxis" rel="0" transform="translate(16.53125, 0)"><g id="SvgjsG1209" class="apexcharts-yaxis-texts-g"><text id="SvgjsText1210" font-family="Helvetica, Arial, sans-serif" x="20" y="31.5" text-anchor="end" dominant-baseline="central" font-size="11px" fill="#373d3f" class="apexcharts-yaxis-label " style="font-family: Helvetica, Arial, sans-serif;">36</text><text id="SvgjsText1211" font-family="Helvetica, Arial, sans-serif" x="20" y="87.19095" text-anchor="end" dominant-baseline="central" font-size="11px" fill="#373d3f" class="apexcharts-yaxis-label " style="font-family: Helvetica, Arial, sans-serif;">30</text><text id="SvgjsText1212" font-family="Helvetica, Arial, sans-serif" x="20" y="142.8819" text-anchor="end" dominant-baseline="central" font-size="11px" fill="#373d3f" class="apexcharts-yaxis-label " style="font-family: Helvetica, Arial, sans-serif;">24</text><text id="SvgjsText1213" font-family="Helvetica, Arial, sans-serif" x="20" y="198.57285000000002" text-anchor="end" dominant-baseline="central" font-size="11px" fill="#373d3f" class="apexcharts-yaxis-label " style="font-family: Helvetica, Arial, sans-serif;">18</text><text id="SvgjsText1214" font-family="Helvetica, Arial, sans-serif" x="20" y="254.2638" text-anchor="end" dominant-baseline="central" font-size="11px" fill="#373d3f" class="apexcharts-yaxis-label " style="font-family: Helvetica, Arial, sans-serif;">12</text><text id="SvgjsText1215" font-family="Helvetica, Arial, sans-serif" x="20" y="309.95475" text-anchor="end" dominant-baseline="central" font-size="11px" fill="#373d3f" class="apexcharts-yaxis-label " style="font-family: Helvetica, Arial, sans-serif;">6</text></g></g></svg><div class="apexcharts-legend"></div><div class="apexcharts-tooltip dark"><div class="apexcharts-tooltip-series-group"><span class="apexcharts-tooltip-marker" style="background-color: rgb(34, 186, 160);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label"></span><span class="apexcharts-tooltip-text-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group"><span class="apexcharts-tooltip-marker" style="background-color: rgb(254, 196, 0);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label"></span><span class="apexcharts-tooltip-text-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div></div><div class="apexcharts-xaxistooltip apexcharts-xaxistooltip-bottom"><div class="apexcharts-xaxistooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"></div></div></div></div>
+
+                            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mt-3">
+                                <h5 class="m-0">Total per month</h5>
+                                <div class="d-flex flex-column flex-md-row">
+                <span class="mr-md-4">
+                  <i class="fa fa-circle text-warning mr-1" aria-hidden="true"></i> <p class="d-inline-block m-0 font-weight-bold">Views 1050</p>
+                </span>
+
+                                    <span class="mr-md-4">
+                  <i class="fa fa-circle text-primary mr-1" aria-hidden="true"></i> <p class="d-inline-block m-0 font-weight-bold">Purchases 18</p>
+                </span>
+
+                                    <span>
+                  <i class="fa fa-circle text-success mr-1" aria-hidden="true"></i> <p class="d-inline-block m-0 font-weight-bold">Profit <span class="text-success">$300</span></p>
+                </span>
+                                </div>
+
+                            </div>
+
+                            <div class="resize-triggers"><div class="expand-trigger"><div style="width: 719px; height: 447px;"></div></div><div class="contract-trigger"></div></div></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <!-- Booking Requests -->
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">Profit History</span>
+                        </div>
+
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table mb-0" style="width:100%">
+                                <tbody>
+                                <tr>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">Think Coffee</span>
+                                        <span class="d-block text-capitalize">200$</span>
+                                        <span class="d-block text-capitalize text-danger">Fee 15$</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center text-nowrap">
+                                            <span class="d-block text-capitalize text-success">Net Profit:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize text-success">185$</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <span class="px-2 py-1"> Order: #6890</span>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <span class="px-2 py-1"> Date: 01/Jan/20</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">Burger House</span>
+                                        <span class="d-block text-capitalize">150$</span>
+                                        <span class="d-block text-capitalize text-danger">Fee 11$</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center">
+                                            <span class="d-block text-capitalize text-success">Net Profit:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize text-success">139$</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <span class="px-2 py-1"> Order: #0123</span>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <span class="px-2 py-1"> Date: 09/Jan/20</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">Hotel Govendor</span>
+                                        <span class="d-block text-capitalize">186$</span>
+                                        <span class="d-block text-capitalize text-danger">Fee 13$</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center">
+                                            <span class="d-block text-capitalize text-success">Net Profit:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize text-success">173$</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <span class="px-2 py-1"> Order: #4670</span>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <span class="px-2 py-1"> Date: 07/Feb/20</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">Tom's Restaurant</span>
+                                        <span class="d-block text-capitalize">145$</span>
+                                        <span class="d-block text-capitalize text-danger">Fee 10$</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center">
+                                            <span class="d-block text-capitalize text-success">Net Profit:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize text-success">135$</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <span class="px-2 py-1"> Order: #0053</span>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <span class="px-2 py-1"> Date: 16/Feb/20</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <!-- Booking Requests -->
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">Checkout History</span>
+                        </div>
+
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table mb-0" style="width:100%">
+                                <tbody>
+                                <tr>
+                                    <td class="text-muted h3">
+                                        <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                    </td>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">Sticky Band</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center text-nowrap">
+                                            <span class="d-block text-capitalize">Date:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize">01/Jan/20</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success px-2 py-1">Paid</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-muted h3">
+                                        <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                    </td>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">Tom's Restaurant</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center text-nowrap">
+                                            <span class="d-block text-capitalize">Date:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize">05/Jan/20</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-danger px-2 py-1">unpaid</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-muted h3">
+                                        <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                    </td>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">Hotel Govendor</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center text-nowrap">
+                                            <span class="d-block text-capitalize">Date:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize">11/Feb/20</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-warning px-2 py-1">Pending</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-muted h3">
+                                        <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                    </td>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">The Mayfair Hotel</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center text-nowrap">
+                                            <span class="d-block text-capitalize">Date:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize">19/Feb/20</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success px-2 py-1">Paid</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-muted h3">
+                                        <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                    </td>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">Think Coffee</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center text-nowrap">
+                                            <span class="d-block text-capitalize">Date:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize">11/Mar/20</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-danger px-2 py-1">Unpaid</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-muted h3">
+                                        <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                    </td>
+                                    <td class="text-capitalize">
+                                        <span class="d-block text-capitalize text-primary text-nowrap">Burger House</span>
+                                    </td>
+                                    <td>
+                                        <div class="media media-xs align-items-center text-nowrap">
+                                            <span class="d-block text-capitalize">Date:</span>
+                                            <div class="media-body">
+                                                <span class="d-block text-capitalize">19/Feb/20</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success px-2 py-1">Approved</span>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

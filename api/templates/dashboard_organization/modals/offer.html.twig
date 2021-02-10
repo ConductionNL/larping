@@ -1,0 +1,56 @@
+{# Offer modale #}
+
+{% if resource is defined %}
+    {% set  id = resource['id'] %}
+    {% set  type = 'Offer' %}
+    {% set activeCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource['id']}) %}
+{% else %}
+    {% set  id = 'Add' %}
+    {% set  type = 'Offer' %}
+    {% set  activeCategories = [] %}
+{% endif %}
+
+{% set  modalClass = 'modal-lg' %}
+
+{% extends "dashboard_organization/modals/modal.html.twig" %}
+
+{% block body %}
+<form id="{{ type }}Form{{ id }}" method="post">
+    {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
+    {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
+    <div class="form-group">
+        <label for="name">{{ 'name'|trans|capitalize }}*</label>
+        <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+    </div>
+    <div class="form-group">
+        <label for="description">{{ 'description'|trans|capitalize }}</label>
+        <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="name">{{ 'price'|trans|capitalize }}*</label>
+        <input type="text" class="form-control" id="price" name="price" {% if resource.price is defined %}value="{{ resource.price|capitalize }}"{% endif %} required>
+    </div>
+    <div class="form-group">
+        <label for="description">{{ 'products'|trans|capitalize }}</label>
+        <select class="form-control "  aria-label="{{ 'the products included in this offer'|trans|capitalize }}"  id="products" name="products[]"
+            {% for product in products %}
+                <option value="{{ product.id }}">{{ product.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="description">{{ 'categories'|trans|capitalize }}</label>
+        <select class="form-control"  aria-label="{{ 'the products included in this offer'|trans|capitalize }}" id="categories" name="categories[]">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <script>
+        $(function() {
+            $('products').selectric();
+            $('categories').selectric();
+        });
+    </script>
+</form>
+{% endblock %}

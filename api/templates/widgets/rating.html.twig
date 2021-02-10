@@ -1,0 +1,24 @@
+
+<ul class="list-inline list-inline-rating mr-2">
+{% for i in 1..5 %}
+    {% if rating >= loop.index %}
+        <li class="list-inline-item">
+            <i class="fa fa-star" aria-hidden="true"></i>
+        </li>
+    {#
+    {% if rating > (loop.index0 * 2) %}
+    <li class="list-inline-item">
+        <i class="fa fa-star" aria-hidden="true"></i>
+    </li>
+    {% elseif rating == (loop.index0 * 2) %}
+    <li class="list-inline-item">
+        <i class="fas star-half-alt" aria-hidden="true"></i>
+    </li>
+     #}
+    {% else %}
+    <li class="list-inline-item">
+        <i class="far fa-star" aria-hidden="true"></i>
+    </li>
+    {% endif%}
+{% endfor %}
+</ul>

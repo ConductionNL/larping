@@ -1,0 +1,38 @@
+<!-- Add Review -->
+<div class="media mb-7">
+    <div class="media-body">
+        <h5 class="media-heading">{{ organization.name }}</h5>
+        <div class="d-flex flex-column flex-lg-row align-items-lg-center">
+            <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
+                {% if contact.telephones is defined and contact.telephones is not empty %}
+                    {% for tel in contact.telephones %}
+                        <li class="list-inline-item">
+                            <i class="fa fa-phone" aria-hidden="true"></i>
+                            <span class="ml-2">{{ tel.telephone }}</span>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+                {% if contact.emails is defined and contact.emails is not empty %}
+                    {% for emails in contact.emails %}
+                        <li class="list-inline-item">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                            <span class="ml-2">{{ emails.email }}</span>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+
+            <ul class="list-inline list-inline-icon ml-lg-auto">
+                {% if contact.socials is defined and contact.socials is not empty %}
+                    {% for social in contact.socials %}
+                        <li class="list-inline-item">
+                            <a class="mr-2" href="{{ social.url }}">
+                                <i class="fa fa-{{ social.type }}" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

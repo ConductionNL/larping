@@ -1,0 +1,25 @@
+{% if reservations|default and  reservations|length > 0 %}
+    <table id="products" class="display nowrap table" style="width:100%">
+        <thead>
+        <tr>
+            <th>{{ 'name'|trans|capitalize }}</th>
+           </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" >{{ reservation.name }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card border-light shadow-sm">
+        <div class="card-body text-center">
+            <p>{{ 'no reservations found'|trans|capitalize }}</p>
+         </div>
+    </div>
+{% endif %}
+

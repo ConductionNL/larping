@@ -1,0 +1,143 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {# include '/dashboard_organization/menu.html.twig' #}
+
+    <section class="bg-light pt-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'dashboard'|trans|capitalize }}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item">{{ 'dashboard'|trans|capitalize }}</li>
+                </ul>
+            </nav>
+
+            <div class="row">
+                <!-- events -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{'upcoming events'|trans|capitalize}}</span>
+                            <span class="badge badge-primary">{{ 'upcoming'|trans }}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">{{ upcomingEventsCount }}</span>
+                            {% if upcomingEvent|default %}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">{{ 'next event'|trans|capitalize }}</p>
+                                <b>{{ upcomingEvent.name }}</b>
+                            </div>
+                            {% endif %}
+                            <a href="{{ path('app_dashboardorganization_events') }}"
+                               class="btn btn-link {% if not upcomingEvent|default %}mt-5{% endif %}"
+                            >{{ 'all events'|trans|capitalize }}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- orders -->
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'orders'|trans|capitalize }}</span>
+                            <span class="badge badge-primary">{{'upcoming'|trans}}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">
+                                {% if ticketsSold is defined %}
+                                    {% if ticketsSold == 1 %}
+                                        1 {{ 'ticket'|trans }}
+                                    {% else %}
+                                        {{ ticketsSold }} {{ 'tickets'|trans }}
+                                    {% endif %}
+                                {% else %}
+                                    x
+                                {% endif %}
+                            </span>
+                            {% if ticketsSoldLastWeek is defined %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="mb-0">{{ 'last week'|trans|capitalize }}</p>
+                                    <span>
+                                        {% if ticketsSoldLastWeek == 1 %}
+                                            1 {{ 'ticket'|trans }}
+                                        {% else %}
+                                            {{ ticketsSoldLastWeek }} {{ 'tickets'|trans }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {% endif %}
+                            <a href="{{ path('app_dashboardorganization_orders') }}"
+                               class="btn btn-link {% if ticketsSoldLastWeek is not defined %}mt-5{% endif %}"
+                            >{{'all orders'|trans|capitalize}}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- revenue -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'revenue'|trans|capitalize }}</span>
+                            <span class="badge badge-primary">{{ 'monthly'|trans }}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">{{ revenue.thisMonth }}</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">{{ 'last month'|trans|capitalize }}</p>
+                                <span>{{ revenue.lastMonth }}</span>
+                            </div>
+                            <a href="{{ path('app_dashboardorganization_earnings') }}" class="btn btn-link">{{ 'all earnings'|trans|capitalize }}</a>
+                        </div>
+                    </div>
+                </div><!-- /.col -->
+
+                <!-- reviews -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{'all reviews'|trans|capitalize}}</span>
+                            <span class="badge badge-primary">{{ 'total'|trans }}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">{{ totals.reviews }}</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">{{ 'average rating'|trans|capitalize }}</p>
+                                <b>{{ totals.rating|round(1, 'common') }} / 5</b>
+                            </div>
+                            <a href="{{ path('app_dashboardorganization_reviews') }}" class="btn btn-link">{{ 'all reviews'|trans|capitalize }}</a>
+                        </div>
+                    </div>
+                </div><!-- /.col -->
+
+                <!-- Members -->
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'members'|trans|capitalize }}</span>
+                            <span class="badge badge-primary">{{'total'|trans}}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">{{ totalUsers }}</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">{{ 'new members this month'|trans|capitalize }}</p>
+                                {% if newUsersThisMonth > 0 %}
+                                    <span class="text-success"> {{ newUsersThisMonth }} <i class="fa fa-level-up" aria-hidden="true"></i> </span>
+                                {% else %}
+                                    <b>{{ newUsersThisMonth }}</b>
+                                {% endif %}
+                            </div>
+                            <a href="{{ path('app_dashboardorganization_members') }}" class="btn btn-link">{{'all members'|trans|capitalize}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% if reviewedResources|default and  reviewedResources|length > 0 %}
+    <table id="reviews" class="display nowrap table" style="width:100%">
+        <thead>
+        <tr>
+            <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'type'|trans|capitalize }}</th>
+            <th>{{ 'reviews'|trans|capitalize }}</th>
+            <th>{{ 'average rating'|trans|capitalize }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if organization|default %}
+            <tr>
+                <td>
+                    <a class="text-hover-primary text-muted"
+                       href="{{ path('app_organization_organization', {id: organization.id}) }}"
+                    >{{ organization.name }}</a>
+                </td>
+                <td>
+                    {{ organization['@type']|lower|trans|capitalize }}
+                </td>
+                <td>
+                    {{ organization.totals.reviews }}
+                </td>
+                <td>
+                    {{ organization.totals.rating|round(1, 'common') }} / 5
+                </td>
+                <td>
+                    <div class="float-right">
+                        <a class="btn btn-primary btn-sm mr-1" href="{{ path('app_dashboardorganization_reviews')~'?resource='~organization['@id'] }}">{{ 'view reviews'|trans }}</a>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+        {% for reviewedResource in reviewedResources %}
+            <tr>
+                <td>
+                    <a class="text-hover-primary text-muted"
+                        {% if reviewedResource['@type'] == 'https://schema.org/Event' %}
+                            href="{{ path('app_event_event', {id: reviewedResource.id}) }}"
+                        {% else %}
+                            href="#"
+                        {% endif %}
+                    >{{ reviewedResource.name }}</a>
+                </td>
+                <td>
+                    {% if reviewedResource['@type'] == 'https://schema.org/Event' %}
+                        {{ 'event'|trans|capitalize }}
+                    {% else %}
+                        {{ reviewedResource['@type']|lower|trans|capitalize }}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ reviewedResource.totals.reviews }}
+                </td>
+                <td>
+                    {{ reviewedResource.totals.rating|round(1, 'common') }} / 5
+                </td>
+                <td>
+                    <div class="float-right">
+                        <a class="btn btn-primary btn-sm mr-1" href="{{ path('app_dashboardorganization_reviews')~'?resource='~reviewedResource['@id'] }}">{{ 'view reviews'|trans }}</a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card border-light shadow-sm">
+        <div class="card-body text-center">
+            <p>{{ 'no reviewed resources found'|trans|capitalize }}</p>
+        </div>
+    </div>
+{% endif %}
+
+
+

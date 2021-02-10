@@ -1,0 +1,37 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <section class="py-7 pt-md-9 pb-md-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-lg-8">
+                    <div class="mb-2 mb-lg-0">
+                        <h1 class="single-listing-title">{{ 'contact'|trans|capitalize }}</h1>
+
+                        <!-- Breadcrumb -->
+                        <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
+                            <ul class="list-unstyled d-flex p-0 m-0">
+                                <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                                <li class="breadcrumb-item active"
+                                    aria-current="page">{{ 'contact'|trans|capitalize }}</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div><!-- /.row -->
+        </div><!--/.container -->
+    </section>
+    <section class="pt-7 pb-4 pt-md-9 pb-md-8" style="margin-top: -100px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 single-listing-content">
+                    {% include 'widgets/contact_form.html.twig' %}
+                </div>
+                <div class="col-md-4 ">
+                    {% include 'widgets/contact_details.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

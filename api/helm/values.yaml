@@ -15,7 +15,7 @@ settings:
   repro: https://github.com/ConductionNL/larping
   demo: dev.larping.eu
   container: https://hub.docker.com/repository/docker/conduction/larping-php
-  domain: zuid-drecht.nl
+  domain: larping.eu
   subdomain: false
   subpath: 
   subpathRouting: true
@@ -30,7 +30,7 @@ settings:
   internal: false
   debug: 1
   cache: false
-  sessionDuration: 900
+  sessionDuration: 1209600
   replicaCount: 1
   corsAllowOrigin: ['*']
   trustedHosts: '^.+$'
@@ -52,9 +52,9 @@ settings:
   archiveEnabled: false
 
 security:
-  commongroundId: "9798cae6-187a-434f-bd66-f1dc2cc61466"
-  commongroundKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
-  applicationKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
+  commongroundId: "7919a58b-3fd9-4931-ad70-2ccc1168ef23"
+  commongroundKey: "7919a58b-3fd9-4931-ad70-2ccc1168ef23"
+  applicationKey: "7919a58b-3fd9-4931-ad70-2ccc1168ef23"
   userKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
   authorisationProviderUser: https://uc.zuid-drecht.nl
   authorisationProviderApplication: https://openzaak.dev.zuid-drecht.nl/authorizaties/api/v1
@@ -152,6 +152,6 @@ resources: {}
 
 commonground:
     eherkenning:
-        location: https://zuid-drecht.nl/eherkenning
+        location: https://larping.eu/eherkenning
     digispoof:
-        location: https://zuid-drecht.nl/digispoof
+        location: https://larping.eu/digispoof

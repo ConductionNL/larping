@@ -1,403 +1,202 @@
-{% extends "base.html.twig" %}
+{% set likes = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':organization['@id']})['hydra:member']|length %}
 
+  {% if app.user|default %}
+      {% set isLiked = commonground_resource_list({'component':'rc','type':'likes'}, {'resource':organization['@id'], 'author':app.user.person})['hydra:member'] %}
+  {% endif %}
+
+{% set reviews = commonground_resource_list({'component':'rc','type':'reviews'}, {'resource':organization['@id']})['hydra:member'] %}
+{% set features = commonground_resource_list({'component':'wrc','type':'categories'}, {'parent.name': 'features'})['hydra:member'] %}
+{% extends "base.html.twig" %}
 {% block content %}
 
+    <!-- ====================================
+    ———	LISTING SINGLE HEADING
+    ===================================== -->
     <section class="py-7 pt-md-9 pb-md-8">
         <div class="container">
             <div class="row">
-                <div class="col-9">
-                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ item.name }}</h1>
-                </div>
-                <div class="col-3 float-right">
-                    <!-- Breadcrumb -->
-                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
-                        <ul class="list-unstyled d-flex p-0 m-0">
-                            <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a
-                                    href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
-                            </li>
-                            <li class="breadcrumb-item active"
-                                aria-current="page">{{ item.name }}</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8">
+                <div class="col-md-7 col-lg-8">
                     <div class="mb-2 mb-lg-0">
-                        {% if item.emails.0.email|default %}
-                            <p class="text-muted mb-1"><i
-                                    class="fa fa-mail-forward text-primary mr-1"></i>{{ item.emails.0.email }}
-                            </p>
-                        {% endif %}
-                        {% if item.phonenumbers.0.phonenumber|default %}
-                            <p class="text-muted mb-1"><i
-                                    class="fa fa-phone text-primary mr-1"></i> {{ item.phonenumbers.0.phonenumber }}
-                            </p>
-                        {% endif %}
-                        <div class="d-flex align-items-center">
-                            <ul class="list-inline list-inline-rating mr-2">
-                                <li class="list-inline-item">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                        <h1 class="single-listing-title">{{ organization.name }}</h1>
+
+                        <!-- Breadcrumb -->
+                        <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
+                            <ul class="list-unstyled d-flex p-0 m-0">
+                                <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                                <li class="breadcrumb-item"><a
+                                        href="{{ path('app_organization_index') }}">{{ 'organizations'|trans|capitalize }}</a>
                                 </li>
-                                <li class="list-inline-item">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </li>
-                                <li class="list-inline-item">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ organization.name }}</li>
                             </ul>
-                            <span class="d-inline-block mr-2">(5 Reviews)</span>
-                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title=""
-                                    data-original-title="Favourite this listing">
-                                <i class="fa fa-heart-o text-primary" aria-hidden="true"></i>
-                                <span>5 k</span>
-                            </button>
+                        </nav>
+
+                        <!-- Ratings -->
+                        <div class="d-flex align-items-center">
+                            {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
+                            <span
+                                class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                            <a href="#" onclick="likeItem('{{ organization['id'] }}','{{ organization['@id'] }}','{{ organization['@id'] }}', this)"
+                               liked="{% if totals.liked|default %}true{% else %}false{% endif %}"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               title=""
+                               data-original-title="{{ 'favorite this organization'|trans|capitalize }}"><i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                                    aria-hidden="true" id="icon_{{ organization['id'] }}"></i>
+                                <span id="counter_{{ organization['id'] }}">{{ totals.likes }}</span></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 d-lg-flex justify-content-end align-items-end">
-                    <a href="#" class="btn btn-primary">Write a review</a>
-                </div>
-            </div>
-
-        </div>
+                <div class="col-lg-4 pl-8">
+                    {% if subscriptions|default %}
+                        <a href="#subscriptions" class="btn btn-primary">{{ 'become a member'|trans|capitalize }}</a>
+                    {% elseif tickets|default %}
+                        <a href="#tickets" class="btn btn-primary">{{ 'buy a ticket'|trans|capitalize }}</a>
+                    {% elseif products|default %}
+                        <a href="#products" class="btn btn-primary">{{ 'buy a product'|trans|capitalize }}</a>
+                    {% endif %}
+                </div><!--/.col -->
+            </div><!-- /.row -->
+        </div><!--/.container -->
     </section>
 
-    <section class="pb-4  pb-md-8">
+    <section>
+            {% include 'widgets/carusel.html.twig' with {'events': events} %}
+    </section>
+
+    <!-- ====================================
+    ———	MAIN CONTENT
+    ===================================== -->
+    <section class="pt-7 pb-4 pt-md-9 pb-md-8">
         <div class="container">
             <div class="row">
-                <div class="col-md-7 col-lg-8">
+                <!--======= Main =======-->
+                <div class="col-md-8 col-lg-8 single-listing-content">
                     <!-- About -->
-                    <div class="single-listing-content mb-6">
-                        {% if item.description|default %}
-                            <h3 class="font-weight-normal mb-6">{{ 'about this'|trans|capitalize~' '~'organization'|trans }}</h3>
-                            <p class="mb-6">{{ item.description }}</p>
-                        {% endif %}
-                        <!-- Hours -->
-                        <div class="mb-6">
-                            <h4 class="font-weight-normal mb-4">Hours</h4>
-                            <p class="mb-1">LUNCH - MONDAY – FRIDAY: 11:30am-3pm</p>
-                            <p class="mb-1">ALL DAY MENU - MONDAY – FRIDAY: 3pm-5:30pm</p>
-                            <p class="mb-1">DINNER - MONDAY – SUNDAY: 5:30pm-11pm</p>
-                            <p class="mb-1">BRUNCH - 10am-3pm</p>
-                        </div>
-
-                        <!-- Departments at this Store -->
-                        <div class="mb-6">
-                            <h4 class="font-weight-normal mb-4">Services</h4>
-                            <p class="mb-1">Counter Service</p>
-                            <p class="mb-1">Table Service</p>
-                            <p class="mb-1">Buffet Service</p>
-                            <p class="mb-1">Self Service</p>
-                            <p class="mb-1">Gueridon Service</p>
-                        </div>
-
-                        <!-- Departments at this Store -->
-                        <div class="mb-6">
-                            <h4 class="font-weight-normal mb-4">Seating</h4>
-                            <p class="mb-1">55 Guests in our Main Dining Room</p>
-                            <p class="mb-1">16 Guests in our Garden Room</p>
-                        </div>
-
-                    </div>
-
-                    <hr>
-
-                    <!-- Features -->
-                    <div class="my-6">
-                        <h3 class="font-weight-normal mb-6">Features</h3>
-                        <ul class="list-unstyled mb-7">
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-wifi mr-2" aria-hidden="true"></i>High Speed Wifi
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-car mr-2" aria-hidden="true"></i>Street Parking
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-glass mr-2" aria-hidden="true"></i>Alcohol
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-pagelines mr-2" aria-hidden="true"></i>Vegetarian
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-cube mr-2" aria-hidden="true"></i>Reservations
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-check-circle-o mr-2" aria-hidden="true"></i> Pets Friendly
-                            </li>
-                            <li class="d-inline-block mr-4 mb-2">
-                                <i class="fa fa-credit-card mr-2" aria-hidden="true"></i>Accept Credit Card
-                            </li>
-                        </ul>
-                        <hr>
-                    </div>
-
-                    <!-- Added By -->
-                    <div>
-                        <h3 class="font-weight-normal mb-6">Added By </h3>
-                        <div class="media mb-7">
-                            <div class="media-img">
-                                <img src="assets/img/user/user-xs-4.jpg" class="mr-3 media-object rounded-circle"
-                                     alt="Image User">
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Adam Smith</h5>
-                                <div class="d-flex flex-column flex-lg-row align-items-lg-center">
-                                    <ul class="list-inline d-flex flex-column flex-lg-row mb-0">
-
-                                        <li class="list-inline-item">
-                                            <i class="fa fa-phone" aria-hidden="true"></i>
-                                            <span class="ml-2">+55 654 545 122</span>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                                            <span class="ml-2">example.com</span>
-                                        </li>
-
-                                    </ul>
-
-                                    <ul class="list-inline list-inline-icon ml-lg-auto">
-                                        <li class="list-inline-item">
-                                            <a class="mr-2" href="#">
-                                                <i class="fa fa-facebook-official" aria-hidden="true"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a class="mr-2" href="#">
-                                                <i class="fa fa-twitter" aria-hidden="true"></i>
-                                            </a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a class="mr-2" href="#">
-                                                <i class="fa fa-instagram" aria-hidden="true"></i>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-
-                                </div>
-                            </div>
+                    {% if organization.description|default %}
+                        <div class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {% if organization.name|default %}{{ organization.name }}{% endif %}</h3>
+                            <p class="mb-6">{{ organization.description }}</p>
                         </div>
 
                         <hr>
-                    </div>
+                    {% endif %}
+
+                    <!-- Catagories -->
+                    {% if categories is defined and categories is not empty %}
+                        <div class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ 'catagories'|trans|capitalize }} {{ organization.name }}</h3>
+                            {% include '/sections/categories.html.twig' with {'categories': categories} %}
+                        </div>
+                        <hr>
+                    {% endif %}
+
+
+                    <!-- Events -->
+                    {% if events is defined and events is not empty %}
+                        <div class="fade-in" id="events">
+                            <h3 class="font-weight-normal mb-6">{{ 'events'|trans|capitalize }}</h3>
+                            <div class="row">
+                                {% for event in events %}
+                                    <div class="col-md-6" id="organization">
+                                        {% include '/cards/event.html.twig' with {'item': event} %}
+                                    </div>
+                                {% endfor %}
+                            </div><!-- /.row -->
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Tickets -->
+                    {% if tickets is defined and tickets is not empty %}
+                        <div class="fade-in" id="tickets">
+                            <h3 class="font-weight-normal mb-6">{{ 'tickets'|trans|capitalize }}</h3>
+                            <div class="row">
+                                {% for offer in tickets %}
+                                    <div class="col-md-6" id="organization">
+                                        {% include 'cards/offer.html.twig'  with {'item': offer} %}
+                                    </div>
+                                {% endfor %}
+                            </div><!-- /.row -->
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Subscriptions -->
+                    {% if subscriptions is defined and subscriptions is not empty %}
+                        <div class="fade-in" id="subscriptions">
+                            <h3 class="font-weight-normal mb-6">{{ 'subscriptions'|trans|capitalize }}</h3>
+                            <div class="row">
+                                {% for offer in subscriptions %}
+                                    <div class="col-md-6" id="organization">
+                                        {% include 'cards/offer.html.twig'  with {'item': offer} %}
+                                    </div>
+                                {% endfor %}
+                            </div><!-- /.row -->
+                        </div>
+
+                        <hr>
+                    {% endif %}
+
+                    <!-- Products -->
+                    {% if products is defined and products is not empty %}
+                        <div id="gridFullwidthDiv" class="fade-in" id="products">
+                            <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
+                            <div class="row">
+                                {% for offer in products %}
+                                    <div class="col-md-6" id="organization">
+                                        {% include 'cards/offer.html.twig'  with {'item': offer} %}
+                                    </div>
+                                {% endfor %}
+                            </div><!-- /.row -->
+                        </div>
+
+                        <hr>
+                    {% endif %}
 
                     <!-- Reviews -->
-                    <div class="my-6">
-                        <h3 class="font-weight-normal mb-6">Reviews (3)</h3>
-                        <div class="media mb-3">
-                            <div class="media-img">
-                                <img src="assets/img/user/user-xs-1.jpg" class="mr-3 media-object rounded-circle"
-                                     alt="Image User">
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Aaren</h5>
-                                <ul class="list-inline list-inline-rating">
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                </ul>
-                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                    laudan totam rem ape
-                                    riam,</p>
-
-                                <!-- Reply Section -->
-                                <div class="reply-wrapper">
-                                    <a class="d-inline-block mb-2 btn-reply" href="javascript:0">Reply</a>
-                                    <form class="form-reply my-3">
-                                        <textarea class="form-control mb-6" rows="3"
-                                                  placeholder="Enter your comment"></textarea>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="media mb-3">
-                            <div class="media-img">
-                                <img src="assets/img/user/user-xs-2.jpg" class="mr-3 media-object rounded-circle"
-                                     alt="Image User">
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Abby</h5>
-                                <ul class="list-inline list-inline-rating">
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                                    </li>
-                                </ul>
-                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                    lauda totam rem ape riam,
-                                </p>
-
-                                <p class="bg-light p-4 rounded">Nam illo asperiores architecto fuga corrupti.
-                                    Voluptates, assumenda. Repellendus,
-                                    dicta voluptatum. Voluptatibus eos voluptatum, consequuntur rerum voluptas
-                                    reiciendis et quo deleniti illum
-                                    nihil</p>
-                            </div>
-                        </div>
-                        <div class="media mb-3">
-                            <div class="media-img">
-                                <img src="assets/img/user/user-xs-3.jpg" class="mr-3 media-object rounded-circle"
-                                     alt="Image User">
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Abriel</h5>
-                                <ul class="list-inline list-inline-rating">
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                                    </li>
-                                </ul>
-                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                    laudan totam rem ape
-                                    riam,</p>
-
-                                <p class="bg-light p-4 rounded">Nam illo asperiores architecto fuga corrupti.
-                                    Voluptates, assumenda. Repellendus,
-                                    dicta
-                                    voluptatum. Voluptatibus eos voluptatum, consequuntur rerum voluptas reiciendis et
-                                    quo deleniti illum nihil</p>
-
-                            </div>
+                    <a id="reviews">
+                    {% if reviews is defined and reviews is not empty %}
+                        <div class="fade-in">
+                            <h3 class="font-weight-normal mb-6">{{ totals.reviews }} {{ 'reviews'|trans|capitalize }}</h3>
+                            {% include '/sections/reviews.html.twig' %}
                         </div>
 
                         <hr>
+                    {% endif %}
+
+                    <!-- Add a review -->
+                    <div id="add-review" class="fade-in">
+                        <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
+                        {% include '/sections/review.html.twig' with {'item': organization} %}
                     </div>
-
-                    <!-- Add Review -->
-                    <div class="my-6" id="add-review">
-                        <h3 class="font-weight-normal mb-6"> Add Review </h3>
-                        <span class="star add-rating-default pl-0 mb-6 jq-ry-container" style="width: 100px;"><div
-                                class="jq-ry-group-wrapper"><div class="jq-ry-normal-group jq-ry-group"><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="gray"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="gray" style="margin-left: 5px;"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg></div><div
-                                    class="jq-ry-rated-group jq-ry-group" style="width: 0%;"><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="#f39c12"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                        viewBox="0 0 24 24" fill="#f39c12" style="margin-left: 5px;"><path
-                                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"></path></svg></div></div></span>
-                        <form>
-                            <div class="form-check form-check-inline mb-6 mr-lg-7">
-                                <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
-                                       id="inlineRadio1" value="option1" checked="">
-                                <label class="form-check-label" for="inlineRadio1">
-                                    <div class="media media-xs align-items-center">
-                                        <img src="assets/img/user/user-xs-3.jpg"
-                                             class="mr-2 media-object rounded-circle" alt="Image User">
-                                        <div class="media-body">
-                                            <h5 class="media-heading mb-0">William</h5>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="form-check form-check-inline mb-6">
-                                <input class="form-check-input mr-2" type="radio" name="inlineRadioOptions"
-                                       id="inlineRadio2" value="option2">
-                                <label class="form-check-label" for="inlineRadio2">
-                                    <div class="media media-xs align-items-center">
-                                        <img src="assets/img/user/avatar-01.png"
-                                             class="mr-2 media-object rounded-circle border" alt="Image User">
-                                        <div class="media-body">
-                                            <h5 class="media-heading mb-0">Anonymous</h5>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="form-group mb-6">
-                                <textarea class="form-control" rows="6" placeholder="Enter Your Comment"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary text-uppercase"> Send Review</button>
-                            </div>
-                        </form>
-
-                    </div>
-
-                </div>
+                </div><!-- /.col -->
 
                 <!--======= Sidebar =======-->
                 <div class="col-md-5 col-lg-4 pl-xl-8">
-                    <!-- Single listing Map -->
-                    {% include 'widgets/single_listing_map.html.twig' %}
+                    <!-- Contact  -->
+                    <h5>{{ 'contact'|trans|capitalize }} {{ organization.name }}</h5>
+                    <p>{{ organization.description }}</p>
 
-                    <!-- Make Online Reservations -->
-                    {% include 'widgets/select_and_book.html.twig' %}
 
-                    <!-- Opening Hours -->
-                    {% include 'widgets/business_hours.html.twig' %}
+                    {% include 'widgets/contact_details.html.twig' %}
+
+                    {% include 'widgets/contact_form.html.twig' %}
 
                     <!-- You may also like  -->
-                    {% include 'widgets/you_may_like.html.twig' %}
-                </div>
-            </div>
-        </div>
+                    {% if categories is defined and categories is not empty %}
+                        <h5>{{ 'categories you might like'|trans|capitalize }}</h5>
+                        {% for category in categories %}
+                            {% include 'cards/category.html.twig' with {
+                                'item': category
+                            } %}
+                        {% endfor %}
+
+                    {% endif %}
+                </div><!-- /.col -->
+            </div> <!-- /.row -->
+        </div> <!-- /.container -->
     </section>
 
 {% endblock %}

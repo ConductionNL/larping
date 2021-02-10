@@ -1,0 +1,62 @@
+
+{% if events is  defined and events|length > 0 %}
+<table id="events" class="display nowrap table" style="width:100%">
+    <thead>
+    <tr>
+        <th>{{ 'name'|trans|capitalize }}</th>
+        <th>{{ 'start'|trans|capitalize }}</th>
+        <th>{{ 'end'|trans|capitalize }}</th>
+        <th>{{ 'location'|trans|capitalize }}</th>
+        <th>{{ 'tickets available'|trans|capitalize }}</th>
+        <th>Status</th>
+        <th><a href="{{ path('app_dashboardorganization_event', {id: 'add'}) }}" class="btn btn-success btn-sm">{{ 'add'|trans|capitalize }}</button></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+    <tr>
+        <td class="text-capitalize">
+            <a class="text-hover-primary text-muted" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ event.name }}</a>
+        </td>
+        <td>
+            {{ event.startDate|date("Y/d/m") }}
+        </td>
+        <td>
+            {{ event.endDate|date("Y/d/m") }}
+        </td>
+        <td class="text-capitalize">{% if event.location|default %}{{ commonground_resource(event.location).name }}{% endif %}</td>
+
+        <td>
+            80 / 120
+        </td>
+        <td>
+            <span class="badge badge-warning px-2 py-1">{{event.status}}</span>
+        </td>
+        <td>
+
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i class="fas fa-ellipsis-v"></i>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_event', {id: event.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_eventcheckin', { id: event.id}) }}">{{ 'checkin'|trans|capitalize }}</a>
+                    <a class="dropdown-item" href="{{ path('app_dashboardorganization_eventtickets', { id: event.id}) }}">{{ 'tickets'|trans|capitalize }}</a>
+                </div>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="card border-light shadow-sm">
+    <div class="card-body text-center">
+        <p>{{ 'no events found'|trans|capitalize }}</p>
+        <a href="{{ path('app_dashboardorganization_event', {id: 'add'}) }}" class="btn btn-primary" >{{ 'add your first event'|trans|capitalize }}!</a>
+    </div>
+</div>
+{% endif %}
+
+

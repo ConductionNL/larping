@@ -1,0 +1,254 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <section class="pb-8 pt-5 bg-light height100vh">
+        <div class="container">
+
+            <!-- Title -->
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'shopping cart'|trans|capitalize }}</h2>
+            </nav>
+
+            <!-- Order -->
+            {% if orders|default %}
+                {% for order in orders %}
+                    {% set organization = commonground_resource(order.organization) %}
+                    <div id="my-booking_wrapper" class="dataTables_wrapper no-footer my-5">
+                        <h3 class="mb-3">{{ organization.name }}</h3>
+                        <table id="my-booking"
+                               class="display nowrap table-data-default dataTable no-footer dtr-inline mb-4"
+                               style="width: 100%;" role="grid">
+                            <thead>
+                            <tr role="row">
+                                <th class="sorting" tabindex="0" aria-controls="my-booking" rowspan="1"
+                                    colspan="1"
+                                    style="width: 188px;"
+                                    aria-label="Listing: activate to sort column ascending">
+                                    {{ 'name'|trans|capitalize }}
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="my-booking" rowspan="1"
+                                    colspan="1"
+                                    style="width: 188px;"
+                                    aria-label="Listing: activate to sort column ascending">
+                                    {{ 'type'|trans|capitalize }}
+                                </th>
+                                <th class="sorting text-center" tabindex="0" aria-controls="my-booking"
+                                    rowspan="1"
+                                    colspan="1"
+                                    style="width: 95px;" aria-label="Type: activate to sort column ascending">
+                                    {{ 'quantity'|trans|capitalize }}
+                                </th>
+                                <th class="sorting text-center" tabindex="0" aria-controls="my-booking"
+                                    rowspan="1"
+                                    colspan="1"
+                                    style="width: 95px;" aria-label="Type: activate to sort column ascending">
+                                    {{ 'options'|trans|capitalize }}
+                                </th>
+                                <th class="sorting_asc text-center" tabindex="0" aria-controls="my-booking"
+                                    rowspan="1"
+                                    colspan="1"
+                                    style="width: 167px;" aria-sort="ascending"
+                                    aria-label="Requested Time: activate to sort column descending">
+                                    {{ 'price'|trans|capitalize }}
+                                </th>
+                                <th data-priority="2" class="sorting_disabled" rowspan="1" colspan="1"
+                                    style="width: 36px;" aria-label=""></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if order.orderItems|default and order.orderItems > 0 %}
+                                {% set sum = 0 %}
+                                {% for item in order.orderItems %}
+                                    {% set ownsThisProduct = null %}
+                                    {% set offer = commonground_resource(item.offer) %}
+
+                                    {% if offer.products|default %}
+                                        {% for prod in offer.products %}
+                                            {% if prod.productsThatAreDependent|default %}
+                                                {% set ownsThisProduct = owns_this_product(prod) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    <tr style="border-top: #f6f6f6 1px solid" role="row" class="odd">
+                                        <td class="text-capitalize">
+                                            <a class="text-hover-primary text-muted"
+                                               href="{% if item.path|default %}{{ item.path }}{% endif %}">{{ offer.name|capitalize }}</a>
+                                            {% if ownsThisProduct|default and ownsThisProduct == true %}
+                                                <span data-toggle="tooltip"
+                                                      data-placement="top" title=""
+                                                      data-original-title="This product is not required for other products">
+                    <i style="color: red" class="fa fa-info-circle" aria-hidden="true"></i>
+                  </span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-capitalize">
+                                            {% if offer.products|default %}
+                                                {{ offer.products.0.type|capitalize }}
+                                            {% endif %}</td>
+                                        <td class="text-capitalize text-center">
+                                            {% if item.price|default %}
+                                                {{ item.quantity }}
+                                            {% endif %}</td>
+                                        <td class="text-center">
+                                            {% if item.options|default %}
+                                                <a data-toggle="collapse"
+                                                   href="#options{{ loop.index0 }}" role="button" aria-expanded="false"
+                                                   aria-controls="collapseExample">
+                                                    <i class="fa fa-arrow-circle-down"></i>
+                                                    <span class="badge">{{ item.options|length }}</span>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                        <td class=" text-center">
+                                            <div></div>
+                                            {% if item.price|default %}
+                                                {{ (item.price)|localizedcurrency('EUR') }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <form method="post" action="{{ path('app_shopping_removeitem') }}">
+                                                <input type="hidden" name="offer"
+                                                       value="{{ item.offer }}">
+                                                <button style="background: none; border: none" type="submit">
+                                                    <i style="color: red" class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% if item.options|default %}
+                                        {% for option in item.options %}
+                                            <tr class="collapse" id="options{{ loop.parent.loop.index0 }}">
+                                                <td class="text-capitalize">
+                                                    {% if option.name|default %}
+                                                        {{ option.name }}
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-capitalize text-center">
+                                                <td>
+                                                </td>
+                                                <td>
+                                                </td>
+                                                <td class=" text-center">
+                                                    {{ (option.price)|localizedcurrency('EUR') }}
+                                                </td>
+                                                <td>
+                                                    <form action="{{ path('app_shopping_removeoption') }}"
+                                                          method="post">
+                                                        {% if option.name|default %}
+                                                            <input type="hidden" name="option[name]"
+                                                                   value="{{ option.name }}">
+                                                        {% endif %}
+                                                        <input type="hidden" name="option[offer]"
+                                                               value="{{ option.offer }}">
+                                                        <input type="hidden" name="redirect"
+                                                               value="{{ 'app_shopping_index' }}">
+                                                        <button style="background: none; border: none" type="submit">
+                                                            <i style="color: red" class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            {% set sum = sum + option.price %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% set sum = sum + (item.price * item.quantity) %}
+                                {% endfor %}
+                                <tr style="border-top: #f6f6f6 1px solid" role="row" class="odd">
+                                    <td>
+                                        <b>{{ 'sum'|trans|capitalize }}:</b>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td class="text-center pt-0">
+                                        <div class="text-center pt-4 mx-auto"
+                                             style="width: 50%;border-top: 1px solid grey">
+                                            <b>{{ (sum)|localizedcurrency('EUR') }}</b>
+                                        </div>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr role="row" class="odd">
+                                    <td class="text-capitalize" style="color: grey">
+                                        {{ 'your shopping cart is empty'|trans|capitalize }}
+                                    </td>
+                                    <td class="text-capitalize"></td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+
+                        {% if app.user|default and order|default and order.orderItems|default and order.orderItems|length > 0 %}
+                            <form action="{{ path('app_shopping_index') }}" method="post">
+                                <input type="hidden" name="organization" value="{{ order.organization }}">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group mb-3 text-center">
+                                            <label
+                                                for="remarksTextarea">{{ 'remarks'|trans|capitalize }}</label>
+                                            <textarea id="remarksTextarea" name="remarks"
+                                                      class="form-control"
+                                                      rows="3"
+                                                      placeholder="{{ 'something you want us to know'|trans|capitalize }}..">{% if order.remark|default %}{{ order.remark }}{% endif %}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+
+                                        {% if organization.termsAndConditions|default and organization.termsAndConditions.content|default %}
+                                            <div class="form-group mb-3 text-center">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input required type="checkbox">
+                                                        I agree to the <a target="_blank"
+                                                                          href="{{ path('app_default_termsandconditionsfororg', {'id': organization.id}) }}">Terms
+                                                            of Use</a> &amp; <a
+                                                            href="#">Privacy
+                                                            Policy</a>.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <p>{{ 'this organization has no terms and conditions.'|trans|capitalize }}</p>
+                                        {% endif %}
+                                        <button type="submit" name="makeOrder" value="true"
+                                                class="btn btn-lg btn-primary btn-block">{{ 'pay'|trans|capitalize }}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        {% elseif not app.user|default %}
+                            <a href="{{ path('app_user_idvault', {'backUrl':path(app.request.attributes.get('_route'),
+                                app.request.attributes.get('_route_params'))}) }}"
+                               class="btn btn-lg btn-primary btn-block mb-2">{{ 'login'|trans|capitalize }}</a>
+                            <p style="color: grey"
+                               class="text-center">{{ 'you have to be logged in to continue'|trans|capitalize }}</p>
+                        {% endif %}
+
+                    </div>
+                    <hr>
+
+                {% endfor %}
+            {% else %}
+                <div class="card text-center p-5">
+                    <p class="mb-4">{{ 'no results found'|trans|capitalize }}</p>
+                    <p class="mb-4">{{ 'you haven\'t made any orders.'|trans|capitalize~' '~'if you want to make a order, search here for a event.'|trans|capitalize }}</p>
+                    <a style="width: 33%; margin: auto" href="{{ path('app_event_index') }}"
+                       class="btn btn-primary">{{ 'find a event'|trans|capitalize }}</a>
+                </div>
+            {% endif %}
+
+        </div>
+    </section>
+
+{% endblock %}

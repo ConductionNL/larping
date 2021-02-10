@@ -1,0 +1,45 @@
+<!-- Offer card -->
+{% if item.totals is not defined  %}
+    {% set item = item|merge({
+        "totals": commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']})
+    }) %}
+{%  endif %}
+{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']}) %}
+
+    <div class="card rounded-0 card-hover-overlay">
+        <div class="position-relative">
+            <img class="card-img rounded-0" src="https://picsum.photos/300/200"
+                 alt="Card image cap">
+            <div class="card-img-overlay"  style="cursor: pointer">
+                <h3>
+                    <a data-toggle="modal" data-target="#offer{{ offer.id }}Modal" class="stretched-link">
+                        {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
+                    </a>
+                </h3>
+                {% if item.description|default %}
+                    <p class="text-white">{{ item.description|length > 50 ? item.description|slice(0, 50) ~ '...' : item.description }}</p>
+                {% endif %}
+
+                {% if item.products|default and item.products|length > 0 %}
+                <p class="text-white">{{ 'contains'|trans|capitalize }}:
+                    {% for product in item.products %}{{ product.name }}
+                    {% endfor %}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card-footer bg-transparent">
+            <ul class="list-unstyled d-flex mb-0 py-2">
+                <li>
+                    {{ (item.price/100)|localizedcurrency(item.priceCurrency) }}
+                </li>
+                <li class="ml-auto">
+                    <a class="px-2" style="cursor: pointer" data-toggle="modal" href="#offer{{ offer.id }}Modal" ><span>{{ 'add to cart'|trans|capitalize }}</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</a>
+
+{% include 'modals/offer.html.twig' with {'offer': offer}  %}

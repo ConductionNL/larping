@@ -1,0 +1,111 @@
+<form method="get">
+
+    <div class="row mb-6 pl-3">
+        <div class="form-inline">
+            <input type="text" class="form-control" id="search" name="search"
+                   placeholder="Enter Keyword" {% if search|default %} value="{{ search }}"  {% endif %}>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+
+    <div>
+        {{ 'start date'|trans|capitalize }}
+        <input class="form-control" id="startDate" type="date" name="startDate"
+            {% if startDate|default %}
+                value="{{ startDate }}"
+            {% endif %}
+               style="width: 200px;">
+    </div>
+    <br>
+    <div>
+        {{ 'end date'|trans|capitalize }}
+        <a onclick="setMinEndDate()">
+            <input class="form-control" id="endDate" type="date" name="endDate"
+                   {% if endDate|default %}
+                   value="{{ endDate }}"
+                   {% endif %}
+                   style="width: 200px;">
+        </a>
+    </div>
+    <br>
+    <div>
+        {{ 'min price'|trans|capitalize }}
+        <a>
+            <input class="form-control" id="minPrice" type="number" step=".01" name="minPrice"
+                {% if minPrice|default %}
+                    value="{{ minPrice }}"
+                {% endif %}
+                   style="width: 200px;" placeholder="{{ 'enter your minimum price'|trans|capitalize }}">
+        </a>
+    </div>
+    <br>
+    <div>
+        {{ 'max price'|trans|capitalize }}
+        <a>
+            <input class="form-control" id="maxPrice" type="number" step=".01" name="maxPrice"
+                {% if maxPrice|default %}
+                    value="{{ maxPrice }}"
+                {% endif %}
+                   style="width: 200px;" placeholder="{{ 'enter your maximum price'|trans|capitalize }}">
+        </a>
+    </div>
+    <br>
+    <br>
+    <div class="mb-6">
+        <h5 class="mb-4 font-weight-normal">{{ 'regions'|trans|title }}</h5>
+        <ul class="list-unstyled list-gray">
+            {% for category in regions %}
+                <li class="mb-2">
+                    <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                    {% if category.id in categories %}
+                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span><span style="color: red" class="fa fa-times px-2 py-1"></span></a>
+                    {% else %}
+                        <a href="{{ path('app_event_index', {"categories":categories|merge([category.id]),"search":search}) }}">{{ category.name|title }} </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="mb-6">
+        <h5 class="mb-4 font-weight-normal">{{ 'categories'|trans|title }}</h5>
+        <ul class="list-unstyled list-gray">
+            {% for category in settings %}
+                <li class="mb-2">
+                    <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                    {% if category.id in categories %}
+                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span><span style="color: red" class="fa fa-times px-2 py-1"></span></a>
+                    {% else %}
+                        <a href="{{ path('app_event_index', {"categories":categories|merge([category.id]),"search":search}) }}">{{ category.name|title }} </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="mb-6">
+        <h5 class="mb-4 font-weight-normal">{{ 'features'|trans|title }}</h5>
+        <ul class="list-unstyled list-gray">
+            {% for category in features %}
+                <li class="mb-2">
+                    <i class="{{ category.icon }}" data-toggle="tooltip" data-placement="top" title="{{ category.name }}"></i>
+                    {% if category.id in categories %}
+                        <a href="{{ path('app_event_index', {"categories":categories|filter(v => v != category.id),"search":search}) }}">{{ category.name|title }} <span class="badge badge-info px-2 py-1">{{ 'active'|trans|title }}</span><span style="color: red" class="fa fa-times px-2 py-1"></span></a>
+                    {% else %}
+                        <a href="{{ path('app_event_index', {"categories":categories|merge([category.id]),"search":search}) }}">{{ category.name|title }} </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</form>
+
+<script>
+    function setMinEndDate() {
+        var startDate = document.getElementById('startDate');
+        var endDate = document.getElementById('endDate');
+        endDate.setAttribute("min", startDate.value);
+    }
+</script>

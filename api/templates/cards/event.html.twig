@@ -1,0 +1,70 @@
+<!-- Event card -->
+{% if item.totals is not defined  %}
+    {% set item = item|merge({
+        "totals": commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']})
+    }) %}
+{% endif %}
+{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
+{% if item.location is defined and item.location is not empty %}
+    {% set eventLocation  = commonground_resource(item.location) %}
+    {% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':eventLocation['id']})['hydra:member'] %}
+{% endif %}
+{% set eventOrganizations = commonground_resource(event.organization)%}
+<div class="card rounded-0 card-hover-overlay">
+    <div class="position-relative">
+        <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
+        <div class="card-img-overlay pt-3 pb-0" onclick=" location.href = '{{ path('app_event_event', {id: item.id}) }}';" style="cursor: pointer;">
+            <a href="{{ path('app_event_event', {id: item.id}) }}#reviews">
+                <div class="d-flex align-items-center">
+                    {% include 'widgets/rating.html.twig' with {'rating':item.totals.rating} %}
+                    <span class="d-inline-block mr-2 text-white" >{{ item.totals.reviews }} {{ 'reviews'|trans|capitalize }}</span>
+                </div>
+            </a>
+            <h3 class="text-white mb-0">
+                {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
+            </h3>
+            <p class="text-white">
+                {% set eventOrganization = commonground_resource(item.organization) %}
+                {{ 'by'|trans|capitalize }}: <a href="{{ path('app_organization_organization', {'id': eventOrganization.id }) }}">{{ eventOrganization.name|length > 35 ? eventOrganization.name|slice(0, 35) ~ '...' : eventOrganization.name }}</a>
+            </p>
+
+            <ul class="list-unstyled text-white">
+                {% if eventLocation|default %}
+                    <li>
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                       <a href="{{ path('app_location_location', {'id':eventLocation.id }) }}" class="text-white">{{ eventLocation.name|length > 35 ? eventLocation.name|slice(0, 35) ~ '...' : eventLocation.name }}</a>
+                    </li>
+                {% endif %}
+                <li><i class="far fa-calendar-alt" aria-hidden="true" id="{{ item.id }}_date"></i> {{ item.startDate|date("d-m-Y H:m") }}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card-footer bg-transparent">
+        <ul class="list-unstyled d-flex mb-0 py-2">
+            {% for category in eventCategories %}
+                <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip"
+                        data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
+            {% endfor %}
+            {% if locationCategories|default %}
+                {% for category in locationCategories %}
+                    <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip"
+                            data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
+                {% endfor %}
+            {% endif %}
+            <li class="ml-auto">
+                <i {% if item.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ item['id'] }}" {% if app.user|default %}
+                    onclick="likeItem('{{ item['id'] }}','{{ item['@id'] }}','{{ eventOrganization['@id'] }}', this)"
+                    data-original-title="{{ 'favorite this event'|trans|capitalize }}"
+                {% else %}
+                    data-original-title="{{ 'login to favorite this event'|trans|capitalize }}"
+                {% endif %}
+                    liked="{% if item.totals.liked|default %}true{% else %}false{% endif %}"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title=""></i>
+                <span id="counter_{{ item['id'] }}">{{ item.totals.likes }}</span>
+            </li>
+        </ul>
+    </div>
+</div>
+

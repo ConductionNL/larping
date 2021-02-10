@@ -1,0 +1,72 @@
+{% if orders|default and orders|length > 0 %}
+    <table id="events" class="display nowrap table" style="width:100%">
+        <thead class="thead-light">
+        <tr>
+            <th>{{ 'name'|trans|capitalize }}</th>
+            <th class="text-center">{{ 'amount of items'|trans|capitalize }}</th>
+            <th class="text-center">{{ 'price'|trans|capitalize }}</th>
+            <th>{{ 'organization'|trans|capitalize }}</th>
+            <th>{{ 'date'|trans|capitalize }}</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders|slice(0, 10) %}
+            <tr>
+
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" href="{{ path('app_dashboarduser_order', {id: order.id}) }}">{{ order.name }}</a>
+                </td>
+                <td class="text-center">
+                    {% if order.items|default and order.items|length > 0 %}
+                        {{ order.items|length }}
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if order.price|default %}
+                        {{ order.priceCurrency~' '~order.price }},-
+                    {% endif %}
+                </td>
+                <td class="text-capitalize">
+                    {% if order.organization|default %}
+                        {% set organization = commonground_resource(order.organization) %}
+                        <a class="text-hover-primary text-muted" href="{{ path('app_organization_organization', {id: organization.id}) }}">{{ organization.name }}</a>
+                    {% endif %}
+                </td>
+                <td class="text-capitalize">
+                    {% if order.dateCreated|default %}
+                        {{ order.dateCreated|date('d-m-Y') }}
+                    {% endif %}
+                </td>
+
+                {#            <td>#}
+                {#                <span class="d-block ">80 Available</span>#}
+                {#                <span class="d-block ">120 Sold</span>#}
+                {#            </td>#}
+
+                <td>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{{ path('app_dashboarduser_order', {id: order.id}) }}"
+                               target="_blank">{{ 'view'|trans|capitalize }}</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card-body  text-center">
+        <p>{{ 'no results found'|trans|capitalize }}<br>
+            {{ 'you have not placed any orders yet. If you want to place an order, search for your event below'|trans|capitalize }}
+        </p>
+
+        <a href="{{ path('app_event_index') }}"
+           class="btn btn-primary">{{ 'find a event'|trans }}</a>
+    </div>
+{% endif %}

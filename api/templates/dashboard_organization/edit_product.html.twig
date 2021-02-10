@@ -1,0 +1,247 @@
+{% extends "base.html.twig" %}
+{% if organization is defined %}
+    {% set  id = organization['id'] %}
+    {% set  type = 'Organization' %}
+{% endif %}
+{% block content %}
+
+    {# include 'dashboard_user/menu.html.twig' #}
+
+    <section class="bg-light py-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'edit product'|trans|capitalize }}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ 'edit product'|trans|capitalize }}</li>
+                </ul>
+            </nav>
+            <form id="{{ type }}Form{{ id }}" method="post">
+                <input type="hidden" name="@type" value="Product">
+                <!-- About -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <div class="row">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ product.name }}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <button type="submit"
+                                        class="btn btn-primary float-right ">{{ 'save'|trans|capitalize }}</button>
+                                <a class="btn btn-danger float-right mr-2 text-white" data-toggle="modal"
+                                   data-target="#ProductModalDelete{{ product.id }}">{{ 'delete'|trans|capitalize }}</a>
+                                {% include 'dashboard_organization/modals/model_delete.html.twig' with {'name': product.name,'id': product.id,'type':'Product','url': path('app_dashboardorganization_editproduct', {id: product.id, action: 'delete'}) } %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group  col-md-8 mb-8">
+                                <label for="name">{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" value="{{ product.name }}" id="name"
+                                       name="name">
+                            </div>
+                            <div class="form-group  col-md-4">
+                                <label for="type">{{ 'type'|trans|capitalize }}</label>
+                                <select class="form-control"
+                                        aria-label="{{ 'the type of this product'|trans|capitalize }}" required
+                                        id="type" name="type" {% if product.type|default %}disabled{% endif %}>
+                                    <option
+                                        value="simple" {% if product.type is defined  and product.type == "simple" %} selected {% endif %}>{{ 'simple'|trans|capitalize }}</option>
+                                    <option
+                                        value="ticket" {% if product.type is defined  and product.type == "ticket" %} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
+                                    <option
+                                        value="subscription" {% if product.type is defined  and product.type == "subscription" %} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
+                                    <!--
+                                    <option value="set" {% if product.type is defined  and product.type == "set" %} selected {% endif %}>{{ 'set'|trans|capitalize }}</option>
+                                    <option value="virtual" {% if product.type is defined  and product.type == "virtual" %} selected {% endif %}>{{ 'virtual'|trans|capitalize }}</option>
+                                    <option value="external" {% if product.type is defined  and product.type == "external" %} selected {% endif %}>{{ 'external'|trans|capitalize }}</option>
+                                    <option value="variable" {% if product.type is defined  and product.type == "variable" %} selected {% endif %}>{{ 'variable'|trans|capitalize }}</option>
+                                    <option value="person" {% if product.type is defined  and product.type == "person" %} selected {% endif %}>{{ 'person'|trans|capitalize }}</option>
+                                    <option value="location" {% if product.type is defined  and product.type == "location" %} selected {% endif %}>{{ 'location'|trans|capitalize }}</option>
+                                    <option value="service" {% if product.type is defined  and product.type == "service" %} selected {% endif %}>{{ 'service'|trans|capitalize }}</option>
+                                    -->
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="description">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="form-control" rows="6" id="description"
+                                          name="description">{{ product.description }}</textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                {% if product.type == "ticket" %}
+                    <!-- Event -->
+                    <div class="card">
+                        <div class="card-body px-6 pt-6 pb-1">
+                            <h3 class="h4 mb-4">{{ 'event'|trans|capitalize }}</h3>
+                            <div class="row">
+                                <div class="form-group  col-md-12 mb-6">
+                                    <label for="name">{{ 'event'|trans|capitalize }}* </label>
+                                    <select class="form-control"
+                                            aria-label="{{ 'the event of this product'|trans|capitalize }}" required
+                                            id="event" name="event">
+                                        {% for event in events %}
+                                            <option
+                                                value="{{ event['@id'] }}" {% if product.event|default  and product.event == event['@id'] %} selected {% endif %}>{{ event.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Group -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'group'|trans|capitalize }}</h3>
+                        <div class="row">
+                            <div class="form-group  col-md-12 mb-6">
+                                <label for="name">{{ 'group'|trans|capitalize }}* </label>
+                                <select class="form-control"
+                                        aria-label="{{ 'the group of this product'|trans|capitalize }}"
+                                        id="userGroup" name="userGroup">
+                                    <option value="">{{ 'none'|trans|capitalize }}</option>
+                                    {% if groups|default %}
+                                        {% for group in groups %}
+                                            <option
+                                                value="https://www.id-vault.com/api/v1/wac/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/v1/wac/groups/' ~ group['id'] %} selected {% endif %}>{{ group.name }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <div class="row">
+                            <div class="col-8">
+                                <h3 class="h4 mb-4">{{ 'pricing'|trans|capitalize }} </h3>
+                            </div>
+                            <div class="col-4">
+                                <a href="#" class="btn btn-sm btn-success float-right" data-toggle="modal"
+                                   data-target="#OfferModalAdd">{{ 'add pricing'|trans|capitalize }}</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {% if product.offers is  defined and product.offers|length > 0 %}
+                                <table id="events" class="display nowrap table" style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'name'|trans|capitalize }}</th>
+                                        <th>{{ 'audiance'|trans|capitalize }}</th>
+                                        <th>{{ 'price'|trans|capitalize }}</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for offer in product.offers %}
+                                        <tr>
+                                            <td class="text-capitalize">
+                                                {{ offer.name }}
+                                            </td>
+                                            <td>
+                                                {{ offer.audience }}
+                                            </td>
+                                            <td>
+                                                {{ (offer.price/100)|localizedcurrency(offer.priceCurrency) }}
+                                            </td>
+                                            <td class="text-capitalize">
+                                                <a href="#" class="btn btn-sm btn-success float-right"
+                                                   data-toggle="modal"
+                                                   data-target="#OfferModal{{ offer.id }}">{{ 'edit'|trans|capitalize }}</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                            {% endif %}
+
+                        </div>
+                        <div class="row">
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Gallery -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
+
+                        <div class="form-group position-relative mb-6 form-group-dragable">
+                            <input type="file" class="custom-file-input" id="images" name="images">
+                            <label class="custom-file-label" for="favicon">
+                                {{ 'Click or Drag images here'|trans|capitalize }}
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-6 col-xl-5">
+                        <div class="mb-6">
+                            <button type="submit"
+                                    class="btn btn-lg btn-primary btn-block">{{ 'submit'|trans|capitalize }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+
+    {% include 'dashboard_organization/modals/offer_product.html.twig' %}
+
+    {% if product.offers|default %}
+        {% for offer in product.offers %}
+            {% include 'dashboard_organization/modals/offer_product.html.twig' with {
+                'resource': offer
+            } %}
+        {% endfor %}
+    {% endif %}
+
+    <script>
+        function addItem(id) {
+            const formDiv = document.getElementById(id);
+            const input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+            input.setAttribute('class', "form-control mb-2");
+            input.setAttribute('name', id);
+            input.setAttribute('id', id);
+
+            var options_array = {
+                ValueA: '{{ 'select type'|trans|capitalize }}',
+                ValueB: '{{ 'website'|trans|capitalize }}',
+                ValueC: '{{ 'facebook'|trans|capitalize }}',
+                ValueD: '{{ 'twitter'|trans|capitalize }}',
+                ValueE: '{{ 'instagram'|trans|capitalize }}'
+            };
+
+            const select = document.createElement("select");
+            if (id === 'socials[]') {
+                select.setAttribute('class', "form-control mb-2");
+                input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
+                formDiv.appendChild(select);
+                for (option in options_array) {
+                    select.options[select.options.length] = new Option(options_array[option], option);
+                }
+            }
+
+            formDiv.appendChild(input);
+        }
+    </script>
+{% endblock %}

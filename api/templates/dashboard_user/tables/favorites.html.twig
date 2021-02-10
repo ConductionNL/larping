@@ -1,0 +1,79 @@
+{% if likes|default and likes|length > 0 %}
+<table id="likes" class="display nowrap table" style="width:100%">
+    <thead class="thead-light">
+    <tr>
+        <th>{{ 'name'|trans|capitalize }}</th>
+        <th>{{ 'type'|trans|capitalize }}</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for like in likes %}
+    <tr id="tr_{{ like.resource['id'] }}">
+        <td>
+            <a class="text-hover-primary text-muted"
+            {% if like.resource['@type'] == 'https://schema.org/Event' %}
+                 href="{{ path('app_event_event', {id: like.resource.id}) }}"
+            {% elseif like.resource['@type'] == 'Organization' %}
+                href="{{ path('app_organization_organization', {id: like.resource.id}) }}"
+            {% else %}
+                href="#"
+            {% endif %}
+            >{{ like.resource.name }}</a>
+        </td>
+        <td>
+            {% if like.resource['@type'] == 'https://schema.org/Event' %}
+                {{ 'event'|trans|capitalize }}
+                {% else %}
+                {{ like.resource['@type']|lower|trans|capitalize }}
+            {% endif %}
+        </td>
+        <td>
+            <div class="float-right">
+                <i href="#" onclick="removeLikeItem('{{ like.resource['id'] }}','{{ like.resource['@id'] }}','{{ like.organization }}')"
+                   id="i_{{ like.resource['id'] }}"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title=""
+                   data-original-title="{{ 'remove this favorite'|trans|capitalize }}">
+                    <i class="fas fa-trash text-primary float-right mr-3" aria-hidden="true"></i>
+                </i>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<script>
+    function removeLikeItem(id, resource, organization, item){
+        console.log("unliked " + id);
+
+        $('#i_'+id).tooltip('hide');
+        $("table#likes tr#tr_"+id).remove();
+
+        // And then fire an ajax to do the actual work
+        $.ajax({
+            type: "POST",
+            url: "/like",
+            data: {
+                resource: resource,
+                organization: organization
+            },
+            dataType: "json",
+            complete: function (response) {
+                console.log(response.responseText);
+                console.log("All done");
+            }
+
+        });
+
+    }
+</script>
+{% else %}
+<div class="card-body  text-center">
+    <p>{{ 'no results found'|trans|capitalize }}</p>
+    <a href="{{ path('app_event_index') }}" class="btn btn-primary btn-sm">{{ 'find'|trans|capitalize~' '~'a'|trans~' '~'event'|trans }}</a>
+    <span class="mx-2">{{ 'or'|trans }}</span>
+    <a href="{{ path('app_organization_index') }}" class="btn btn-primary btn-sm">{{ 'find'|trans|capitalize~' '~'a'|trans~' '~'organization'|trans }}</a>
+</div>
+{% endif %}

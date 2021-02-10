@@ -4,75 +4,107 @@
 
     <section class="py-7 py-md-10">
         <div class="container">
-
             <div class="row">
-                <div class="col-8">
-                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ typePlural|trans|capitalize }}</h1>
-                </div>
-                <div class="col-4">
+                <div class="col-9">
+                    <h1 class="font-weight-normal mb-4 mb-md-0 single-listing-title">{{ 'organizations'|trans|capitalize }}</h1>
+                </div><!-- /.col -->
+                <div class="col-3">
                     <!-- Breadcrumb -->
-                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1 float-right" aria-label="breadcrumb">
+                    <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-1" aria-label="breadcrumb">
                         <ul class="list-unstyled d-flex p-0 m-0">
                             <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
-                            <li class="breadcrumb-item active"
-                                aria-current="page">{{ typePlural|trans|capitalize }}</li>
+                            <li class="breadcrumb-item active">{{ 'organizations'|trans|capitalize }} </li>
                         </ul>
                     </nav>
-                </div>
-            </div>
-
-            <div class="search-result-bar">
-                {% if items|default %}
-                    <p>{{ 'we found'|trans|capitalize }} <span>{{ items|length }}</span> {{ 'results for'|trans }}
-                        <span>{{ typePlural|trans|capitalize }}</span>.</p>
-                {% else %}
-                    <p>{{ 'no results found'|trans|capitalize }}.</p>
-                {% endif %}
-                <div class="ml-md-auto d-flex align-items-center justify-content-between">
-                    <div class="select-bg-transparent select-border">
-                        <div class="selectric-wrapper selectric-select-location">
-                            <div class="selectric-hide-select">
-                                <select class="select-location" tabindex="-1">
-                                    <option>Popular</option>
-                                    <option>Nearest</option>
-                                    <option>Recent</option>
-                                </select>
-                            </div>
-                            <div class="selectric"><span class="label">Popular</span>
-                                <div class="arrow-button"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
-                            </div>
-                            <div class="selectric-items" tabindex="-1">
-                                <div class="selectric-scroll">
-                                    <ul>
-                                        <li data-index="0" class="selected">Popular</li>
-                                        <li data-index="1" class="">Nearest</li>
-                                        <li data-index="2" class="last">Recent</li>
-                                    </ul>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+            <!-- header -->
+            <div class="row">
+                <div class="col-9">
+                    <!-- search bar -->
+                    <form method="get"
+                          action="{{ path('app_organization_index', {"categories":categories,"search":search}) }}"
+                          id="organizationSortingForm">
+                        <div class="search-result-bar">
+                            {% if organizations|default %}
+                                <p>{{ 'we found'|trans|capitalize }}
+                                    <span>{{ organizations|length }}</span> {{ 'results for'|trans }}
+                                    <span>{{ 'organizations'|trans|capitalize }}</span>.</p>
+                            {% else %}
+                                <p>{{ 'no results found'|trans|capitalize }}.</p>
+                            {% endif %}
+                            <div class="ml-md-auto d-flex align-items-center justify-content-between">
+                                <div class="select-bg-transparent select-border">
+                                    <div class="selectric-wrapper selectric-select-location">
+                                        <div class="selectric-select">
+                                            <select class="select-location" style="text-align: center"
+                                                    name="sorting_order"
+                                                    onchange="javascript:document.getElementById('organizationSortingForm').submit();">
+                                                <option
+                                                    value="likes-asc" {% if sorting is defined  and sorting == "likes-asc" %} selected {% endif %}>{{ 'likes, ascending'|trans|capitalize }}</option>
+                                                <option
+                                                    value="likes-desc" {% if sorting is defined  and sorting == "likes-desc" %} selected {% endif %}> {{ 'likes, descending'|trans|capitalize }}</option>
+                                                <option
+                                                    value="rating-asc" {% if sorting is defined  and sorting == "rating-asc" %} selected {% endif %}>{{ 'rating, ascending'|trans|capitalize }}</option>
+                                                <option
+                                                    value="rating-desc" {% if sorting is defined  and sorting == "rating-desc" %} selected {% endif %}> {{ 'rating, descending'|trans|capitalize }}</option>
+                                                <option
+                                                    value="name-asc" {% if sorting is defined  and sorting == "name-asc" %} selected {% endif %}>{{ 'name, ascending'|trans|capitalize }}</option>
+                                                <option
+                                                    value="name-desc" {% if sorting is defined  and sorting == "name-desc" %} selected {% endif %}> {{ 'name, descending'|trans|capitalize }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="selectric-items" tabindex="-1">
+                                            <div class="selectric-scroll">
+                                                <ul>
+                                                    <li data-index="0"
+                                                        class="selected">{{ 'likes'|trans|capitalize }}</li>
+                                                    <li data-index="1" class="">{{ 'rating'|trans|capitalize }}</li>
+                                                    <li data-index="2"
+                                                        class="last">{{ 'alphabet'|trans|capitalize }}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input class="selectric-input" tabindex="0">
                                 </div>
+                                {#
+                                <div class="icons">
+                                    <a id="switchToGridA" class="mr-2 active cursor-pointer-hover"
+                                       onclick="switchToGrid()">
+                                        <i class="fa fa-th" aria-hidden="true"></i>
+                                    </a>
+                                    {#                                    <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">#}
+                                {#                                        <i class="fa fa-th-list" aria-hidden="true"></i>#}
+                                {#                                    </a>#}
+                                {#                            </div>#}
                             </div>
-                            <input class="selectric-input" tabindex="0">
+                        </div>
+                    </form>
+
+                    <div id="gridFullwidthDiv" class="fade-in">
+                        <div class="row">
+                            {% for organization in organizations %}
+                                <div class="col-md-4" id="organization">
+                                    {% include '/cards/organization.html.twig' with {'resource': organization} %}
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    <div class="icons">
-                        <a id="switchToGridA" class="mr-2 active cursor-pointer-hover" onclick="switchToGrid()">
-                            <i class="fa fa-th" aria-hidden="true"></i>
-                        </a>
-                        <a id="switchToListA" class="cursor-pointer-hover" onclick="switchToList()">
-                            <i class="fa fa-th-list" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
 
-            <div id="gridFullwidthDiv" class="fade-in">
-                {% include 'sections/grid_fullwidth.html.twig' %}
-            </div>
+                    <div id="listFullwidthDiv" class="fade-in">
+                        {% for organization in organizations %}
+                            {% include '/cards/list/organization.html.twig' with {'item': organization} %}
+                        {% endfor %}
+                    </div><!-- /.col -->
+                </div><!-- /.col -->
 
-            <div id="listFullwidthDiv" class="fade-in">
-                {% include 'sections/list_fullwidth.html.twig' %}
-            </div>
+                <div class="col-lg-3">
+                    {% include '/organization/sidebar.html.twig' %}
+                </div><!-- /.col -->
+            </div><!-- /.row -->
 
-        </div>
+        </div><!-- /.container -->
     </section>
 
     <script>

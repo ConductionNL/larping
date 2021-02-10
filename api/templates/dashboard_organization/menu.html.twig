@@ -1,0 +1,72 @@
+<nav class="navbar navbar-expand-md navbar-dark">
+    <div class="container">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>asd
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+                {% if organization|default %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <i class="fa fa-building mr-1"></i> {{ organization.name }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_edit', {'id':organization.id}) }}">{{ 'edit organization'|trans|capitalize }}</a>
+                    </div>
+                </li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fas fa-coins" aria-hidden="true"></i> {{ 'sales'|trans|capitalize }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                       <a class="dropdown-item" href="{{ path('app_dashboardorganization_events') }}">{{ 'events'|trans|capitalize }}</a>
+                       <a class="dropdown-item" href="{{ path('app_dashboardorganization_products') }}">{{ 'products'|trans|capitalize }}</a>
+                       <a class="dropdown-item" href="{{ path('app_dashboardorganization_orders') }}">{{ 'orders'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_reviews') }}">{{ 'reviews'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_services') }}">{{ 'payment providers'|trans|capitalize }}</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fa fa-building" aria-hidden="true"></i> {{ 'member managment'|trans|capitalize }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_members') }}">{{ 'members'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_mailinglists') }}">{{ 'Mailing Lists'|trans }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_makeorderformember') }}">{{ 'make a order for a member'|trans|capitalize }}</a>
+                    </div>
+                </li>
+                <!--
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fas fa-chart-pie" aria-hidden="true"></i> {{ 'financial'|trans|capitalize }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_balance') }}">{{ 'balance'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_reservations') }}">{{ 'reservations'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_earnings') }}">{{ 'earnings'|trans|capitalize }}</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="far fa-play-circle" aria-hidden="true"></i> {{ 'gameplay'|trans|capitalize }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_characters') }}">{{ 'characters'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_skills') }}">{{ 'skills'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_items') }}">{{ 'items'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_conditions') }}">{{ 'conditions'|trans|capitalize }}</a>
+                        <a class="dropdown-item" href="{{ path('app_dashboardorganization_storylines') }}">{{ 'storylines'|trans|capitalize }}</a>
+                    </div>
+                </li>
+                -->
+            </ul>
+        </div>
+    </div>
+</nav>

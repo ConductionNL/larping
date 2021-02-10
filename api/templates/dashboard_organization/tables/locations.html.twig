@@ -1,0 +1,43 @@
+{% if locations is defined and locations|length > 0 %}
+    <table id="events" class="display nowrap table" style="width:100%">
+        <thead>
+        <tr>
+            <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'address'|trans|capitalize }}</th>
+            <th>{{ 'features'|trans|capitalize }}</th>
+            <th>
+                <a class="btn btn-success btn-sm float-right" href="{{ path('app_dashboardorganization_location', { id: 'add'}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'add'|trans|capitalize }}</a>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for location in locations %}
+            <tr>
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" href="{{ path('app_dashboardorganization_location', {id: location.id}) }}" target="_blank">{{ location.name }}</a>
+                </td>
+                <td>
+                    {% if location.address|default %}
+                    <span class="d-block">{{ location.address.street ~' '~ location.address.houseNumber }}</span>
+                    <span class="d-block">{{ location.address.postalCode ~' '~ location.address.locality }}</span>
+                    {% endif %}
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary btn-sm float-right" href="{{ path('app_dashboardorganization_location', { id: location.id}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card border-light shadow-sm">
+        <div class="card-body text-center">
+            <p>{{ 'no locations found'|trans|capitalize }}</p>
+            <a href="{{ path('app_dashboardorganization_location', { id: 'add'}) }}" class="btn btn-primary" >{{ 'add your first location'|trans|capitalize }}!</a>
+        </div>
+    </div>
+{% endif %}
+

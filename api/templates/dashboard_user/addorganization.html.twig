@@ -1,0 +1,217 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {# include 'dashboard_user/menu.html.twig' #}
+
+<section class="bg-light py-5 height100vh">
+    <div class="container">
+        <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+            <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'add organization'|trans|capitalize }}</h2>
+            <ul class="list-unstyled d-flex p-0 m-0">
+                <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_dashboard_index') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active"
+                    aria-current="page">{{ 'add organization'|trans|capitalize }}</li>
+            </ul>
+        </nav>
+
+        <form method="post" action="{{ path('app_dashboarduser_addorganization') }}">
+            <!-- About -->
+            <div class="card">
+                <div class="card-body px-6 pt-6 pb-1">
+                    <h3 class="h4 mb-4">{{ 'basics'|trans|capitalize }}</h3>
+                    <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by
+                        posting business listings here. Please use our site at your own discretion and exercise good
+                        judgement as well as common sense when advertising business here.</p>
+
+                    <div class="row">
+                        <div class="form-group col-md-12 mb-6">
+                            <label for="name">{{ 'name of your organization'|trans|capitalize }}*</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+
+                        <div class="form-group col-md-12 mb-6">
+                            <label for="description">{{ 'description of your organization'|trans|capitalize }}</label>
+                            <textarea class="form-control" id="description" name="description" rows="6"></textarea>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="card">
+                <div class="card-body p-6">
+                    <h3 class="h4 mb-4">Contact</h3>
+                    <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
+                        business listings here.
+                        Please use our site at your own discretion and exercise good judgement as well as common sense when
+                        advertising
+                        business here.
+                    </p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="street">{{ 'street'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="street" name="addresses[street]">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="houseNumber">{{ 'house number'|trans|capitalize }}</label>
+                                <input type="number" class="form-control" id="houseNumber" name="addresses[houseNumber]">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="suffix">{{ 'suffix'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="suffix" name="addresses[suffix]">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="postalCode" name="addresses[postalCode]">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="locality">{{ 'locality'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" id="locality" name="addresses[locality]">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group" id="emails[]">
+                                <div class="form-inline">
+                                    <label for="email">{{ 'email'|trans|capitalize }}</label>
+                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('emails[]');"
+                                       data-toggle="tooltip" data-placement="top"
+                                       title="{{ 'add more emails'|trans|capitalize }}">
+                                    </i>
+                                </div>
+                                    <input class="form-control mb-2" name="email" id="email" type="email" placeholder="{{ 'add email'|trans|capitalize }}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group" id="telephones[]">
+                                <div class="form-inline">
+                                    <label for="telephone">{{ 'telephone'|trans|capitalize }}</label>
+                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus"
+                                       onclick="addItem('telephones[]');" data-toggle="tooltip" data-placement="top"
+                                       title="{{ 'add more phone numbers'|trans|capitalize }}">
+                                    </i>
+                                </div>
+                                    <input class="form-control mb-2" name="telephone" id="telephone" type="tel" placeholder="{{ 'add phone number'|trans|capitalize }}">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery -->
+            <div class="card">
+                <div class="card-body p-6">
+                    <h3 class="h4 mb-4">Gallery</h3>
+                    <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
+                        business listings here.
+                        Please use our site at your own discretion and exercise good judgement as well as common sense when
+                        advertising
+                        business here.
+                    </p>
+
+                    <div class="form-group position-relative mb-6 form-group-dragable">
+                        <input type="file" class="custom-file-input">
+                        <label class="custom-file-label" for="customFile">
+                            Click or Drag images here
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Socials -->
+            <div class="card">
+                <div class="card-body p-6">
+                    <h3 class="h4 mb-4">Social</h3>
+                    <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
+                        business listings here.
+                        Please use our site at your own discretion and exercise good judgement as well as common sense when
+                        advertising
+                        business here.
+                    </p>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" id="socials[]">
+                                <div class="form-inline">
+                                    <label for="socials">{{ 'socials'|trans|capitalize }}</label>
+                                    <i style="margin-left: 5px; color: #2196f3" class="fa fa-plus" onclick="addItem('socials[]');"
+                                       data-toggle="tooltip" data-placement="top"
+                                       title="{{ 'add more socials'|trans|capitalize }}">
+                                    </i>
+                                </div>
+                                <select class="form-control" name="socials[][type]" id="type">
+                                    <option>{{ 'select type'|capitalize }}</option>
+                                    <option value="website" id="type">{{ 'website'|capitalize }}</option>
+                                    <option value="facebook" id="type">{{ 'facebook'|capitalize }}</option>
+                                    <option value="twitter" id="type">{{ 'twitter'|capitalize }}</option>
+                                    <option value="instagram" id="type">{{ 'instagram'|capitalize }}</option>
+                                </select>
+                                <input class="form-control mb-2" name="socials[][url]" id="socials" type="url" placeholder="{{ 'add url'|trans|capitalize }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-7 col-lg-6 col-xl-5">
+                    <div class="mb-6">
+                        <button type="submit" class="btn btn-lg btn-primary btn-block">submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+    <script>
+        function addItem(id) {
+            const formDiv = document.getElementById(id);
+            const input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+            input.setAttribute('class', "form-control mb-2");
+            input.setAttribute('name', id);
+            input.setAttribute('id', id);
+
+            var options_array = {
+                select_type : '{{ 'select type'|trans|capitalize }}',
+                website : '{{ 'website'|trans|capitalize }}',
+                facebook : '{{ 'facebook'|trans|capitalize }}',
+                twitter : '{{ 'twitter'|trans|capitalize }}',
+                instagram : '{{ 'instagram'|trans|capitalize }}'
+            };
+
+            const select = document.createElement("select");
+            if (id === 'socials[]') {
+                select.setAttribute('class', "form-control mb-2");
+                select.setAttribute('name', 'socials[][type]');
+                input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
+                input.setAttribute('name', 'socials[][url]');
+                formDiv.appendChild(select);
+                for(option in options_array) {
+                    select.options[select.options.length] = new Option(options_array[option], option);
+                    select.value = option
+                }
+            }
+
+            formDiv.appendChild(input);
+        }
+    </script>
+{% endblock %}

@@ -4,16 +4,13 @@
 
 namespace App\Controller;
 
-use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Conduction\IdVaultBundle\Security\User\IdVaultUser;
+use Conduction\IdVaultBundle\Service\IdVaultService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * The DashboardController handles any calls about administration and dashboard pages.
@@ -25,125 +22,30 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class DashboardController extends AbstractController
 {
     /**
+     * Lets catch any users lost in routes.
+     *
      * @Route("/")
-     * @Template
      */
-    public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
+    public function indexAction()
     {
-        $variables = [];
-
-        return $variables;
+        return $this->redirectToRoute('app_dashboarduser_index');
     }
 
     /**
-     * @Route("/organizations")
-     * @Template
+     * Method  for switching the organization on a user session.
+     *
+     * @Route("/switch-organization/{id}")
      */
-    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
+    public function switchOrganizationAction(CommonGroundService $commonGroundService, IdVaultService $idVaultService, $id)
     {
-        $variables = [];
-        $variables['type'] = 'organization';
+        $user = $idVaultService->updateUserOrganization($id, $this->getUser()->getUsername());
+        $person = $commonGroundService->getResource($user['person']);
+        $userObject = new IdVaultUser($user['username'], $user['username'], $person['name'], null, $user['roles'], $user['person'], $user['organization'], 'id-vault');
 
-        if ($request->isMethod('POST')) {
-            $resource = $request->request->all();
+        $token = new UsernamePasswordToken($userObject, null, 'main', $userObject->getRoles());
+        $this->container->get('security.token_storage')->setToken($token);
+        $this->container->get('session')->set('_security_main', serialize($token));
 
-            // Check if org has name (required)
-            if ($resource['organization']['name']) {
-                // Make or save email
-                if ($resource['email']['email']) {
-                    if (!isset($resource['email']['name'])) {
-                        $resource['email']['name'] = 'Email';
-                    }
-                    $email = $commonGroundService->saveResource($resource['email'], ['component' => 'cc', 'type' => 'emails']);
-                }
-                // Make or save telephone
-                if ($resource['telephone']['telephone']) {
-                    if (!isset($resource['telephone']['name'])) {
-                        $resource['telephone']['name'] = 'Telephone';
-                    }
-                    $telephone = $commonGroundService->saveResource($resource['telephone'], ['component' => 'cc', 'type' => 'telephones']);
-                }
-                // If we have a email add it to the org
-                if (isset($email)) {
-                    $resource['organization']['emails'][0] = '/emails/'.$email['id'];
-                }
-                // If we have a telephone add it to the org
-                if (isset($telephone)) {
-                    $resource['organization']['telephones'][0] = '/telephones/'.$telephone['id'];
-                }
-
-                // Save organization
-                $org = $commonGroundService->saveResource($resource['organization'], ['component' => 'cc', 'type' => 'organizations']);
-            }
-
-        }
-
-        $variables['items'] = $commonGroundService->getResourceList(['component'=>'cc', 'type'=>'organizations'])['hydra:member'];
-        $variables['items'][] = [
-            'id' => 'randomuuid',
-            'name' => 'Conduction',
-            'emails' => [
-                0 => [
-                    'email' => 'info@conduction.nl'
-                ]
-            ]
-        ];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/organizations/{id}")
-     * @Template
-     */
-    public function organizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
-    {
-        $variables = [];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/participants")
-     * @Template
-     */
-    public function participantsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
-    {
-        $variables = [];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/participants/{id}")
-     * @Template
-     */
-    public function participantAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
-    {
-        $variables = [];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/events")
-     * @Template
-     */
-    public function eventsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
-    {
-        $variables = [];
-
-        return $variables;
-    }
-
-    /**
-     * @Route("/events/{id}")
-     * @Template
-     */
-    public function eventAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
-    {
-        $variables = [];
-
-        return $variables;
+        return $this->redirectToRoute('app_dashboardorganization_index');
     }
 }

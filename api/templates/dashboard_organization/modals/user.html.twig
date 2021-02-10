@@ -1,0 +1,35 @@
+{% extends "dashboard_organization/modals/modal.html.twig" %}
+
+{% if resource is defined %}
+    {% set  id = resource['id'] %}
+    {% set  type = 'User' %}
+{% else %}
+    {% set  id = 'Add' %}
+    {% set  type = 'User' %}
+{% endif %}
+
+{% block body %}
+<form id="{{ type }}Form{{ id }}" method="post">
+    {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
+    {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
+    <div class="form-group">
+        <label for="email">{{ 'email'|trans|capitalize }}*</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+
+    <div class="form-group">
+        <label for="group">{{ 'group'|trans|capitalize }}*</label>
+        <select class="form-control" name="group" id="group">
+            {% for group in groups %}
+                <option value="{{ group.id }}">{{ group.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    {% if resource is defined %}
+        <input type="hidden" name="editUser" value="true">
+    {% else %}
+        <input type="hidden" name="inviteUser" value="true">
+    {% endif %}
+</form>
+{% endblock %}

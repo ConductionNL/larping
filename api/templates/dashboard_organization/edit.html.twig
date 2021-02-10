@@ -1,0 +1,530 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {# include 'dashboard_user/menu.html.twig' #}
+
+    <section class="bg-light py-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{% if organization['@id']|default %}{{ 'edit profile'|trans|capitalize }}{% else %}{{ 'add organization'|trans|capitalize }}{% endif %}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                    </li>
+                    <li class="breadcrumb-item active"
+                        aria-current="page">{% if organization['@id']|default %}{{ 'edit organization'|trans|capitalize }}{% else %}{{ 'add organization'|trans|capitalize }}{% endif %}</li>
+                </ul>
+            </nav>
+            <form id="OrganizationForm{{ organization['id'] }}" method="post">
+                {% if organization['id'] is defined %}<input type="hidden" id="id" name="id"
+                                                             value="{{ organization['id'] }}">{% endif %}
+                {% if organization['@id'] is defined %}<input type="hidden" id="@id" name="@id"
+                                                              value="{{ organization['@id'] }}">{% endif %}
+                {% if organization['@type'] is defined %}<input type="hidden" id="@type" name="@type"
+                                                                value="{{ organization['@type'] }}">{% endif %}
+
+
+                {% if organization.contact|default %}
+                    {% set contact = commonground_resource(organization.contact) %}
+                {% endif %}
+
+                {% if contact['id'] is defined %}<input type="hidden" id="contact[id]" name="contact[id]"
+                                                        value="{{ contact['id'] }}">{% endif %}
+                {% if contact['@id'] is defined %}<input type="hidden" id="contact[@id]" name="contact[@id]"
+                                                         value="{{ contact['@id'] }}">{% endif %}
+                {% if contact['@type'] is defined %}<input type="hidden" id="contact[@type]" name="contact[@type]"
+                                                           value="{{ contact['@type'] }}">{% endif %}
+
+                <!-- About -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <div class="row">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {% if organization.name is defined %}{{ organization.name }}{% endif %}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <button type="submit"
+                                        class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="name">{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"
+                                       {% if organization.name|default %}value="{{ organization.name }}"{% endif %}
+                                       id="name"
+                                       name="name">
+                            </div>
+
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="description">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="form-control" rows="6" id="description"
+                                          name="description">{% if organization.description|default %}{{ organization.description }}{% endif %}</textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% if organization is defined %}
+                    <!-- Settings -->
+                    <div class="card">
+                        <div class="card-body px-6 pt-6 pb-1">
+                            <h3 class="h4 mb-4">{{ 'categories'|trans|capitalize }} </h3>
+                            <ul class="list-unstyled mb-6">
+                                {% for category in settings %}
+                                    <li class="d-inline-block mr-4 mb-2">
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                value="/categories/{{ category.id }}"
+                                                id="category{{ category.id }}"
+                                                name="categories[]"
+                                                {% if category.id in categories %}
+                                                    checked="checked"
+                                                {% endif %}
+                                            />
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                <i class="{{ category.icon }} mr-2"
+                                                   aria-hidden="true"></i>{{ category.name }}
+                                            </label>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="card">
+                        <div class="card-body p-6" id="contact-list">
+                            <div class="row">
+                                <div class="form-group  col-md-6 mb-6">
+                                    <h3 class="h4 mb-4">{{ 'contact'|trans|capitalize }}</h3>
+                                </div>
+                                <div class="form-group  col-md-6 mb-6">
+                                    <a class="btn btn-success float-right text-white"
+                                       onclick="addItemToList('contact-list');"><i class="fal fa-plus"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="row" id="contact-list-new" style="display: none;">
+                                <div class="form-group col-md-6 mb-6">
+                                    <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                    <input type="text" class="form-control" name="contact[adresses][uuid][postalCode]">
+                                </div>
+
+                                <div class="form-group col-md-6 mb-6">
+                                    <label for="street">{{ 'street'|trans|capitalize }}</label>
+                                    <input type="text" class="form-control" name="contact[adresses][uuid][street]">
+                                </div>
+
+                                <div class="form-group col-md-6 mb-6">
+                                    <label for="houseNumber">{{ 'house number'|trans|capitalize }}</label>
+                                    <input type="number" class="form-control"
+                                           name="contact[adresses][uuid][houseNumber]">
+                                </div>
+
+                                <div class="form-group col-md-6 mb-6">
+                                    <label for="suffix">{{ 'suffix'|trans|capitalize }}</label>
+                                    <input type="text" class="form-control" name="contact[adresses][uuid][suffix]">
+                                </div>
+                                <div class="form-group col-md-12 mb-6">
+                                    <label for="locality">{{ 'locality'|trans|capitalize }}</label>
+                                    <input type="text" class="form-control" name="contact[adresses][uuid][locality]">
+                                </div>
+                            </div>
+                            {% if contact.adresses is defined and contact.adresses is not empty %}
+                                {% for adress in contact.adresses %}
+                                    <div class="row" id="{{ adress.id }}">
+                                        <input type="hidden" id={{ adress.id }}_id"
+                                               name="contact[adresses][{{ adress.id }}][id]"
+                                               value="/addresses/{{ adress['id'] }}">
+                                        <input type="hidden" id="{{ adress.id }}_@id"
+                                               name="contact[adresses][{{ adress.id }}][@id]"
+                                               value="/addresses/{{ adress['id'] }}">
+                                        <input type="hidden" id="{{ adress.id }}_@type"
+                                               name="contact[adresses][{{ adress.id }}][@type]" value="Adress">
+                                        <div class="form-group col-md-6 mb-6">
+                                            <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                            <input type="text" class="form-control"
+                                                   {% if adress.postalCode|default %}value="{{ adress.postalCode }}"{% endif %}
+                                                   id="{{ adress.id }}_postalCode"
+                                                   name="contact[adresses][{{ adress.id }}][postalCode]">
+                                        </div>
+
+                                        <div class="form-group col-md-6 mb-6">
+                                            <label for="street">{{ 'street'|trans|capitalize }}</label>
+                                            <input type="text" class="form-control"
+                                                   {% if adress.street|default %}value="{{ adress.street }}"{% endif %}
+                                                   id="{{ adress.id }}_street"
+                                                   name="contact[adresses][{{ adress.id }}][street]">
+                                        </div>
+
+                                        <div class="form-group col-md-6 mb-6">
+                                            <label for="houseNumber">{{ 'house number'|trans|capitalize }}</label>
+                                            <input type="number" class="form-control"
+                                                   {% if adress.houseNumber|default %}value="{{ adress.houseNumber }}"{% endif %}
+                                                   id="{{ adress.id }}_houseNumber"
+                                                   name="contact[adresses][{{ adress.id }}][houseNumber]">
+                                        </div>
+
+                                        <div class="form-group col-md-6 mb-6">
+                                            <label for="suffix">{{ 'suffix'|trans|capitalize }}</label>
+                                            <input type="text" class="form-control"
+                                                   {% if adress.suffix|default %}value="{{ adress.suffix }}"{% endif %}
+                                                   id="{{ adress.id }}_suffix"
+                                                   name="contact[adresses][{{ adress.id }}][suffix]">
+                                        </div>
+                                        <div class="form-group col-md-12 mb-6">
+                                            <label for="locality">{{ 'locality'|trans|capitalize }}</label>
+                                            <input type="text" class="form-control"
+                                                   {% if adress.locality|default %}value="{{ adress.locality }}"{% endif %}
+                                                   id="{{ adress.id }}_locality"
+                                                   name="contact[adresses][{{ adress.id }}][locality]">
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- emails -->
+                        <div class="col-md-6 ">
+                            <div class="card ">
+                                <div class="card-body p-6" id="email-list">
+                                    <div class="row">
+                                        <div class="form-group  col-md-6 mb-6">
+                                            <h3 class="h4 mb-4">{{ 'emails'|trans|capitalize }}</h3>
+                                        </div>
+                                        <div class="form-group  col-md-6 mb-6">
+                                            <a class="btn btn-success float-right text-white"
+                                               onclick="addItemToList('email-list');"><i class="fal fa-plus"></i></a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" id="email-list-new" style="display: none;">
+                                        <div class="form-group col-6">
+                                            <label>{{ 'name'|trans|capitalize }}*</label>
+                                            <input type="text" class="form-control" name="contact[emails][uuid][name]">
+                                        </div>
+                                        <div class="form-group col-5">
+                                            <label>{{ 'email'|trans|capitalize }}</label>
+                                            <input type="email" class="form-control"
+                                                   name="contact[emails][uuid][email]">
+                                        </div>
+                                        <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
+                                            <a class="btn btn-danger float-right text-white"
+                                               onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                                        </div>
+                                    </div>
+
+                                    {% if contact.emails is defined and contact.emails is not empty %}
+                                        {% for email in contact.emails %}
+                                            <div class="row" id="{{ email.id }}">
+                                                <!--
+                                    <input type="hidden" id="{{ email.id }}_@type" name="contact[emails][{{ email.id }}][@type]" value="Email">
+                                    -->
+                                                <input type="hidden" id={{ email.id }}_id"
+                                                       name="contact[emails][{{ email.id }}][id]"
+                                                       value="emails/{{ email['id'] }}">
+                                                <input type="hidden" id="{{ email.id }}_@id"
+                                                       name="contact[emails][{{ email.id }}][@id]"
+                                                       value="/emails/{{ email['id'] }}">
+                                                <div class="form-group col-6">
+                                                    <label for="{{ email.id }}_name">{{ 'name'|trans|capitalize }}
+                                                        *</label>
+                                                    <input type="text" class="form-control"
+                                                           {% if email.name|default %}value="{{ email.name }}"{% endif %}
+                                                           id="{{ email.id }}_name"
+                                                           name="contact[emails][{{ email.id }}][name]" required>
+                                                </div>
+                                                <div class="form-group col-5">
+                                                    <label for="_email">{{ 'email'|trans|capitalize }}</label>
+                                                    <input type="email" class="form-control"
+                                                           {% if email.email|default %}value="{{ email.email }}"{% endif %}
+                                                           id="{{ email.id }}_email"
+                                                           name="contact[emails][{{ email.id }}][email]">
+                                                </div>
+                                                <div
+                                                    class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
+                                                    <a class="btn btn-danger float-right text-white"
+                                                       onclick="removeItemFromList(this);"><i
+                                                            class="fal fa-trash-alt"></i></a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--  phone numbers -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body p-6" id="phone-list">
+                                    <div class="row">
+                                        <div class="form-group  col-md-6 mb-6">
+                                            <h3 class="h4 mb-4">{{ 'phone numbers'|trans|capitalize }}</h3>
+                                        </div>
+                                        <div class="form-group  col-md-6 mb-6">
+                                            <a class="btn btn-success float-right text-white"
+                                               onclick="addItemToList('phone-list');"><i class="fal fa-plus"></i></a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" id="phone-list-new" style="display: none;">
+                                        <div class="form-group col-6">
+                                            <label>{{ 'name'|trans|capitalize }}*</label>
+                                            <input type="text" class="form-control"
+                                                   name="contact[telephones][uuid][name]">
+                                        </div>
+                                        <div class="form-group col-5">
+                                            <label>{{ 'telephone'|trans|capitalize }}</label>
+                                            <input type="tel" class="form-control"
+                                                   name="contact[telephones][uuid][telephone]">
+                                        </div>
+                                        <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
+                                            <a class="btn btn-danger float-right text-white"
+                                               onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                                        </div>
+                                    </div>
+                                    {% if contact.telephones is defined and contact.telephones is not empty %}
+                                        {% for number in contact.telephones %}
+                                            <div class="row" id="{{ number.id }}">
+                                                <!--
+                                            <input type="hidden" id="{{ number.id }}_@type" name="contact[telephones][{{ number.id }}][@type]" value="Telephone">
+                                            -->
+                                                <input type="hidden" id={{ number.id }}_id"
+                                                       name="contact[telephones][{{ number.id }}][id]"
+                                                       value="telephones/{{ number['id'] }}">
+                                                <input type="hidden" id="{{ number.id }}_@id"
+                                                       name="contact[telephones][{{ number.id }}][@id]"
+                                                       value="telephones/{{ number['id'] }}">
+                                                <div class="form-group col-6">
+                                                    <label for="{{ number.id }}_name">{{ 'name'|trans|capitalize }}
+                                                        *</label>
+                                                    <input type="text" class="form-control"
+                                                           {% if number.name|default %}value="{{ number.name }}"{% endif %}
+                                                           id="{{ number.id }}_name"
+                                                           name="contact[telephones][{{ number.id }}][name]" required>
+                                                </div>
+                                                <div class="form-group col-5">
+                                                    <label for="_email">{{ 'telephone'|trans|capitalize }}</label>
+                                                    <input type="tel" class="form-control"
+                                                           {% if number.telephone|default %}value="{{ number.telephone }}"{% endif %}
+                                                           id="{{ number.id }}telephone"
+                                                           name="contact[telephones][{{ number.id }}][telephone]">
+                                                </div>
+                                                <div
+                                                    class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
+                                                    <a class="btn btn-danger float-right text-white"
+                                                       onclick="removeItemFromList(this);"><i
+                                                            class="fal fa-trash-alt"></i></a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social -->
+                    <div class="card">
+                        <div class="card-body p-6" id="social-list">
+                            <div class="row">
+                                <div class="form-group  col-md-6 mb-6">
+                                    <h3 class="h4 mb-4">{{ 'socials'|trans|capitalize }}</h3>
+                                </div>
+                                <div class="form-group  col-md-6 mb-6">
+                                    <a class="btn btn-success float-right text-white"
+                                       onclick="addItemToList('social-list');"><i class="fal fa-plus"></i></a>
+                                </div>
+                            </div>
+                            <div class="row" id="social-list-new" style="display: none;">
+                                <div class="form-group col-3">
+                                    <label>{{ 'name'|trans|capitalize }}*</label>
+                                    <input type="text" class="form-control" name="contact[socials][uuid][name]">
+                                </div>
+                                <div class="form-group col-3">
+                                    <label>{{ 'type'|trans|capitalize }}</label>
+                                    <select class="form-control" name="contact[socials][uuid][type]">
+                                        <option value="website">{{ 'website'|capitalize }}</option>
+                                        <option value="facebook">{{ 'facebook'|capitalize }}</option>
+                                        <option value="twitter">{{ 'twitter'|capitalize }}</option>
+                                        <option value="instagram">{{ 'instagram'|capitalize }}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-5">
+                                    <label>{{ 'url'|trans|capitalize }}</label>
+                                    <input type="tel" class="form-control" name="contact[socials][uuid][url]">
+                                </div>
+                                <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
+                                    <a class="btn btn-danger float-right text-white"
+                                       onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+                            {% if contact.socials is defined and contact.socials is not empty %}
+                                {% for social in contact.socials %}
+                                    <div class="row" id="{{ social.id }}">
+                                        <!--
+                            <input type="hidden" id="{{ social.id }}_@type" name="contact[socials][{{ social.id }}][@type]" value="Telephone">
+                            -->
+                                        <input type="hidden" id={{ social.id }}_id"
+                                               name="contact[socials][{{ social.id }}][id]"
+                                               value="socials/{{ social['id'] }}">
+                                        <input type="hidden" id="{{ social.id }}_@id"
+                                               name="contact[socials][{{ social.id }}][@id]"
+                                               value="socials/{{ social['id'] }}">
+                                        <div class="form-group col-3">
+                                            <label for="{{ social.id }}_name">{{ 'name'|trans|capitalize }}*</label>
+                                            <input type="text" class="form-control"
+                                                   {% if social.name|default %}value="{{ social.name }}"{% endif %}
+                                                   id="{{ social.id }}_name"
+                                                   name="contact[socials][{{ social.id }}][name]" required>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="{{ social.id }}_type">{{ 'type'|trans|capitalize }}</label>
+                                            <select class="form-control" name="contact[socials][{{ social.id }}][type]"
+                                                    id="{{ social.id }}_type">
+                                                <option value="website"
+                                                        {% if social.type|default and social.type == "website" %}selected{% endif %}>{{ 'website'|capitalize }}</option>
+                                                <option value="facebook"
+                                                        {% if social.type|default and social.type == "facebook" %}selected{% endif %}>{{ 'facebook'|capitalize }}</option>
+                                                <option value="twitter"
+                                                        {% if social.type|default and social.type == "twitter" %}selected{% endif %}>{{ 'twitter'|capitalize }}</option>
+                                                <option value="instagram"
+                                                        {% if social.type|default and social.type == "instagram" %}selected{% endif %} >{{ 'instagram'|capitalize }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-5">
+                                            <label for="{{ social.id }}_url">{{ 'url'|trans|capitalize }}</label>
+                                            <input type="tel" class="form-control"
+                                                   {% if social.url|default %}value="{{ social.url }}"{% endif %}
+                                                   id="{{ social.id }}_url"
+                                                   name="contact[socials][{{ social.id }}][url]" onblur="checkURL(this)">
+                                        </div>
+                                        <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
+                                            <a class="btn btn-danger float-right text-white"
+                                               onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Gallery -->
+                    <div class="card">
+                        <div class="card-body p-6">
+                            <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
+
+                            <div class="form-group position-relative mb-6 form-group-dragable">
+                                <input type="file" class="custom-file-input" id="favicon" name="favicon">
+                                <label class="custom-file-label" for="favicon">
+                                    {{ 'Click or Drag images here'|trans|capitalize }}
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Gallery -->
+                    <div class="card">
+                        <div class="card-body p-6">
+                            <h3 class="h4 mb-4">{{ 'terms and conditions'|trans|capitalize }}</h3>
+
+                            <div class="form-group position-relative mb-6 form-group-dragable">
+                                <div class="form-group">
+                                    <label for="contentInput">{{ 'content'|trans|capitalize }}</label>
+                                    <textarea oninput="renderTermsAndConditions()" class="form-control" rows="10"
+                                              id="contentInput" name="template[content]"
+                                              required>{% if organization.termsAndConditions.content is defined %}{{ organization.termsAndConditions.content|raw }}{% endif %}</textarea>
+                                </div>
+
+                                <div id="renderedContentDiv">
+                                    {% if organization.termsAndConditions.content is defined %}{{ organization.termsAndConditions.content|raw }}{% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-6 col-xl-5">
+                        <div class="mb-6">
+                            <button type="submit"
+                                    class="btn btn-lg btn-primary btn-block">{{ 'submit'|trans|capitalize }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+
+
+
+    <script>
+        function renderTermsAndConditions() {
+            console.log(document.getElementById('contentInput').value);
+            console.log(document.getElementById("renderedContentDiv").innerHTML);
+            document.getElementById("renderedContentDiv").innerHTML = document.getElementById('contentInput').value;
+        }
+
+        function createUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function removeItemFromList(item) {
+            var element = item.parentElement.parentElement;
+            console.log("remove " + element);
+            element.remove();
+        }
+
+        function addItemToList(id) {
+            const formDiv = document.getElementById(id + '-new');
+            var cln = formDiv.cloneNode(true);
+            var uuid = createUUID();
+
+            // Let clear up some atributes
+            cln.setAttribute('id', createUUID());
+            cln.removeAttribute('style');
+
+            // Lets update al the names
+            cln.childNodes.forEach((item, index) => {
+                if (item.nodeType == 1) {
+                    item.childNodes.forEach((input, index) => {
+                        if (input.nodeType == 1) {
+                            var name = input.getAttribute('name');
+                            if (name) {
+                                input.setAttribute('name', name.replace('uuid', uuid));
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Atach the now prepared form
+            document.getElementById(id).appendChild(cln);
+            console.log('added:' + uuid);
+        }
+        function checkURL (url) {
+            var string = url.value;
+            if (!~string.indexOf("http")) {
+                string = "http://" + string;
+            }
+            url.value = string;
+            console.log(url);
+        }
+    </script>
+{% endblock %}

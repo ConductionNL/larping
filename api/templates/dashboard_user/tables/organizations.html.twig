@@ -1,60 +1,37 @@
-<div class="card border-light shadow-sm">
-    <div class="card-header">
-        <div class="row align-items-center">
-            <div class="col">
-                <h2 class="h5">{{ 'teams'|trans|capitalize }}</h2></div>
-            <div class="col text-right">
-                {% if addPath is  defined %}
-                    <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add'|trans|capitalize }}</a>
-                {% else %}
-                    <a href="{{ path('app_team_index') }}" class="btn btn-sm btn-secondary">{{ 'see all teams'|trans|capitalize }}</a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    {% if teams is  defined and teams|length > 0 %}
-    <div class="table-responsive">
-        <table class="table align-items-center table-flush">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col">{{ 'name'|trans|capitalize }}</th>
-                <th scope="col">{{ 'participants'|trans|capitalize }}</th>
-                <th scope="col">{{ 'details'|trans|capitalize }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for team in teams|slice(0, 10) %}
-                <tr>
-                    <th>{{ team.name }}</th>
-                    <td>
-                        {% if team.participants|default %}
-                            <span class="h5 mb-3 mb-lg-0">
-                                <i class="fas fa-user-tie text-secondary"></i>
-                                <span class="ml-3">{{ team.participants|length }}</span>
-                            </span>
-                        {% else %}
-                            <span class="h5 mb-3 mb-lg-0">
-                                <i class="fas fa-user-tie text-secondary"></i>
-                                <span class="ml-3">0</span>
-                            </span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{ path('app_team_team', {id: team.id}) }}" class="btn btn-primary">{{ 'view'|trans|capitalize }}</a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
+
+{% if organizations|default and organizations|length > 0 %}
+<table id="organizations" class="display nowrap table" style="width:100%">
+    <thead class="thead-light">
+    <tr>
+        <th>{{ 'name'|trans|capitalize }}</th>
+        <th>
+{#            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#OrganizationModalAdd">{{ 'add'|trans|capitalize }}</button>#}
+            <a href="{{ path('app_dashboardorganization_edit', {'id':'add'}  ) }}" class="btn btn-success btn-sm float-right">{{ 'add'|trans|capitalize }}</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for organization in organizations %}
+    <tr>
+        <td>{{ organization.name }} {% if app.user.organization is defined and organization['@id'] == app.user.organization %}
+                <i style="color: green" class="fas fa-check-circle mr-2" data-toggle="tooltip" data-placement="top" title="selected"></i>{% endif %}</td>
+        <td>
+            <a class="btn btn-outline-primary btn-sm float-right" href="{{ path('app_dashboard_switchorganization', {id: organization.id}) }}">
+                <i class="fas fa-edit" aria-hidden="true"></i>{{ 'manage organization'|trans|capitalize }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
     <div class="card-body  text-center">
-        <p>{{ 'no teams found'|trans|capitalize }}</p>
-        {% if addPath is  defined %}
-        <a href="{{ path(addPath, {'id':'new' }) }}" class="btn btn-primary">{{ 'add your first team!'|trans|capitalize }}</a>
-        {% else %}
-        <a href="{{ path('app_team_index') }}" class="btn btn-primary">{{ 'find a team'|trans|capitalize }}</a>
-        {% endif %}
+        <p>{{ 'no organizations found'|trans|capitalize }}</p>
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#OrganizationModalAdd">{{ 'add a organization'|trans|capitalize }}</a>
     </div>
-    {% endif %}
-</div>
+{% endif %}
+
+{% include 'dashboard_user/modals/organization.html.twig' %}
+
+{% for organization in organizations %}
+    {% include 'dashboard_user/modals/organization.html.twig' with {'resource': organization} %}
+{% endfor %}

@@ -1,3 +1,18 @@
+.button-as-a {
+    border: none !important;
+    background: none !important;
+    color: #2196f3 !important;
+}
+
+.button-as-a:focus {
+    border: none !important;
+}
+
+.button-as-a:hover {
+    text-decoration: underline !important;
+    color: #0a6ebd !important;
+}
+
 .no-text-deco:hover {
     text-decoration: none;
 }
@@ -21,4 +36,8 @@
     100% {
         opacity: 1;
     }
+}
+
+.hover-color-primary:host{
+    color: #2095F2;
 }

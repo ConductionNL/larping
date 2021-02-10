@@ -1,0 +1,30 @@
+<!-- Reviews -->
+{% for review in reviews %}
+    <div class="media mb-3">
+        <div class="media-img">
+            <img {% if commonground_resource(review.author).personalPhoto|default %}
+                src="{{ commonground_resource(review.author).personalPhoto }}"{% else %}
+                src="https://eu.ui-avatars.com/api/?name={{ commonground_resource(review.author).givenName }}+{{ commonground_resource(review.author).familyName }}&background=EB2D2D&rounded=true&color=fff&bold=true"
+                {% endif %}
+                class="mr-3 media-object rounded-circle" alt="Image User">
+        </div>
+        <div class="media-body">
+            <h5 class="media-heading">{{ commonground_resource(review.author).givenName }}</h5>
+            <span class="d-inline-block mr-2">
+                {% include 'widgets/rating.html.twig' with {'rating':review.rating} %}
+            </span>
+            <p>{{ review.review }}</p>
+            <!-- Reply Section -->
+            {#
+            <div class="reply-wrapper">
+                <a class="d-inline-block mb-2 btn-reply" href="javascript:0">Reply</a>
+                <form class="form-reply my-3">
+                    <textarea class="form-control mb-6" rows="3" placeholder="Enter your comment"></textarea>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            #}
+        </div>
+    </div>
+{% endfor %}
+
