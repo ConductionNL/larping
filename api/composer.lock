@@ -685,12 +685,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/CommonGroundBundle.git",
-                "reference": "1b326f22718d115130bc2d3baad3f8db9a72992a"
+                "reference": "30ce8b7034d87a9b76f3a96f84ba59880a49d329"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/1b326f22718d115130bc2d3baad3f8db9a72992a",
-                "reference": "1b326f22718d115130bc2d3baad3f8db9a72992a",
+                "url": "https://api.github.com/repos/ConductionNL/CommonGroundBundle/zipball/30ce8b7034d87a9b76f3a96f84ba59880a49d329",
+                "reference": "30ce8b7034d87a9b76f3a96f84ba59880a49d329",
                 "shasum": ""
             },
             "require": {
@@ -768,7 +768,12 @@
                 "postcode",
                 "rsin"
             ],
-            "time": "2021-01-22T08:05:04+00:00"
+            "support": {
+                "email": "ruben@conduction.nl",
+                "issues": "https://github.com/ConductionNL/ConductionCommonGroundBundle/issues",
+                "source": "https://github.com/ConductionNL/ConductionCommonGroundBundle"
+            },
+            "time": "2021-02-19T12:06:13+00:00"
         },
         {
             "name": "conduction/id-vault-php",
@@ -11057,5 +11062,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
