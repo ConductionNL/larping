@@ -34,8 +34,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for ticket in tickets %}
-                    {% set order = ticket.order %}
+                {% for order in orders %}
                     <tr>
                         <td>{{ order.reference }}</td>
                         <td>{{ commonground_resource(order.customer).name }}</td>
@@ -46,7 +45,7 @@
 {#                                <span  class="text-danger">{{ 'unpaid'|trans|capitalize }}</span>#}
 {#                            {% endif %}#}
                         </td>
-                        <td>{{ product.type }}</td>
+                        <td>{{ ticket.0.type }}</td>
                         <td></td>
                     </tr>
                 {% endfor %}
