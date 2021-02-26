@@ -969,6 +969,7 @@ class DashboardOrganizationController extends AbstractController
                 $template['@id'] = $variables['organization']['termsAndConditions']['@id'];
             }
 
+            /*
             $template['name'] = 'Terms and conditions for '.$variables['organization']['name'];
             $template['templateEngine'] = 'twig';
             $template['organization'] = '/organizations/'.$organization['id'];
@@ -977,6 +978,7 @@ class DashboardOrganizationController extends AbstractController
 
             $organization['termsAndConditions'] = '/templates/'.$template['id'];
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
+            */
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
         }
