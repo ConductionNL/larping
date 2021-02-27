@@ -23,6 +23,7 @@ parameters:
     env(NOTIFICATION_ENABLED):
     env(APP_VERSION): "1.0.0"
     env(APP_NAME): "Proto Component"
+    env(APP_NAME_TECHNICAL): ""
     env(APP_DESCRIPTION): "A commonground component"
     env(APP_DOMAIN): "zaakonline.nl"
     env(APP_LOGO): "zaakonline.nl"
