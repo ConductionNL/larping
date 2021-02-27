@@ -44,6 +44,7 @@ parameters:
     env(IDIN_ID): ""
     env(IDIN_SECRET): ""
     env(APP_TYPE): "component"
+    env(HELM_REPOSITORY): ""
     env(APP_BUILD): ""
     env(APP_CHART): ""
     env(APP_SESSION_DURATION): ""
