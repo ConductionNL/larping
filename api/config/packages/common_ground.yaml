@@ -10,6 +10,7 @@ parameters:
     env(APP_COMMONGROUND_SECRET): ""
 
     common_ground.app.id: "%env(APP_COMMONGROUND_ID)%"
+    app_id: "%env(APP_COMMONGROUND_ID)%"
     app_commonground_id: "%env(APP_COMMONGROUND_ID)%"
     app_commonground_secret: "%env(APP_COMMONGROUND_SECRET)%"
 
@@ -312,6 +313,7 @@ twig:
         app_type: "%env(APP_TYPE)%"
 
         # Security Details
+        app_id: "%env(APP_COMMONGROUND_ID)%"
         app_commonground_id: "%env(APP_COMMONGROUND_ID)%"
         app_commonground_secret: "%env(APP_COMMONGROUND_SECRET)%"
 
