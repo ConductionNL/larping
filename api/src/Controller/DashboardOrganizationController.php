@@ -875,6 +875,15 @@ class DashboardOrganizationController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $organization = $request->request->all();
+
+            // New org switch
+            if($id == 'add'){
+                $new = true;
+            }
+            else{
+                $new = false;
+            }
+
             if ($organization['template']) {
                 unset($organization['template']);
             }
@@ -935,20 +944,19 @@ class DashboardOrganizationController extends AbstractController
             }
 
             // Lets save te organization
+            if($new){
+                $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
+                $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
-            /*
-            $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
-            $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
+                $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
+                $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
 
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
-            $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
-            $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
-
-            //create the groups clients, members, administrators
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
-            */
+                //create the groups clients, members, administrators
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
+            }
 
             // Setting the categories
 
@@ -969,14 +977,16 @@ class DashboardOrganizationController extends AbstractController
                 $template['@id'] = $variables['organization']['termsAndConditions']['@id'];
             }
 
-            $template['name'] = 'Terms and conditions for '.$variables['organization']['name'];
-            $template['templateEngine'] = 'twig';
-            $template['organization'] = '/organizations/'.$organization['id'];
+            if($new){
+                $template['name'] = 'Terms and conditions for '.$organization['name'];
+                $template['templateEngine'] = 'twig';
+                $template['organization'] = '/organizations/'.$organization['id'];
 
-            $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
+                $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
 
-            $organization['termsAndConditions'] = '/templates/'.$template['id'];
-            $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
+                $organization['termsAndConditions'] = '/templates/'.$template['id'];
+                $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
+            }
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
         }
