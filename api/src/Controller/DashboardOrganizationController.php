@@ -208,11 +208,13 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             $event['status'] = 'pending';
 
-            $categories = $event['categories'];
-            if (!$categories) {
-                $categories = [];
+            if (isset($categories)) {
+                $categories = $event['categories'];
+                if (!$categories) {
+                    $categories = [];
+                }
+                unset($event['categories']);
             }
-            unset($event['categories']);
 
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
@@ -231,10 +233,11 @@ class DashboardOrganizationController extends AbstractController
                 $resourceCategory = ['resource' => $event['@id'], 'catagories' => []];
             }
 
-            $resourceCategory['categories'] = $categories;
+            if (isset($categories)) {
+                $resourceCategory['categories'] = $categories;
 
-            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
-
+                $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+            }
             return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $event['id']]);
         }
 
