@@ -4,21 +4,23 @@
 
 settings:
   registryBase: docker.io/conduction
-  projectName: :arping
-  name: :arping
+  projectName: arping
+  name: arping
   version: V1.0
+  majorVersion: v1
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
   repro: https://github.com/ConductionNL/larping
-  demo: dev.larping.eu
+  demo: larping.eu
   domain: larping.eu
-  subdomain: larping
+  subdomain: arping
   subpath: larping
   subpathRouting: true
-  env: dev
+  env: prod
   web: false
   debug: 1
   cache: false
   type: component
+  id: 
   replicaCount: 1
   corsAllowOrigin: ['*']
   trustedHosts: '^.+$'
@@ -38,7 +40,7 @@ settings:
   archiveEnabled: false
 
 security:
-  applicationKey: "33297bd1-0d65-427f-9cb2-821ef5def018"
+  applicationKey: "7919a58b-3fd9-4931-ad70-2ccc1168ef23"
 
 
 php:
@@ -49,6 +51,19 @@ php:
   env: prod
   secret: ""
   replicaCount: 2
+
+redis:
+  cluster:
+    enabled: false
+  enabled: false
+  redisPort: 6379
+  usePassword: false
+
+commonground:
+  eherkenning:
+    location: https://larping.eu/eherkenning
+  digispoof:
+    location: https://larping.eu/digispoof
 
 nginx:
   repository: docker.io/conduction/protocomponent-nginx
