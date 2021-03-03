@@ -169,9 +169,9 @@
                             <div class="dropdown">
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ path('app_dashboardadministration_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
-                                    <a class="dropdown-item" href="#">{{ 'organizations'|trans|capitalize }}</a>
+                                    <a class="dropdown-item" href="{{ path('app_dashboardadministration_organizations') }}">{{ 'organizations'|trans|capitalize }}</a>
                                     <a class="dropdown-item" href="{{ path('app_dashboardorganization_locations') }}">{{ 'locations'|trans|capitalize }}</a>
-                                    <a class="dropdown-item" href="">{{ 'categories'|trans|capitalize }}</a>
+                                    <a class="dropdown-item"  href="{{ path('app_dashboardadministration_categories') }}">{{ 'categories'|trans|capitalize }}</a>
                                 </div>
                             </div>
                        {% endif %}
