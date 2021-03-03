@@ -34,6 +34,7 @@ class DashboardAdministrationController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirect($this->generateUrl('app_user_idvault'));
         }
+
         return $variables;
     }
 
@@ -43,9 +44,11 @@ class DashboardAdministrationController extends AbstractController
      */
     public function organizationsAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, IdVaultService $idVaultService)
     {
-        $variabeles = [];
+        $variables = [];
 
-        return $variabeles;
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+
+        return $variables;
     }
 
     /**
@@ -54,9 +57,11 @@ class DashboardAdministrationController extends AbstractController
      */
     public function locationsAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, IdVaultService $idVaultService)
     {
-        $variabeles = [];
+        $variables = [];
 
-        return $variabeles;
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'])['hydra:member'];
+
+        return $variables;
     }
 
     /**
@@ -65,8 +70,8 @@ class DashboardAdministrationController extends AbstractController
      */
     public function categoriesAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, IdVaultService $idVaultService)
     {
-        $variabeles = [];
+        $variables = [];
 
-        return $variabeles;
+        return $variables;
     }
 }
