@@ -10,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -20,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/dashboard/administration")
  */
-
 class DashboardAdministrationController extends AbstractController
 {
     /**
@@ -34,6 +32,7 @@ class DashboardAdministrationController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirect($this->generateUrl('app_user_idvault'));
         }
+
         return $variables;
     }
 

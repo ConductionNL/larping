@@ -238,6 +238,7 @@ class DashboardOrganizationController extends AbstractController
 
                 $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
             }
+
             return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $event['id']]);
         }
 
@@ -879,10 +880,9 @@ class DashboardOrganizationController extends AbstractController
             $organization = $request->request->all();
 
             // New org switch
-            if($id == 'add'){
+            if ($id == 'add') {
                 $new = true;
-            }
-            else{
+            } else {
                 $new = false;
             }
 
@@ -946,7 +946,7 @@ class DashboardOrganizationController extends AbstractController
             }
 
             // Lets save te organization
-            if($new){
+            if ($new) {
                 $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
                 $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
@@ -979,7 +979,7 @@ class DashboardOrganizationController extends AbstractController
                 $template['@id'] = $variables['organization']['termsAndConditions']['@id'];
             }
 
-            if($new){
+            if ($new) {
                 $template['name'] = 'Terms and conditions for '.$organization['name'];
                 $template['templateEngine'] = 'twig';
                 $template['organization'] = '/organizations/'.$organization['id'];
@@ -1026,6 +1026,7 @@ class DashboardOrganizationController extends AbstractController
 
         return $variables;
     }
+
     /**
      * @Route("/payment-providers/{id}")
      * @Template
@@ -1050,6 +1051,7 @@ class DashboardOrganizationController extends AbstractController
 
             // Save the resource
             $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
+
             return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $provider['id']]);
         }
 
