@@ -4,7 +4,7 @@
         <tr>
             <th>{{ 'name' }}</th>
             <th>{{ 'icon' }}</th>
-            <th><a href="#" class="btn btn-success btn-sm">{{ 'add'|trans|capitalize }}</a></th>
+            <th><button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#CategoryModalAdd">{{ 'add'|trans|capitalize }}</button></th>
         </tr>
     </thead>
     <tbody>
@@ -31,4 +31,8 @@
       {% endfor %}
     </tbody>
 </table>
+    {% include 'dashboard_administration/modals/category.html.twig' %}
+    {% for category in categories %}
+        {% include 'dashboard_administration/modals/category.html.twig' with {'resource': category} %}
+    {% endfor %}
 {% endif %}
