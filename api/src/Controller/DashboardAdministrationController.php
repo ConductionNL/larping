@@ -73,6 +73,11 @@ class DashboardAdministrationController extends AbstractController
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];
 
+        if ($request->isMethod('POST')){
+            $category = $request->request->all();
+            
+        }
+
         return $variables;
     }
 }
