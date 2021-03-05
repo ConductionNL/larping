@@ -42,9 +42,11 @@ class DashboardAdministrationController extends AbstractController
      */
     public function organizationsAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, IdVaultService $idVaultService)
     {
-        $variabeles = [];
+        $variables = [];
 
-        return $variabeles;
+        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+
+        return $variables;
     }
 
     /**
@@ -53,9 +55,11 @@ class DashboardAdministrationController extends AbstractController
      */
     public function locationsAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, IdVaultService $idVaultService)
     {
-        $variabeles = [];
+        $variables = [];
 
-        return $variabeles;
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'])['hydra:member'];
+
+        return $variables;
     }
 
     /**
@@ -64,8 +68,11 @@ class DashboardAdministrationController extends AbstractController
      */
     public function categoriesAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, IdVaultService $idVaultService)
     {
-        $variabeles = [];
+        $variables = [];
 
-        return $variabeles;
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
+        $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];
+
+        return $variables;
     }
 }

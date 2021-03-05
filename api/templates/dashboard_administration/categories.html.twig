@@ -12,6 +12,16 @@
                     <li class="breadcrumb-item">{{ 'categories'|trans|capitalize }}</li>
                 </ul>
             </nav>
+            <div class="row">
+                <div class="col-6">
+                    <h3>{{ 'settings'|capitalize }}</h3>
+                    {% include 'dashboard_administration/tables/category.html.twig' with {'categories': settings} %}
+                </div>
+                <div class="col-6">
+                    <h3>{{ 'features'|capitalize }}</h3>
+                    {% include 'dashboard_administration/tables/category.html.twig' with {'categories': features} %}
+                </div>
+            </div>
         </div>
     </section>
 {% endblock %}
