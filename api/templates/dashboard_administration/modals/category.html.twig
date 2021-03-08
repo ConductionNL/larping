@@ -28,8 +28,8 @@
         <div class="form-group">
             <label for="type">{{ 'type'|trans|capitalize }}*</label>
             <select class="form-control" id="type" name="parent" required>
-                <option value="944c21bd-540c-4433-8fd3-dca9498c1008" {% if resource.parent.id is defined and resource.parent.id == '944c21bd-540c-4433-8fd3-dca9498c1008' %} selected {% endif %}>{{ 'features' }}</option>
-                <option value="acf85299-1fee-4510-9b8d-6b78af055f45" {% if resource.parent.id is defined and resource.parent.id == 'acf85299-1fee-4510-9b8d-6b78af055f45' %} selected {% endif %}>{{ 'settings' }}</option>
+                <option value="944c21bd-540c-4433-8fd3-dca9498c1008" {% if resource.parent.id is defined and resource.parent.id == '944c21bd-540c-4433-8fd3-dca9498c1008' %} selected {% endif %}>{{ 'feature' }}</option>
+                <option value="acf85299-1fee-4510-9b8d-6b78af055f45" {% if resource.parent.id is defined and resource.parent.id == 'acf85299-1fee-4510-9b8d-6b78af055f45' %} selected {% endif %}>{{ 'setting' }}</option>
             </select>
         </div>
     </form>

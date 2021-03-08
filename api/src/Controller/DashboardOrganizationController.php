@@ -198,7 +198,7 @@ class DashboardOrganizationController extends AbstractController
             $variables['products'] = [];
         }
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
-        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'])['hydra:member'];
+        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         // Update event
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Event') {
@@ -208,7 +208,7 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             $event['status'] = 'pending';
 
-            if (isset($categories)) {
+            if (isset($event['categories'])) {
                 $categories = $event['categories'];
                 if (!$categories) {
                     $categories = [];
