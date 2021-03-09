@@ -120,7 +120,9 @@
                                         {% for option in item.options %}
                                             <tr class="collapse" id="options{{ loop.parent.loop.index0 }}">
                                                 <td class="text-capitalize">
-                                                    {{ option.name }}
+                                                    {% if option.name|default %}
+                                                        {{ option.name }}
+                                                    {% endif %}
                                                 </td>
                                                 <td class="text-capitalize text-center">
                                                 <td>
@@ -133,8 +135,10 @@
                                                 <td>
                                                     <form action="{{ path('app_shopping_removeoption') }}"
                                                           method="post">
-                                                        <input type="hidden" name="option[name]"
-                                                               value="{{ option.name }}">
+                                                        {% if option.name|default %}
+                                                            <input type="hidden" name="option[name]"
+                                                                   value="{{ option.name }}">
+                                                        {% endif %}
                                                         <input type="hidden" name="option[offer]"
                                                                value="{{ option.offer }}">
                                                         <input type="hidden" name="redirect"
@@ -207,7 +211,9 @@
                                                 <div class="checkbox">
                                                     <label>
                                                         <input required type="checkbox">
-                                                        I agree to the <a target="_blank" href="{{ path('app_default_termsandconditionsfororg', {'id': organization.id}) }}">Terms of Use</a> &amp; <a
+                                                        I agree to the <a target="_blank"
+                                                                          href="{{ path('app_default_termsandconditionsfororg', {'id': organization.id}) }}">Terms
+                                                            of Use</a> &amp; <a
                                                             href="#">Privacy
                                                             Policy</a>.
                                                     </label>

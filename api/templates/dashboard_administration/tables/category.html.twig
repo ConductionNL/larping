@@ -1,0 +1,38 @@
+{%  if categories is defined and categories is not empty %}
+<table class="display nowrap table" style="width:100%">
+    <thead>
+        <tr>
+            <th>{{ 'name' }}</th>
+            <th>{{ 'icon' }}</th>
+            <th><button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#CategoryModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for category in categories %}
+          <tr>
+              <td>{{ category.name }}</td>
+              <td>
+                  <i class="{{ category.icon }}"></i>
+                  {{ category.icon }}
+              </td>
+              <td>
+                  <div class="dropdown">
+                      <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i class="fas fa-ellipsis-v"></i>
+                      </a>
+
+                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                          <a class="dropdown-item" href="#">{{ 'edit'|trans|capitalize }}</a>
+                          <a class="dropdown-item text-danger" href="#">{{ 'delete'|trans|capitalize }}</a>
+                      </div>
+                  </div>
+              </td>
+          </tr>
+      {% endfor %}
+    </tbody>
+</table>
+    {% include 'dashboard_administration/modals/category.html.twig' %}
+    {% for category in categories %}
+        {% include 'dashboard_administration/modals/category.html.twig' with {'resource': category} %}
+    {% endfor %}
+{% endif %}

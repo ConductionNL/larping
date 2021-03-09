@@ -208,11 +208,13 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             $event['status'] = 'pending';
 
-            $categories = $event['categories'];
-            if (!$categories) {
-                $categories = [];
+            if (isset($categories)) {
+                $categories = $event['categories'];
+                if (!$categories) {
+                    $categories = [];
+                }
+                unset($event['categories']);
             }
-            unset($event['categories']);
 
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
@@ -231,9 +233,11 @@ class DashboardOrganizationController extends AbstractController
                 $resourceCategory = ['resource' => $event['@id'], 'catagories' => []];
             }
 
-            $resourceCategory['categories'] = $categories;
+            if (isset($categories)) {
+                $resourceCategory['categories'] = $categories;
 
-            $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+                $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+            }
 
             return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $event['id']]);
         }
@@ -278,31 +282,17 @@ class DashboardOrganizationController extends AbstractController
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
-        $variables['product'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
 
-//        $variables['ticket'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
-//        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-//
-//        $ticketorders = [];
-//        foreach ($variables['orders'] as $order){
-//            $var = array_column($order['items'], 'offer');
-//            if (in_array($variables['ticket'], $var)){
-//
-//            }
-//        }
-
-        /*@todo make this better*/
-        if (count($variables['product']) > 0) {
-            $variables['product'] = $variables['product'][0];
-            $variables['product']['offers'] = $variables['product']['offers'][0];
+        $variables['ticket'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+        if (count($variables['ticket']) > 0) {
+            $variables['ticket'] = $variables['ticket'][0];
         }
-        $offers = $variables['product']['offers'];
-        //orders op het offer van het event
-        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['order.organization' => $variables['organization']['@id'], 'offer' => $offers['@id']])['hydra:member'];
+        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        //$variables['order_items'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['offer' => $variables['ticket']['@id']])['hydra:member'];
 
         //downloads tickets
         if ($request->query->has('action') && $request->query->get('action') == 'download') {
-            $results = $variables['products'];
+            $results = $variables['orders'];
 
             $responseData = $serializer->serialize(
                 $results,
@@ -875,6 +865,14 @@ class DashboardOrganizationController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $organization = $request->request->all();
+
+            // New org switch
+            if ($id == 'add') {
+                $new = true;
+            } else {
+                $new = false;
+            }
+
             if ($organization['template']) {
                 unset($organization['template']);
             }
@@ -935,20 +933,19 @@ class DashboardOrganizationController extends AbstractController
             }
 
             // Lets save te organization
+            if ($new) {
+                $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
+                $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
-            /*
-            $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
-            $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
+                $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
+                $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
 
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
-            $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
-            $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
-
-            //create the groups clients, members, administrators
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
-            */
+                //create the groups clients, members, administrators
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
+            }
 
             // Setting the categories
 
@@ -969,14 +966,16 @@ class DashboardOrganizationController extends AbstractController
                 $template['@id'] = $variables['organization']['termsAndConditions']['@id'];
             }
 
-            $template['name'] = 'Terms and conditions for '.$variables['organization']['name'];
-            $template['templateEngine'] = 'twig';
-            $template['organization'] = '/organizations/'.$organization['id'];
+            if ($new) {
+                $template['name'] = 'Terms and conditions for '.$organization['name'];
+                $template['templateEngine'] = 'twig';
+                $template['organization'] = '/organizations/'.$organization['id'];
 
-            $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
+                $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
 
-            $organization['termsAndConditions'] = '/templates/'.$template['id'];
-            $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
+                $organization['termsAndConditions'] = '/templates/'.$template['id'];
+                $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
+            }
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
         }
@@ -996,6 +995,52 @@ class DashboardOrganizationController extends AbstractController
     public function makeOrderForMemberAction(CommonGroundService $commonGroundService, Request $request)
     {
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/payment-providers")
+     * @Template
+     */
+    public function paymentProvidersAction(CommonGroundService $commonGroundService, Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+
+//        $variables['providers'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'services'], ['organization' => $variables['organization']['id']])['hydra:member'];
+        $variables['providers'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'services'])['hydra:member'];
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/payment-providers/{id}")
+     * @Template
+     */
+    public function paymentProviderAction(CommonGroundService $commonGroundService, Request $request, $id)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+
+        if ($id != 'add') {
+            $variables['provider'] = $commonGroundService->getResource(['component' => 'bc', 'type' => 'services', 'id' => $id]);
+        } else {
+            $variables['provider'] = [];
+        }
+
+        // Update provider
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Provider') {
+            // Get the current resource
+            $provider = $request->request->all();
+            // Set the current organization as owner
+            $provider['organization'] = $variables['organization']['@id'];
+
+            // Save the resource
+            $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
+
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $provider['id']]);
+        }
 
         return $variables;
     }
