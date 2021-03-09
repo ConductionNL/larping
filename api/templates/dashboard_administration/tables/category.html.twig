@@ -22,8 +22,8 @@
                       </a>
 
                       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item" href="#">{{ 'edit'|trans|capitalize }}</a>
-                          <a class="dropdown-item text-danger" href="#">{{ 'delete'|trans|capitalize }}</a>
+                          <a class="dropdown-item" href="#"data-toggle="modal" data-target="#CategoryModal{{ category.id }}">{{ 'edit'|trans|capitalize }}</a>
+                          <a class="dropdown-item text-danger" href="#" style="text-decoration: line-through">{{ 'delete'|trans|capitalize }}</a>
                       </div>
                   </div>
               </td>

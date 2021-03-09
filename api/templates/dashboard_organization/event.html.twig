@@ -69,7 +69,7 @@
                 <!-- Settings -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{{ 'settings'|trans|capitalize }} </h3>
+                        <h3 class="h4 mb-4">{{ 'setting\'s'|capitalize }} </h3>
                         <ul class="list-unstyled mb-6">
                             {% for category in settings %}
                                 <li class="d-inline-block mr-4 mb-2">
@@ -94,23 +94,32 @@
                     </div>
                 </div>
 
+                {% if event['@id'] is defined %}
                 <!-- Location -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
                         <h3 class="h4 mb-4">{{ 'location'|trans|capitalize }} </h3>
                         <div class="row">
                             <div class="form-group  col-md-12 mb-6">
-                                <label for="name">{{ 'location'|trans|capitalize }}* </label>
-                                <select class="form-control" aria-label="{{ 'the location of this event'|trans|capitalize }}" required id="location" name="location">
+                                {% if locations is defined and locations is not empty  %}
+                                    <label for="name">{{ 'location'|trans|capitalize }}* </label>
+                                    <select class="form-control" aria-label="{{ 'the location of this event'|trans|capitalize }}" id="location" name="location">
                                     <option value="" >{{ 'none'|trans|capitalize }}</option>
                                     {% for location in locations %}
                                         <option value="{{ location['@id'] }}" {% if event.location|default  and event.location == location['@id']%} selected {% endif %}>{{ location.name }}</option>
                                     {% endfor %}
                                 </select>
+                                {% else %}
+                                <div class="card-body text-center">
+                                    <p>{{ 'no locations found'|trans|capitalize }}</p>
+                                    <a href="{{ path('app_dashboardorganization_location', { id: 'add'}) }}" class="btn btn-primary" >{{ 'add your first location'|trans|capitalize }}!</a>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
 
             </form>
 
@@ -128,7 +137,7 @@
             <!-- Gallery -->
             <div class="card">
                 <div class="card-body p-6">
-                    <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
+                    <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
 
                     <div class="form-group position-relative mb-6 form-group-dragable">
                         <input type="file" class="custom-file-input" id="favicon" name="favicon">

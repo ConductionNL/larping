@@ -73,6 +73,17 @@ class DashboardAdministrationController extends AbstractController
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];
 
+        //aanmaken en aanpassen categories
+        if ($request->isMethod('POST')) {
+            $category = $request->request->all();
+            $category['name'] = $request->get('name');
+            $category['icon'] = $request->get('icon');
+            $category['organization'] = '/organizations/d24e147f-00b9-4970-9809-6684a3fb965b';
+            $category['parent'] = '/categories/'.$request->get('parent');
+            $category['root'] = '/categories/'.$request->get('parent');
+            $commonGroundService->saveResource($category, ['component' => 'wrc', 'type' => 'categories']);
+        }
+
         return $variables;
     }
 }
