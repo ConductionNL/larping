@@ -362,7 +362,7 @@
                                 </div>
                                 <div class="form-group col-5">
                                     <label>{{ 'url'|trans|capitalize }}</label>
-                                    <input type="tel" class="form-control" name="contact[socials][uuid][url]">
+                                    <input type="tel" class="form-control" name="contact[socials][uuid][url]" onblur="checkURL(this)">
                                 </div>
                                 <div class="col-lg-1 d-lg-flex justify-content-end align-items-end mb-3">
                                     <a class="btn btn-danger float-right text-white"

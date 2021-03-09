@@ -1,13 +1,13 @@
 publiccodeYmlVersion: "0.2"
 
-name: larping
+name: arping
 applicationSuite: commonground
 url: "https://github.com/ConductionNL/larping"
-landingURL: "dev.larping.eu"
+landingURL: "larping.eu"
 isBasedOn: "https://github.com/ConductionNL/Proto-component-commonground.git"
 softwareVersion: "V1.0"
-releaseDate: "2021-10-02"
-logo: www.larping.eu
+releaseDate: "2021-01-03"
+logo: https://conductionnl.github.io/images/conduction_avatar_blue_on_transparant.svg
 monochromeLogo: img/logo-mono.svg
 
 inputTypes:
@@ -70,7 +70,7 @@ description:
         #          is and why one should need it.
 
         documentation: "https://github.com/ConductionNL/larping/blob/master/README.md"
-        apiDocumentation: "dev.larping.eu"
+        apiDocumentation: "larping.eu"
 #
 #    features:
 #       - Very important feature
@@ -120,3 +120,4 @@ dependsOn:
 installations:
     - type: helm
       url: "https://raw.githubusercontent.com/ConductionNL/larping/master/api/helm/"
+

@@ -1,4 +1,4 @@
-# larping
+# Larping
 
 Description
 ----
@@ -75,11 +75,5 @@ But most imporantly, welcome! We strife to keep an active community at [commongr
 Credits
 ----
 Information about the authors of this component can be found [here](AUTHORS.md)
-
-Copyright © [Utrecht](https://www.utrecht.nl/) 2019
-
-
-
-
 
 Copyright © [Utrecht](https://www.utrecht.nl/) 2019

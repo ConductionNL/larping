@@ -123,9 +123,9 @@ class OrganizationController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['organization']['id']])['hydra:member'];
 
         // Getting the offers
-        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id'], 'products.type' => 'simple'])['hydra:member'];
-        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id'], 'products.type' => 'ticket'])['hydra:member'];
-        $variables['subscriptions'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id'], 'products.type' => 'subscription'])['hydra:member'];
+        $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'simple'])['hydra:member'];
+        $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+        $variables['subscriptions'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'subscription'])['hydra:member'];
 
         return $variables;
     }

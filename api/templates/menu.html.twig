@@ -50,10 +50,10 @@
                                             <a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }} </a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch organization'|trans|capitalize }}</a>
+                                            <a href="{# path('app_dashboarduser_organizations') #}" style="text-decoration: line-through">{{ 'switch organization'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_edit', {'id':organization.id}) }}">{{ 'edit organization'|trans|capitalize }} </a>
+                                            <a href="{# path('app_dashboardorganization_edit', {'id':organization.id}) #}" style="text-decoration: line-through">{{ 'edit organization'|trans|capitalize }} </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -99,13 +99,13 @@
                                         </li>
                                         -->
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_orders') }}">{{ 'orders'|trans|capitalize }}</a>
+                                            <a href="{# path('app_dashboardorganization_orders') #}" style="text-decoration: line-through">{{ 'orders'|trans|capitalize }}</a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_reviews') }}">{{ 'reviews'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_paymentproviders') }}">{{ 'payment providers'|trans|capitalize }}</a>
+                                            <a href="{# path('app_dashboardorganization_paymentproviders') #}" style="text-decoration: line-through">{{ 'payment providers'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -118,13 +118,13 @@
                                             </h5>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_members') }}">{{ 'members'|trans|capitalize }}</a>
+                                            <a href=" {# {{path('app_dashboardorganization_members')}} #} " style="text-decoration: line-through">{{ 'members'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_mailinglists') }}">{{ 'Mailing Lists'|trans }}</a>
+                                            <a href="{# path('app_dashboardorganization_mailinglists') #}" style="text-decoration: line-through">{{ 'Mailing Lists'|trans }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_makeorderformember') }}">{{ 'make a order for a member'|trans|capitalize }}</a>
+                                            <a href="{# path('app_dashboardorganization_makeorderformember') #}" style="text-decoration: line-through">{{ 'make a order for a member'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
                                     <!--
@@ -156,6 +156,26 @@
                             </div>
                         </div>
                     {% endif %}
+                </li>
+
+                <li id="firstdiv">
+                   {% if app.user.organization is defined and app.user.organization is not empty %}
+                        {% set organization = commonground_resource(app.user.organization) %}
+                        {#@todo change this to static id#}
+                       {% if organization.name == 'Conduction'%}
+                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                {{ 'global administration' }}
+                            </a>
+                            <div class="dropdown">
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="secdiv">
+                                    <a class="dropdown-item" href="{{ path('app_dashboardadministration_index') }}"><i class="fal fa-columns"></i> {{ 'dashboard'|trans|capitalize }}</a>
+                                    <a class="dropdown-item" href="{{ path('app_dashboardadministration_organizations') }}"><i class="fal fa-building"></i> {{ 'organizations'|trans|capitalize }}</a>
+                                    <a class="dropdown-item" href="{{ path('app_dashboardadministration_locations') }}"><i class="fal fa-map-marker-alt"></i> {{ 'locations'|trans|capitalize }}</a>
+                                    <a class="dropdown-item"  href="{{ path('app_dashboardadministration_categories') }}"><i class="fal fa-paw-claws"></i> {{ 'categories'|trans|capitalize }}</a>
+                                </div>
+                            </div>
+                       {% endif %}
+                   {% endif %}
                 </li>
 
                 <div class="menu-right">
@@ -304,7 +324,7 @@
                             <ul class="dropdown-menu" style="min-width: 200px;">
                                 <li>
                                     <a class="d-flex flex-wrap align-items-center"
-                                       href="https://id-vault.com/dashboard/general" target="_blank">
+                                       href="https://id-vault.com/dashboard" target="_blank">
                                         <i class="fal fa-user mr-2" aria-hidden="true"></i>
                                         {{ 'my profile'|trans|capitalize }}
                                     </a>
@@ -370,3 +390,11 @@
         </div>
     </div>
 </nav>
+
+<script>
+    $(document).ready(function () {
+        $("#secdiv").css({
+            'width': ($("#firstdiv").width() + 'px')
+        });
+    });
+</script>

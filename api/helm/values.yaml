@@ -4,33 +4,23 @@
 
 settings:
   registryBase: docker.io/conduction
-  projectName: larping
-  name: larping
-  title: larping
+  projectName: arping
+  name: arping
   version: V1.0
   majorVersion: v1
-  id: 9798cae6-187a-434f-bd66-f1dc2cc61466
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
-  type: application
   repro: https://github.com/ConductionNL/larping
-  demo: dev.larping.eu
-  container: https://hub.docker.com/repository/docker/conduction/larping-php
+  demo: larping.eu
   domain: larping.eu
-  subdomain: false
-  subpath: 
+  subdomain: arping
+  subpath: larping
   subpathRouting: true
-  organisationName: Conduction
-  email: info@conduction.nl
-  country: Netherlands
-  state: Noord-Holland
-  locality: Amsterdam
-  unit: Common-Ground
-  env: dev
+  env: prod
   web: false
-  internal: false
   debug: 1
   cache: false
-  sessionDuration: 1209600
+  type: component
+  id: 
   replicaCount: 1
   corsAllowOrigin: ['*']
   trustedHosts: '^.+$'
@@ -40,11 +30,9 @@ settings:
     - 10.0.0.0/8
     - 172.16.0.0/12
     - 192.168.0.0/16
-  # If you are runnig a single component on a kubernetes cluster you can just easaliy enable the load balancer, if not you need to set up a multi component load balancer
+  # If you are running a single component on a kubernetes cluster you can just easily enable the load balancer, if not you need to set up a multi component load balancer
   loadbalancerEnabled: false
-  # If you want to enable NLX you are requered to add the appropreate certificates to you nlx-settings folder (located in the /api folder)
-  nlxInwayEnabled: false
-  # If you are runnig a single component on a kubernetes cluster you can just easaliy enable the load balancer, if not you need to set up a multi component load balancer
+  # If you are running a single component on a kubernetes cluster you can just easily enable the load balancer, if not you need to set up a multi component load balancer
   notificationEnabled: false
   audittrailEnabled: false
   authorisationEnabled: false
@@ -52,12 +40,7 @@ settings:
   archiveEnabled: false
 
 security:
-  commongroundId: "7919a58b-3fd9-4931-ad70-2ccc1168ef23"
-  commongroundKey: "7919a58b-3fd9-4931-ad70-2ccc1168ef23"
   applicationKey: "7919a58b-3fd9-4931-ad70-2ccc1168ef23"
-  userKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
-  authorisationProviderUser: https://uc.zuid-drecht.nl
-  authorisationProviderApplication: https://openzaak.dev.zuid-drecht.nl/authorizaties/api/v1
 
 
 php:
@@ -68,6 +51,19 @@ php:
   env: prod
   secret: ""
   replicaCount: 2
+
+redis:
+  cluster:
+    enabled: false
+  enabled: false
+  redisPort: 6379
+  usePassword: false
+
+commonground:
+  eherkenning:
+    location: https://larping.eu/eherkenning
+  digispoof:
+    location: https://larping.eu/digispoof
 
 nginx:
   repository: docker.io/conduction/protocomponent-nginx
@@ -111,15 +107,6 @@ mercure:
     type: NodePort
     port: 80
 
-redis:
-    port: 6379
-    version: 5.0
-    memory: 100Mi
-    cpu: 100m
-    limits:
-        memory: 200Mi
-        cpu: 250m
-
 ingress:
   annotations:
     # kubernetes.io/ingress.global-static-ip-name: chart-ip
@@ -149,9 +136,3 @@ resources: {}
   # requests:
   #  cpu: 100m
   #  memory: 128Mi
-
-commonground:
-    eherkenning:
-        location: https://larping.eu/eherkenning
-    digispoof:
-        location: https://larping.eu/digispoof
