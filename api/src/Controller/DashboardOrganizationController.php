@@ -291,19 +291,17 @@ class DashboardOrganizationController extends AbstractController
             $variables['ticket'] = $variables['ticket'][0];
         }
         $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        //$variables['order_items'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['offer' => $variables['ticket']['@id']])['hydra:member'];
 
-        //downloads tickets
-        if ($request->query->has('action') && $request->query->get('action') == 'download') {
-            $results = $variables['orders'];
+            //downloads tickets
+            if ($request->query->has('action') && $request->query->get('action') == 'download') {
+                $results = [];
+                $responseData = $serializer->serialize(
+                    $results,
+                    'csv'
+                );
 
-            $responseData = $serializer->serialize(
-                $results,
-                'csv'
-            );
-
-            return new Response($responseData, Response::HTTP_OK, ['content-type' => 'text/csv', 'Content-Disposition' => 'attachment; filename=tickets.csv']);
-        }
+                return new Response($responseData, Response::HTTP_OK, ['content-type' => 'text/csv', 'Content-Disposition' => 'attachment; filename=tickets.csv']);
+            }
 
         return $variables;
     }
