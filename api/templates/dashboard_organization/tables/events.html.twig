@@ -30,7 +30,7 @@
             80 / 120
         </td>
         <td>
-            <span class="badge badge-warning px-2 py-1">{{event.status}}</span>
+            <span class="badge {% if event.status == 'pending' %} badge-warning {% else %} badge-success {% endif %} px-2 py-1">{{event.status}}</span>
         </td>
         <td>
 
