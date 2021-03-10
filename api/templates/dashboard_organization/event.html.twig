@@ -116,7 +116,7 @@
                                 {% else %}
                                 <div class="card-body text-center">
                                     <p>{{ 'no locations found'|trans|capitalize }}</p>
-                                    <a href="{{ path('app_dashboardorganization_location', { id: 'add'}) }}" class="btn btn-primary" >{{ 'add your first location'|trans|capitalize }}!</a>
+                                    <a href="#" data-toggle="modal" data-target="#LocationModalAdd" class="btn btn-primary" >{{ 'add your first location'|trans|capitalize }}!</a>
                                 </div>
                                 {% endif %}
                             </div>
@@ -158,6 +158,8 @@
     </section>
 
     {% include 'dashboard_organization/modals/event_product.html.twig'%}
+    {% include 'dashboard_organization/modals/event_location.html.twig'%}
+
 
     <script>
         function addItem(id) {

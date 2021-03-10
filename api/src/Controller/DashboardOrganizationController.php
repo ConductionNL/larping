@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use function GuzzleHttp\Promise\all;
 
 /**
  * The DashboardController handles any calls about administration and dashboard pages.
@@ -207,7 +208,7 @@ class DashboardOrganizationController extends AbstractController
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
             if ($id == 'add') {
-                $event['status'] = 'pending';
+                $event['status'] = 'private';
             }
 
             if (isset($event['categories'])) {
@@ -265,6 +266,17 @@ class DashboardOrganizationController extends AbstractController
             $product['offers'][] = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
 
             $variables['products'][] = $product;
+        }
+
+        //Add location
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Location') {
+            $location = $request->request->all();
+            $location['organization'] = $variables['organization']['@id'];
+            $location = $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
+            $variables['event']['location'] = $location['@id'];
+            $commonGroundService->saveResource($variables['event'], ['component' => 'arc', 'type' => 'events']);
+
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $variables['event']['id']]);
         }
 
         $variables['categories'] = [];
