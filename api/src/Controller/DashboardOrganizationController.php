@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
+use function GuzzleHttp\Promise\all;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -167,7 +168,7 @@ class DashboardOrganizationController extends AbstractController
             $event = $request->request->all();
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
-            $event['status'] = 'pending';
+            $event['status'] = 'private';
 
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
@@ -208,7 +209,7 @@ class DashboardOrganizationController extends AbstractController
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
             if ($id == 'add') {
-                $event['status'] = 'pending';
+                $event['status'] = 'private';
             }
 
             if (isset($event['categories'])) {
@@ -265,6 +266,17 @@ class DashboardOrganizationController extends AbstractController
             $offer['audience'] = 'public';
 
             $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $variables['event']['id']]);
+        }
+
+        //Add location
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Location') {
+            $location = $request->request->all();
+            $location['organization'] = $variables['organization']['@id'];
+            $location = $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
+            $variables['event']['location'] = $location['@id'];
+            $commonGroundService->saveResource($variables['event'], ['component' => 'arc', 'type' => 'events']);
 
             return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $variables['event']['id']]);
         }

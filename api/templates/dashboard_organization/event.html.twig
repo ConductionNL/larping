@@ -30,15 +30,15 @@
                     <div class="card-body px-6 pt-6 pb-1">
                         <div class="row">
                             <div class="form-group  col-md-6 mb-6">
-                                <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {% if event.name is defined %}{{ event.name }}{% endif %}</h3>
+                                <h3 class="h4 mb-4">{% if event.name is defined %}{{ 'about'|trans|capitalize }}{{ event.name }}{% endif %}</h3>
                             </div>
                             <div class="form-group  col-md-6 mb-6">
-                                <button type="submit" class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
+                                <button type="submit" class="btn btn-primary float-right">{% if event['@id']|default %}{{ 'save'|trans|capitalize }}{% else %}{{ 'next'|trans|capitalize }}{% endif %}</button>
                                 {% if event['@id'] is defined %}
-                                    {% if event.status == 'pending' %}
+                                    {% if event.status == 'private' %}
                                         <button type="submit" name="status" value="published" class="btn btn-success float-right mr-1">{{ 'publish event'|trans|capitalize }}</button>
                                     {% else %}
-                                        <button type="submit" name="status" value="pending" class="btn btn-warning float-right mr-1">{{ "unpublish event" }}</button>
+                                        <button type="submit" name="status" value="private" class="btn btn-warning float-right mr-1">{{ "unpublish event"|trans|capitalize }}</button>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -102,6 +102,7 @@
                 <!-- Location -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
+                        <a class="btn btn-success float-right text-white" data-toggle="modal" data-target="#LocationModalAdd"><i class="fal fa-plus"></i></a>
                         <h3 class="h4 mb-4">{{ 'location'|trans|capitalize }} </h3>
                         <div class="row">
                             <div class="form-group  col-md-12 mb-6">
@@ -116,7 +117,7 @@
                                 {% else %}
                                 <div class="card-body text-center">
                                     <p>{{ 'no locations found'|trans|capitalize }}</p>
-                                    <a href="{{ path('app_dashboardorganization_location', { id: 'add'}) }}" class="btn btn-primary" >{{ 'add your first location'|trans|capitalize }}!</a>
+                                    <a href="#" data-toggle="modal" data-target="#LocationModalAdd" class="btn btn-primary" >{{ 'add your first location'|trans|capitalize }}!</a>
                                 </div>
                                 {% endif %}
                             </div>
@@ -158,6 +159,8 @@
     </section>
 
     {% include 'dashboard_organization/modals/event_product.html.twig'%}
+    {% include 'dashboard_organization/modals/event_location.html.twig'%}
+
 
     <script>
         function addItem(id) {

@@ -10,15 +10,9 @@
                     {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
                     <span class="d-inline-block mr-2 text-white">{{ totals.reviews }} (Reviews)</span>
                 </div>
-                <h3>
+                <h3 class="text-white">
                     {{ item.name|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
                 </h3>
-
-                <p class="text-white">
-                    {% for category in locationCategories %}
-                        <i class="{% if category.icon|default %}{{ category.icon }}{% endif %}" data-toggle="tooltip" data-placement="top" title="{{ 'categorie: ' }}{{ category.name }}" aria-hidden="true"></i>
-                    {% endfor %}
-                </p>
             </div>
         </div>
 
@@ -33,6 +27,10 @@
                         <span id="{{ item['id'] }}">{{ totals.likes }}</span>
                     </button>
                 </li>
+                {% for category in locationCategories %}
+                    <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip"
+                            data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
+                {% endfor %}
                 <li class="ml-auto">
                     <a class="px-2" href="{{ path('app_location_location', {'id': item.id}) }}">{{ 'view'|trans|capitalize }}</a>
                 </li>
