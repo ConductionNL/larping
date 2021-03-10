@@ -35,7 +35,11 @@
                             <div class="form-group  col-md-6 mb-6">
                                 <button type="submit" class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
                                 {% if event['@id'] is defined %}
-                                <button disabled type="button" class="btn btn-danger float-right mr-1">{{ 'delete event'|trans|capitalize }}</button>
+                                    {% if event.status == 'pending' %}
+                                        <button type="submit" name="status" value="published" class="btn btn-success float-right mr-1">{{ 'publish event'|trans|capitalize }}</button>
+                                    {% else %}
+                                        <button type="submit" name="status" value="pending" class="btn btn-warning float-right mr-1">{{ "unpublish event" }}</button>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
