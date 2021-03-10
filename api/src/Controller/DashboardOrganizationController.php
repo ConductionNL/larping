@@ -206,7 +206,9 @@ class DashboardOrganizationController extends AbstractController
             $event = $request->request->all();
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
-            $event['status'] = 'pending';
+            if ($id == 'add') {
+                $event['status'] = 'pending';
+            }
 
             if (isset($event['categories'])) {
                 $categories = $event['categories'];
@@ -288,12 +290,10 @@ class DashboardOrganizationController extends AbstractController
             $variables['ticket'] = $variables['ticket'][0];
         }
         $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        //$variables['order_items'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['offer' => $variables['ticket']['@id']])['hydra:member'];
 
         //downloads tickets
         if ($request->query->has('action') && $request->query->get('action') == 'download') {
-            $results = $variables['orders'];
-
+            $results = [];
             $responseData = $serializer->serialize(
                 $results,
                 'csv'
