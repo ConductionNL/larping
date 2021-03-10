@@ -193,8 +193,7 @@ class DashboardOrganizationController extends AbstractController
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
-        }
-        else {
+        } else {
             $variables['event'] = [];
             $variables['products'] = [];
         }
@@ -292,16 +291,16 @@ class DashboardOrganizationController extends AbstractController
         }
         $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
-            //downloads tickets
-            if ($request->query->has('action') && $request->query->get('action') == 'download') {
-                $results = [];
-                $responseData = $serializer->serialize(
-                    $results,
-                    'csv'
-                );
+        //downloads tickets
+        if ($request->query->has('action') && $request->query->get('action') == 'download') {
+            $results = [];
+            $responseData = $serializer->serialize(
+                $results,
+                'csv'
+            );
 
-                return new Response($responseData, Response::HTTP_OK, ['content-type' => 'text/csv', 'Content-Disposition' => 'attachment; filename=tickets.csv']);
-            }
+            return new Response($responseData, Response::HTTP_OK, ['content-type' => 'text/csv', 'Content-Disposition' => 'attachment; filename=tickets.csv']);
+        }
 
         return $variables;
     }
