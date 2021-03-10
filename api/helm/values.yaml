@@ -15,7 +15,7 @@ settings:
   subdomain: arping
   subpath: larping
   subpathRouting: true
-  env: prod
+  env: dev
   web: false
   debug: 1
   cache: false
