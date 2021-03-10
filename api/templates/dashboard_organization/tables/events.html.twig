@@ -9,7 +9,7 @@
         <th>{{ 'location'|trans|capitalize }}</th>
         <th>{{ 'tickets available'|trans|capitalize }}</th>
         <th>Status</th>
-        <th><a href="{{ path('app_dashboardorganization_event', {id: 'add'}) }}" class="btn btn-success btn-sm">{{ 'add'|trans|capitalize }}</button></th>
+        <th><a href="{{ path('app_dashboardorganization_event', {id: 'add'}) }}" class="btn btn-success btn-sm">{{ 'add'|trans|capitalize }}</a></th>
     </tr>
     </thead>
     <tbody>
@@ -30,7 +30,7 @@
             80 / 120
         </td>
         <td>
-            <span class="badge badge-warning px-2 py-1">{{event.status}}</span>
+            <span class="badge {% if event.status == 'pending' %} badge-warning {% else %} badge-success {% endif %} px-2 py-1">{{event.status}}</span>
         </td>
         <td>
 

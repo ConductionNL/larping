@@ -62,6 +62,7 @@ class EventController extends AbstractController
         if ($variables['search']) {
             $query['name'] = $variables['search'];
         }
+        $query['status'] = 'published';
 
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], $query)['hydra:member'];
 

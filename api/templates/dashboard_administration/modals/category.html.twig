@@ -1,0 +1,36 @@
+{% if resource is defined %}
+    {% set  id = resource['id'] %}
+    {% set  type = 'Category' %}
+{% else %}
+    {% set  id = 'Add' %}
+    {% set  type = 'Category' %}
+{% endif %}
+
+{% extends "dashboard_administration/modals/modal.html.twig" %}
+
+{% block body %}
+    <form id="{{ type }}Form{{ id }}" method="post">
+        {% if resource['id'] is defined %}
+            <input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
+        {% if resource['@id'] is defined %}
+            <input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
+
+        <div class="form-group">
+            <label for="name">{{ 'name'|trans|capitalize }}</label>
+            <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %} value="{{ resource.name }}" {% endif %} required>
+        </div>
+
+        <div class="form-group">
+            <label for="icon">{{ 'icon'|trans|capitalize }}</label>
+            <input type="text" class="form-control" id="icon" name="icon" {% if resource.icon is defined %} value="{{ resource.icon }}" {% endif %} required>
+        </div>
+
+        <div class="form-group">
+            <label for="type">{{ 'type'|trans|capitalize }}*</label>
+            <select class="form-control" id="type" name="parent" required>
+                <option value="944c21bd-540c-4433-8fd3-dca9498c1008" {% if resource.parent.id is defined and resource.parent.id == '944c21bd-540c-4433-8fd3-dca9498c1008' %} selected {% endif %}>{{ 'feature' }}</option>
+                <option value="acf85299-1fee-4510-9b8d-6b78af055f45" {% if resource.parent.id is defined and resource.parent.id == 'acf85299-1fee-4510-9b8d-6b78af055f45' %} selected {% endif %}>{{ 'setting' }}</option>
+            </select>
+        </div>
+    </form>
+{% endblock %}
