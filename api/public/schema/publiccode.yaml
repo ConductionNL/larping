@@ -1,6 +1,6 @@
 publiccodeYmlVersion: "0.2"
 
-name: arping
+name: larping
 applicationSuite: commonground
 url: "https://github.com/ConductionNL/larping"
 landingURL: "larping.eu"
