@@ -48,7 +48,7 @@ class EventController extends AbstractController
         $resourceIds = [];
         if (!empty($variables['categories'])) {
             foreach ($variables['categories'] as $key => $category) {
-                if($category == 'Alle categorieën' || $category == 'alle regio\'s') {
+                if ($category == 'Alle categorieën' || $category == 'alle regio\'s') {
                     unset($variables['categories'][$key]);
                 }
             }
