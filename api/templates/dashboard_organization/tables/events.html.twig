@@ -1,29 +1,28 @@
 {% if events is  defined and events|length > 0 %}
-<table id="events" class="display nowrap table" style="width:100%">
-    <thead>
-    <tr>
-        <th>{{ 'name'|trans|capitalize }}</th>
-        <th>{{ 'start'|trans|capitalize }}</th>
-        <th>{{ 'end'|trans|capitalize }}</th>
-        <th>{{ 'location'|trans|capitalize }}</th>
-        <th>{{ 'tickets available'|trans|capitalize }}</th>
-        <th>Status</th>
-        <th><a href="{{ path('app_dashboardorganization_event', {id: 'add'}) }}" class="btn btn-success btn-sm">{{ 'add'|trans|capitalize }}</a></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for event in events %}
-    <tr>
-        <td class="text-capitalize">
-            <a class="text-hover-primary text-muted" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ event.name }}</a>
-        </td>
-        <td>
-            {{ event.startDate|date("d/m/Y") }}
-        </td>
-        <td>
-            {{ event.endDate|date("d/m/Y") }}
-        </td>
-        <td class="text-capitalize">{% if event.location|default %}{{ commonground_resource(event.location).name }}{% endif %}</td>
+{#<table id="events" class="display nowrap table" style="width:100%">#}
+{#    <thead>#}
+{#    <tr>#}
+{#        <th>{{ 'name'|trans|capitalize }}</th>#}
+{#        <th>{{ 'start'|trans|capitalize }}</th>#}
+{#        <th>{{ 'end'|trans|capitalize }}</th>#}
+{#        <th>{{ 'location'|trans|capitalize }}</th>#}
+{#        <th>{{ 'tickets available'|trans|capitalize }}</th>#}
+{#        <th>Status</th>#}
+{#        <th><a href="{{ path('app_dashboardorganization_event', {id: 'add'}) }}" class="btn btn-success btn-sm">{{ 'add'|trans|capitalize }}</a></th>#}
+{#    </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#    <tr>#}
+{#        <td class="text-capitalize">#}
+{#            <a class="text-hover-primary text-muted" href="{{ path('app_event_event', {id: event.id}) }}" target="_blank">{{ event.name }}</a>#}
+{#        </td>#}
+{#        <td>#}
+{#            {{ event.startDate|date("d/m/Y") }}#}
+{#        </td>#}
+{#        <td>#}
+{#            {{ event.endDate|date("d/m/Y") }}#}
+{#        </td>#}
+{#        <td class="text-capitalize">{% if event.location|default %}{{ commonground_resource(event.location).name }}{% endif %}</td>#}
     <table id="events" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
@@ -46,7 +45,7 @@
             {% if products|default %}
                 {% for product in products %}
                     {% if product.offers|default %}
-                        {% for offer in products.offers %}
+                        {% for offer in product.offers %}
                             {% if offer.maxQuantity|default %}
                                 {% set maxQuantity = maxQuantity + offer.maxQuantity %}
                             {% endif %}
