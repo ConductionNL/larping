@@ -47,6 +47,11 @@ class EventController extends AbstractController
         $query = [];
         $resourceIds = [];
         if (!empty($variables['categories'])) {
+            foreach ($variables['categories'] as $key => $category) {
+                if($category == 'Alle categorieën' || $category == 'alle regio\'s') {
+                    unset($variables['categories'][$key]);
+                }
+            }
             $categoryQuery['categories.id'] = $variables['categories'];
             $categoryQuery['filter'] = 'id';
 
