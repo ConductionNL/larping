@@ -17,29 +17,39 @@
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ 'edit event'|trans|capitalize }}</li>
+                    <li class="breadcrumb-item active"
+                        aria-current="page">{% if event['@id'] is defined %}{{ 'edit event'|trans|capitalize }}{% else %}{{ 'add event'|trans|capitalize }}{% endif %}</li>
                 </ul>
             </nav>
 
-            <form id="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}" method="post" name="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}">
+            <form id="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}" method="post"
+                  name="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}">
                 <input type="hidden" name="@type" value="Event">
-                {% if event['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ event['id'] }}">{% endif %}
-                {% if event['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ event['@id'] }}">{% endif %}
+                {% if event['id'] is defined %}<input type="hidden" id="id" name="id"
+                                                      value="{{ event['id'] }}">{% endif %}
+                {% if event['@id'] is defined %}<input type="hidden" id="@id" name="@id"
+                                                       value="{{ event['@id'] }}">{% endif %}
                 <!-- About -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
                         <div class="row">
                             <div class="form-group  col-md-6 mb-6">
-                                <h3 class="h4 mb-4">{% if event.name is defined %}{{ 'about'|trans|capitalize }}{{ event.name }}{% endif %}</h3>
+                                <h3 class="h4 mb-4">{% if event.name is defined %}{{ 'about'|trans|capitalize }} {{ event.name }}{% endif %}</h3>
                             </div>
                             <div class="form-group  col-md-6 mb-6">
-                                <button type="submit" class="btn btn-primary float-right">{% if event['@id']|default %}{{ 'save'|trans|capitalize }}{% else %}{{ 'next'|trans|capitalize }}{% endif %}</button>
                                 {% if event['@id'] is defined %}
-                                    {% if event.status == 'private' %}
-                                        <button type="submit" name="status" value="published" class="btn btn-success float-right mr-1">{{ 'publish event'|trans|capitalize }}</button>
+                                    <button type="submit"
+                                            class="btn btn-primary float-right">{{ 'add'|trans|capitalize }}</button>
+                                    {% if event.status == 'pending' or event.status == 'private' %}
+                                        <button type="submit" name="status" value="published"
+                                                class="btn btn-success float-right mr-1">{{ 'publish event'|trans|capitalize }}</button>
                                     {% else %}
-                                        <button type="submit" name="status" value="private" class="btn btn-warning float-right mr-1">{{ "unpublish event"|trans|capitalize }}</button>
+                                        <button type="submit" name="status" value="private"
+                                                class="btn btn-warning float-right mr-1">{{ "unpublish event" }}</button>
                                     {% endif %}
+                                {% else %}
+                                    <button type="submit"
+                                            class="btn btn-primary float-right">{{ 'continue'|trans|capitalize }}</button>
                                 {% endif %}
                             </div>
                         </div>
@@ -47,23 +57,32 @@
                         <div class="row">
                             <div class="form-group  col-md-12 mb-6">
                                 <label for="nameInput">{{ 'name'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" {% if event.name is defined %}value="{{ event.name }}"{% endif %} id="nameInput" name="name">
+                                <input type="text" class="form-control"
+                                       {% if event.name is defined %}value="{{ event.name }}"{% endif %} id="nameInput"
+                                       name="name">
                             </div>
                             <div class="form-group col-md-12 mb-6">
                                 <label for="}descriptionTextarea">{{ 'description'|trans|capitalize }}</label>
-                                <textarea class="form-control" rows="6" id="descriptionTextarea" name="description">{% if event.description is defined %}{{ event.description }}{% endif %}</textarea>
+                                <textarea class="form-control" rows="6" id="descriptionTextarea"
+                                          name="description">{% if event.description is defined %}{{ event.description }}{% endif %}</textarea>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="form-group col-6">
                                 <label for="startdateInput">{{ 'startdate'|trans|capitalize }}</label>
-                                <input class="form-control" name="startDate" type="datetime-local" id="startdateInput" placeholder="yyyy-mm-dd" {% if event.startDate is defined %}value="{{ event.startDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} required>
+                                <input class="form-control" name="startDate" type="datetime-local" id="startdateInput"
+                                       placeholder="yyyy-mm-dd"
+                                       {% if event.startDate is defined %}value="{{ event.startDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %}
+                                       required>
                             </div>
 
                             <div class="form-group col-6">
                                 <label for="enddateInput">{{ 'enddate'|trans|capitalize }}</label>
-                                <input class="form-control" name="endDate" type="datetime-local" id="enddateInput" placeholder="yyyy-mm-dd" {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} min="{{ "now"|date("Y-m-d\\Th:i") }}" required>
+                                <input class="form-control" name="endDate" type="datetime-local" id="enddateInput"
+                                       placeholder="yyyy-mm-dd"
+                                       {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %}
+                                       min="{{ "now"|date("Y-m-d\\Th:i") }}" required>
                             </div>
                         </div>
 
@@ -84,12 +103,13 @@
                                             value="/categories/{{ category.id }}"
                                             id="category{{ category.id }}"
                                             name="categories[]"
-                                            {% if category.id in categories%}
-                                            checked="checked"
+                                            {% if category.id in categories %}
+                                                checked="checked"
                                             {% endif %}
                                         />
                                         <label class="form-check-label" for="flexCheckDefault">
-                                            <i class="{{ category.icon }} mr-2" aria-hidden="true"></i>{{ category.name }}
+                                            <i class="{{ category.icon }} mr-2"
+                                               aria-hidden="true"></i>{{ category.name }}
                                         </label>
                                     </div>
                                 </li>
@@ -99,50 +119,34 @@
                 </div>
 
                 {% if event['@id'] is defined %}
-                <!-- Location -->
-                <div class="card">
-                    <div class="card-body px-6 pt-6 pb-1">
-                        <a class="btn btn-success float-right text-white" data-toggle="modal" data-target="#LocationModalAdd"><i class="fal fa-plus"></i></a>
-                        <h3 class="h4 mb-4">{{ 'location'|trans|capitalize }} </h3>
-                        <div class="row">
-                            <div class="form-group  col-md-12 mb-6">
-                                {% if locations is defined and locations is not empty  %}
-                                    <label for="name">{{ 'location'|trans|capitalize }}* </label>
-                                    <select class="form-control" aria-label="{{ 'the location of this event'|trans|capitalize }}" id="location" name="location">
-                                    <option value="" >{{ 'none'|trans|capitalize }}</option>
-                                    {% for location in locations %}
-                                        <option value="{{ location['@id'] }}" {% if event.location|default  and event.location == location['@id']%} selected {% endif %}>{{ location.name }}</option>
-                                    {% endfor %}
-                                </select>
-                                {% else %}
-                                <div class="card-body text-center">
-                                    <p>{{ 'no locations found'|trans|capitalize }}</p>
-                                    <a href="#" data-toggle="modal" data-target="#LocationModalAdd" class="btn btn-primary" >{{ 'add your first location'|trans|capitalize }}!</a>
-                                </div>
-                                {% endif %}
+                    <!-- Location -->
+                    <div class="card">
+                        <div class="card-body px-6 pt-6 pb-1">
+                            <h3 class="h4 mb-4">{{ 'locations'|trans|capitalize }} </h3>
+                            <div class="row">
+                                {% include 'dashboard_organization/tables/event_location.html.twig' with {'id': 'locations'} %}
                             </div>
                         </div>
                     </div>
-                </div>
                 {% endif %}
 
             </form>
 
             {% if event['@id'] is defined %}
-            <!-- Products -->
-            <div class="card">
-                <div class="card-body px-6 pt-6 pb-1">
-                    <h3 class="h4 mb-4">{{ 'products'|trans|capitalize }} </h3>
-                    <div class="row">
-                        {%  include 'dashboard_organization/tables/products.html.twig' with {'id': 'products'} %}
+                <!-- Products -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'products'|trans|capitalize }} </h3>
+                        <div class="row">
+                            {% include 'dashboard_organization/tables/products.html.twig' with {'id': 'products'} %}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Gallery -->
-            <div class="card">
-                <div class="card-body p-6">
-                    <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
+                <!-- Gallery -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
 
                     <div class="form-group position-relative mb-6 form-group-dragable">
                         <input onchange="showLogo()" type="file" class="custom-file-input" id="favicon" name="favicon">
@@ -154,16 +158,13 @@
                             {% endif %}
                         </div>
                     </div>
-
                 </div>
-            </div>
             {% endif %}
         </div>
 
     </section>
 
-    {% include 'dashboard_organization/modals/event_product.html.twig'%}
-    {% include 'dashboard_organization/modals/event_location.html.twig'%}
+    {% include 'dashboard_organization/modals/event_product.html.twig' %}
 
     <script>
         function showLogo(){
@@ -205,11 +206,11 @@
             input.setAttribute('id', id);
 
             var options_array = {
-                ValueA : '{{ 'select type'|trans|capitalize }}',
-                ValueB : '{{ 'website'|trans|capitalize }}',
-                ValueC : '{{ 'facebook'|trans|capitalize }}',
-                ValueD : '{{ 'twitter'|trans|capitalize }}',
-                ValueE : '{{ 'instagram'|trans|capitalize }}'
+                ValueA: '{{ 'select type'|trans|capitalize }}',
+                ValueB: '{{ 'website'|trans|capitalize }}',
+                ValueC: '{{ 'facebook'|trans|capitalize }}',
+                ValueD: '{{ 'twitter'|trans|capitalize }}',
+                ValueE: '{{ 'instagram'|trans|capitalize }}'
             };
 
             const select = document.createElement("select");
@@ -217,7 +218,7 @@
                 select.setAttribute('class', "form-control mb-2");
                 input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
                 formDiv.appendChild(select);
-                for(option in options_array) {
+                for (option in options_array) {
                     select.options[select.options.length] = new Option(options_array[option], option);
                 }
             }
