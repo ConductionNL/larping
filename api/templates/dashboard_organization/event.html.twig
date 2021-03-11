@@ -39,7 +39,7 @@
                             <div class="form-group  col-md-6 mb-6">
                                 {% if event['@id'] is defined %}
                                     <button type="submit"
-                                            class="btn btn-primary float-right">{{ 'add'|trans|capitalize }}</button>
+                                            class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
                                     {% if event.status == 'pending' or event.status == 'private' %}
                                         <button type="submit" name="status" value="published"
                                                 class="btn btn-success float-right mr-1">{{ 'publish event'|trans|capitalize }}</button>
@@ -117,20 +117,19 @@
                         </ul>
                     </div>
                 </div>
+            </form>
 
-                {% if event['@id'] is defined %}
-                    <!-- Location -->
-                    <div class="card">
-                        <div class="card-body px-6 pt-6 pb-1">
-                            <h3 class="h4 mb-4">{{ 'locations'|trans|capitalize }} </h3>
-                            <div class="row">
-                                {% include 'dashboard_organization/tables/event_location.html.twig' with {'id': 'locations'} %}
-                            </div>
+            {% if event['@id'] is defined %}
+                <!-- Location -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'locations'|trans|capitalize }} </h3>
+                        <div class="row">
+                            {% include 'dashboard_organization/tables/event_location.html.twig' with {'id': 'locations'} %}
                         </div>
                     </div>
-                {% endif %}
-
-            </form>
+                </div>
+            {% endif %}
 
             {% if event['@id'] is defined %}
                 <!-- Products -->
