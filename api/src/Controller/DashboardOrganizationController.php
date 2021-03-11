@@ -291,6 +291,8 @@ class DashboardOrganizationController extends AbstractController
 
             $offer = [];
             $offer['price'] = (string) ((float) $request->get('price') * 100);
+            $offer['quantity'] = (integer) $request->get('quantity');
+            $offer['maxQuantity'] = (integer) $request->get('maxQuantity');
             $offer['name'] = $product['name'];
             $offer['description'] = $product['description'];
             $offer['products'] = ['/products/'.$product['id']];
