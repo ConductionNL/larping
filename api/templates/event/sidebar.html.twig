@@ -33,7 +33,7 @@
     <div>
         {{ 'min price'|trans|capitalize }}
         <a>
-            <input class="form-control" id="minPrice" type="number" step=".01" name="minPrice"
+            <input class="form-control" id="minPrice" type="number" name="minPrice"
                 {% if minPrice|default %}
                     value="{{ minPrice }}"
                 {% endif %}
@@ -44,7 +44,7 @@
     <div>
         {{ 'max price'|trans|capitalize }}
         <a>
-            <input class="form-control" id="maxPrice" type="number" step=".01" name="maxPrice"
+            <input class="form-control" id="maxPrice" type="number" name="maxPrice"
                 {% if maxPrice|default %}
                     value="{{ maxPrice }}"
                 {% endif %}

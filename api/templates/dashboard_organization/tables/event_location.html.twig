@@ -1,0 +1,49 @@
+{% if locations is defined and locations|length > 0 %}
+    <table id="events" class="display nowrap table" style="width:100%">
+        <thead>
+        <tr>
+            <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'address'|trans|capitalize }}</th>
+            <th>{{ 'features'|trans|capitalize }}</th>
+            <th>
+                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#LocationModalAdd">{{ 'add'|trans|capitalize }}</button>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for location in locations %}
+            {% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':location['id']})['hydra:member'] %}
+            <tr>
+                <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" href="{{ path('app_dashboardorganization_location', {id: location.id}) }}" target="_blank">{{ location.name }}</a>
+                </td>
+                <td>
+                    {% if location.address|default %}
+                        <span class="d-block">{{ location.address.street ~' '~ location.address.houseNumber }}</span>
+                        <span class="d-block">{{ location.address.postalCode ~' '~ location.address.locality }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if locationCategories|default %}
+                        {% for category in locationCategories %}
+                            <i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip" data-placement="top" title="{{ category.name }}" aria-hidden="true"></i>
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary btn-sm float-right" href="{{ path('app_dashboardorganization_location', { id: location.id}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card border-light shadow-sm">
+        <div class="card-body text-center">
+            <p>{{ 'no locations found'|trans|capitalize }}</p>
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#LocationModalAdd">{{ 'add your first location'|trans|capitalize }}!</a>
+        </div>
+    </div>
+{% endif %}
+{% include 'dashboard_organization/modals/location.html.twig' %}
+
