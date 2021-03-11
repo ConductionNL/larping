@@ -145,10 +145,14 @@
                     <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
 
                     <div class="form-group position-relative mb-6 form-group-dragable">
-                        <input type="file" class="custom-file-input" id="favicon" name="favicon">
-                        <label class="custom-file-label" for="favicon">
-                            {{ 'Click or Drag images here'|trans|capitalize }}
-                        </label>
+                        <input onchange="showLogo()" type="file" class="custom-file-input" id="favicon" name="favicon">
+                        <div class="custom-file-label" for="favicon" id="logoHolder" {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
+                            {% if image.base64 is defined %}
+                                <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
+                            {% else %}
+                                {{ 'Click or Drag an image here'|trans|capitalize }}
+                            {% endif %}
+                        </div>
                     </div>
 
                 </div>
@@ -161,6 +165,34 @@
     {% include 'dashboard_organization/modals/event_product.html.twig'%}
     {% include 'dashboard_organization/modals/event_location.html.twig'%}
 
+    <script>
+        function showLogo(){
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+
+            async function Main() {
+                let file = document.querySelector('#favicon').files[0];
+                let logoHolder = document.querySelector('#logoHolder');
+                if ( file ) {
+                    logoHolder.setAttribute('style', 'padding-top: 10px;')
+                    logoHolder.innerHTML = '';
+                    let logo = document.createElement('img');
+                    let base64 = await toBase64(file);
+                    logo.setAttribute('style', 'height: 150px;');
+                    logo.setAttribute('src', base64);
+                    logoHolder.appendChild(logo);
+                } else {
+                    logoHolder.setAttribute('style', '')
+                    logoHolder.innerHTML = '{{ 'Click or Drag an image here'|trans|capitalize }}';
+                }
+            }
+            Main();
+        }
+    </script>
 
     <script>
         function addItem(id) {
