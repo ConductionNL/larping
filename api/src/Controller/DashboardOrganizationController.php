@@ -181,7 +181,6 @@ class DashboardOrganizationController extends AbstractController
                 $image['description'] = 'logo for '.$event['name'];
                 $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
                 $image['resource'] = $event['@id'];
-                $image['organization'] = $variables['organization']['@id'];
                 // save image in wrc connected to the $event
 //                $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
             }
@@ -210,7 +209,7 @@ class DashboardOrganizationController extends AbstractController
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
-            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['event']['@id'], 'organization' => $variables['organization']['@id']])['hydra:member'];
+            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['event']['@id']])['hydra:member'];
             if (count($images) > 0) {
                 $variables['image'] = $images[0];
             }
@@ -254,7 +253,6 @@ class DashboardOrganizationController extends AbstractController
                 $image['description'] = 'logo for '.$event['name'];
                 $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
                 $image['resource'] = $event['@id'];
-                $image['organization'] = $variables['organization']['@id'];
                 // save image in wrc connected to the $event
 //                $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
             }
