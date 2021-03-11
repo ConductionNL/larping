@@ -210,7 +210,7 @@ class DashboardOrganizationController extends AbstractController
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
             if ($id == 'add') {
-                $event['status'] = 'pending';
+                $event['status'] = 'private';
             }
 
             if (isset($event['categories'])) {
