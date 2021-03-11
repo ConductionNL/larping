@@ -12,6 +12,7 @@
         </thead>
         <tbody>
         {% for location in locations %}
+            {% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':location['id']})['hydra:member'] %}
             <tr>
                 <td class="text-capitalize">
                     <a class="text-hover-primary text-muted" href="{{ path('app_dashboardorganization_location', {id: location.id}) }}" target="_blank">{{ location.name }}</a>
@@ -23,7 +24,11 @@
                     {% endif %}
                 </td>
                 <td>
-
+                    {% if locationCategories|default %}
+                    {% for category in locationCategories %}
+                    <i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip" data-placement="top" title="{{ category.name }}" aria-hidden="true"></i>
+                    {% endfor %}
+                    {% endif %}
                 </td>
                 <td>
                     <a class="btn btn-outline-primary btn-sm float-right" href="{{ path('app_dashboardorganization_location', { id: location.id}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>

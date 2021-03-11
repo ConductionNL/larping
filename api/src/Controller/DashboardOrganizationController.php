@@ -193,8 +193,7 @@ class DashboardOrganizationController extends AbstractController
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
-        }
-        else {
+        } else {
             $variables['event'] = [];
             $variables['products'] = [];
         }
@@ -291,12 +290,10 @@ class DashboardOrganizationController extends AbstractController
             $variables['ticket'] = $variables['ticket'][0];
         }
         $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-        //$variables['order_items'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'order_items'], ['offer' => $variables['ticket']['@id']])['hydra:member'];
 
         //downloads tickets
         if ($request->query->has('action') && $request->query->get('action') == 'download') {
-            $results = $variables['orders'];
-
+            $results = [];
             $responseData = $serializer->serialize(
                 $results,
                 'csv'

@@ -63,7 +63,7 @@
 
                             <div class="form-group col-6">
                                 <label for="enddateInput">{{ 'enddate'|trans|capitalize }}</label>
-                                <input class="form-control" name="endDate" type="datetime-local" id="enddateInput" placeholder="yyyy-mm-dd" {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} required>
+                                <input class="form-control" name="endDate" type="datetime-local" id="enddateInput" placeholder="yyyy-mm-dd" {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %} min="{{ "now"|date("Y-m-d\\Th:i") }}" required>
                             </div>
                         </div>
 
