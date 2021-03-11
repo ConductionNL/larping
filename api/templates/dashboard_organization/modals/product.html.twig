@@ -1,17 +1,18 @@
 {% extends "dashboard_organization/modals/modal.html.twig" %}
 
 {% if resource is defined %}
-    {% set  id = resource['id'] %}
+    {% set id = resource['id'] %}
 {% else %}
-    {% set  id = 'Add' %}
+    {% set id = 'Add' %}
 {% endif %}
 
-{% set  type = 'Product' %}
+{% set type = 'Product' %}
 
 {% block body %}
-<form id="{{ type }}Form{{ id }}" method="post">
+<form id="{{ type }}Form{{ id }}" method="post" action="{{ path('app_dashboardorganization_event', {id: event['id']}) }}">
     {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
     {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
+    <input type="hidden" name="@type" value="Product">
     <div class="form-group">
         <label for="name">{{ 'name of your product'|trans|capitalize }}*</label>
         <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
@@ -19,6 +20,10 @@
     <div class="form-group">
         <label for="description">{{ 'description'|trans|capitalize }}</label>
         <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="price">{{ 'price'|trans|capitalize }}*</label>
+        <input type="text" class="form-control" id="price" name="price" {% if resource.price is defined %}value="{{ resource.price }}"{% endif %} required>
     </div>
     <div class="form-group">
         <label for="description">{{ 'type'|trans|capitalize }}</label>

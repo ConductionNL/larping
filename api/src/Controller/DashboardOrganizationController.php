@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
+use function GuzzleHttp\Promise\all;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -200,6 +201,7 @@ class DashboardOrganizationController extends AbstractController
             $variables['event'] = [];
             $variables['products'] = [];
         }
+
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
         $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
@@ -253,7 +255,6 @@ class DashboardOrganizationController extends AbstractController
             unset($product['price']);
             $product['requiresAppointment'] = false;
             $product['event'] = $variables['event']['@id'];
-            $product['type'] = 'ticket';
             $product['sourceOrganization'] = $variables['organization']['@id'];
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
@@ -265,9 +266,20 @@ class DashboardOrganizationController extends AbstractController
             $offer['offeredBy'] = $variables['organization']['@id'];
             $offer['audience'] = 'public';
 
-            $product['offers'][] = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+            $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
 
-            $variables['products'][] = $product;
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $variables['event']['id']]);
+        }
+
+        //Add location
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Location') {
+            $location = $request->request->all();
+            $location['organization'] = $variables['organization']['@id'];
+            $location = $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
+            $variables['event']['location'] = $location['@id'];
+            $commonGroundService->saveResource($variables['event'], ['component' => 'arc', 'type' => 'events']);
+
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $variables['event']['id']]);
         }
 
 //        $variables['categories'] = [];
