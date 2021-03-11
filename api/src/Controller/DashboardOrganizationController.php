@@ -167,7 +167,7 @@ class DashboardOrganizationController extends AbstractController
             $event = $request->request->all();
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
-            $event['status'] = 'pending';
+            $event['status'] = 'private';
 
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
@@ -189,6 +189,9 @@ class DashboardOrganizationController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];
+        $variables['activeCategories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
+        $variables['activeCategories'] = array_column($variables['activeCategories'], 'id');
 
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
@@ -267,10 +270,10 @@ class DashboardOrganizationController extends AbstractController
             $variables['products'][] = $product;
         }
 
-        $variables['categories'] = [];
-        foreach ($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category) {
-            $variables['categories'][] = $category['id'];
-        }
+//        $variables['categories'] = [];
+//        foreach ($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category) {
+//            $variables['categories'][] = $category['id'];
+//        }
 
         return $variables;
     }
