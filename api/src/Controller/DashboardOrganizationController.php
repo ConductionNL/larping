@@ -173,6 +173,17 @@ class DashboardOrganizationController extends AbstractController
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
 
+            if (isset($_FILES['logo']) && $_FILES['logo']['error'] !== 4) {
+                $path = $_FILES['logo']['tmp_name'];
+                $type = filetype($_FILES['logo']['tmp_name']);
+                $data = file_get_contents($path);
+                $image['name'] = 'logo for '.$event['name'];
+                $image['description'] = 'logo for '.$event['name'];
+                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+                // save image in wrc connected to the $event
+//                var_dump($image);
+            }
+
             // redirects externally
             if (array_key_exists('id', $event) && $event['id']) {
                 return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $event['id']]);
@@ -190,6 +201,9 @@ class DashboardOrganizationController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];
+        $variables['activeCategories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
+        $variables['activeCategories'] = array_column($variables['activeCategories'], 'id');
 
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
@@ -281,10 +295,10 @@ class DashboardOrganizationController extends AbstractController
             return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $variables['event']['id']]);
         }
 
-        $variables['categories'] = [];
-        foreach ($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category) {
-            $variables['categories'][] = $category['id'];
-        }
+//        $variables['categories'] = [];
+//        foreach ($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category) {
+//            $variables['categories'][] = $category['id'];
+//        }
 
         return $variables;
     }
