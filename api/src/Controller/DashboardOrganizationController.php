@@ -198,7 +198,7 @@ class DashboardOrganizationController extends AbstractController
             $variables['event'] = [];
             $variables['products'] = [];
         }
-        
+
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
         $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
@@ -242,8 +242,6 @@ class DashboardOrganizationController extends AbstractController
 
                 $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
             }
-
-
 
             return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $event['id']]);
         }
