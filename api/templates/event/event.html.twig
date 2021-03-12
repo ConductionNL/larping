@@ -104,7 +104,7 @@
                         <div class="row" id="tickets">
                             {% for offer in tickets %}
                                 <div class="col-md-6" id="organization">
-                                    {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238}  %}
                                 </div>
                             {% endfor %}
                         </div><!-- /.row -->
@@ -118,7 +118,7 @@
                         <div class="row" id="tickets">
                             {% for offer in subscriptions %}
                                 <div class="col-md-6" id="organization">
-                                    {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238}  %}
                                 </div>
                             {% endfor %}
                         </div><!-- /.row -->
@@ -132,7 +132,7 @@
                         <div class="row">
                             {% for offer in products %}
                                 <div class="col-md-6" id="organization">
-                                    {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238}  %}
                                 </div>
                             {% endfor %}
                         </div><!-- /.row -->
@@ -179,7 +179,7 @@
                         <!-- You may also like  -->
                         <h5 class="mb-4">{{ 'other events you might like'|trans|capitalize }}</h5>
                         {% for event in events|slice(0,3) %}
-                            {% include '/cards/event.html.twig' with {'item': event} %}
+                            {% include '/cards/event.html.twig' with {'item': event, 'maxHeight': 215} %}
                         {% endfor %}
                     </div>
 
