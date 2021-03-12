@@ -42,12 +42,12 @@
                             <ul class="list-inline mr-2">
                                 {% if event.startDate|default %}
                                     <li class="list-inline-item">
-                                        {{ 'startdate'|trans|capitalize }}: {{ event.startDate|date("d-m-Y") }}
+                                        {{ 'startdate'|trans|capitalize }}: {{ event.startDate|date("d-m-Y", "Europe/Paris") }}
                                     </li><br>
                                 {% endif %}
                                 {% if event.endDate|default %}
                                     <li class="list-inline-item">
-                                        {{ 'enddate'|trans|capitalize }}: {{ event.endDate|date("d-m-Y") }}
+                                        {{ 'enddate'|trans|capitalize }}: {{ event.endDate|date("d-m-Y", "Europe/Paris") }}
                                     </li>
                                 {% endif %}
                             </ul>
@@ -153,11 +153,14 @@
                     <hr>
                     {% endif %}
 
-                    <!-- Add a review -->
-                    <div id="add-review">
-                        <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
-                        {% include '/sections/review.html.twig' with {'item': event} %}
-                    </div>
+                    {% set today = date("now") %}
+                    {% if event.endDate|default and event.endDate|date("Y-m-d H:i:s") < today|date("Y-m-d H:i:s") %}
+                        <!-- Add a review -->
+                        <div id="add-review">
+                            <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
+                            {% include '/sections/review.html.twig' with {'item': event} %}
+                        </div>
+                    {% endif %}
                 </div><!-- /.col -->
 
 
