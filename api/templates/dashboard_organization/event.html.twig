@@ -23,7 +23,7 @@
                 </ul>
             </nav>
 
-            <form id="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}" method="post"
+            <form id="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}" method="post" enctype="multipart/form-data"
                   name="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}">
                 <input type="hidden" name="@type" value="Event">
                 {% if event['id'] is defined %}<input type="hidden" id="id" name="id"
@@ -74,7 +74,7 @@
                                 <label for="startdateInput">{{ 'startdate'|trans|capitalize }}</label>
                                 <input class="form-control" name="startDate" type="datetime-local" id="startdateInput"
                                        placeholder="yyyy-mm-dd"
-                                       {% if event.startDate is defined %}value="{{ event.startDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %}
+                                       {% if event.startDate is defined %}value="{{ event.startDate|date("Y-m-d\\TH:i:s", "Europe/Paris") }}"{% endif %}
                                        required>
                             </div>
 
@@ -82,7 +82,7 @@
                                 <label for="enddateInput">{{ 'enddate'|trans|capitalize }}</label>
                                 <input class="form-control" name="endDate" type="datetime-local" id="enddateInput"
                                        placeholder="yyyy-mm-dd"
-                                       {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %}
+                                       {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d\\TH:i:s", "Europe/Paris") }}"{% endif %}
                                        min="{{ "now"|date("Y-m-d\\Th:i") }}" required>
                             </div>
                         </div>
@@ -119,6 +119,24 @@
                         </ul>
                     </div>
                 </div>
+
+                <!-- Gallery -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
+
+                        <div class="form-group position-relative mb-6 form-group-dragable">
+                            <input onchange="showImage()" type="file" class="custom-file-input" id="image" name="image">
+                            <div class="custom-file-label" for="image" id="imageHolder" {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
+                                {% if image.base64 is defined %}
+                                    <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
+                                {% else %}
+                                    {{ 'Click or Drag an image here'|trans|capitalize }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
 
             {% if event['@id'] is defined %}
@@ -141,26 +159,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Gallery -->
-                <div class="card">
-                    <div class="card-body p-6">
-                        <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
-
-                        <div class="form-group position-relative mb-6 form-group-dragable">
-                            <input onchange="showLogo()" type="file" class="custom-file-input" id="favicon"
-                                   name="favicon">
-                            <div class="custom-file-label" for="favicon" id="logoHolder"
-                                 {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
-                                {% if image.base64 is defined %}
-                                    <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
-                                {% else %}
-                                    {{ 'Click or Drag an image here'|trans|capitalize }}
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
             {% endif %}
         </div>
 
@@ -169,7 +167,7 @@
     {% include 'dashboard_organization/modals/event_product.html.twig' %}
 
     <script>
-        function showLogo() {
+        function showImage(){
             const toBase64 = file => new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -178,19 +176,19 @@
             });
 
             async function Main() {
-                let file = document.querySelector('#favicon').files[0];
-                let logoHolder = document.querySelector('#logoHolder');
-                if (file) {
-                    logoHolder.setAttribute('style', 'padding-top: 10px;')
-                    logoHolder.innerHTML = '';
-                    let logo = document.createElement('img');
+                let file = document.querySelector('#image').files[0];
+                let imageHolder = document.querySelector('#imageHolder');
+                if ( file ) {
+                    imageHolder.setAttribute('style', 'padding-top: 10px;')
+                    imageHolder.innerHTML = '';
+                    let image = document.createElement('img');
                     let base64 = await toBase64(file);
-                    logo.setAttribute('style', 'height: 150px;');
-                    logo.setAttribute('src', base64);
-                    logoHolder.appendChild(logo);
+                    image.setAttribute('style', 'height: 150px;');
+                    image.setAttribute('src', base64);
+                    imageHolder.appendChild(image);
                 } else {
-                    logoHolder.setAttribute('style', '')
-                    logoHolder.innerHTML = '{{ 'Click or Drag an image here'|trans|capitalize }}';
+                    imageHolder.setAttribute('style', '')
+                    imageHolder.innerHTML = '{{ 'Click or Drag an image here'|trans|capitalize }}';
                 }
             }
 
