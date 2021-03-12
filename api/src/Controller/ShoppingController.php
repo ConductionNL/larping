@@ -82,6 +82,12 @@ class ShoppingController extends AbstractController
                 foreach ($variables['invoice']['items'] as $item) {
                     $offer = $commonGroundService->getResource($item['offer']);
 
+                    // Decrease quantity
+                    if (isset($offer['quantity']) && $offer['quantity'] <= 0) {
+                        $offer['quantity']--;
+                        $commonGroundService->saveResource($offer);
+                    }
+
                     // Check if the product of this offer has a userGroup this user should be added to.
                     if (isset($offer['products'][0]['userGroup'])) {
                         $groupId = str_replace('https://www.id-vault.com/api/v1/wac/groups/', '', $offer['products'][0]['userGroup']);

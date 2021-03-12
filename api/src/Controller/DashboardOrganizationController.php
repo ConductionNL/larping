@@ -6,11 +6,13 @@ namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
+use function GuzzleHttp\Promise\all;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -167,10 +169,50 @@ class DashboardOrganizationController extends AbstractController
             $event = $request->request->all();
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
-            $event['status'] = 'pending';
+            $event['status'] = 'private';
+
+            // Fix start and enddate timezone:
+            if (isset($event['startDate'])) {
+                $startDate = new \DateTime($event['startDate'], new \DateTimeZone('Europe/Paris'));
+                $startDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['startDate'] = $startDate->format('Y-m-d\TH:i:s');
+            }
+            if (isset($event['endDate'])) {
+                $endDate = new \DateTime($event['endDate'], new \DateTimeZone('Europe/Paris'));
+                $endDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['endDate'] = $endDate->format('Y-m-d\TH:i:s');
+            }
 
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
+
+            if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
+                $path = $_FILES['image']['tmp_name'];
+                $type = filetype($_FILES['image']['tmp_name']);
+                $data = file_get_contents($path);
+                $image['name'] = 'image for '.$event['name'];
+                $image['description'] = 'image for '.$event['name'];
+                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+                $image['resource'] = $event['@id'];
+                $image['organization'] = '/organizations/'.$variables['organization']['id'];
+                // save image in wrc connected to the $event
+                $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
+            }
+
+            // Setting the categories
+            /*@todo  This should go to a wrc service */
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $event['id']])['hydra:member'];
+            if (count($resourceCategories) > 0) {
+                $resourceCategory = $resourceCategories[0];
+            } else {
+                $resourceCategory = ['resource' => $event['@id'], 'catagories' => []];
+            }
+
+            if (isset($categories)) {
+                $resourceCategory['categories'] = $categories;
+
+                $variables['resourceCategories'] = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+            }
 
             // redirects externally
             if (array_key_exists('id', $event) && $event['id']) {
@@ -182,6 +224,25 @@ class DashboardOrganizationController extends AbstractController
     }
 
     /**
+     * @Route("/events/publish/{id}")
+     * @Template
+     */
+    public function publishEventAction(CommonGroundService $commonGroundService, Request $request, FlashBagInterface $flash, $id)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        try {
+            $event = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+            $event['status'] = 'published';
+            $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
+        } catch (\Exception $e) {
+            $flash->add('danger', 'Failed to publish event');
+        }
+
+        return $this->redirectToRoute('app_dashboardorganization_events');
+    }
+
+    /**
      * @Route("/events/{id}")
      * @Template
      */
@@ -189,16 +250,25 @@ class DashboardOrganizationController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];
+        $variables['activeCategories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
+        $variables['activeCategories'] = array_column($variables['activeCategories'], 'id');
 
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
+            $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['event']['@id'], 'organization' => '/organizations/'.$variables['organization']['id']])['hydra:member'];
+            if (count($images) > 0) {
+                $variables['image'] = $images[0];
+            }
         } else {
             $variables['event'] = [];
             $variables['products'] = [];
+            $variables['locations'] = [];
         }
+
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
-        $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         // Update event
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Event') {
@@ -207,7 +277,7 @@ class DashboardOrganizationController extends AbstractController
             // Set the current organization as owner
             $event['organization'] = $variables['organization']['@id'];
             if ($id == 'add') {
-                $event['status'] = 'pending';
+                $event['status'] = 'private';
             }
 
             if (isset($event['categories'])) {
@@ -215,11 +285,39 @@ class DashboardOrganizationController extends AbstractController
                 if (!$categories) {
                     $categories = [];
                 }
-                unset($event['categories']);
+//                unset($event['categories']);
+            }
+
+            // Fix start and enddate timezone:
+            if (isset($event['startDate'])) {
+                $startDate = new \DateTime($event['startDate'], new \DateTimeZone('Europe/Paris'));
+                $startDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['startDate'] = $startDate->format('Y-m-d\TH:i:s');
+            }
+            if (isset($event['endDate'])) {
+                $endDate = new \DateTime($event['endDate'], new \DateTimeZone('Europe/Paris'));
+                $endDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['endDate'] = $endDate->format('Y-m-d\TH:i:s');
             }
 
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
+
+            if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
+                $path = $_FILES['image']['tmp_name'];
+                $type = filetype($_FILES['image']['tmp_name']);
+                $data = file_get_contents($path);
+                if ($id != 'add' && isset($variables['image'])) {
+                    $image = $variables['image'];
+                }
+                $image['name'] = 'image for '.$event['name'];
+                $image['description'] = 'image for '.$event['name'];
+                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+                $image['resource'] = $event['@id'];
+                $image['organization'] = '/organizations/'.$variables['organization']['id'];
+                // save image in wrc connected to the $event
+                $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
+            }
 
             // Only do categories stuff when aplicable
             if (!array_key_exists('categories', $event)) {
@@ -237,8 +335,9 @@ class DashboardOrganizationController extends AbstractController
 
             if (isset($categories)) {
                 $resourceCategory['categories'] = $categories;
+                $event['categories'] = $categories;
 
-                $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
+                $variables['resourceCategories'] = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
             }
 
             return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $event['id']]);
@@ -250,27 +349,41 @@ class DashboardOrganizationController extends AbstractController
             unset($product['price']);
             $product['requiresAppointment'] = false;
             $product['event'] = $variables['event']['@id'];
-            $product['type'] = 'ticket';
             $product['sourceOrganization'] = $variables['organization']['@id'];
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
             $offer['price'] = (string) ((float) $request->get('price') * 100);
+            $offer['quantity'] = (int) $request->get('quantity');
+            $offer['maxQuantity'] = (int) $request->get('maxQuantity');
             $offer['name'] = $product['name'];
             $offer['description'] = $product['description'];
             $offer['products'] = ['/products/'.$product['id']];
             $offer['offeredBy'] = $variables['organization']['@id'];
             $offer['audience'] = 'public';
 
-            $product['offers'][] = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+            $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
 
-            $variables['products'][] = $product;
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $variables['event']['id']]);
         }
 
-        $variables['categories'] = [];
-        foreach ($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category) {
-            $variables['categories'][] = $category['id'];
+        //Add location
+        if ($request->isMethod('POST') && $request->request->get('@type') == 'Place') {
+            $location = $request->request->all();
+            $location['organization'] = $variables['organization']['@id'];
+//            var_dump($location);die();
+            $location = $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
+
+            $variables['event']['location'] = $location['@id'];
+            $commonGroundService->saveResource($variables['event'], ['component' => 'arc', 'type' => 'events']);
+
+            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $variables['event']['id']]);
         }
+
+//        $variables['event']['categories'] = [];
+//        foreach ($commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'] as $category) {
+//            $variables['event']['categories'] = $category['@id'];
+//        }
 
         return $variables;
     }
@@ -285,10 +398,9 @@ class DashboardOrganizationController extends AbstractController
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
-        $variables['ticket'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $variables['event']['@id'], 'products.type' => 'ticket'])['hydra:member'];
-        if (count($variables['ticket']) > 0) {
-            $variables['ticket'] = $variables['ticket'][0];
-        }
+        $variables['ticket'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
+        $variables['ticket'] = $variables['ticket'][0]['offers'][0];
+
         $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
         //downloads tickets

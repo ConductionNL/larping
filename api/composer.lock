@@ -781,12 +781,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/id-vault-php.git",
-                "reference": "f5cf32e195fa6daffeda383ea44dc2bc1cfcb165"
+                "reference": "039e6fc44330307a80a08dfb11947ae523fc9e7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/f5cf32e195fa6daffeda383ea44dc2bc1cfcb165",
-                "reference": "f5cf32e195fa6daffeda383ea44dc2bc1cfcb165",
+                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/039e6fc44330307a80a08dfb11947ae523fc9e7d",
+                "reference": "039e6fc44330307a80a08dfb11947ae523fc9e7d",
                 "shasum": ""
             },
             "require": {
@@ -830,7 +830,7 @@
                 "issues": "https://github.com/ConductionNL/id-vault-php/issues",
                 "source": "https://github.com/ConductionNL/id-vault-php"
             },
-            "time": "2021-02-23T15:21:43+00:00"
+            "time": "2021-03-11T11:58:01+00:00"
         },
         {
             "name": "conduction/idvaultbundle",
