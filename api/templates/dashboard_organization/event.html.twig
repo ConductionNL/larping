@@ -3,6 +3,7 @@
     {% set  id = organization['id'] %}
     {% set  type = 'Organization' %}
 {% endif %}
+{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':event['id']})['hydra:member'] %}
 {% block content %}
 
     {# include 'dashboard_user/menu.html.twig' #}
@@ -45,7 +46,7 @@
                                                 class="btn btn-success float-right mr-1">{{ 'publish event'|trans|capitalize }}</button>
                                     {% else %}
                                         <button type="submit" name="status" value="private"
-                                                class="btn btn-warning float-right mr-1">{{ "unpublish event" }}</button>
+                                                class="btn btn-warning float-right mr-1">{{ "unpublish the event"|trans|capitalize }}</button>
                                     {% endif %}
                                 {% else %}
                                     <button type="submit"
@@ -94,16 +95,17 @@
                     <div class="card-body px-6 pt-6 pb-1">
                         <h3 class="h4 mb-4">{{ 'setting\'s'|capitalize }} </h3>
                         <ul class="list-unstyled mb-6">
+
                             {% for category in settings %}
                                 <li class="d-inline-block mr-4 mb-2">
                                     <div class="form-check">
                                         <input
                                             class="form-check-input"
                                             type="checkbox"
-                                            value="/categories/{{ category.id }}"
+                                            value="{{ category['@id'] }}"
                                             id="category{{ category.id }}"
                                             name="categories[]"
-                                            {% if category.id in categories %}
+                                            {% if category in eventCategories %}
                                                 checked="checked"
                                             {% endif %}
                                         />
@@ -129,9 +131,7 @@
                         </div>
                     </div>
                 </div>
-            {% endif %}
 
-            {% if event['@id'] is defined %}
                 <!-- Products -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
@@ -147,14 +147,17 @@
                     <div class="card-body p-6">
                         <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
 
-                    <div class="form-group position-relative mb-6 form-group-dragable">
-                        <input onchange="showLogo()" type="file" class="custom-file-input" id="favicon" name="favicon">
-                        <div class="custom-file-label" for="favicon" id="logoHolder" {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
-                            {% if image.base64 is defined %}
-                                <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
-                            {% else %}
-                                {{ 'Click or Drag an image here'|trans|capitalize }}
-                            {% endif %}
+                        <div class="form-group position-relative mb-6 form-group-dragable">
+                            <input onchange="showLogo()" type="file" class="custom-file-input" id="favicon"
+                                   name="favicon">
+                            <div class="custom-file-label" for="favicon" id="logoHolder"
+                                 {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
+                                {% if image.base64 is defined %}
+                                    <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
+                                {% else %}
+                                    {{ 'Click or Drag an image here'|trans|capitalize }}
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,7 +169,7 @@
     {% include 'dashboard_organization/modals/event_product.html.twig' %}
 
     <script>
-        function showLogo(){
+        function showLogo() {
             const toBase64 = file => new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -177,7 +180,7 @@
             async function Main() {
                 let file = document.querySelector('#favicon').files[0];
                 let logoHolder = document.querySelector('#logoHolder');
-                if ( file ) {
+                if (file) {
                     logoHolder.setAttribute('style', 'padding-top: 10px;')
                     logoHolder.innerHTML = '';
                     let logo = document.createElement('img');
@@ -190,6 +193,7 @@
                     logoHolder.innerHTML = '{{ 'Click or Drag an image here'|trans|capitalize }}';
                 }
             }
+
             Main();
         }
     </script>
