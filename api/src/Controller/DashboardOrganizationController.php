@@ -6,13 +6,13 @@ namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use function GuzzleHttp\Promise\all;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -119,12 +119,12 @@ class DashboardOrganizationController extends AbstractController
             if (count($ordersThisMonth) > 0) {
                 // Calculate revenue of this organization, this month
                 $prices = array_column($ordersThisMonth, 'price');
-                $variables['revenue']['thisMonth'] = '€ ' . number_format(array_sum($prices), 2, ',', '.');
+                $variables['revenue']['thisMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
             }
             if (count($ordersLastMonth) > 0) {
                 // Calculate revenue of this organization, last month
                 $prices = array_column($ordersLastMonth, 'price');
-                $variables['revenue']['lastMonth'] = '€ ' . number_format(array_sum($prices), 2, ',', '.');
+                $variables['revenue']['lastMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
             }
         }
 
@@ -172,14 +172,12 @@ class DashboardOrganizationController extends AbstractController
             $event['status'] = 'private';
 
             // Fix start and enddate timezone:
-            if (isset($event['startDate']))
-            {
+            if (isset($event['startDate'])) {
                 $startDate = new \DateTime($event['startDate'], new \DateTimeZone('Europe/Paris'));
                 $startDate->setTimeZone(new \DateTimeZone('Europe/London'));
                 $event['startDate'] = $startDate->format('Y-m-d\TH:i:s');
             }
-            if (isset($event['endDate']))
-            {
+            if (isset($event['endDate'])) {
                 $endDate = new \DateTime($event['endDate'], new \DateTimeZone('Europe/Paris'));
                 $endDate->setTimeZone(new \DateTimeZone('Europe/London'));
                 $event['endDate'] = $endDate->format('Y-m-d\TH:i:s');
@@ -217,6 +215,7 @@ class DashboardOrganizationController extends AbstractController
     public function publishEventAction(CommonGroundService $commonGroundService, Request $request, FlashBagInterface $flash, $id)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         try {
             $event = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $event['status'] = 'published';
@@ -274,14 +273,12 @@ class DashboardOrganizationController extends AbstractController
             }
 
             // Fix start and enddate timezone:
-            if (isset($event['startDate']))
-            {
+            if (isset($event['startDate'])) {
                 $startDate = new \DateTime($event['startDate'], new \DateTimeZone('Europe/Paris'));
                 $startDate->setTimeZone(new \DateTimeZone('Europe/London'));
                 $event['startDate'] = $startDate->format('Y-m-d\TH:i:s');
             }
-            if (isset($event['endDate']))
-            {
+            if (isset($event['endDate'])) {
                 $endDate = new \DateTime($event['endDate'], new \DateTimeZone('Europe/Paris'));
                 $endDate->setTimeZone(new \DateTimeZone('Europe/London'));
                 $event['endDate'] = $endDate->format('Y-m-d\TH:i:s');
@@ -344,7 +341,7 @@ class DashboardOrganizationController extends AbstractController
             $offer['maxQuantity'] = (int) $request->get('maxQuantity');
             $offer['name'] = $product['name'];
             $offer['description'] = $product['description'];
-            $offer['products'] = ['/products/' . $product['id']];
+            $offer['products'] = ['/products/'.$product['id']];
             $offer['offeredBy'] = $variables['organization']['@id'];
             $offer['audience'] = 'public';
 
@@ -499,12 +496,12 @@ class DashboardOrganizationController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Offer') {
             $offer = $request->request->all();
             // Add the current product to het offer
-            $offer['products'] = ['/products/' . $id];
+            $offer['products'] = ['/products/'.$id];
             $offer['offeredBy'] = $variables['organization']['@id'];
-            $offer['price'] = (string)((float)$offer['price'] * 100);
+            $offer['price'] = (string) ((float) $offer['price'] * 100);
             if (isset($offer['options'])) {
                 foreach ($offer['options'] as &$option) {
-                    $option['price'] = (string)((float)$option['price'] * 100);
+                    $option['price'] = (string) ((float) $option['price'] * 100);
                 }
             }
 
@@ -697,7 +694,7 @@ class DashboardOrganizationController extends AbstractController
             $mail = [];
             $mail['title'] = $request->get('title');
             $mail['html'] = $request->get('html');
-            $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']) . '@larping.eu';
+            $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']).'@larping.eu';
 
             // Send email to all subscribers of this mailing list.
             $idVaultService->sendToSendList($sendListId, $mail);
@@ -919,7 +916,7 @@ class DashboardOrganizationController extends AbstractController
                 $contact['name'] = $location['name'];
                 $contact['description'] = $location['description'];
                 $contact = $commonGroundService->saveResource($contact, ['component' => 'lc', 'type' => 'addresses']);
-                $location['address'] = '/addresses/' . $contact['id'];
+                $location['address'] = '/addresses/'.$contact['id'];
             }
 
             // Lets save the location
@@ -1064,13 +1061,13 @@ class DashboardOrganizationController extends AbstractController
             }
 
             if ($new) {
-                $template['name'] = 'Terms and conditions for ' . $organization['name'];
+                $template['name'] = 'Terms and conditions for '.$organization['name'];
                 $template['templateEngine'] = 'twig';
-                $template['organization'] = '/organizations/' . $organization['id'];
+                $template['organization'] = '/organizations/'.$organization['id'];
 
                 $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
 
-                $organization['termsAndConditions'] = '/templates/' . $template['id'];
+                $organization['termsAndConditions'] = '/templates/'.$template['id'];
                 $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
             }
 
