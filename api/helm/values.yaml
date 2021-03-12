@@ -4,18 +4,18 @@
 
 settings:
   registryBase: docker.io/conduction
-  projectName: arping
-  name: arping
+  projectName: larping
+  name: Larping
   version: V1.0
   majorVersion: v1
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
   repro: https://github.com/ConductionNL/larping
   demo: larping.eu
   domain: larping.eu
-  subdomain: arping
+  subdomain: larping
   subpath: larping
   subpathRouting: true
-  env: prod
+  env: dev
   web: false
   debug: 1
   cache: false

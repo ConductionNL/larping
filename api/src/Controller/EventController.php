@@ -36,8 +36,8 @@ class EventController extends AbstractController
         $variables['categories'] = $request->get('categories', []);
         $variables['startDate'] = $request->get('startDate', false);
         $variables['endDate'] = $request->get('endDate', false);
-        $variables['minPrice'] = (float) ($request->get('minPrice', null) * 100);
-        $variables['maxPrice'] = (float) ($request->get('maxPrice', null) * 100);
+        $variables['minPrice'] = (float) $request->get('minPrice', false);
+        $variables['maxPrice'] = (float) $request->get('maxPrice', false);
 
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
         $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
@@ -47,6 +47,11 @@ class EventController extends AbstractController
         $query = [];
         $resourceIds = [];
         if (!empty($variables['categories'])) {
+            foreach ($variables['categories'] as $key => $category) {
+                if ($category == 'Alle categorieën' || $category == 'alle regio\'s') {
+                    unset($variables['categories'][$key]);
+                }
+            }
             $categoryQuery['categories.id'] = $variables['categories'];
             $categoryQuery['filter'] = 'id';
 
