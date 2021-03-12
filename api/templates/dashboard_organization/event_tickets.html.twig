@@ -26,11 +26,9 @@
                     <th>{{ 'paid'|trans|capitalize }}</th>
                     <th>{{ 'type'|trans|capitalize }}</th>
                     <th>{{ 'extra'|trans|capitalize }}</th>
-                    <th>
                         {% if app.request.attributes.get('_route') == 'app_dashboardorganization_eventtickets' %}
-                            <a onclick="sendDownload()" {#href="{{ path('app_dashboardorganization_eventtickets', {'action': 'download', id: event.id}) }}"#} class="btn btn-warning btn-sm ml-2 text-white">{{ 'download tickets'|trans|capitalize }}</a>
+                            <button onclick="sendDownload('tickets')" {#href="{{ path('app_dashboardorganization_eventtickets', {'action': 'download', id: event.id}) }}"#} class="btn btn-warning btn-sm ml-2 text-white float-right mb-1">{{ 'download tickets'|trans|capitalize }}</button>
                         {% endif %}
-                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -63,21 +61,35 @@
     </section>
 
     <script>
-        //get content of table into array
-        var tableInfo = Array.prototype.map.call(document.querySelectorAll('#tickets tr'), function(tr){
-            return Array.prototype.map.call(tr.querySelectorAll('td'), function(td){
-                return td.innerHTML;
-            });
-        });
-        function sendDownload() {
-            let csvContent = "data:text/csv;charset=utf-8," + tableInfo.map(e => e.join(",")).join("\n");
-            var encodedUri = encodeURI(csvContent);
-            var link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "tickets.csv");
-            document.body.appendChild(link); // Required for FF
-            link.click(); // This will download the data file named "tickets.csv"
-
+        
+        function sendDownload(table_id, separator = ',') {
+            // Select rows from table_id
+            var rows = document.querySelectorAll('#' + table_id + ' tr');
+            // Construct csv
+            var csv = [];
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll('td, th');
+                for (var j = 0; j < cols.length; j++) {
+                    // Clean innertext to remove multiple spaces and jumpline (break csv)
+                    var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                    // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                    data = data.replace(/"/g, '""');
+                    // Push escaped string
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(separator));
+            }
+            var csv_string = csv.join('\n');
+            // Download it
+            var filename = 'export_' + table_id + '_' + '{{ event.name }}' + '.csv';
+            var link = document.createElement('a');
+            link.style.display = 'none';
+            link.setAttribute('target', '_blank');
+            link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 {% endblock %}
