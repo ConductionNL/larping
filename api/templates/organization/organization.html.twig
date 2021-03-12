@@ -98,7 +98,7 @@
                             <div class="row">
                                 {% for event in events %}
                                     <div class="col-md-6" id="organization">
-                                        {% include '/cards/event.html.twig' with {'item': event} %}
+                                        {% include '/cards/event.html.twig' with {'item': event, 'maxHeight': 238} %}
                                     </div>
                                 {% endfor %}
                             </div><!-- /.row -->
@@ -114,7 +114,7 @@
                             <div class="row">
                                 {% for offer in tickets %}
                                     <div class="col-md-6" id="organization">
-                                        {% include 'cards/offer.html.twig'  with {'item': offer} %}
+                                        {% include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238} %}
                                     </div>
                                 {% endfor %}
                             </div><!-- /.row -->
@@ -130,7 +130,7 @@
                             <div class="row">
                                 {% for offer in subscriptions %}
                                     <div class="col-md-6" id="organization">
-                                        {% include 'cards/offer.html.twig'  with {'item': offer} %}
+                                        {% include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238} %}
                                     </div>
                                 {% endfor %}
                             </div><!-- /.row -->
@@ -146,7 +146,7 @@
                             <div class="row">
                                 {% for offer in products %}
                                     <div class="col-md-6" id="organization">
-                                        {% include 'cards/offer.html.twig'  with {'item': offer} %}
+                                        {% include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238} %}
                                     </div>
                                 {% endfor %}
                             </div><!-- /.row -->
