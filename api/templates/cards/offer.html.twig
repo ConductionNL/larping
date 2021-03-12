@@ -6,6 +6,23 @@
 {% endif %}
 {% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']}) %}
 
+{% if item.products|default and item.products|length > 0 %}
+    {% set break = false %}
+    {% set eventUrl = false %}
+    {% for product in item.products if not break %}
+        {% if product.event|default %}
+            {% set eventUrl = product.event %}
+            {% set break = true %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if eventUrl|default %}
+    {% set eventImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':eventUrl})['hydra:member'] %}
+    {% if eventImages|length > 0 %}
+        {% set eventImage = eventImages[0] %}
+    {% endif %}
+{% endif %}
 
 
                     {% if not offer.quantity|default or (offer.quantity|default and offer.quantity > 0) %}
@@ -13,8 +30,12 @@
     {% endif %}
     <div class="card rounded-0 card-hover-overlay">
         <div class="position-relative">
-            <img class="card-img rounded-0" src="https://picsum.photos/300/200"
-                 alt="Card image cap">
+            {# todo first check if there is an image for this offer, then elseif: #}
+            {% if eventImage.base64 is defined %}
+                <img class="card-img rounded-0" {% if maxHeight|default %}style="max-height: {{ maxHeight }}px;"{% endif%} src="{{ eventImage.base64 }}" alt="Card image cap">
+            {% else %}
+                <img class="card-img rounded-0" {% if maxHeight|default %}style="max-height: {{ maxHeight }}px;"{% endif%} src="https://picsum.photos/300/200" alt="Card image cap">
+            {% endif %}
             <div class="card-img-overlay" style="cursor: pointer">
                 <h3>
                     {% if not offer.quantity|default or (offer.quantity|default and offer.quantity > 0) %}
