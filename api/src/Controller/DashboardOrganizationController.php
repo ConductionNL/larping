@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -170,6 +171,18 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             $event['status'] = 'private';
 
+            // Fix start and enddate timezone:
+            if (isset($event['startDate'])) {
+                $startDate = new \DateTime($event['startDate'], new \DateTimeZone('Europe/Paris'));
+                $startDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['startDate'] = $startDate->format('Y-m-d\TH:i:s');
+            }
+            if (isset($event['endDate'])) {
+                $endDate = new \DateTime($event['endDate'], new \DateTimeZone('Europe/Paris'));
+                $endDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['endDate'] = $endDate->format('Y-m-d\TH:i:s');
+            }
+
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
 
@@ -193,6 +206,25 @@ class DashboardOrganizationController extends AbstractController
         }
 
         return $variables;
+    }
+
+    /**
+     * @Route("/events/publish/{id}")
+     * @Template
+     */
+    public function publishEventAction(CommonGroundService $commonGroundService, Request $request, FlashBagInterface $flash, $id)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        try {
+            $event = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+            $event['status'] = 'published';
+            $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
+        } catch (\Exception $e) {
+            $flash->add('danger', 'Failed to publish event');
+        }
+
+        return $this->redirectToRoute('app_dashboardorganization_events');
     }
 
     /**
@@ -238,6 +270,18 @@ class DashboardOrganizationController extends AbstractController
                     $categories = [];
                 }
                 unset($event['categories']);
+            }
+
+            // Fix start and enddate timezone:
+            if (isset($event['startDate'])) {
+                $startDate = new \DateTime($event['startDate'], new \DateTimeZone('Europe/Paris'));
+                $startDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['startDate'] = $startDate->format('Y-m-d\TH:i:s');
+            }
+            if (isset($event['endDate'])) {
+                $endDate = new \DateTime($event['endDate'], new \DateTimeZone('Europe/Paris'));
+                $endDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['endDate'] = $endDate->format('Y-m-d\TH:i:s');
             }
 
             // Save the resource

@@ -78,7 +78,7 @@
                         <div class="row">
                             {% for event in events %}
                                 <div class="col-md-4" id="event{{ event.id }}">
-                                    {% include '/cards/event.html.twig' with {'item': event} %}
+                                    {% include '/cards/event.html.twig' with {'item': event, 'maxHeight': 140} %}
                                 </div>
                             {% endfor %}
                         </div>

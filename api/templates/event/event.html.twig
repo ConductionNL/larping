@@ -42,12 +42,12 @@
                             <ul class="list-inline mr-2">
                                 {% if event.startDate|default %}
                                     <li class="list-inline-item">
-                                        {{ 'startdate'|trans|capitalize }}: {{ event.startDate|date("d-m-Y") }}
+                                        {{ 'startdate'|trans|capitalize }}: {{ event.startDate|date("d-m-Y", "Europe/Paris") }}
                                     </li><br>
                                 {% endif %}
                                 {% if event.endDate|default %}
                                     <li class="list-inline-item">
-                                        {{ 'enddate'|trans|capitalize }}: {{ event.endDate|date("d-m-Y") }}
+                                        {{ 'enddate'|trans|capitalize }}: {{ event.endDate|date("d-m-Y", "Europe/Paris") }}
                                     </li>
                                 {% endif %}
                             </ul>
@@ -104,7 +104,7 @@
                         <div class="row" id="tickets">
                             {% for offer in tickets %}
                                 <div class="col-md-6" id="organization">
-                                    {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238}  %}
                                 </div>
                             {% endfor %}
                         </div><!-- /.row -->
@@ -118,7 +118,7 @@
                         <div class="row" id="tickets">
                             {% for offer in subscriptions %}
                                 <div class="col-md-6" id="organization">
-                                    {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238}  %}
                                 </div>
                             {% endfor %}
                         </div><!-- /.row -->
@@ -132,7 +132,7 @@
                         <div class="row">
                             {% for offer in products %}
                                 <div class="col-md-6" id="organization">
-                                    {%  include 'cards/offer.html.twig'  with {'item': offer}  %}
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238}  %}
                                 </div>
                             {% endfor %}
                         </div><!-- /.row -->
@@ -153,11 +153,14 @@
                     <hr>
                     {% endif %}
 
-                    <!-- Add a review -->
-                    <div id="add-review">
-                        <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
-                        {% include '/sections/review.html.twig' with {'item': event} %}
-                    </div>
+                    {% set today = date("now") %}
+                    {% if event.endDate|default and event.endDate|date("Y-m-d H:i:s") < today|date("Y-m-d H:i:s") %}
+                        <!-- Add a review -->
+                        <div id="add-review">
+                            <h3 class="font-weight-normal mb-6">{{ 'add a review'|trans|capitalize }}</h3>
+                            {% include '/sections/review.html.twig' with {'item': event} %}
+                        </div>
+                    {% endif %}
                 </div><!-- /.col -->
 
 
@@ -179,7 +182,7 @@
                         <!-- You may also like  -->
                         <h5 class="mb-4">{{ 'other events you might like'|trans|capitalize }}</h5>
                         {% for event in events|slice(0,3) %}
-                            {% include '/cards/event.html.twig' with {'item': event} %}
+                            {% include '/cards/event.html.twig' with {'item': event, 'maxHeight': 215} %}
                         {% endfor %}
                     </div>
 

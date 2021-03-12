@@ -73,7 +73,7 @@
                                 <label for="startdateInput">{{ 'startdate'|trans|capitalize }}</label>
                                 <input class="form-control" name="startDate" type="datetime-local" id="startdateInput"
                                        placeholder="yyyy-mm-dd"
-                                       {% if event.startDate is defined %}value="{{ event.startDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %}
+                                       {% if event.startDate is defined %}value="{{ event.startDate|date("Y-m-d\\TH:i:s", "Europe/Paris") }}"{% endif %}
                                        required>
                             </div>
 
@@ -81,7 +81,7 @@
                                 <label for="enddateInput">{{ 'enddate'|trans|capitalize }}</label>
                                 <input class="form-control" name="endDate" type="datetime-local" id="enddateInput"
                                        placeholder="yyyy-mm-dd"
-                                       {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %}
+                                       {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d\\TH:i:s", "Europe/Paris") }}"{% endif %}
                                        min="{{ "now"|date("Y-m-d\\Th:i") }}" required>
                             </div>
                         </div>
