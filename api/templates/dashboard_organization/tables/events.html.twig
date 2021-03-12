@@ -97,6 +97,10 @@
                                href="{{ path('app_dashboardorganization_eventcheckin', { id: event.id}) }}">{{ 'checkin'|trans|capitalize }}</a>
                             <a class="dropdown-item"
                                href="{{ path('app_dashboardorganization_eventtickets', { id: event.id}) }}">{{ 'tickets'|trans|capitalize }}</a>
+                            {% if event.status|default and event.status != 'published' %}
+                            <a class="dropdown-item"
+                               href="{{ path('app_dashboardorganization_publishevent', { id: event.id}) }}">{{ 'publish'|trans|capitalize }}</a>
+                            {% endif %}
                         </div>
                     </div>
                 </td>
