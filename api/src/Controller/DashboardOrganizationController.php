@@ -170,6 +170,20 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             $event['status'] = 'private';
 
+            // Fix start and enddate timezone:
+            if (isset($event['startDate']))
+            {
+                $startDate = new \DateTime($event['startDate'], new \DateTimeZone('Europe/Paris'));
+                $startDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['startDate'] = $startDate->format('Y-m-d\TH:i:s');
+            }
+            if (isset($event['endDate']))
+            {
+                $endDate = new \DateTime($event['endDate'], new \DateTimeZone('Europe/Paris'));
+                $endDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['endDate'] = $endDate->format('Y-m-d\TH:i:s');
+            }
+
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
 
@@ -238,6 +252,20 @@ class DashboardOrganizationController extends AbstractController
                     $categories = [];
                 }
                 unset($event['categories']);
+            }
+
+            // Fix start and enddate timezone:
+            if (isset($event['startDate']))
+            {
+                $startDate = new \DateTime($event['startDate'], new \DateTimeZone('Europe/Paris'));
+                $startDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['startDate'] = $startDate->format('Y-m-d\TH:i:s');
+            }
+            if (isset($event['endDate']))
+            {
+                $endDate = new \DateTime($event['endDate'], new \DateTimeZone('Europe/Paris'));
+                $endDate->setTimeZone(new \DateTimeZone('Europe/London'));
+                $event['endDate'] = $endDate->format('Y-m-d\TH:i:s');
             }
 
             // Save the resource
