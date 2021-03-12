@@ -24,7 +24,8 @@
     {% endif %}
 {% endif %}
 
-{% if offer.quantity is not defined or (offer.quantity|default and offer.quantity != 0) %}
+
+                    {% if not offer.quantity|default or (offer.quantity|default and offer.quantity > 0) %}
 <a data-toggle="modal" href="#offer{{ offer.id }}Modal">
     {% endif %}
     <div class="card rounded-0 card-hover-overlay">
@@ -37,11 +38,11 @@
             {% endif %}
             <div class="card-img-overlay" style="cursor: pointer">
                 <h3>
-                    {% if offer.quantity is not defined or (offer.quantity|default and offer.quantity != 0) %}
+                    {% if not offer.quantity|default or (offer.quantity|default and offer.quantity > 0) %}
                     <a data-toggle="modal" data-target="#offer{{ offer.id }}Modal" class="stretched-link">
                         {% endif %}
                         {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
-                        {% if offer.quantity is not defined or (offer.quantity|default and offer.quantity != 0) %}
+                        {% if not offer.quantity|default or (offer.quantity|default and offer.quantity > 0) %}
                     </a>
                     {% endif %}
                 </h3>
@@ -64,7 +65,7 @@
                     {{ (item.price/100)|localizedcurrency(item.priceCurrency) }}
                 </li>
                 <li class="ml-auto">
-                    {% if offer.quantity is not defined or (offer.quantity|default and offer.quantity != 0) %}
+                    {% if not offer.quantity|default or (offer.quantity|default and offer.quantity > 0) %}
                         <a class="px-2" style="cursor: pointer" data-toggle="modal"
                            href="#offer{{ offer.id }}Modal"><span>{{ 'add to cart'|trans|capitalize }}</span></a>
                     {% else %}
@@ -75,10 +76,10 @@
         </div>
     </div>
 
-    {% if offer.quantity is not defined or (offer.quantity|default and offer.quantity != 0) %}
+    {% if not offer.quantity|default or (offer.quantity|default and offer.quantity > 0) %}
 </a>
 {% endif %}
 
-{% if offer.quantity is not defined or (offer.quantity|default and offer.quantity != 0) %}
+                    {% if not offer.quantity|default or (offer.quantity|default and offer.quantity > 0) %}
                         {% include 'modals/offer.html.twig' with {'offer': offer} %}
                     {% endif %}
