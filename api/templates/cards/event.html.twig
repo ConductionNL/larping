@@ -9,10 +9,18 @@
     {% set eventLocation  = commonground_resource(item.location) %}
     {% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':eventLocation['id']})['hydra:member'] %}
 {% endif %}
-{% set eventOrganizations = commonground_resource(event.organization)%}
+{% set eventOrganization = commonground_resource(item.organization) %}
+{% set eventImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':item['@id'], 'organization':'/organizations/'~eventOrganization['id']})['hydra:member'] %}
+{% if eventImages|length > 0 %}
+    {% set eventImage = eventImages[0] %}
+{% endif %}
 <div class="card rounded-0 card-hover-overlay">
     <div class="position-relative">
-        <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
+        {% if eventImage.base64 is defined %}
+            <img class="card-img rounded-0" style="max-height: 140px; max-width: 210px" src="{{ eventImage.base64 }}" alt="Card image cap">
+        {% else %}
+            <img class="card-img rounded-0" style="max-height: 140px; max-width: 210px" src="https://picsum.photos/300/200" alt="Card image cap">
+        {% endif %}
         <div class="card-img-overlay pt-3 pb-0" onclick=" location.href = '{{ path('app_event_event', {id: item.id}) }}';" style="cursor: pointer;">
             <a href="{{ path('app_event_event', {id: item.id}) }}#reviews">
                 <div class="d-flex align-items-center">
@@ -24,7 +32,6 @@
                 {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
             </h3>
             <p class="text-white">
-                {% set eventOrganization = commonground_resource(item.organization) %}
                 {{ 'by'|trans|capitalize }}: <a href="{{ path('app_organization_organization', {'id': eventOrganization.id }) }}">{{ eventOrganization.name|length > 35 ? eventOrganization.name|slice(0, 35) ~ '...' : eventOrganization.name }}</a>
             </p>
 
