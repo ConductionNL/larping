@@ -75,10 +75,10 @@
                     </form>
 
                     <div id="gridFullwidthDiv" class="fade-in">
-                        <div class="row">
+                        <div class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3">
                             {% for event in events %}
-                                <div class="col-md-4" id="event{{ event.id }}">
-                                    {% include '/cards/event.html.twig' with {'item': event, 'maxHeight': 140} %}
+                                <div class="col-12 col-lg-6 col-xl-4" id="event{{ event.id }}">
+                                    {% include '/cards/event.html.twig' with {'item': event, 'maxHeightImage': 174, 'maxWidthImage': 260, 'minHeightCard': 242, 'minWidthCard': 262} %}
                                 </div>
                             {% endfor %}
                         </div>
