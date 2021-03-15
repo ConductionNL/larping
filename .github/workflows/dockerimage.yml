@@ -58,7 +58,7 @@ jobs:
       - name: Run the docker image
         run: docker-compose up -d
       - name: Taking some sleep (for containers to come up)
-        run: sleep 20
+        run: sleep 60
       - name: Check if all containers are running
         run: docker ps
       - name: Dumping the logs
@@ -66,7 +66,7 @@ jobs:
       - name: Database Update
         run: docker-compose exec -T php bin/console doctrine:schema:update --force
       #- name: Taking some more sleep (for database to be updated)
-      #  run: sleep 20
+      #  run: sleep 60
       #- name: Database Check
       #  run: docker-compose exec -T php bin/console doctrine:schema:validate
       - name: Security Checks
