@@ -354,7 +354,13 @@
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_organizations') }}">
                                         <i class="fal fa-building mr-2" aria-hidden="true"></i>
-                                        {% if organizations|default and organizations|length > 0 %}
+                                        {% set allowed = false %}
+                                        {% for group in app.user.groups %}
+                                            {% if group.name == 'root' or 'admin' %}
+                                                {% set allowed = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if allowed %}
                                             {{ 'my organizations'|trans|capitalize }}
                                         {% else %}
                                             {{ 'start an organization'|trans|capitalize }}
