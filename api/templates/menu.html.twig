@@ -50,12 +50,10 @@
                                             <a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }} </a>
                                         </li>
                                         <li>
-                                            <a href="{# path('app_dashboarduser_organizations') #}"
-                                               style="text-decoration: line-through">{{ 'switch organization'|trans|capitalize }}</a>
+                                            <a href="{{path('app_dashboarduser_organizations')}}">{{ 'switch organization'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{# path('app_dashboardorganization_edit', {'id':organization.id}) #}"
-                                               style="text-decoration: line-through">{{ 'edit organization'|trans|capitalize }} </a>
+                                            <a href="{{ path('app_dashboardorganization_edit', {'id':organization.id}) }}">{{ 'edit organization'|trans|capitalize }} </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -108,8 +106,7 @@
                                             <a href="{{ path('app_dashboardorganization_reviews') }}">{{ 'reviews'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{# path('app_dashboardorganization_paymentproviders') #}"
-                                               style="text-decoration: line-through">{{ 'payment providers'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_paymentproviders') }}">{{ 'payment providers'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -122,8 +119,7 @@
                                             </h5>
                                         </li>
                                         <li>
-                                            <a href=" {# {{path('app_dashboardorganization_members')}} #} "
-                                               style="text-decoration: line-through">{{ 'members'|trans|capitalize }}</a>
+                                            <a href="{{path('app_dashboardorganization_members')}}">{{ 'members'|trans|capitalize }}</a>
                                         </li>
                                         <li>
                                             <a href="{# path('app_dashboardorganization_mailinglists') #}"
