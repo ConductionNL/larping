@@ -178,11 +178,11 @@ class DashboardOrganizationController extends AbstractController
                 $path = $_FILES['image']['tmp_name'];
                 $type = filetype($_FILES['image']['tmp_name']);
                 $data = file_get_contents($path);
-                $image['name'] = 'image for '.$event['name'];
-                $image['description'] = 'image for '.$event['name'];
-                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+                $image['name'] = 'image for ' . $event['name'];
+                $image['description'] = 'image for ' . $event['name'];
+                $image['base64'] = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 $image['resource'] = $event['@id'];
-                $image['organization'] = '/organizations/'.$variables['organization']['id'];
+                $image['organization'] = '/organizations/' . $variables['organization']['id'];
                 // save image in wrc connected to the $event
                 $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
             }
@@ -229,7 +229,7 @@ class DashboardOrganizationController extends AbstractController
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
-            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['event']['@id'], 'organization' => '/organizations/'.$variables['organization']['id']])['hydra:member'];
+            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['event']['@id'], 'organization' => '/organizations/' . $variables['organization']['id']])['hydra:member'];
             if (count($images) > 0) {
                 $variables['image'] = $images[0];
             }
@@ -269,11 +269,11 @@ class DashboardOrganizationController extends AbstractController
                 if ($id != 'add' && isset($variables['image'])) {
                     $image = $variables['image'];
                 }
-                $image['name'] = 'image for '.$event['name'];
-                $image['description'] = 'image for '.$event['name'];
-                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+                $image['name'] = 'image for ' . $event['name'];
+                $image['description'] = 'image for ' . $event['name'];
+                $image['base64'] = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 $image['resource'] = $event['@id'];
-                $image['organization'] = '/organizations/'.$variables['organization']['id'];
+                $image['organization'] = '/organizations/' . $variables['organization']['id'];
                 // save image in wrc connected to the $event
                 $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
             }
@@ -311,9 +311,9 @@ class DashboardOrganizationController extends AbstractController
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
-            $offer['price'] = (string) ((float) $request->get('price') * 100);
-            $offer['quantity'] = (int) $request->get('quantity');
-            $offer['maxQuantity'] = (int) $request->get('maxQuantity');
+            $offer['price'] = (string)((float)$request->get('price') * 100);
+            $offer['quantity'] = (int)$request->get('quantity');
+            $offer['maxQuantity'] = (int)$request->get('maxQuantity');
             $offer['name'] = $product['name'];
             $offer['description'] = $product['description'];
             $offer['products'] = ['/products/' . $product['id']];
@@ -380,9 +380,23 @@ class DashboardOrganizationController extends AbstractController
      */
     public function eventCheckinAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
+//        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+
+        $customers = [];
+        $products = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']]);
+        foreach ($products as $prod) {
+            $invoiceItems = $commonGroundService->getResource(['component' => 'bc', 'type' => 'invoice_items'], ['event' => $variables['event']['@id']]);
+            foreach ($invoiceItems as $item) {
+                if (!in_array($item['invoice']['customer'], $customers)) {
+
+                    $customers[] = $item['invoice']['customer'];
+                }
+            }
+        }
+
 
         return $variables;
     }
