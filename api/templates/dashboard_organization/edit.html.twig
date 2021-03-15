@@ -73,7 +73,7 @@
                             <h3 class="h4 mb-4">{{ 'categories'|trans|capitalize }} </h3>
                             <ul class="list-unstyled mb-6">
                                 {% for category in settings %}
-                                    {% if category.name != 'algemene ledenvergadering' %}
+                                    {% if category.name != 'algemene ledenvergadering' or 'ALV' %}
                                         <li class="d-inline-block mr-4 mb-2">
                                             <div class="form-check">
                                                 <input
