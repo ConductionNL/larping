@@ -2,7 +2,7 @@
 {% set totals = commonground_resource_list({'component':'rc','type':'totals'}, {'resource':item['@id']}) %}
 {% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
     <div class="card rounded-0 card-hover-overlay" href="{{ path('app_location_location', {id: item.id}) }}">
-        <div class="position-relative">
+        <div class="position-relative text-center">
             <img class="card-img rounded-0" src="https://picsum.photos/300/200"
                  alt="Card image cap">
             <div class="card-img-overlay">
