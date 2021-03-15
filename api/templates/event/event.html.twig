@@ -101,10 +101,10 @@
                     {% if tickets is defined and tickets is not empty %}
                     <div id="gridFullwidthDiv" class="fade-in">
                         <h3 class="font-weight-normal mb-6">{{ 'tickets'|trans|capitalize }}</h3>
-                        <div class="row" id="tickets">
+                        <div class="row row-cols-1 row-cols-xl-2" id="tickets">
                             {% for offer in tickets %}
-                                <div class="col-md-6" id="organization">
-                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238}  %}
+                                <div class="col-12 col-xl-6" id="organization">
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeightImage': 238, 'maxWidthImage': 358, 'minHeightCard': 306, 'minWidthCard': 360}  %}
                                 </div>
                             {% endfor %}
                         </div><!-- /.row -->
@@ -115,10 +115,10 @@
                     {% if subscriptions is defined and subscriptions is not empty %}
                     <div id="gridFullwidthDiv" class="fade-in">
                         <h3 class="font-weight-normal mb-6">{{ 'subscriptions'|trans|capitalize }}</h3>
-                        <div class="row" id="tickets">
+                        <div class="row row-cols-1 row-cols-xl-2" id="tickets">
                             {% for offer in subscriptions %}
-                                <div class="col-md-6" id="organization">
-                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238}  %}
+                                <div class="col-12 col-xl-6" id="organization">
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeightImage': 238, 'maxWidthImage': 358, 'minHeightCard': 306, 'minWidthCard': 360}  %}
                                 </div>
                             {% endfor %}
                         </div><!-- /.row -->
@@ -129,10 +129,10 @@
                     {% if products is defined and products is not empty %}
                     <div id="gridFullwidthDiv" class="fade-in" id="products">
                         <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
-                        <div class="row">
+                        <div class="row row-cols-1 row-cols-xl-2">
                             {% for offer in products %}
-                                <div class="col-md-6" id="organization">
-                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeight': 238}  %}
+                                <div class="col-12 col-xl-6" id="organization">
+                                    {%  include 'cards/offer.html.twig'  with {'item': offer, 'maxHeightImage': 238, 'maxWidthImage': 358, 'minHeightCard': 306, 'minWidthCard': 360}  %}
                                 </div>
                             {% endfor %}
                         </div><!-- /.row -->
@@ -182,7 +182,7 @@
                         <!-- You may also like  -->
                         <h5 class="mb-4">{{ 'other events you might like'|trans|capitalize }}</h5>
                         {% for event in events|slice(0,3) %}
-                            {% include '/cards/event.html.twig' with {'item': event, 'maxHeight': 215} %}
+                            {% include '/cards/event.html.twig' with {'item': event, 'maxHeightImage': 215, 'maxWidthImage': 323, 'minHeightCard': 283, 'minWidthCard': 325} %}
                         {% endfor %}
                     </div>
 
