@@ -3,6 +3,7 @@
     {% set  id = organization['id'] %}
     {% set  type = 'Organization' %}
 {% endif %}
+{% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':event['id']})['hydra:member'] %}
 {% block content %}
 
     {# include 'dashboard_user/menu.html.twig' #}
@@ -45,7 +46,7 @@
                                                 class="btn btn-success float-right mr-1">{{ 'publish event'|trans|capitalize }}</button>
                                     {% else %}
                                         <button type="submit" name="status" value="private"
-                                                class="btn btn-warning float-right mr-1">{{ "unpublish event" }}</button>
+                                                class="btn btn-warning float-right mr-1">{{ "unpublish the event"|trans|capitalize }}</button>
                                     {% endif %}
                                 {% else %}
                                     <button type="submit"
@@ -73,7 +74,7 @@
                                 <label for="startdateInput">{{ 'startdate'|trans|capitalize }}</label>
                                 <input class="form-control" name="startDate" type="datetime-local" id="startdateInput"
                                        placeholder="yyyy-mm-dd"
-                                       {% if event.startDate is defined %}value="{{ event.startDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %}
+                                       {% if event.startDate is defined %}value="{{ event.startDate|date("Y-m-d\\TH:i:s", "Europe/Paris") }}"{% endif %}
                                        required>
                             </div>
 
@@ -81,7 +82,7 @@
                                 <label for="enddateInput">{{ 'enddate'|trans|capitalize }}</label>
                                 <input class="form-control" name="endDate" type="datetime-local" id="enddateInput"
                                        placeholder="yyyy-mm-dd"
-                                       {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d", "Europe/Paris") }}T{{ event.endDate|date("H:m:s", "Europe/Paris") }}"{% endif %}
+                                       {% if event.endDate is defined %}value="{{ event.endDate|date("Y-m-d\\TH:i:s", "Europe/Paris") }}"{% endif %}
                                        min="{{ "now"|date("Y-m-d\\Th:i") }}" required>
                             </div>
                         </div>
@@ -94,16 +95,17 @@
                     <div class="card-body px-6 pt-6 pb-1">
                         <h3 class="h4 mb-4">{{ 'setting\'s'|capitalize }} </h3>
                         <ul class="list-unstyled mb-6">
+
                             {% for category in settings %}
                                 <li class="d-inline-block mr-4 mb-2">
                                     <div class="form-check">
                                         <input
                                             class="form-check-input"
                                             type="checkbox"
-                                            value="/categories/{{ category.id }}"
+                                            value="{{ category['@id'] }}"
                                             id="category{{ category.id }}"
                                             name="categories[]"
-                                            {% if category.id in categories %}
+                                            {% if category in eventCategories %}
                                                 checked="checked"
                                             {% endif %}
                                         />
@@ -147,9 +149,7 @@
                         </div>
                     </div>
                 </div>
-            {% endif %}
 
-            {% if event['@id'] is defined %}
                 <!-- Products -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
@@ -191,6 +191,7 @@
                     imageHolder.innerHTML = '{{ 'Click or Drag an image here'|trans|capitalize }}';
                 }
             }
+
             Main();
         }
     </script>

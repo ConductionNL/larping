@@ -5,12 +5,12 @@ info:
   description: |
     API Details
     - Component: 
-    - Reference: larping
+    - Reference: Larping
     - Enviroment: dev
     - Version: V1.0
     - Repository: [online](https://github.com/ConductionNL/larping) / [zip](https://github.com/ConductionNL/larping/archive/master.zip)
     - Docker Image: [online]() 
-    - Datamodel: [postman](/schema/larping.postman_collection.json) / [oas](/schema/openapi.yaml) / [pdf](/schema/datamodel.pdf) / [modelio (zip)](/schema/Datamodel_Modelio.zip) 
+    - Datamodel: [postman](/schema/Larping.postman_collection.json) / [oas](/schema/openapi.yaml) / [pdf](/schema/datamodel.pdf) / [modelio (zip)](/schema/Datamodel_Modelio.zip) 
     
     Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.         
     
@@ -2391,12 +2391,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-12 09:43:35'
+        example: '2021-03-12 10:37:39'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-12 09:43:35'
+        example: '2021-03-12 10:37:39'
     required: []
   AuditTrail-write:
     properties:
@@ -2444,12 +2444,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-12 09:43:35'
+        example: '2021-03-12 10:37:39'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-12 09:43:35'
+        example: '2021-03-12 10:37:39'
     required: []
   ChangeLog-write:
     properties:
@@ -2491,7 +2491,7 @@ host: irc.zaakonline.nl
 servers:
   -
     name: larping.eu
-    url: larping.dev.larping.eu
+    url: Larping.dev.larping.eu
 externalDocs:
   -
     description: 'OAS Documentatie'
