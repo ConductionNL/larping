@@ -49,9 +49,19 @@
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }} </a>
                                         </li>
-                                        <li>
-                                            <a href="{{path('app_dashboarduser_organizations')}}">{{ 'switch organization'|trans|capitalize }}</a>
-                                        </li>
+                                        {% set allowed = false %}
+                                        {% for group in app.user.groups %}
+                                            {% if organizations|default and organizations > 1 %}
+                                                {% if group.name == 'root' or 'administrators' %}
+                                                    {% set allowed = true %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if allowed %}
+                                            <li>
+                                                <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch organization'|trans|capitalize }}</a>
+                                            </li>
+                                        {% endif %}
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_edit', {'id':organization.id}) }}">{{ 'edit organization'|trans|capitalize }} </a>
                                         </li>
@@ -119,7 +129,7 @@
                                             </h5>
                                         </li>
                                         <li>
-                                            <a href="{{path('app_dashboardorganization_members')}}">{{ 'members'|trans|capitalize }}</a>
+                                            <a href="{{ path('app_dashboardorganization_members') }}">{{ 'members'|trans|capitalize }}</a>
                                         </li>
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_mailinglists') }}">{{ 'Mailing Lists'|trans }}</a>
@@ -349,7 +359,13 @@
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_organizations') }}">
                                         <i class="fal fa-building mr-2" aria-hidden="true"></i>
-                                        {% if organizations|default and organizations|length > 0 %}
+                                        {% set allowed = false %}
+                                        {% for group in app.user.groups %}
+                                            {% if group.name == 'root' or 'administrators' %}
+                                                {% set allowed = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if allowed %}
                                             {{ 'my organizations'|trans|capitalize }}
                                         {% else %}
                                             {{ 'start an organization'|trans|capitalize }}
