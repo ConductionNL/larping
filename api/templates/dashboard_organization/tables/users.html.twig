@@ -3,7 +3,9 @@
         <thead>
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'email'|trans|capitalize }}</th>
             <th>{{ 'group(s)'|trans|capitalize }}</th>
+            <th>{{ 'membership paid'|trans|capitalize }}</th>
             <th>
                 <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#UserModalAdd">{{ 'invite'|trans|capitalize }}</button>
                 <button type="button" class="btn btn-warning btn-sm float-right text-white mr-2" onclick="sendDownload('users')">{{ 'download list'|trans|capitalize }}</button>
@@ -12,14 +14,21 @@
         </thead>
         <tbody>
         {% for user in users %}
+            {% set userData = commonground_resource_list({'component':'uc','type':'users'}, {'username' : user.name})['hydra:member'][0] %}
             <tr>
                 <td>
-                    <a class="text-hover-primary text-muted" >{{ user.name }}</a>
+                    <a class="text-hover-primary text-muted" >{{ commonground_resource(userData.person).name }}</a>
+                </td>
+                <td>
+                    <a class="text-hover-primary text-muted">{{ user.name }}</a>
                 </td>
                 <td>
                     <a class="text-hover-primary text-muted" >
                         {% for group in user.groups %}{{ group|capitalize }}{% if not loop.last %}, {% endif %}{% endfor %}
                     </a>
+                </td>
+                <td>
+
                 </td>
                 <td>
                     <div class="dropdown">
