@@ -3,6 +3,7 @@
         <thead>
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'description'|trans|capitalize }}</th>
             <th>{{ 'members'|trans|capitalize }}</th>
             <th>
                 <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#GroupModalAdd">{{ 'add'|trans|capitalize }}</button>
@@ -17,6 +18,9 @@
                     <a class="text-hover-primary text-muted" >{{ group.name }}</a>
                 </td>
                 <td class="text-capitalize">
+                    <a class="text-hover-primary text-muted" >{{ group.description }}</a>
+                </td>
+                <td class="text-capitalize">
                     <a class="text-hover-primary text-muted" >{{ group.users|length }}</a>
                 </td>
                 <td>
@@ -26,7 +30,8 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#GroupModal{{ group.id }}">Edit</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#GroupModal{{ group.id }}">{{ 'edit'|trans|capitalize }}</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailModal{{ group.id }}">{{ 'mail to group'|trans|capitalize }}</a>
                         </div>
                     </div>
                 </td>
@@ -47,6 +52,7 @@
 
 {% for group in groups %}
     {% include 'dashboard_organization/modals/group.html.twig' with {'resource': group} %}
+    {% include 'dashboard_organization/modals/mail_group.html.twig' with {'resource': group} %}
 {% endfor %}
 
 <script>
