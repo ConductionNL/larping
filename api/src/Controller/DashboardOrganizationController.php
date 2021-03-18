@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints\Json;
 use function GuzzleHttp\Promise\all;
@@ -407,7 +408,7 @@ class DashboardOrganizationController extends AbstractController
                 $contact['name'] = $location['name'];
                 $contact['description'] = $location['description'];
                 $contact = $commonGroundService->saveResource($contact, ['component' => 'lc', 'type' => 'addresses']);
-                $location['address'] = '/addresses/'.$contact['id'];
+                $location['address'] = '/addresses/' . $contact['id'];
             }
 
             // Lets save the location
@@ -475,6 +476,7 @@ class DashboardOrganizationController extends AbstractController
 //        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
 
+
         $customers = [];
         $products = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
         foreach ($products as $prod) {
@@ -485,15 +487,27 @@ class DashboardOrganizationController extends AbstractController
                     $isCheckedIn = false;
                     $checkin = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['person' => $item['invoice']['customer'], 'node.event' => $variables['event']['@id']])['hydra:member'];
                     if (isset($checkin[0]) && !empty($checkin[0])) {
-                        $isCheckedIn = true;
+                        $checkin['checkedIn'] = true;
+                        if (isset($checkin['dateCheckedOut'])) {
+                            $variables['checkOutsCount']++;
+                            unset($checkin['checkedIn']);
+                        }
                     }
+                    $checkin['person'] = $commonGroundService->getResource($item['invoice']['customer']);
+                    $checkin['paymentStatus'] = $item['invoice']['status'];
+                    $checkin['invoiceItem'] = $item;
 
-                    $variables['checkins'][] = ['person' => $commonGroundService->getResource($item['invoice']['customer']), 'paymentStatus' => $item['invoice']['status'], 'invoiceItem' => $item, 'checkedIn' => $isCheckedIn];
+
+                    $variables['checkins'][] = $checkin;
                     $customers[] = $item['invoice']['customer'];
                 }
             }
         }
 
+        if (isset($variables['checkins'])) {
+            $variables['totalCheckins'] = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['node.event' => $variables['event']['@id']])['hydra:member'];
+            $variables['peopleToCheckinCount'] = count($variables['checkins']) - count($variables['checkins']);
+        }
 
         return $variables;
     }
@@ -508,16 +522,29 @@ class DashboardOrganizationController extends AbstractController
             $event = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $node = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'nodes'], ['event' => $event['@id']])['hydra:member'][0];
 
-            $checkin = [
-                'node' => '/nodes/' . $node['id'],
-                'person' => $request->request->get('person'),
-            ];
+            // Check for existing checkin
+            $person = $request->request->get('person');
+//            $checkin = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['person' => $person, 'node.event' => $event['@id']])['hydra:member'];
+//
+//            // If dateCheckedOut already is set unset it so people can check in again, else set dateCheckedOut
+//            if (isset($checkin[0]) && isset($checkin[0]['dateCheckedOut'])) {
+//                $checkin = $checkin[0];
+//                unset($checkin['dateCheckedOut']);
+//            } elseif (isset($checkin[0])) {
+//                $checkin = $checkin[0];
+//                $checkin['dateCheckedOut'] = date('Y-m-d H:i:s');
+//            } else {
+                $checkin = [
+                    'node' => '/nodes/' . $node['id'],
+                    'person' => $person,
+                ];
+//            }
 
             $checkin = $commonGroundService->saveResource($checkin, ['component' => 'chin', 'type' => 'checkins']);
 
         } catch (\Exception $e) {
             return new JsonResponse([
-                'status' => 'failed'
+                'status' => $request->request->get('person').' '.$event['@id']
             ]);
         }
 
@@ -769,10 +796,10 @@ class DashboardOrganizationController extends AbstractController
 
             foreach ($email['users'] as $mail) {
                 $data['username'] = $mail['username'];
-                $idVaultService->sendMail($appId, 'emails/mail_group.html.twig', $data['groupName'].': '.$data['title'], $data['username'], 'no-reply@larping.eu', $data);
+                $idVaultService->sendMail($appId, 'emails/mail_group.html.twig', $data['groupName'] . ': ' . $data['title'], $data['username'], 'no-reply@larping.eu', $data);
             }
 
-            $this->addFlash('success', 'Email sent to '.$group['name']);
+            $this->addFlash('success', 'Email sent to ' . $group['name']);
 
             return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
         }
@@ -1205,13 +1232,13 @@ class DashboardOrganizationController extends AbstractController
                 $template['@id'] = $organization['template']['@id'];
             }
 
-            $template['name'] = 'Terms and conditions for '.$organization['name'];
+            $template['name'] = 'Terms and conditions for ' . $organization['name'];
             $template['templateEngine'] = 'twig';
-            $template['organization'] = '/organizations/'.$organization['id'];
+            $template['organization'] = '/organizations/' . $organization['id'];
 
             $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
 
-            $organization['termsAndConditions'] = '/templates/'.$template['id'];
+            $organization['termsAndConditions'] = '/templates/' . $template['id'];
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
