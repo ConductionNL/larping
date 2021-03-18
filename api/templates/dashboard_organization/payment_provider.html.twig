@@ -30,7 +30,7 @@
                   method="post"
                   enctype="multipart/form-data"
                   name="EventForm{% if provider['@id'] is defined %}{{ provider.id }}{% else %}Add{% endif %}">
-                <input type="hidden" name="@type" value="Event">
+                <input type="hidden" name="@type" value="Provider">
                 {% if provider['id'] is defined %}<input type="hidden" id="id" name="id"
                                                          value="{{ provider['id'] }}">{% endif %}
                 {% if provider['@id'] is defined %}<input type="hidden" id="@id" name="@id"
