@@ -83,7 +83,7 @@ class ShoppingController extends AbstractController
                     $offer = $commonGroundService->getResource($item['offer']);
 
                     // Decrease quantity
-                    if (isset($offer['quantity']) && $offer['quantity'] <=! 0) {
+                    if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
                         $offer['quantity']--;
                         $commonGroundService->saveResource($offer);
                     }
