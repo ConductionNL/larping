@@ -745,6 +745,10 @@
         <source>memberships</source>
         <target>lidmaatschappen</target>
       </trans-unit>
+      <trans-unit id="4fNNw9i" resname="membership paid">
+        <source>membership paid</source>
+        <target>lidmaatschap betaald</target>
+      </trans-unit>
       <trans-unit id="TtN51Bi" resname="groups">
         <source>groups</source>
         <target>groepen</target>
@@ -1276,6 +1280,10 @@
       <trans-unit id="48HzGqo" resname="download tickets">
         <source>download tickets</source>
         <target>download kaartjes</target>
+      </trans-unit>
+      <trans-unit id="lGYAsi7" resname="download list">
+        <source>download list</source>
+        <target>download lijst</target>
       </trans-unit>
       <trans-unit id="5m0Drwv" resname="unpaid">
         <source>unpaid</source>
