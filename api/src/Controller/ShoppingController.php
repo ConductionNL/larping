@@ -85,6 +85,7 @@ class ShoppingController extends AbstractController
                     // Decrease quantity
                     if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
                         $offer['quantity']--;
+                        $offer['price'] = (string) $offer['price'];
                         $commonGroundService->saveResource($offer);
                     }
 
