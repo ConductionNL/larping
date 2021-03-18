@@ -34,6 +34,8 @@
                 <select class="form-control" aria-label="{{ 'test123'|trans|capitalize }}" id="groups{{ id|replace({'-':''}) }}" required>
                     <option hidden selected value>{{ 'select a group'|trans|capitalize }}</option> {# do not remove this option, it will break the javascript code :) #}
                     {% for group in groups %}
+                        {# temp do not show the groups clients and root TODO:remove? #}
+                        {% if group.name != 'clients' and group.name != 'root' %}
                         <option
                             id="Option{{ id|replace({'-':''}) }}{{ group.id|replace({'-':''}) }}"
                             value="{{ group.id }}"
@@ -44,7 +46,8 @@
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
-                        >{{ group.name }}</option>
+                        >{{ group.name|trans|capitalize }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>

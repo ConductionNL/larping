@@ -583,6 +583,7 @@ class DashboardOrganizationController extends AbstractController
         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
         $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['organization']['@id'])['groups'];
         $variables['groups'] = array_filter($groups, function ($group) {
+            // We never want these options available to choose:
             return $group['name'] != 'root' && $group['name'] != 'clients';
         });
 
@@ -590,6 +591,13 @@ class DashboardOrganizationController extends AbstractController
             // Get the current resource
             $product = array_merge($variables['product'], $request->request->all());
             $product['sourceOrganization'] = $variables['organization']['@id'];
+
+            if (isset($product['productsThatAreDependent'])) {
+                foreach ($product['productsThatAreDependent'] as &$productThatIsDependent) {
+                    $productThatIsDependent = '/products/'.$productThatIsDependent['id'];
+                }
+            }
+
             // Remove offers (wont do any harm with an updateResource)
             unset($product['offers']);
             // Option for cascade updating offers without unset product.offers ^:
@@ -1237,8 +1245,26 @@ class DashboardOrganizationController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
 
-//        $variables['providers'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'services'], ['organization' => $variables['organization']['id']])['hydra:member'];
-        $variables['providers'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'services'])['hydra:member'];
+        $variables['bcOrganizations'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'organizations'], ['shortCode' => $variables['organization']['@id']])['hydra:member'];
+        if (count($variables['bcOrganizations']) > 0) {
+            $variables['bcOrganization'] = $variables['bcOrganizations'][0];
+        }
+        $variables['providers'] = $variables['bcOrganization']['services'];
+
+        // Update provider
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            $provider = $request->request->all();
+            // Set the current organization as owner
+            $organization = $variables['bcOrganization']['id'];
+            $variables['organization'] = '/organizations/'.$organization;
+
+            // Save the resource
+            $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
+            $bcOrganization = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'organizations']);
+
+            return $this->redirectToRoute('app_dashboardorganization_paymentproviders');
+        }
 
         return $variables;
     }
@@ -1259,7 +1285,7 @@ class DashboardOrganizationController extends AbstractController
         }
 
         // Update provider
-        if ($request->isMethod('POST') && $request->request->get('@type') == 'Provider') {
+        if ($request->isMethod('POST')) {
             // Get the current resource
             $provider = $request->request->all();
             // Set the current organization as owner
@@ -1268,7 +1294,7 @@ class DashboardOrganizationController extends AbstractController
             // Save the resource
             $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
 
-            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $provider['id']]);
+            return $this->redirectToRoute('app_dashboardorganization_paymentproviders');
         }
 
         return $variables;

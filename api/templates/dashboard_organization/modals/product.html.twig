@@ -10,7 +10,11 @@
 
 {% block body %}
     <form id="{{ type }}Form{{ id }}" method="post"
-          action="{{ path('app_dashboardorganization_event', {id: event['id']}) }}">
+        {% if app.request.attributes.get('_route') == 'app_dashboardorganization_event' %}
+          action="{{ path('app_dashboardorganization_event', {id: event['id']}) }}"
+        {% else %}
+          action="{{ path('app_dashboardorganization_products') }}"
+        {% endif %}>
         {% if resource['id'] is defined %}<input type="hidden" id="id" name="id"
                                                  value="{{ resource['id'] }}">{% endif %}
         {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id"

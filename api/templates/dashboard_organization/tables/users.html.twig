@@ -5,8 +5,8 @@
             <th>{{ 'name'|trans|capitalize }}</th>
             <th>{{ 'email'|trans|capitalize }}</th>
             <th>{{ 'group(s)'|trans|capitalize }}</th>
-            <th>{{ 'membership paid'|trans|capitalize }}</th>
-            <th>
+            <th style="min-width: 150px">{{ 'membership paid'|trans|capitalize }}</th>
+            <th style="min-width: 270px">
                 <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#UserModalAdd">{{ 'invite'|trans|capitalize }}</button>
                 <button type="button" class="btn btn-warning btn-sm float-right text-white mr-2" onclick="sendDownload('users')">{{ 'download list'|trans|capitalize }}</button>
             </th>
@@ -14,17 +14,23 @@
         </thead>
         <tbody>
         {% for user in users %}
-            {% set userData = commonground_resource_list({'component':'uc','type':'users'}, {'username' : user.name})['hydra:member'][0] %}
+            {% set userData = commonground_resource_list({'component':'uc','type':'users'}, {'username' : user.name})['hydra:member'] %}
+            {% if userData|length > 0 %}
+                {% set userData = userData[0] %}
+            {% endif %}
             <tr>
                 <td>
-                    <a class="text-hover-primary text-muted" >{{ commonground_resource(userData.person).name }}</a>
+                    <a class="text-hover-primary text-muted" >{% if userData|default %} {{ commonground_resource(userData.person).name }} {% endif %}</a>
                 </td>
                 <td>
                     <a class="text-hover-primary text-muted">{{ user.name }}</a>
                 </td>
                 <td>
                     <a class="text-hover-primary text-muted" >
-                        {% for group in user.groups %}{{ group|capitalize }}{% if not loop.last %}, {% endif %}{% endfor %}
+                        {% for group in user.groups %}
+                            {# temp do not show the groups clients and root TODO:remove? #}
+                            {% if group != 'clients' and group != 'root' %}{{ group|trans|capitalize }}
+                        {% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
                     </a>
                 </td>
                 <td>
