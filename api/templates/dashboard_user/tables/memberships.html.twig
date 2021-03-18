@@ -16,7 +16,11 @@
             <tr>
                 <td>{{ commonground_resource(product.sourceOrganization).name }}</td>
                 <td>{{ product.name }}</td>
-                <td>{% for group in product.groups %}{{ group|capitalize }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
+                <td>{% for group in product.groups %}
+                        {# temp do not show the groups clients and root TODO:remove? #}
+                        {% if group != 'clients' and group != 'root' %}
+                        {{ group|trans|capitalize }}
+                    {% if not loop.last %}, {% endif %}{% endif %}{% endfor %}</td>
                 <td>{% if product.joined is defined %}{{ product.joined|date("d-m-Y") }}{% endif %}</td>
                 <td>{{ product.orderItem.price }}</td>
                 <td>

@@ -521,6 +521,7 @@ class DashboardOrganizationController extends AbstractController
         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
         $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['organization']['@id'])['groups'];
         $variables['groups'] = array_filter($groups, function ($group) {
+            // We never want these options available to choose:
             return $group['name'] != 'root' && $group['name'] != 'clients';
         });
 

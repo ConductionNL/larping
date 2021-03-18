@@ -75,7 +75,7 @@ class ShoppingController extends AbstractController
                     return $group['name'] == 'clients';
                 });
                 if (count($clientsGroup) > 0 && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
-                    $this->idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
+                    $idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
                 }
 
                 //lets see if we need to add the user to an userGroup of a any bought products
