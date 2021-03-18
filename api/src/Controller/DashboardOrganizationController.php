@@ -745,6 +745,28 @@ class DashboardOrganizationController extends AbstractController
             }
 
             return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
+        } elseif ($request->isMethod('POST') && $request->get('mailGroup')) {
+            // Get app_id of larping application
+            $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
+            $appId = $providers[0]['configuration']['app_id'];
+
+            $data = [];
+            $data['title'] = $request->get('title');
+            $data['description'] = $request->get('description');
+            $data['sender'] = $this->getUser()->getUsername();
+            $data['groupName'] = $group['name'];
+
+            $variables['groups'] = $group;
+            $email['users'] = $group['users'];
+
+            foreach ($email['users'] as $mail) {
+                $data['username'] = $mail['username'];
+                $idVaultService->sendMail($appId, 'emails/mail_group.html.twig', $data['groupName'].': '.$data['title'], $data['username'], 'no-reply@larping.eu', $data);
+            }
+
+            $this->addFlash('success', 'Email sent to '.$group['name']);
+
+            return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
         }
 
         return $variables;
