@@ -5,8 +5,8 @@
             <th>{{ 'name'|trans|capitalize }}</th>
             <th>{{ 'email'|trans|capitalize }}</th>
             <th>{{ 'group(s)'|trans|capitalize }}</th>
-            <th>{{ 'membership paid'|trans|capitalize }}</th>
-            <th>
+            <th style="min-width: 150px">{{ 'membership paid'|trans|capitalize }}</th>
+            <th style="min-width: 270px">
                 <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#UserModalAdd">{{ 'invite'|trans|capitalize }}</button>
                 <button type="button" class="btn btn-warning btn-sm float-right text-white mr-2" onclick="sendDownload('users')">{{ 'download list'|trans|capitalize }}</button>
             </th>
@@ -15,8 +15,8 @@
         <tbody>
         {% for user in users %}
             {% set userData = commonground_resource_list({'component':'uc','type':'users'}, {'username' : user.name})['hydra:member'] %}
-            {% if userData|default %}
-            {% set userData = userData[0] %}
+            {% if userData|length > 0 %}
+                {% set userData = userData[0] %}
             {% endif %}
             <tr>
                 <td>
