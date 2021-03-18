@@ -4,8 +4,6 @@
         <tr>
             <th>{{ 'type'|trans|capitalize }}</th>
             <th>{{ 'authorization'|trans|capitalize }}</th>
-            <th><a style="float: right" href="{{ path('app_dashboardorganization_paymentprovider', {id: 'add'}) }}"
-                   class="btn btn-success btn-sm">{{ 'add'|trans|capitalize }}</a></th>
         </tr>
         </thead>
         <tbody>
@@ -15,7 +13,9 @@
                     {{ provider.type }}
                 </td>
                 <td class="text-capitalize">
-                    {% if provider.authorization|default %}{{ provider.authorization }}{% endif %}</td>
+                    {% if provider.authorization|default %}{{ provider.authorization }}{% endif %}
+                </td>
+                <td>
                 <td>
                     <div class="dropdown"  style="float: right">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -24,8 +24,7 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item"
-                               href="{{ path('app_dashboardorganization_paymentprovider', {id: provider.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#ProviderModal{{ provider.id }}" href=""><i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
                         </div>
                     </div>
                 </td>
@@ -37,10 +36,13 @@
     <div class="card border-light shadow-sm">
         <div class="card-body text-center">
             <p>{{ 'no providers found'|trans|capitalize }}</p>
-            <a href="{{ path('app_dashboardorganization_paymentproviders', {id: 'add'}) }}"
-               class="btn btn-primary">{{ 'add your first provider'|trans|capitalize }}!</a>
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ProviderModalAdd">{{ 'add your first provider'|trans|capitalize }}!</a>
         </div>
     </div>
 {% endif %}
+{% include 'dashboard_organization/modals/payment_provider.html.twig' %}
 
+{% for provider in providers  %}
+    {% include 'dashboard_organization/modals/payment_provider.html.twig' with {'resource': provider} %}
+{% endfor %}
 

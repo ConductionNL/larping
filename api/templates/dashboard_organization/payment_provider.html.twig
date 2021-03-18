@@ -1,0 +1,79 @@
+{% extends "base.html.twig" %}
+
+{% if resource is defined %}
+    {% set  id = provider['id'] %}
+{% else %}
+    {% set  id = 'Add' %}
+{% endif %}
+{% set  type = 'Provider' %}
+
+
+{% block content %}
+    {# include 'dashboard_user/menu.html.twig' #}
+
+    <section class="bg-light py-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{% if provider['@id'] is defined %}{{ 'edit provider'|trans|capitalize }}{% else %}{{ 'add provider'|trans|capitalize }}{% endif %}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                    </li>
+                    <li class="breadcrumb-item active"
+                        aria-current="page">{% if provider['@id'] is defined %}{{ 'edit provider'|trans|capitalize }}{% else %}{{ 'add provider'|trans|capitalize }}{% endif %}</li>
+                </ul>
+            </nav>
+
+            <form id="EventForm{% if provider['@id'] is defined %}{{ provider.id }}{% else %}Add{% endif %}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  name="EventForm{% if provider['@id'] is defined %}{{ provider.id }}{% else %}Add{% endif %}">
+                <input type="hidden" name="@type" value="Event">
+                {% if provider['id'] is defined %}<input type="hidden" id="id" name="id"
+                                                         value="{{ provider['id'] }}">{% endif %}
+                {% if provider['@id'] is defined %}<input type="hidden" id="@id" name="@id"
+                                                          value="{{ provider['@id'] }}">{% endif %}
+                <!-- About -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <div class="row">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{% if provider.type is defined %}{{ 'about'|trans|capitalize }} {{ provider.type }}{% endif %}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <button type="submit"
+                                        class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group  col-12">
+                                <label for="providerInput">{{ 'type'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"
+                                       {% if provider.type is defined %}value="{{ provider.type }}"{% endif %}
+                                       id="providerInput"
+                                       name="provider" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <label for="authorization">{{ 'authorization'|trans|capitalize }}</label>
+                                <input class="form-control" name="startDate" type="text" id="authorization"
+                                       {% if provider.authorization is defined %}value="{{ provider.authorization }}"{% endif %}>
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label for="configuration">{{ 'configuration'|trans|capitalize }}</label>
+                                <input class="form-control" name="configuration" type="text" id="configuration">
+{#                                       {% if provider.configuration is defined %}value="{{ provider.configuration[0] }}"{% endif %}>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
