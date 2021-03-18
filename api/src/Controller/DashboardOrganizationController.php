@@ -119,12 +119,12 @@ class DashboardOrganizationController extends AbstractController
             if (count($ordersThisMonth) > 0) {
                 // Calculate revenue of this organization, this month
                 $prices = array_column($ordersThisMonth, 'price');
-                $variables['revenue']['thisMonth'] = '€ ' . number_format(array_sum($prices), 2, ',', '.');
+                $variables['revenue']['thisMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
             }
             if (count($ordersLastMonth) > 0) {
                 // Calculate revenue of this organization, last month
                 $prices = array_column($ordersLastMonth, 'price');
-                $variables['revenue']['lastMonth'] = '€ ' . number_format(array_sum($prices), 2, ',', '.');
+                $variables['revenue']['lastMonth'] = '€ '.number_format(array_sum($prices), 2, ',', '.');
             }
         }
 
@@ -190,11 +190,11 @@ class DashboardOrganizationController extends AbstractController
                 $path = $_FILES['image']['tmp_name'];
                 $type = filetype($_FILES['image']['tmp_name']);
                 $data = file_get_contents($path);
-                $image['name'] = 'image for ' . $event['name'];
-                $image['description'] = 'image for ' . $event['name'];
-                $image['base64'] = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $image['name'] = 'image for '.$event['name'];
+                $image['description'] = 'image for '.$event['name'];
+                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
                 $image['resource'] = $event['@id'];
-                $image['organization'] = '/organizations/' . $variables['organization']['id'];
+                $image['organization'] = '/organizations/'.$variables['organization']['id'];
                 // save image in wrc connected to the $event
                 $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
             }
@@ -267,7 +267,7 @@ class DashboardOrganizationController extends AbstractController
             $variables['resourceCategory'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $variables['event']['@id']])['hydra:member'];
             $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
             $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
-            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['event']['@id'], 'organization' => '/organizations/' . $variables['organization']['id']])['hydra:member'];
+            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['event']['@id'], 'organization' => '/organizations/'.$variables['organization']['id']])['hydra:member'];
             if (count($images) > 0) {
                 $variables['image'] = $images[0];
             }
@@ -311,11 +311,11 @@ class DashboardOrganizationController extends AbstractController
                 if ($id != 'add' && isset($variables['image'])) {
                     $image = $variables['image'];
                 }
-                $image['name'] = 'image for ' . $event['name'];
-                $image['description'] = 'image for ' . $event['name'];
-                $image['base64'] = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $image['name'] = 'image for '.$event['name'];
+                $image['description'] = 'image for '.$event['name'];
+                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
                 $image['resource'] = $event['@id'];
-                $image['organization'] = '/organizations/' . $variables['organization']['id'];
+                $image['organization'] = '/organizations/'.$variables['organization']['id'];
                 // save image in wrc connected to the $event
                 $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
             }
@@ -359,12 +359,12 @@ class DashboardOrganizationController extends AbstractController
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
-            $offer['price'] = (string)((float)$request->get('price') * 100);
-            $offer['quantity'] = (int)$request->get('quantity');
-            $offer['maxQuantity'] = (int)$request->get('maxQuantity');
+            $offer['price'] = (string) ((float) $request->get('price') * 100);
+            $offer['quantity'] = (int) $request->get('quantity');
+            $offer['maxQuantity'] = (int) $request->get('maxQuantity');
             $offer['name'] = $product['name'];
             $offer['description'] = $product['description'];
-            $offer['products'] = ['/products/' . $product['id']];
+            $offer['products'] = ['/products/'.$product['id']];
             $offer['offeredBy'] = $variables['organization']['@id'];
             $offer['audience'] = 'public';
 
@@ -395,7 +395,7 @@ class DashboardOrganizationController extends AbstractController
                 $contact['name'] = $location['name'];
                 $contact['description'] = $location['description'];
                 $contact = $commonGroundService->saveResource($contact, ['component' => 'lc', 'type' => 'addresses']);
-                $location['address'] = '/addresses/' . $contact['id'];
+                $location['address'] = '/addresses/'.$contact['id'];
             }
 
             // Lets save the location
@@ -549,12 +549,12 @@ class DashboardOrganizationController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Offer') {
             $offer = $request->request->all();
             // Add the current product to het offer
-            $offer['products'] = ['/products/' . $id];
+            $offer['products'] = ['/products/'.$id];
             $offer['offeredBy'] = $variables['organization']['@id'];
-            $offer['price'] = (string)((float)$offer['price'] * 100);
+            $offer['price'] = (string) ((float) $offer['price'] * 100);
             if (isset($offer['options'])) {
                 foreach ($offer['options'] as &$option) {
-                    $option['price'] = (string)((float)$option['price'] * 100);
+                    $option['price'] = (string) ((float) $option['price'] * 100);
                 }
             }
 
@@ -683,6 +683,28 @@ class DashboardOrganizationController extends AbstractController
             }
 
             return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
+        } elseif ($request->isMethod('POST') && $request->get('mailGroup')) {
+            // Get app_id of larping application
+            $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
+            $appId = $providers[0]['configuration']['app_id'];
+
+            $data = [];
+            $data['title'] = $request->get('title');
+            $data['description'] = $request->get('description');
+            $data['sender'] = $this->getUser()->getUsername();
+            $data['groupName'] = $group['name'];
+
+            $variables['groups'] = $group;
+            $email['users'] = $group['users'];
+
+            foreach ($email['users'] as $mail) {
+                $data['username'] = $mail['username'];
+                $idVaultService->sendMail($appId, 'emails/mail_group.html.twig', $data['groupName'].': '.$data['title'], $data['username'], 'no-reply@larping.eu', $data);
+            }
+
+            $this->addFlash('success', 'Email sent to '.$group['name']);
+
+            return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
         }
 
         return $variables;
@@ -747,7 +769,7 @@ class DashboardOrganizationController extends AbstractController
             $mail = [];
             $mail['title'] = $request->get('title');
             $mail['html'] = $request->get('html');
-            $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']) . '@larping.eu';
+            $mail['sender'] = preg_replace('/\s+/', '', $variables['organization']['name']).'@larping.eu';
 
             // Send email to all subscribers of this mailing list.
             $idVaultService->sendToSendList($sendListId, $mail);
@@ -969,7 +991,7 @@ class DashboardOrganizationController extends AbstractController
                 $contact['name'] = $location['name'];
                 $contact['description'] = $location['description'];
                 $contact = $commonGroundService->saveResource($contact, ['component' => 'lc', 'type' => 'addresses']);
-                $location['address'] = '/addresses/' . $contact['id'];
+                $location['address'] = '/addresses/'.$contact['id'];
             }
 
             // Lets save the location
@@ -1113,13 +1135,13 @@ class DashboardOrganizationController extends AbstractController
                 $template['@id'] = $organization['template']['@id'];
             }
 
-            $template['name'] = 'Terms and conditions for ' . $organization['name'];
+            $template['name'] = 'Terms and conditions for '.$organization['name'];
             $template['templateEngine'] = 'twig';
-            $template['organization'] = '/organizations/' . $organization['id'];
+            $template['organization'] = '/organizations/'.$organization['id'];
 
             $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
 
-            $organization['termsAndConditions'] = '/templates/' . $template['id'];
+            $organization['termsAndConditions'] = '/templates/'.$template['id'];
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
