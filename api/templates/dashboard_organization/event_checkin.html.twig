@@ -9,10 +9,13 @@
         <div class="container">
             <!-- Breadcrumb -->
             <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
-                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'checkin for'|trans|capitalize }} {{ event.name}}</h2>
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'checkin for'|trans|capitalize }} {{ event.name }}</h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
-                    <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                    </li>
                     <li class="breadcrumb-item active"
                         aria-current="page">{{ 'checkin'|trans|capitalize }}</li>
                 </ul>
@@ -25,15 +28,17 @@
                     <div class="card">
                         <div class="card-header bg-white">
                             <span class="text-content">{{ 'checked-in'|trans|capitalize }}</span>
-                            <span class="badge badge-primary">{{ 'download'|trans|capitalize }}</span>
+                            {% if totalCheckins|default %}
+                                <span class="badge badge-primary">{{ 'download'|trans|capitalize }}</span>
+                            {% endif %}
                         </div>
 
                         <div class="card-body widget-content">
-                            <span class="widget-content-title">221</span>
+                            <span id="totalCheckinsSpan" class="widget-content-title">{% if totalCheckins|default %}{{ totalCheckins|length }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people currently pressent'|trans|capitalize }}</p>
                             </div>
-                            <a href="#" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
+                            <a onclick="showCheckedIn()" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
                         </div>
                     </div><!-- /.col -->
                 </div><!-- /.col -->
@@ -42,15 +47,15 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header bg-white">
-                            <span class="text-content">{{ 'To do'|trans|capitalize }}</span>
+                            <span class="text-content" >{{ 'To do'|trans|capitalize }}</span>
                         </div>
 
                         <div class="card-body widget-content">
-                            <span class="widget-content-title">400</span>
+                            <span id="todoCheckinsSpan" class="widget-content-title" >{% if peopleToCheckinCount|default %}{{ peopleToCheckinCount }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people yet to check in'|trans|capitalize }}</p>
                             </div>
-                            <a href="#" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
+                            <a onclick="showPeopleToCheckin()" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
                         </div>
                     </div><!-- /.col -->
                 </div><!-- /.col -->
@@ -63,16 +68,17 @@
                         </div>
 
                         <div class="card-body widget-content">
-                            <span class="widget-content-title">6</span>
+                            <span id="checkedOutCheckinsSpan" class="widget-content-title">{% if checkOutsCount|default %}{{ checkOutsCount }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people that have left'|trans|capitalize }}</p>
                             </div>
-                            <a href="#" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
+                            <a onclick="showCheckedOut()"  class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
                         </div>
                     </div><!-- /.col -->
                 </div><!-- /.col -->
 
             </div><!-- /.row -->
+            <button type="button" class="btn btn-success btn-sm m-2 mt-n3 float-right hover-pointer" onclick="resetFilters()">{{ 'reset filters'|trans|capitalize }}</button>
 
             <!-- events -->
             <table id="checkin" class="display nowrap table" style="width:100%">
@@ -80,96 +86,199 @@
                 <tr>
                     <th>{{ 'reference'|trans|capitalize }}</th>
                     <th>{{ 'person'|trans|capitalize }}</th>
-                    <th>{{ 'membership'|trans|capitalize }}</th>
+{#                    <th>{{ 'membership'|trans|capitalize }}</th>#}
                     <th>{{ 'order'|trans|capitalize }}</th>
                     <th>{{ 'payment'|trans|capitalize }}</th>
                     <th>{{ 'status'|trans|capitalize }}</th>
-                    <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#CheckinModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+                    <th>
+                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                data-target="#CheckinModalAdd">{{ 'add'|trans|capitalize }}</button>
+                    </th>
                 </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            5092
-                        </td>
-                        <td class="text-capitalize">
-                            <a class="text-hover-primary text-muted" >Ruben van der Linde</a>
-                        </td>
-                        <td>
-                            Jaarlid
-                        </td>
-                        <td>
-                            Vortes Adventures 2020-12
-                        </td>
-                        <td>
-                            <span class="badge badge-danger px-2 py-1">Not paid</span>
-                        </td>
-                        <td>
-                            <span class="badge badge-warning px-2 py-1">Not checked in</span>
-                        </td>
-                        <td>
-                            <a class="btn btn-outline-primary btn-sm" href="#"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            5092
-                        </td>
-                        <td class="text-capitalize">
-                            <a class="text-hover-primary text-muted" >Ruben van der Linde</a>
-                        </td>
-                        <td>
-                            Jaarlid
-                        </td>
-                        <td>
-                            Vortes Adventures 2020-12
-                        </td>
-                        <td>
-                            Paid
-                        </td>
-                        <td>
-                            <span class="badge badge-success px-2 py-1">Checked in</span>
-                        </td>
-                        <td>
-                            <div class="dropdown">
-                                <a href="#" role="button" id="dropdownMenuLink"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i class="fas fa-ellipsis-v"></i>
+                <tbody id="checkinTableBody">
+                {% if checkins|default %}
+                    {% for checkin in checkins %}
+                        <tr>
+                            <td>
+                                {{ checkin.invoiceItem.id[:7] }}
+                            </td>
+                            <td class="text-capitalize">
+                                <a class="text-hover-primary text-muted">{{ checkin.person.name }}</a>
+                            </td>
+{#                            <td>#}
+{#                                Jaarlid#}
+{#                            </td>#}
+                            <td>
+                                {{ checkin.invoiceItem.name }}
+                            </td>
+                            <td>
+                                <span class="badge {% if checkin.paymentStatus == 'paid' %}badge-success{% else%}badge-danger{% endif %} px-2 py-1">{{ checkin.paymentStatus }}</span>
+                            </td>
+                            <td>
+                                <span
+                                    class="badge {% if checkin.dateCheckedOut|default %}badge-danger{% elseif checkin.checkedIn|default %}badge-success{% else %}badge-warning{% endif %} px-2 py-1">{% if checkin.dateCheckedOut|default %}Checked out{% elseif checkin.checkedIn|default %}Checked in{% else %}Not checked in{% endif %}</span>
+                            </td>
+                            <td>
+                                <a {% if checkin.checkedIn|default %}style="color: white"{% endif%} class="btn {% if checkin.checkedIn|default %}btn-danger color-white{% else %}btn-outline-primary{% endif%} btn-sm text-center w-100"{% if checkin.checkedIn|default %}onclick="checkThisPersonOut(this, '{{ checkin.person['@id'] }}')" {% else %} onclick="checkThisPersonIn(this, '{{ checkin.person['@id'] }}')"{% endif %}>{% if checkin.checkedIn|default %}<i class="fas fa-close"
+                                aria-hidden="true"></i> {{ 'check out'|capitalize }}{% else %}<i class="fas fa-edit" aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}{% endif %}
                                 </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">{{ 'check out'|trans|capitalize }}</a>
-                                    <a class="dropdown-item" href="#">{{ 'emergency information'|trans|capitalize }}</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            5092
-                        </td>
-                        <td class="text-capitalize">
-                            <a class="text-hover-primary text-muted" >Ruben van der Linde</a>
-                        </td>
-                        <td>
-                            Jaarlid
-                        </td>
-                        <td>
-                            Vortes Adventures 2020-12
-                        </td>
-                        <td>
-                            Paid
-                        </td>
-                        <td>
-                            <span class="badge badge-danger px-2 py-1">checked out</span>
-                        </td>
-                        <td>
-                            <a class="btn btn-outline-primary btn-sm" href="#"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}</a>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
 
         </div>
     </section>
+
+    <script>
+        function resetFilters() {
+            var children = [].slice.call(document.getElementById('checkinTableBody').children);
+            children.forEach(function (item) {
+                item.style.display = "";
+            });
+        }
+
+        function showPeopleToCheckin() {
+            resetFilters();
+            var children = [].slice.call(document.getElementById('checkinTableBody').children);
+            children.forEach(function (item) {
+                console.log(item.children[4].children[0].innerText);
+                if (item.children[4].children[0].innerText === 'Checked in') {
+                    item.style.display = "none";
+                }
+            });
+        }
+
+        function showCheckedIn() {
+            resetFilters();
+            var children = [].slice.call(document.getElementById('checkinTableBody').children);
+            children.forEach(function (item) {
+                console.log(item.children[4].children[0].innerText);
+                if (item.children[4].children[0].innerText !== 'Checked in' && item.children[4].children[0].innerText !== 'Checked out' ) {
+                    item.style.display = "none";
+                }
+            });
+
+        }
+
+        function showCheckedOut() {
+            resetFilters();
+            var children = [].slice.call(document.getElementById('checkinTableBody').children);
+            children.forEach(function (item) {
+                console.log(item.children[4].children[0].innerText);
+                if (item.children[4].children[0].innerText !== 'Checked out') {
+                    item.style.display = "none";
+                }
+            });
+
+        }
+
+        function checkThisPersonIn(aElement, person) {
+            aElement.innerHTML = "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>" + "<span class=\"sr-only\">Loading...</span>";
+            aElement.removeAttribute("onclick");
+
+            // And then fire an ajax to do the actual work
+            $.ajax({
+                type: "POST",
+                url: "{{ path('app_dashboardorganization_checksomeonein', {id: event.id}) }}",
+                data: {
+                    person: person
+                },
+                dataType: "json",
+                complete: function (response) {
+                    console.log(response.responseJSON);
+                    if (response.responseJSON == undefined) {
+                        aElement.innerHTML = "Checking failed";
+                        setTimeout(function () {
+                            aElement.innerHTML = "<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Checkin";
+                            aElement.setAttribute("onclick", " checkThisPersonIn(this, '" + person + "')");
+                        }, 2000)
+                    } else if (response.responseJSON.status == 'success') {
+                        // aElement.innerHTML = "<i class=\"fas fa-check\" aria-hidden=\"true\"></i>";
+                        aElement.parentElement.previousElementSibling.firstElementChild.innerHTML = "Checked in";
+                        aElement.parentElement.previousElementSibling.firstElementChild.classList.remove("badge-danger");
+                        aElement.parentElement.previousElementSibling.firstElementChild.classList.add("badge-success");
+
+                        // Make button ready for checkin out
+                        aElement.classList.remove("btn-outline-primary");
+                        aElement.classList.add("btn-danger");
+                        aElement.style.color = 'white';
+                        aElement.innerHTML = 'Check out';
+
+                        aElement.setAttribute("onclick", " checkThisPersonOut(this, '" + person + "')");
+
+                        let totalCheckinsSpan = document.getElementById('totalCheckinsSpan');
+                        totalCheckinsSpan.innerHTML = parseInt(totalCheckinsSpan.innerHTML) + 1;
+
+                        let todoCheckinsSpan = document.getElementById('todoCheckinsSpan');
+                        if (parseInt(todoCheckinsSpan.innerHTML) - 1 >= 0) {
+                            todoCheckinsSpan.innerHTML = parseInt(todoCheckinsSpan.innerHTML) - 1;
+                        }
+                    } else {
+                        aElement.innerHTML = "Checking failed";
+                        setTimeout(function () {
+                            aElement.innerHTML = "<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Checkin";
+                            aElement.setAttribute("onclick", " checkThisPersonIn(this, '" + person + "')");
+                        }, 2000)
+                    }
+                }
+            });
+        }
+
+
+        function checkThisPersonOut(aElement, person) {
+            aElement.innerHTML = "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>" + "<span class=\"sr-only\">Loading...</span>";
+            aElement.removeAttribute("onclick");
+            $.ajax({
+                type: "POST",
+                url: "{{ path('app_dashboardorganization_checksomeonein', {id: event.id}) }}",
+                data: {
+                    person: person
+                },
+                dataType: "json",
+                complete: function (response) {
+                    console.log(response.responseJSON);
+                    if (response.responseJSON == undefined) {
+                        aElement.innerHTML = "Checkout failed";
+                        setTimeout(function () {
+                            aElement.innerHTML = "<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Check out";
+                            aElement.setAttribute("onclick", " checkThisPersonOut(this, '" + person + "')");
+                        }, 2000)
+                    } else if (response.responseJSON.status == 'success') {
+                        aElement.innerHTML = "";
+                        aElement.parentElement.previousElementSibling.firstElementChild.innerHTML = "Checked out";
+                        aElement.parentElement.previousElementSibling.firstElementChild.classList.remove("badge-success");
+                        aElement.parentElement.previousElementSibling.firstElementChild.classList.add("badge-danger");
+
+                        aElement.classList.add("btn-outline-primary");
+                        aElement.classList.remove("btn-danger");
+                        aElement.style.color = 'gray';
+                        aElement.innerHTML = '<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Checkin';
+
+                        aElement.setAttribute("onclick", " checkThisPersonIn(this, '" + person + "')");
+
+                        let totalCheckinsSpan = document.getElementById('totalCheckinsSpan');
+                        if (parseInt(totalCheckinsSpan.innerHTML) - 1 >= 0) {
+                            totalCheckinsSpan.innerHTML = parseInt(totalCheckinsSpan.innerHTML) - 1;
+                        }
+
+                        let checkedOutCheckinsSpan = document.getElementById('checkedOutCheckinsSpan');
+                        checkedOutCheckinsSpan.innerHTML = parseInt(checkedOutCheckinsSpan.innerHTML) + 1;
+                    } else {
+                        aElement.innerHTML = "Checking failed";
+                        setTimeout(function () {
+                            aElement.innerHTML = "<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Check out";
+                            aElement.setAttribute("onclick", " checkThisPersonOut(this, '" + person + "')");
+                        }, 2000)
+                    }
+
+                }
+            });
+        }
+    </script>
+
 
 {% endblock %}

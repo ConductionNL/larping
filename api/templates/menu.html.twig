@@ -65,6 +65,9 @@
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_edit', {'id':organization.id}) }}">{{ 'edit organization'|trans|capitalize }} </a>
                                         </li>
+                                        <li>
+                                            <a href="{{ path('app_dashboardorganization_paymentproviders') }}">{{ 'payment providers'|trans|capitalize }}</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="col4">
@@ -91,7 +94,7 @@
                                         <li>
                                             <h5 class="heading">
                                                 <i class="fas fa-coins mr-2 text-primary" aria-hidden="true"></i>
-                                                {{ 'sales'|trans|capitalize }}
+                                                {{ 'event managment'|trans|capitalize }}
                                             </h5>
                                         </li>
                                         <li>
@@ -113,10 +116,7 @@
                                                style="text-decoration: line-through">{{ 'orders'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_dashboardorganization_reviews') }}">{{ 'reviews'|trans|capitalize }}</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_dashboardorganization_paymentproviders') }}">{{ 'payment providers'|trans|capitalize }}</a>
+                                            <a style="text-decoration: line-through" href="{# {{ path('app_dashboardorganization_reviews') }} #}">{{ 'reviews'|trans|capitalize }}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -132,8 +132,7 @@
                                             <a href="{{ path('app_dashboardorganization_members') }}">{{ 'members'|trans|capitalize }}</a>
                                         </li>
                                         <li>
-                                            <a href="{# path('app_dashboardorganization_mailinglists') #}"
-                                               style="text-decoration: line-through">{{ 'Mailing Lists'|trans }}</a>
+                                            <a href="{{ path('app_dashboardorganization_mailinglists') }}">{{ 'Mailing Lists'|trans }}</a>
                                         </li>
                                         <li>
                                             <a href="{# path('app_dashboardorganization_makeorderformember') #}"
@@ -360,17 +359,19 @@
                                     <a class="d-flex flex-wrap align-items-center"
                                        href="{{ path('app_dashboarduser_organizations') }}">
                                         <i class="fal fa-building mr-2" aria-hidden="true"></i>
-                                        {% set allowed = false %}
-                                        {% for group in app.user.groups %}
-                                            {% if group.name == 'root' or 'administrators' %}
-                                                {% set allowed = true %}
-                                            {% endif %}
-                                        {% endfor %}
-                                        {% if allowed %}
-                                            {{ 'my organizations'|trans|capitalize }}
-                                        {% else %}
-                                            {{ 'start an organization'|trans|capitalize }}
-                                        {% endif %}
+                                        {{ 'my organizations'|trans|capitalize }}
+                                        {# @todo terug plaatsen na review matthias #}
+{#                                        {% set allowed = false %}#}
+{#                                        {% for group in app.user.groups %}#}
+{#                                            {% if group.name == 'administrators' %}#}
+{#                                                {% set allowed = true %}#}
+{#                                            {% endif %}#}
+{#                                        {% endfor %}#}
+{#                                        {% if allowed %}#}
+{#                                            {{ 'my organizations'|trans|capitalize }}#}
+{#                                        {% else %}#}
+{#                                            {{ 'start an organization'|trans|capitalize }}#}
+{#                                        {% endif %}#}
                                     </a>
                                 </li>
                                 <li>

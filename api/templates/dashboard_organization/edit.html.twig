@@ -473,18 +473,16 @@
                     <div class="card">
                         <div class="card-body p-6">
                             <h3 class="h4 mb-4">{{ 'terms and conditions'|trans|capitalize }}</h3>
-                            {% set termsAndConditions = commonground_resource_list({'component':'wrc','type':'templates'}, {'organization.id' : organization['id']})['hydra:member'] %}
 
                             <div class="form-group position-relative mb-6 form-group-dragable">
                                 <div class="form-group">
                                     <label for="contentInput">{{ 'content'|trans|capitalize }}</label>
                                     <textarea oninput="renderTermsAndConditions()" class="form-control" rows="10"
                                               id="contentInput" name="template[content]"
-                                              required>{% if termsAndConditions is defined %}{{ termsAndConditions[0].content|raw }}{% endif %}</textarea>
+                                              required>{% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}</textarea>
                                 </div>
-
                                 <div id="renderedContentDiv">
-                                    {% if termsAndConditions is defined %}{{ termsAndConditions[0].content|raw }}{% endif %}
+                                    {% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}
                                 </div>
                             </div>
 

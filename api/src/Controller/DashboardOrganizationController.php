@@ -10,6 +10,7 @@ use function GuzzleHttp\Promise\all;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -304,6 +305,16 @@ class DashboardOrganizationController extends AbstractController
             // Save the resource
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
 
+            // Make a node
+            $node = [];
+            $node['name'] = 'Node for '.$event['name'];
+            $node['event'] = $event['@id'];
+            $node['accommodation'] = 'https://test.com';
+            $node['type'] = 'checkin';
+            $node['organization'] = $variables['organization']['@id'];
+
+            $node = $commonGroundService->saveResource($node, ['component' => 'chin', 'type' => 'nodes']);
+
             if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
                 $path = $_FILES['image']['tmp_name'];
                 $type = filetype($_FILES['image']['tmp_name']);
@@ -458,11 +469,82 @@ class DashboardOrganizationController extends AbstractController
      */
     public function eventCheckinAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
+//        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
 
+        $customers = [];
+        $products = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
+        foreach ($products as $prod) {
+            $invoiceItems = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'invoice_items'], ['event' => $variables['event']['@id']])['hydra:member'];
+            foreach ($invoiceItems as $item) {
+                if (!in_array($item['invoice']['customer'], $customers)) {
+                    $isCheckedIn = false;
+                    $checkin = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['person' => $item['invoice']['customer'], 'node.event' => $variables['event']['@id']])['hydra:member'];
+                    if (isset($checkin[0]) && !empty($checkin[0])) {
+                        $checkin['checkedIn'] = true;
+                        if (isset($checkin['dateCheckedOut'])) {
+                            $variables['checkOutsCount']++;
+                            unset($checkin['checkedIn']);
+                        }
+                    }
+                    $checkin['person'] = $commonGroundService->getResource($item['invoice']['customer']);
+                    $checkin['paymentStatus'] = $item['invoice']['status'];
+                    $checkin['invoiceItem'] = $item;
+
+                    $variables['checkins'][] = $checkin;
+                    $customers[] = $item['invoice']['customer'];
+                }
+            }
+        }
+
+        if (isset($variables['checkins'])) {
+            $variables['totalCheckins'] = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['node.event' => $variables['event']['@id']])['hydra:member'];
+            $variables['peopleToCheckinCount'] = count($variables['checkins']) - count($variables['checkins']);
+        }
+
         return $variables;
+    }
+
+    /**
+     * @Route("/events/{id}/check-someone-in")
+     * @Template
+     */
+    public function checkSomeoneInAction(CommonGroundService $commonGroundService, Request $request, $id)
+    {
+        try {
+            $event = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
+            $node = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'nodes'], ['event' => $event['@id']])['hydra:member'][0];
+
+            // Check for existing checkin
+            $person = $request->request->get('person');
+//            $checkin = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['person' => $person, 'node.event' => $event['@id']])['hydra:member'];
+//
+//            // If dateCheckedOut already is set unset it so people can check in again, else set dateCheckedOut
+//            if (isset($checkin[0]) && isset($checkin[0]['dateCheckedOut'])) {
+//                $checkin = $checkin[0];
+//                unset($checkin['dateCheckedOut']);
+//            } elseif (isset($checkin[0])) {
+//                $checkin = $checkin[0];
+//                $checkin['dateCheckedOut'] = date('Y-m-d H:i:s');
+//            } else {
+            $checkin = [
+                'node'   => '/nodes/'.$node['id'],
+                'person' => $person,
+            ];
+//            }
+
+            $checkin = $commonGroundService->saveResource($checkin, ['component' => 'chin', 'type' => 'checkins']);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'status' => $request->request->get('person').' '.$event['@id'],
+            ]);
+        }
+
+        return new JsonResponse([
+            'status' => 'success',
+        ]);
     }
 
     /**
@@ -521,6 +603,7 @@ class DashboardOrganizationController extends AbstractController
         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
         $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['organization']['@id'])['groups'];
         $variables['groups'] = array_filter($groups, function ($group) {
+            // We never want these options available to choose:
             return $group['name'] != 'root' && $group['name'] != 'clients';
         });
 
@@ -528,6 +611,13 @@ class DashboardOrganizationController extends AbstractController
             // Get the current resource
             $product = array_merge($variables['product'], $request->request->all());
             $product['sourceOrganization'] = $variables['organization']['@id'];
+
+            if (isset($product['productsThatAreDependent'])) {
+                foreach ($product['productsThatAreDependent'] as &$productThatIsDependent) {
+                    $productThatIsDependent = '/products/'.$productThatIsDependent['id'];
+                }
+            }
+
             // Remove offers (wont do any harm with an updateResource)
             unset($product['offers']);
             // Option for cascade updating offers without unset product.offers ^:
@@ -681,6 +771,28 @@ class DashboardOrganizationController extends AbstractController
                     $this->addFlash('error', 'Gebruiker zit al in de gekozen groep');
                 }
             }
+
+            return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
+        } elseif ($request->isMethod('POST') && $request->get('mailGroup')) {
+            // Get app_id of larping application
+            $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
+            $appId = $providers[0]['configuration']['app_id'];
+
+            $data = [];
+            $data['title'] = $request->get('title');
+            $data['description'] = $request->get('description');
+            $data['sender'] = $this->getUser()->getUsername();
+            $data['groupName'] = $group['name'];
+
+            $variables['groups'] = $group;
+            $email['users'] = $group['users'];
+
+            foreach ($email['users'] as $mail) {
+                $data['username'] = $mail['username'];
+                $idVaultService->sendMail($appId, 'emails/mail_group.html.twig', $data['groupName'].': '.$data['title'], $data['username'], 'no-reply@larping.eu', $data);
+            }
+
+            $this->addFlash('success', 'Email sent to '.$group['name']);
 
             return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
         }
@@ -1153,8 +1265,27 @@ class DashboardOrganizationController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
 
-//        $variables['providers'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'services'], ['organization' => $variables['organization']['id']])['hydra:member'];
-        $variables['providers'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'services'])['hydra:member'];
+        $variables['bcOrganizations'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'organizations'], ['shortCode' => $variables['organization']['@id']])['hydra:member'];
+        if (count($variables['bcOrganizations']) > 0) {
+            $variables['bcOrganization'] = $variables['bcOrganizations'][0];
+        }
+        $variables['providers'] = $variables['bcOrganization']['services'];
+
+        // Update provider
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            $provider = $request->request->all();
+            // Set the current organization as owner
+            $organization = $variables['bcOrganization']['id'];
+            $variables['organization'] = '/organizations/'.$organization;
+            $provider['organization']['rsin'] = $variables['organization']['@id'];
+            $provider['organization']['shortCode'] = $variables['organization']['@id'];
+
+            // Save the resource
+            $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
+
+            return $this->redirectToRoute('app_dashboardorganization_paymentproviders');
+        }
 
         return $variables;
     }
@@ -1175,7 +1306,7 @@ class DashboardOrganizationController extends AbstractController
         }
 
         // Update provider
-        if ($request->isMethod('POST') && $request->request->get('@type') == 'Provider') {
+        if ($request->isMethod('POST')) {
             // Get the current resource
             $provider = $request->request->all();
             // Set the current organization as owner
@@ -1184,7 +1315,7 @@ class DashboardOrganizationController extends AbstractController
             // Save the resource
             $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
 
-            return $this->redirectToRoute('app_dashboardorganization_event', ['id' => $provider['id']]);
+            return $this->redirectToRoute('app_dashboardorganization_paymentproviders');
         }
 
         return $variables;
