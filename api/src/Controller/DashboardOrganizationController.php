@@ -529,6 +529,13 @@ class DashboardOrganizationController extends AbstractController
             // Get the current resource
             $product = array_merge($variables['product'], $request->request->all());
             $product['sourceOrganization'] = $variables['organization']['@id'];
+
+            if (isset($product['productsThatAreDependent'])) {
+                foreach ($product['productsThatAreDependent'] as &$productThatIsDependent) {
+                    $productThatIsDependent = '/products/'.$productThatIsDependent['id'];
+                }
+            }
+
             // Remove offers (wont do any harm with an updateResource)
             unset($product['offers']);
             // Option for cascade updating offers without unset product.offers ^:
