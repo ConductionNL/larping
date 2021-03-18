@@ -4,7 +4,6 @@
 
 namespace App\Controller;
 
-use App\Service\MailingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
 use function GuzzleHttp\Promise\all;
