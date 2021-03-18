@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="card-body widget-content">
-                            <span id="totalCheckinsSpan" class="widget-content-title">{% if totalCheckins|default %}{{ totalCheckins|length }}{% else %}{{ 'unkown'|trans|capitalize }}{% endif %}</span>
+                            <span id="totalCheckinsSpan" class="widget-content-title">{% if totalCheckins|default %}{{ totalCheckins|length }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people currently pressent'|trans|capitalize }}</p>
                             </div>
@@ -51,11 +51,11 @@
                         </div>
 
                         <div class="card-body widget-content">
-                            <span id="todoCheckinsSpan" class="widget-content-title" >{% if todoCheckinsTotal|default %}{{ todoCheckinsTotal }}{% else %}{{ 'unkown'|trans|capitalize }}{% endif %}</span>
+                            <span id="todoCheckinsSpan" class="widget-content-title" >{% if peopleToCheckinCount|default %}{{ peopleToCheckinCount }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people yet to check in'|trans|capitalize }}</p>
                             </div>
-                            <a onclick="showTodoCheckins()" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
+                            <a onclick="showPeopleToCheckin()" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
                         </div>
                     </div><!-- /.col -->
                 </div><!-- /.col -->
@@ -68,17 +68,17 @@
                         </div>
 
                         <div class="card-body widget-content">
-                            <span class="widget-content-title">6</span>
+                            <span id="checkedOutCheckinsSpan" class="widget-content-title">{% if checkOutsCount|default %}{{ checkOutsCount }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people that have left'|trans|capitalize }}</p>
                             </div>
-                            <a class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
+                            <a onclick="showCheckedOut()"  class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
                         </div>
                     </div><!-- /.col -->
                 </div><!-- /.col -->
 
             </div><!-- /.row -->
-            <button type="button" class="btn btn-success btn-sm m-2 mt-n3" onclick="resetFilters()">{{ 'reset filters'|trans|capitalize }}</button>
+            <button type="button" class="btn btn-success btn-sm m-2 mt-n3 float-right hover-pointer" onclick="resetFilters()">{{ 'reset filters'|trans|capitalize }}</button>
 
             <!-- events -->
             <table id="checkin" class="display nowrap table" style="width:100%">
@@ -117,14 +117,11 @@
                             </td>
                             <td>
                                 <span
-                                    class="badge {% if checkin.checkedIn == true %} badge-success {% else %} badge-warning {% endif %} px-2 py-1"> {% if checkin.checkedIn == true %} Checked in {% else %} Not checked in {% endif %}</span>
+                                    class="badge {% if checkin.dateCheckedOut|default %}badge-danger{% elseif checkin.checkedIn|default %}badge-success{% else %}badge-warning{% endif %} px-2 py-1">{% if checkin.dateCheckedOut|default %}Checked out{% elseif checkin.checkedIn|default %}Checked in{% else %}Not checked in{% endif %}</span>
                             </td>
                             <td>
-                                <a class="btn btn-outline-primary btn-sm text-center w-100"{% if checkin.checkedIn != true %}
-                                onclick="checkThisPersonIn(this, '{{ checkin.person['@id'] }}')"{% endif %}>{% if checkin.checkedIn == true %}
-                                        <i style="color: limegreen" class="fas fa-check"
-                                           aria-hidden="true"></i>{% else %}<i class="fas fa-edit"
-                                                                               aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}{% endif %}
+                                <a {% if checkin.checkedIn|default %}style="color: white"{% endif%} class="btn {% if checkin.checkedIn|default %}btn-danger color-white{% else %}btn-outline-primary{% endif%} btn-sm text-center w-100"{% if checkin.checkedIn|default %}onclick="checkThisPersonOut(this, '{{ checkin.person['@id'] }}')" {% else %} onclick="checkThisPersonIn(this, '{{ checkin.person['@id'] }}')"{% endif %}>{% if checkin.checkedIn|default %}<i class="fas fa-close"
+                                aria-hidden="true"></i> {{ 'check out'|capitalize }}{% else %}<i class="fas fa-edit" aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}{% endif %}
                                 </a>
                             </td>
                         </tr>
@@ -144,7 +141,7 @@
             });
         }
 
-        function showTodoCheckins() {
+        function showPeopleToCheckin() {
             resetFilters();
             var children = [].slice.call(document.getElementById('checkinTableBody').children);
             children.forEach(function (item) {
@@ -160,7 +157,19 @@
             var children = [].slice.call(document.getElementById('checkinTableBody').children);
             children.forEach(function (item) {
                 console.log(item.children[4].children[0].innerText);
-                if (item.children[4].children[0].innerText !== 'Checked in') {
+                if (item.children[4].children[0].innerText !== 'Checked in' && item.children[4].children[0].innerText !== 'Checked out' ) {
+                    item.style.display = "none";
+                }
+            });
+
+        }
+
+        function showCheckedOut() {
+            resetFilters();
+            var children = [].slice.call(document.getElementById('checkinTableBody').children);
+            children.forEach(function (item) {
+                console.log(item.children[4].children[0].innerText);
+                if (item.children[4].children[0].innerText !== 'Checked out') {
                     item.style.display = "none";
                 }
             });
@@ -180,6 +189,7 @@
                 },
                 dataType: "json",
                 complete: function (response) {
+                    console.log(response.responseJSON);
                     if (response.responseJSON == undefined) {
                         aElement.innerHTML = "Checking failed";
                         setTimeout(function () {
@@ -187,16 +197,26 @@
                             aElement.setAttribute("onclick", " checkThisPersonIn(this, '" + person + "')");
                         }, 2000)
                     } else if (response.responseJSON.status == 'success') {
-                        aElement.innerHTML = "<i class=\"fas fa-check\" aria-hidden=\"true\"></i>";
+                        // aElement.innerHTML = "<i class=\"fas fa-check\" aria-hidden=\"true\"></i>";
                         aElement.parentElement.previousElementSibling.firstElementChild.innerHTML = "Checked in";
-                        aElement.parentElement.previousElementSibling.firstElementChild.classList.remove("badge-warning");
+                        aElement.parentElement.previousElementSibling.firstElementChild.classList.remove("badge-danger");
                         aElement.parentElement.previousElementSibling.firstElementChild.classList.add("badge-success");
-                        aElement.firstElementChild.style.color = 'limegreen';
-                        aElement.removeAttribute("onclick");
+
+                        // Make button ready for checkin out
+                        aElement.classList.remove("btn-outline-primary");
+                        aElement.classList.add("btn-danger");
+                        aElement.style.color = 'white';
+                        aElement.innerHTML = 'Check out';
+
+                        aElement.setAttribute("onclick", " checkThisPersonOut(this, '" + person + "')");
+
                         let totalCheckinsSpan = document.getElementById('totalCheckinsSpan');
                         totalCheckinsSpan.innerHTML = parseInt(totalCheckinsSpan.innerHTML) + 1;
+
                         let todoCheckinsSpan = document.getElementById('todoCheckinsSpan');
-                        todoCheckinsSpan.innerHTML = parseInt(todoCheckinsSpan.innerHTML) - 1;
+                        if (parseInt(todoCheckinsSpan.innerHTML) - 1 >= 0) {
+                            todoCheckinsSpan.innerHTML = parseInt(todoCheckinsSpan.innerHTML) - 1;
+                        }
                     } else {
                         aElement.innerHTML = "Checking failed";
                         setTimeout(function () {
@@ -207,6 +227,58 @@
                 }
             });
         }
+
+
+        function checkThisPersonOut(aElement, person) {
+            aElement.innerHTML = "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>" + "<span class=\"sr-only\">Loading...</span>";
+            aElement.removeAttribute("onclick");
+            $.ajax({
+                type: "POST",
+                url: "{{ path('app_dashboardorganization_checksomeonein', {id: event.id}) }}",
+                data: {
+                    person: person
+                },
+                dataType: "json",
+                complete: function (response) {
+                    console.log(response.responseJSON);
+                    if (response.responseJSON == undefined) {
+                        aElement.innerHTML = "Checkout failed";
+                        setTimeout(function () {
+                            aElement.innerHTML = "<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Check out";
+                            aElement.setAttribute("onclick", " checkThisPersonOut(this, '" + person + "')");
+                        }, 2000)
+                    } else if (response.responseJSON.status == 'success') {
+                        aElement.innerHTML = "";
+                        aElement.parentElement.previousElementSibling.firstElementChild.innerHTML = "Checked out";
+                        aElement.parentElement.previousElementSibling.firstElementChild.classList.remove("badge-success");
+                        aElement.parentElement.previousElementSibling.firstElementChild.classList.add("badge-danger");
+
+                        aElement.classList.add("btn-outline-primary");
+                        aElement.classList.remove("btn-danger");
+                        aElement.style.color = 'gray';
+                        aElement.innerHTML = '<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Checkin';
+
+                        aElement.setAttribute("onclick", " checkThisPersonIn(this, '" + person + "')");
+
+                        let totalCheckinsSpan = document.getElementById('totalCheckinsSpan');
+                        if (parseInt(totalCheckinsSpan.innerHTML) - 1 >= 0) {
+                            totalCheckinsSpan.innerHTML = parseInt(totalCheckinsSpan.innerHTML) - 1;
+                        }
+
+                        let checkedOutCheckinsSpan = document.getElementById('checkedOutCheckinsSpan');
+                        checkedOutCheckinsSpan.innerHTML = parseInt(checkedOutCheckinsSpan.innerHTML) + 1;
+                    } else {
+                        aElement.innerHTML = "Checking failed";
+                        setTimeout(function () {
+                            aElement.innerHTML = "<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Check out";
+                            aElement.setAttribute("onclick", " checkThisPersonOut(this, '" + person + "')");
+                        }, 2000)
+                    }
+
+                }
+            });
+        }
     </script>
+
 
 {% endblock %}

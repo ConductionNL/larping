@@ -487,10 +487,18 @@ class DashboardOrganizationController extends AbstractController
                     $isCheckedIn = false;
                     $checkin = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['person' => $item['invoice']['customer'], 'node.event' => $variables['event']['@id']])['hydra:member'];
                     if (isset($checkin[0]) && !empty($checkin[0])) {
-                        $isCheckedIn = true;
+                        $checkin['checkedIn'] = true;
+                        if (isset($checkin['dateCheckedOut'])) {
+                            $variables['checkOutsCount']++;
+                            unset($checkin['checkedIn']);
+                        }
                     }
+                    $checkin['person'] = $commonGroundService->getResource($item['invoice']['customer']);
+                    $checkin['paymentStatus'] = $item['invoice']['status'];
+                    $checkin['invoiceItem'] = $item;
 
-                    $variables['checkins'][] = ['person' => $commonGroundService->getResource($item['invoice']['customer']), 'paymentStatus' => $item['invoice']['status'], 'invoiceItem' => $item, 'checkedIn' => $isCheckedIn];
+
+                    $variables['checkins'][] = $checkin;
                     $customers[] = $item['invoice']['customer'];
                 }
             }
@@ -498,7 +506,7 @@ class DashboardOrganizationController extends AbstractController
 
         if (isset($variables['checkins'])) {
             $variables['totalCheckins'] = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['node.event' => $variables['event']['@id']])['hydra:member'];
-            $variables['todoCheckinsTotal'] = count($variables['checkins']) - count($variables['totalCheckins']);
+            $variables['peopleToCheckinCount'] = count($variables['checkins']) - count($variables['checkins']);
         }
 
         return $variables;
@@ -514,16 +522,29 @@ class DashboardOrganizationController extends AbstractController
             $event = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $node = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'nodes'], ['event' => $event['@id']])['hydra:member'][0];
 
-            $checkin = [
-                'node' => '/nodes/' . $node['id'],
-                'person' => $request->request->get('person'),
-            ];
+            // Check for existing checkin
+            $person = $request->request->get('person');
+//            $checkin = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['person' => $person, 'node.event' => $event['@id']])['hydra:member'];
+//
+//            // If dateCheckedOut already is set unset it so people can check in again, else set dateCheckedOut
+//            if (isset($checkin[0]) && isset($checkin[0]['dateCheckedOut'])) {
+//                $checkin = $checkin[0];
+//                unset($checkin['dateCheckedOut']);
+//            } elseif (isset($checkin[0])) {
+//                $checkin = $checkin[0];
+//                $checkin['dateCheckedOut'] = date('Y-m-d H:i:s');
+//            } else {
+                $checkin = [
+                    'node' => '/nodes/' . $node['id'],
+                    'person' => $person,
+                ];
+//            }
 
             $checkin = $commonGroundService->saveResource($checkin, ['component' => 'chin', 'type' => 'checkins']);
 
         } catch (\Exception $e) {
             return new JsonResponse([
-                'status' => 'failed'
+                'status' => $request->request->get('person').' '.$event['@id']
             ]);
         }
 
