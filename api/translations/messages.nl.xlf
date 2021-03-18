@@ -709,6 +709,10 @@
         <source>members</source>
         <target>leden</target>
       </trans-unit>
+      <trans-unit id="FQ2Izz3" resname="administrators">
+        <source>administrators</source>
+        <target>beheerders</target>
+      </trans-unit>
       <trans-unit id="VGQQUSA" resname="reviews">
         <source>reviews</source>
         <target>reviews</target>
