@@ -23,10 +23,11 @@
     {% endfor %}
     </tbody>
 </table>
-{% else %}
-    <div class="card-body  text-center">
-        <p>{{ 'no organizations found'|trans|capitalize }}</p>
-        <a href="{{ path('app_dashboardorganization_edit', {'id':'add'}  ) }}" class="btn btn-primary">{{ 'add an organization'|trans|capitalize }}</a>
-    </div>
+    {# @todo terug plaatsen na review matthias #}
+{#{% else %}#}
+{#    <div class="card-body  text-center">#}
+{#        <p>{{ 'no organizations found'|trans|capitalize }}</p>#}
+{#        <a href="{{ path('app_dashboardorganization_edit', {'id':'add'}  ) }}" class="btn btn-primary">{{ 'add an organization'|trans|capitalize }}</a>#}
+{#    </div>#}
 {% endif %}
 
