@@ -1179,8 +1179,22 @@ class DashboardOrganizationController extends AbstractController
         if (count($variables['bcOrganizations']) > 0) {
             $variables['bcOrganization'] = $variables['bcOrganizations'][0];
         }
-
         $variables['providers'] = $variables['bcOrganization']['services'];
+
+        // Update provider
+        if ($request->isMethod('POST')) {
+            // Get the current resource
+            $provider = $request->request->all();
+            // Set the current organization as owner
+            $organization = $variables['bcOrganization']['id'];
+            $variables['organization'] = '/organizations/'.$organization;
+
+            // Save the resource
+            $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
+            $bcOrganization = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'organizations']);
+
+            return $this->redirectToRoute('app_dashboardorganization_paymentproviders');
+        }
 
         return $variables;
     }
@@ -1201,7 +1215,7 @@ class DashboardOrganizationController extends AbstractController
         }
 
         // Update provider
-        if ($request->isMethod('POST') && $request->request->get('@type') == 'Provider') {
+        if ($request->isMethod('POST')) {
             // Get the current resource
             $provider = $request->request->all();
             // Set the current organization as owner
@@ -1209,7 +1223,6 @@ class DashboardOrganizationController extends AbstractController
 
             // Save the resource
             $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
-            var_dump($provider);die();
 
             return $this->redirectToRoute('app_dashboardorganization_paymentproviders');
         }
