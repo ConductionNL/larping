@@ -110,8 +110,11 @@
                                     <option value="">{{ 'none'|trans|capitalize }}</option>
                                     {% if groups|default %}
                                         {% for group in groups %}
+                                            {# temp do not show the groups clients and root TODO:remove? #}
+                                            {% if group.name != 'clients' and group.name != 'root' %}
                                             <option
-                                                value="https://www.id-vault.com/api/v1/wac/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/v1/wac/groups/' ~ group['id'] %} selected {% endif %}>{{ group.name }}</option>
+                                                value="https://www.id-vault.com/api/v1/wac/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/v1/wac/groups/' ~ group['id'] %} selected {% endif %}>{{ group.name|trans|capitalize }}</option>
+                                            {% endif %}
                                         {% endfor %}
                                     {% endif %}
                                 </select>
@@ -194,7 +197,7 @@
                     <div class="col-md-7 col-lg-6 col-xl-5">
                         <div class="mb-6">
                             <button type="submit"
-                                    class="btn btn-lg btn-primary btn-block">{{ 'submit'|trans|capitalize }}</button>
+                                    class="btn btn-lg btn-primary btn-block">{{ 'save'|trans|capitalize }}</button>
                         </div>
                     </div>
                 </div>
