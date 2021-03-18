@@ -14,10 +14,13 @@
         </thead>
         <tbody>
         {% for user in users %}
-            {% set userData = commonground_resource_list({'component':'uc','type':'users'}, {'username' : user.name})['hydra:member'][0] %}
+            {% set userData = commonground_resource_list({'component':'uc','type':'users'}, {'username' : user.name})['hydra:member'] %}
+            {% if userData|default %}
+            {% set userData = userData[0] %}
+            {% endif %}
             <tr>
                 <td>
-                    <a class="text-hover-primary text-muted" >{{ commonground_resource(userData.person).name }}</a>
+                    <a class="text-hover-primary text-muted" >{% if userData|default %} {{ commonground_resource(userData.person).name }} {% endif %}</a>
                 </td>
                 <td>
                     <a class="text-hover-primary text-muted">{{ user.name }}</a>

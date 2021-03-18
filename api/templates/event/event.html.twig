@@ -6,6 +6,8 @@
         {% set organization = commonground_resource(event.organization) %}
     {% endif %}
 
+    {% set today = date("now") %}
+
     <section class="py-7 pt-md-9 pb-md-8 ">
         <div class="container">
             <div class="row">
@@ -20,14 +22,26 @@
                                 <li class="breadcrumb-item"><a
                                         href="{{ path('app_event_index') }}">{{ 'events'|trans|capitalize }}</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">{{ event.name }}</li>
+                                {% if event.endDate|default and event.endDate|date("Y-m-d H:i:s") > today|date("Y-m-d H:i:s") %}
+                                <li>
+                                    &nbsp;
+                                    <a href="#" onclick="likeItem('{{ event['id'] }}','{{ event['@id'] }}','{{ event['organization'] }}', this)"
+                                       liked="{% if totals.liked|default %}true{% else %}false{% endif %}"
+                                       data-toggle="tooltip" data-placement="top" title=""
+                                       data-original-title="{{ 'favorite this event'|trans|capitalize }}"><i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
+                                            aria-hidden="true" id="icon_{{ event['id'] }}"></i>
+                                        <span id="counter_{{ event['id'] }}">{{ totals.likes }}</span></a>
+                                </li>
+                                {% endif %}
                             </ul>
                         </nav>
 
                         <!-- Ratings -->
                         <div class="d-flex align-items-center">
+                            {% if event.endDate|default and event.endDate|date("Y-m-d H:i:s") < today|date("Y-m-d H:i:s") %}
                             {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
-                            <span
-                                class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+                            <span class="d-inline-block mr-2">{{ totals.rating|round(1) }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
+
                             <a href="#" onclick="likeItem('{{ event['id'] }}','{{ event['@id'] }}','{{ event['organization'] }}', this)"
                                liked="{% if totals.liked|default %}true{% else %}false{% endif %}"
                                data-toggle="tooltip"
@@ -36,6 +50,7 @@
                                data-original-title="{{ 'favorite this event'|trans|capitalize }}"><i {% if totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %}
                                     aria-hidden="true" id="icon_{{ event['id'] }}"></i>
                                 <span id="counter_{{ event['id'] }}">{{ totals.likes }}</span></a>
+                            {% endif %}
                         </div>
 
                         <div class="d-flex align-items-center">
@@ -143,7 +158,6 @@
 
 
                     <!-- Reviews -->
-                    <a id="reviews">
                     {% if reviews is defined and reviews is not empty %}
                     <div>
                         <h3 class="font-weight-normal mb-6">({{ totals.reviews }}) {{ 'reviews'|trans|capitalize }}</h3>
@@ -153,7 +167,6 @@
                     <hr>
                     {% endif %}
 
-                    {% set today = date("now") %}
                     {% if event.endDate|default and event.endDate|date("Y-m-d H:i:s") < today|date("Y-m-d H:i:s") %}
                         <!-- Add a review -->
                         <div id="add-review">
@@ -167,9 +180,14 @@
                     <!--======= Sidebar =======-->
                     <div class="col-md-5 col-lg-4 pl-xl-8">
                         <!-- Single listing Map -->
-                        {% include 'widgets/map.html.twig' %}
+                        {% if event.location|default %}
+                            {% set location = commonground_resource(event.location) %}
+                            {% if location.address.street|default %}
+                        {% include 'widgets/map.html.twig ' with {'location': location} %}
+                            {% endif %}
+                            <hr>
+                        {% endif %}
 
-                        <hr>
 
                         <!-- Contact  -->
                         <h5 class="mb-4">{{ 'by'|trans|capitalize }} {{ organization.name }}</h5>
