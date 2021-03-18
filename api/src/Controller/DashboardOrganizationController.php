@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints\Json;
 use function GuzzleHttp\Promise\all;
@@ -407,7 +408,7 @@ class DashboardOrganizationController extends AbstractController
                 $contact['name'] = $location['name'];
                 $contact['description'] = $location['description'];
                 $contact = $commonGroundService->saveResource($contact, ['component' => 'lc', 'type' => 'addresses']);
-                $location['address'] = '/addresses/'.$contact['id'];
+                $location['address'] = '/addresses/' . $contact['id'];
             }
 
             // Lets save the location
@@ -475,6 +476,7 @@ class DashboardOrganizationController extends AbstractController
 //        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
 
+
         $customers = [];
         $products = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
         foreach ($products as $prod) {
@@ -494,6 +496,10 @@ class DashboardOrganizationController extends AbstractController
             }
         }
 
+        if (isset($variables['checkins'])) {
+            $variables['totalCheckins'] = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['node.event' => $variables['event']['@id']])['hydra:member'];
+            $variables['todoCheckinsTotal'] = count($variables['checkins']) - count($variables['totalCheckins']);
+        }
 
         return $variables;
     }
@@ -761,10 +767,10 @@ class DashboardOrganizationController extends AbstractController
 
             foreach ($email['users'] as $mail) {
                 $data['username'] = $mail['username'];
-                $idVaultService->sendMail($appId, 'emails/mail_group.html.twig', $data['groupName'].': '.$data['title'], $data['username'], 'no-reply@larping.eu', $data);
+                $idVaultService->sendMail($appId, 'emails/mail_group.html.twig', $data['groupName'] . ': ' . $data['title'], $data['username'], 'no-reply@larping.eu', $data);
             }
 
-            $this->addFlash('success', 'Email sent to '.$group['name']);
+            $this->addFlash('success', 'Email sent to ' . $group['name']);
 
             return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
         }
@@ -1197,13 +1203,13 @@ class DashboardOrganizationController extends AbstractController
                 $template['@id'] = $organization['template']['@id'];
             }
 
-            $template['name'] = 'Terms and conditions for '.$organization['name'];
+            $template['name'] = 'Terms and conditions for ' . $organization['name'];
             $template['templateEngine'] = 'twig';
-            $template['organization'] = '/organizations/'.$organization['id'];
+            $template['organization'] = '/organizations/' . $organization['id'];
 
             $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
 
-            $organization['termsAndConditions'] = '/templates/'.$template['id'];
+            $organization['termsAndConditions'] = '/templates/' . $template['id'];
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
