@@ -1189,10 +1189,11 @@ class DashboardOrganizationController extends AbstractController
             // Set the current organization as owner
             $organization = $variables['bcOrganization']['id'];
             $variables['organization'] = '/organizations/'.$organization;
+            $provider['organization']['rsin'] = $variables['organization']['@id'];
+            $provider['organization']['shortCode'] = $variables['organization']['@id'];
 
             // Save the resource
             $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
-            $bcOrganization = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'organizations']);
 
             return $this->redirectToRoute('app_dashboardorganization_paymentproviders');
         }
