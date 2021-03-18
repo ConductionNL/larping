@@ -82,12 +82,12 @@ class ShoppingController extends AbstractController
                 foreach ($variables['invoice']['items'] as $item) {
                     $offer = $commonGroundService->getResource($item['offer']);
 
-                    // Decrease quantity
-                    if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
-                        $offer['quantity']--;
-                        $offer['price'] = (string) $offer['price'];
-                        $commonGroundService->saveResource($offer);
-                    }
+//                    // Decrease quantity
+//                    if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
+//                        $offer['quantity']--;
+//                        $offer['price'] = (string) $offer['price'];
+//                        $commonGroundService->saveResource($offer);
+//                    }
 
                     // Check if the product of this offer has a userGroup this user should be added to.
                     if (isset($offer['products'][0]['userGroup'])) {
