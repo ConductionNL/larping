@@ -1275,11 +1275,11 @@ class DashboardOrganizationController extends AbstractController
         if ($request->isMethod('POST')) {
             // Get the current resource
             $provider = $request->request->all();
-            // Set the current organization as owner
-            $organization = $variables['bcOrganization']['id'];
-            $variables['organization'] = '/organizations/'.$organization;
             $provider['organization']['rsin'] = $variables['organization']['@id'];
             $provider['organization']['shortCode'] = $variables['organization']['@id'];
+            // Set the current organization as owner
+            $organization = $variables['bcOrganization']['id'];
+            $provider['organization'] = '/organizations/'.$organization;
 
             // Save the resource
             $provider = $commonGroundService->saveResource($provider, ['component' => 'bc', 'type' => 'services']);
