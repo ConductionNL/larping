@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use function GuzzleHttp\Promise\all;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The DashboardController handles any calls about administration and dashboard pages.
@@ -724,10 +724,10 @@ class DashboardOrganizationController extends AbstractController
         $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
 
         if (count($variables['groups']) == 0) {
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "{$translator->trans("Administrators group for")} {$variables['organization']['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "{$translator->trans('Administrators group for')} {$variables['organization']['name']}", $organizationUrl);
             $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
             $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "{$translator->trans("Members group for")} {$variables['organization']['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "{$translator->trans('Members group for')} {$variables['organization']['name']}", $organizationUrl);
             $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl)['groups'];
         }
         // TODO: put this back? removed for demo and added ^
@@ -776,7 +776,7 @@ class DashboardOrganizationController extends AbstractController
 //                }
                 if ($group['id'] == $selectedGroup && !in_array($email, array_column($group['users'], 'username'))) {
                     $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, false);
-                    $this->addFlash('success', 'gebruiker is uitgenodigd voor de groep ' . $group['name']);
+                    $this->addFlash('success', 'gebruiker is uitgenodigd voor de groep '.$group['name']);
                 } elseif ($group['id'] == $selectedGroup && in_array($email, array_column($group['users'], 'username')) && $group['name'] !== 'root') {
                     $this->addFlash('error', 'Gebruiker zit al in de gekozen groep');
                 }
@@ -1206,10 +1206,10 @@ class DashboardOrganizationController extends AbstractController
                 $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
                 $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
-                $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "{$translator->trans("Administrators group for")} {$organization['name']}", $organizationUrl);
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "{$translator->trans('Administrators group for')} {$organization['name']}", $organizationUrl);
                 $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
                 $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
-                $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "{$translator->trans("Members group for")} {$organization['name']}", $organizationUrl);
+                $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "{$translator->trans('Members group for')} {$organization['name']}", $organizationUrl);
 
                 // TODO: put this back? removed for demo, added this^
 //                $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
