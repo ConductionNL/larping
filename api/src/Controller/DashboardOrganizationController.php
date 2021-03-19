@@ -374,7 +374,7 @@ class DashboardOrganizationController extends AbstractController
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
-            $offer['price'] = (string) ((float) $request->get('price'));
+            $offer['price'] = (string) ((float) $request->get('price')*100);
             $offer['quantity'] = (int) $request->get('quantity');
             $offer['maxQuantity'] = (int) $request->get('maxQuantity');
             $offer['name'] = $product['name'];
