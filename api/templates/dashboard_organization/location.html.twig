@@ -12,7 +12,7 @@
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item"><a
-                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                            href="{{ path('app_dashboardorganization_locations') }}">{{ 'locations'|trans|capitalize }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">{% if location['@id']|default %}{{ 'edit location'|trans|capitalize }}{% else %}{{ 'add location'|trans|capitalize }}{% endif %}</li>
                 </ul>

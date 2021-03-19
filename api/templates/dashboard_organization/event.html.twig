@@ -15,7 +15,7 @@
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item"><a
-                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                            href="{{ path('app_dashboardorganization_events') }}">{{ 'events'|trans|capitalize }}</a>
                     </li>
                     <li class="breadcrumb-item active"
                         aria-current="page">{% if event['@id'] is defined %}{{ 'edit event'|trans|capitalize }}{% else %}{{ 'add event'|trans|capitalize }}{% endif %}</li>
