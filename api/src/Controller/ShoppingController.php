@@ -65,6 +65,7 @@ class ShoppingController extends AbstractController
 
             //mail user
             $data = [];
+            $data['user'] = $this->getUser()->getPerson();
             $data['invoice'] = $variables['invoice'];
             $mailingService->sendMail('emails/new_invoice.html.twig', 'no-reply@larping.eu',$this->getUser()->getUsername(),'Larping invoice', $data);
 
