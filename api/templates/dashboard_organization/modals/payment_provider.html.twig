@@ -12,18 +12,16 @@
           action="{{ path('app_dashboardorganization_paymentproviders', {id: id}) }}">
         {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
         {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
-        <input type="hidden" id="@type" name="@type" value="Provider">
 
         <div class="form-group">
-            <label for="providerInput">{{ 'type'|trans|capitalize }}</label>
-            <select class="form-control" id="providerInput" required>
-                <option name="provider">{% if provider.type is defined %}{{ provider.type }}{% else %}{{ 'mollie'|trans|capitalize }}{% endif %}</option>
+            <label for="type">{{ 'type'|trans|capitalize }}</label>
+            <select class="form-control" id="type" name="type" required>
+                <option name="type" id="type" value="mollie">{% if provider.type is defined %}{{ provider.type }}{% else %}{{ 'mollie'|trans|capitalize }}{% endif %}</option>
             </select>
         </div>
         <div class="form-group">
             <label for="authorization">{{ 'authorization'|trans|capitalize }}</label>
-            <input class="form-control" name="authorization" type="text" id="authorization"
-                   {% if provider.authorization is defined %}value="{{ provider.authorization }}"{% endif %} required>
+            <input class="form-control" name="authorization" type="text" id="authorization" required>
         </div>
     </form>
 {% endblock %}

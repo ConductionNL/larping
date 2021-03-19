@@ -19,7 +19,7 @@
                     <td class="text-capitalize">
                         <a class="text-hover-primary text-muted" >{{ group.name|trans|capitalize }}</a>
                     </td>
-                    <td class="text-capitalize">
+                    <td>
                         <a class="text-hover-primary text-muted" >{{ group.description }}</a>
                     </td>
                     <td class="text-capitalize">
@@ -33,7 +33,6 @@
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#GroupModal{{ group.id }}">{{ 'edit'|trans|capitalize }}</a>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailModal{{ group.id }}">{{ 'mail to group'|trans|capitalize }}</a>
                             </div>
                         </div>
                     </td>
