@@ -21,7 +21,7 @@
                     <a class="text-hover-primary text-muted">{{ offer.audience }}</a>
                 </td>
                 <td>
-                    {{ (offer.price)|localizedcurrency(offer.priceCurrency) }}
+                    {{ (offer.price / 100)|localizedcurrency(offer.priceCurrency) }}
                 </td>
                 <td class="text-capitalize">
                     <a class="btn btn-sm btn-success float-right" href="#" data-toggle="modal"

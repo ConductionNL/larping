@@ -374,7 +374,7 @@ class DashboardOrganizationController extends AbstractController
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
-            $offer['price'] = (string)((float)$request->get('price') * 100);
+            $offer['price'] = (string)((float)$request->get('price'));
             $offer['quantity'] = (int)$request->get('quantity');
             $offer['maxQuantity'] = (int)$request->get('maxQuantity');
             $offer['name'] = $product['name'];
@@ -577,13 +577,16 @@ class DashboardOrganizationController extends AbstractController
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer['name'] = $product['name'];
-            $offer['price'] = ($product['price'] * 100);
+            $offer['price'] = (string)((float)$product['price'] * 100);
             $offer['offeredBy'] = $variables['organization']['@id'];
             $offer['audience'] = 'public';
             $offer['products'][] = '/products/' . $product['id'];
 
             // Save the resource
             $offer = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+
+            $product['offers'][] = '/offers/' . $offer['id'];
+            $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             // redirects externally
             if ($product['id']) {
@@ -660,7 +663,7 @@ class DashboardOrganizationController extends AbstractController
             // Add the current product to het offer
             $offer['products'] = ['/products/' . $id];
             $offer['offeredBy'] = $variables['organization']['@id'];
-            $offer['price'] = (string)((float)$offer['price']);
+            $offer['price'] = (string)((float)$offer['price'] * 100);
             if (isset($offer['options'])) {
                 foreach ($offer['options'] as &$option) {
                     $option['price'] = (string)((float)$option['price'] * 100);
