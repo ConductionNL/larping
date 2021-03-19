@@ -4,6 +4,7 @@
 
 namespace App\Controller;
 
+use App\Service\MailingService;
 use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
@@ -52,7 +53,7 @@ class ShoppingController extends AbstractController
      * @Route("/payment-status")
      * @Template
      */
-    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params)
+    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params, MailingService $mailingService)
     {
         if ($session->get('invoice@id') && $this->getUser()) {
             $variables['invoice'] = $commonGroundService->getResource($session->get('invoice@id'));
@@ -61,6 +62,14 @@ class ShoppingController extends AbstractController
             $object['target'] = $variables['invoice']['id'];
 
             $variables['invoice'] = $commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'status']);
+            $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
+            $appId = $providers[0]['configuration']['app_id'];
+
+            //mail user
+            $data = [];
+            $data['user'] = $this->getUser()->getUsername();
+            $data['invoice'] = $variables['invoice'];
+            $idVaultService->sendMail($appId, 'emails/new_invoice.html.twig', 'Larping invoice', $data['user'], 'no-reply@larping.eu', $data);
 
             // Empty session order when order is paid
             if (isset($variables['invoice']['status']) && $variables['invoice']['status'] == 'paid') {
@@ -69,25 +78,26 @@ class ShoppingController extends AbstractController
                 // Get provider for when we need to get groups from id-vault
                 $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
-                //add user to the clients group
-                $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
-                $clientsGroup = array_filter($groups, function ($group) {
-                    return $group['name'] == 'clients';
-                });
-                if (count($clientsGroup) > 0 && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
-                    $idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
-                }
+                // TODO: put this back? removed for demo
+//                //add user to the clients group
+//                $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
+//                $clientsGroup = array_filter($groups, function ($group) {
+//                    return $group['name'] == 'clients';
+//                });
+//                if (count($clientsGroup) > 0 && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
+//                    $idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
+//                }
 
                 //lets see if we need to add the user to an userGroup of a any bought products
                 foreach ($variables['invoice']['items'] as $item) {
                     $offer = $commonGroundService->getResource($item['offer']);
 
-                    // Decrease quantity
-                    if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
-                        $offer['quantity']--;
-                        $offer['price'] = (string) $offer['price'];
-                        $commonGroundService->saveResource($offer);
-                    }
+//                    // Decrease quantity
+//                    if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
+//                        $offer['quantity']--;
+//                        $offer['price'] = (string) $offer['price'];
+//                        $commonGroundService->saveResource($offer);
+//                    }
 
                     // Check if the product of this offer has a userGroup this user should be added to.
                     if (isset($offer['products'][0]['userGroup'])) {

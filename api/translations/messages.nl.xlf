@@ -709,9 +709,17 @@
         <source>members</source>
         <target>leden</target>
       </trans-unit>
+      <trans-unit id="7XBPmFm" resname="Members group for">
+        <source>Members group for</source>
+        <target>Leden groep van</target>
+      </trans-unit>
       <trans-unit id="FQ2Izz3" resname="administrators">
         <source>administrators</source>
         <target>beheerders</target>
+      </trans-unit>
+      <trans-unit id="tpvTWx8" resname="Administrators group for">
+        <source>Administrators group for</source>
+        <target>Beheerders groep van</target>
       </trans-unit>
       <trans-unit id="VGQQUSA" resname="reviews">
         <source>reviews</source>
