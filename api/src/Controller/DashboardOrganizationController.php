@@ -776,7 +776,7 @@ class DashboardOrganizationController extends AbstractController
 //                }
                 if ($group['id'] == $selectedGroup && !in_array($email, array_column($group['users'], 'username'))) {
                     $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, false);
-                    $this->addFlash('success', 'gebruiker is toegevoegd aan groep');
+                    $this->addFlash('success', 'gebruiker is uitgenodigd voor de groep ' . $group['name']);
                 } elseif ($group['id'] == $selectedGroup && in_array($email, array_column($group['users'], 'username')) && $group['name'] !== 'root') {
                     $this->addFlash('error', 'Gebruiker zit al in de gekozen groep');
                 }
