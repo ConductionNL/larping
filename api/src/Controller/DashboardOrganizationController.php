@@ -567,8 +567,20 @@ class DashboardOrganizationController extends AbstractController
             // Set the current organization as owner
             $product['requiresAppointment'] = false;
             $product['sourceOrganization'] = $variables['organization']['@id'];
+
             // Save the resource
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
+
+            $offer['name'] = $product['name'];
+            $offer['price'] = $product['price'];
+            $offer['offeredBy'] = $variables['organization']['@id'];
+            $offer['audience'] = 'public';
+            $offer['products'][] = '/products/'.$product['id'];
+
+            // Save the resource
+            $offer = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
+
+            $product['offer'] = '/offers/'.$offer['id'];
 
             // redirects externally
             if ($product['id']) {

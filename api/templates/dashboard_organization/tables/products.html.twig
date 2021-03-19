@@ -20,7 +20,9 @@
         {% for product in products %}
             <tr>
                 <td>
-                    <img class="img-sm rounded" src="assets/img/listing/listing-03.jpg" alt="Image">
+                    {% if product.logo is empty %}
+                        <img class="img-sm rounded" src="https://picsum.photos/300/200" alt="Image">
+                    {% endif %}
                 </td>
                 <td class="text-capitalize">
                     <a class="text-hover-primary text-muted">{{ product.name }}</a>
