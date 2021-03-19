@@ -32,7 +32,7 @@
                 </td>
                 <td>
                     {% for offer in product.offers %}
-                        <span class="d-block ">{{ offer.name }} ({{ offer.price }})</span>
+                        <span class="d-block ">{{ offer.name }} {{ (offer.price)|localizedcurrency(offer.priceCurrency) }}</span>
                     {% endfor %}
                 </td>
                 <td>

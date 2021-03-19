@@ -567,6 +567,8 @@ class DashboardOrganizationController extends AbstractController
             // Set the current organization as owner
             $product['requiresAppointment'] = false;
             $product['sourceOrganization'] = $variables['organization']['@id'];
+            $offer['quantity'] = (int) $request->get('quantity');
+            $offer['maxQuantity'] = (int) $request->get('maxQuantity');
 
             // Save the resource
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
@@ -599,7 +601,7 @@ class DashboardOrganizationController extends AbstractController
 
         if ($id != 'add') {
             $variables['product'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products', 'id' => $id]);
-            $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+            $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products' => $id])['hydra:member'];
         } else {
             $variables['product'] = [];
             $variables['offers'] = [];

@@ -23,9 +23,9 @@
             <form id="ProductForm{{ product.id }}" method="post">
                 <input type="hidden" name="@type" value="Product">
                 {% if product['id'] is defined %}<input type="hidden" id="id" name="id"
-                                                      value="{{ product['id'] }}">{% endif %}
+                                                        value="{{ product['id'] }}">{% endif %}
                 {% if product['@id'] is defined %}<input type="hidden" id="@id" name="@id"
-                                                       value="{{ product['@id'] }}">{% endif %}
+                                                         value="{{ product['@id'] }}">{% endif %}
 
                 <!-- About -->
                 <div class="card">
@@ -70,6 +70,18 @@
                                     -->
                                 </select>
                             </div>
+{#                            <div class="form-group col-6">#}
+{#                                <label for="quantity">{{ 'quantity'|trans|capitalize }}*</label>#}
+{#                                <input type="number" class="form-control" id="quantity" name="quantity"#}
+{#                                       {% if offers is defined %}value="{{ offers.quantity }}"{% endif %}#}
+{#                                       required>#}
+{#                            </div>#}
+{#                            <div class="form-group col-6">#}
+{#                                <label for="maxQuantity">{{ 'maximum quantity'|trans|capitalize }}*</label>#}
+{#                                <input type="number" class="form-control" id="maxQuantity" name="maxQuantity"#}
+{#                                       {% if offers is defined %}value="{{ offers.maxQuantity }}"{% endif %}#}
+{#                                       required>#}
+{#                            </div>#}
                             <div class="form-group col-md-12 mb-6">
                                 <label for="description">{{ 'description'|trans|capitalize }}</label>
                                 <textarea class="form-control" rows="6" id="description"
@@ -116,9 +128,9 @@
                                     {% if groups|default %}
                                         {% for group in groups %}
                                             {# temp do not show the groups clients and root TODO:remove? #}
-                                            {% if group.name != 'clients' and group.name != 'root' and group.name != 'administrators'%}
-                                            <option
-                                                value="https://www.id-vault.com/api/v1/wac/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/v1/wac/groups/' ~ group['id'] %} selected {% endif %}>{{ group.name|trans|capitalize }}</option>
+                                            {% if group.name != 'clients' and group.name != 'root' and group.name != 'administrators' %}
+                                                <option
+                                                    value="https://www.id-vault.com/api/v1/wac/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/v1/wac/groups/' ~ group['id'] %} selected {% endif %}>{{ group.name|trans|capitalize }}</option>
                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}
@@ -129,37 +141,37 @@
                 </div>
             </form>
 
-                <!-- Offers -->
-                <div class="card">
-                    <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{{ 'offers'|trans|capitalize }} </h3>
-                        <div class="row">
-                            {% include 'dashboard_organization/tables/offers.html.twig' with {'id': 'offers'} %}
-                        </div>
+            <!-- Offers -->
+            <div class="card">
+                <div class="card-body px-6 pt-6 pb-1">
+                    <h3 class="h4 mb-4">{{ 'offers'|trans|capitalize }} </h3>
+                    <div class="row">
+                        {% include 'dashboard_organization/tables/offers.html.twig' with {'id': 'offers'} %}
                     </div>
                 </div>
+            </div>
 
-                <!-- Gallery -->
-                <div class="card">
-                    <div class="card-body p-6">
-                        <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
-                        <div class="form-group position-relative mb-6 form-group-dragable">
-                            <input type="file" class="custom-file-input" id="images" name="images">
-                            <label class="custom-file-label" for="favicon">
-                                {{ 'Click or Drag images here'|trans|capitalize }}
-                            </label>
-                        </div>
+            <!-- Gallery -->
+            <div class="card">
+                <div class="card-body p-6">
+                    <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
+                    <div class="form-group position-relative mb-6 form-group-dragable">
+                        <input type="file" class="custom-file-input" id="images" name="images">
+                        <label class="custom-file-label" for="favicon">
+                            {{ 'Click or Drag images here'|trans|capitalize }}
+                        </label>
                     </div>
                 </div>
+            </div>
 
-                <div class="row justify-content-center">
-                    <div class="col-md-7 col-lg-6 col-xl-5">
-                        <div class="mb-6">
-                            <button type="submit"
-                                    class="btn btn-lg btn-primary btn-block">{{ 'save'|trans|capitalize }}</button>
-                        </div>
+            <div class="row justify-content-center">
+                <div class="col-md-7 col-lg-6 col-xl-5">
+                    <div class="mb-6">
+                        <button type="submit"
+                                class="btn btn-lg btn-primary btn-block">{{ 'save'|trans|capitalize }}</button>
                     </div>
                 </div>
+            </div>
         </div>
     </section>
 
