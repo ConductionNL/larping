@@ -35,18 +35,6 @@
             <input type="text" class="form-control" id="price" name="price"
                    {% if resource.price is defined %}value="{{ resource.price }}"{% endif %} required>
         </div>
-        <div class="row">
-            <div class="form-group col-6">
-                <label for="price">{{ 'quantity'|trans|capitalize }}*</label>
-                <input type="number" class="form-control" id="quantity" name="quantity"
-                       {% if resource.price is defined %}value="{{ resource.price }}"{% endif %} required>
-            </div>
-            <div class="form-group col-6">
-                <label for="price">{{ 'maximum quantity'|trans|capitalize }}*</label>
-                <input type="number" class="form-control" id="maxQuantity" name="maxQuantity"
-                       {% if resource.price is defined %}value="{{ resource.price }}"{% endif %} required>
-            </div>
-        </div>
         <div class="form-group">
             <label for="description">{{ 'type'|trans|capitalize }}</label>
             <select class="form-control" aria-label="{{ 'the type of this product'|trans|capitalize }}" required

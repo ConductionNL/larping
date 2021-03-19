@@ -1,42 +1,31 @@
-
-{% if offers|length > 0 %}
-    <table id="events" class="display nowrap table" style="width:100%">
+{% if product.offers|default and product.offers|length > 0 %}
+    <table id="offers" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'audience'|trans|capitalize }}</th>
             <th>{{ 'price'|trans|capitalize }}</th>
-            <th>{{ 'products'|trans|capitalize }}</th>
-            <th>Status</th>
-            <th><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#OfferModalAdd">{{ 'add'|trans|capitalize }}</button></th>
+            <th>
+                <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                        data-target="#OfferModalAdd">{{ 'add'|trans|capitalize }}</button>
+            </th>
         </tr>
         </thead>
         <tbody>
-        {% for offer in offers %}
+        {% for offer in product.offers %}
             <tr>
                 <td class="text-capitalize">
-                    <a class="text-hover-primary text-muted" >{{ offer.name }}</a>
+                    <a class="text-hover-primary text-muted">{{ offer.name }}</a>
                 </td>
                 <td>
-                    <a class="text-hover-primary text-muted" >{{ offer.price }}</a>
+                    <a class="text-hover-primary text-muted">{{ offer.audience }}</a>
                 </td>
                 <td>
-                    {% for product in offer.products %}
-                        <span class="d-block ">{{ product.name }}</span>
-                    {% endfor %}
+                    {{ (offer.price)|localizedcurrency(offer.priceCurrency) }}
                 </td>
-                <td>
-                    <span class="badge badge-warning px-2 py-1">Pending</span>
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#OfferModal{{ offer.id }}">Edit</a>
-                        </div>
-                    </div>
+                <td class="text-capitalize">
+                    <a class="btn btn-sm btn-success float-right" href="#" data-toggle="modal"
+                       data-target="#OfferModal{{ offer.id }}">{{ 'edit'|trans|capitalize }}</a>
                 </td>
             </tr>
         {% endfor %}
@@ -46,15 +35,18 @@
     <div class="card border-light shadow-sm">
         <div class="card-body text-center">
             <p>{{ 'no offers found'|trans|capitalize }}</p>
-            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#OfferModalAdd">{{ 'add your first offer'|trans|capitalize }}!</a>
+            <a href="#" class="btn btn-primary" data-toggle="modal"
+               data-target="#OfferModalAdd">{{ 'add your first offer'|trans|capitalize }}!</a>
         </div>
     </div>
 {% endif %}
 
-{% include 'dashboard_organization/modals/offer.html.twig' %}
+{% include 'dashboard_organization/modals/offer_product.html.twig' %}
 
-{% for offer in offers %}
-    {% include 'dashboard_organization/modals/offer.html.twig' with {'resource': offer} %}
-{% endfor %}
+{% if product.offers|default %}
+    {% for offer in product.offers %}
+        {% include 'dashboard_organization/modals/offer_product.html.twig' with {'resource': offer} %}
+    {% endfor %}
+{% endif %}
 
 

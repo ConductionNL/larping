@@ -20,8 +20,13 @@
                     <li class="breadcrumb-item active" aria-current="page">{{ 'edit product'|trans|capitalize }}</li>
                 </ul>
             </nav>
-            <form id="{{ type }}Form{{ id }}" method="post">
+            <form id="ProductForm{{ product.id }}" method="post">
                 <input type="hidden" name="@type" value="Product">
+                {% if product['id'] is defined %}<input type="hidden" id="id" name="id"
+                                                      value="{{ product['id'] }}">{% endif %}
+                {% if product['@id'] is defined %}<input type="hidden" id="@id" name="@id"
+                                                       value="{{ product['@id'] }}">{% endif %}
+
                 <!-- About -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
@@ -122,59 +127,15 @@
                         </div>
                     </div>
                 </div>
+            </form>
 
-                <!-- About -->
+                <!-- Offers -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'offers'|trans|capitalize }} </h3>
                         <div class="row">
-                            <div class="col-8">
-                                <h3 class="h4 mb-4">{{ 'pricing'|trans|capitalize }} </h3>
-                            </div>
-                            <div class="col-4">
-                                <a href="#" class="btn btn-sm btn-success float-right" data-toggle="modal"
-                                   data-target="#OfferModalAdd">{{ 'add pricing'|trans|capitalize }}</a>
-                            </div>
+                            {% include 'dashboard_organization/tables/offers.html.twig' with {'id': 'offers'} %}
                         </div>
-                        <div class="row">
-                            {% if product.offers is  defined and product.offers|length > 0 %}
-                                <table id="events" class="display nowrap table" style="width:100%">
-                                    <thead>
-                                    <tr>
-                                        <th>{{ 'name'|trans|capitalize }}</th>
-                                        <th>{{ 'audiance'|trans|capitalize }}</th>
-                                        <th>{{ 'price'|trans|capitalize }}</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for offer in product.offers %}
-                                        <tr>
-                                            <td class="text-capitalize">
-                                                {{ offer.name }}
-                                            </td>
-                                            <td>
-                                                {{ offer.audience }}
-                                            </td>
-                                            <td>
-                                                {{ (offer.price)|localizedcurrency(offer.priceCurrency) }}
-                                            </td>
-                                            <td class="text-capitalize">
-                                                <a href="#" class="btn btn-sm btn-success float-right"
-                                                   data-toggle="modal"
-                                                   data-target="#OfferModal{{ offer.id }}">{{ 'edit'|trans|capitalize }}</a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            {% else %}
-                            {% endif %}
-
-                        </div>
-                        <div class="row">
-
-                        </div>
-
                     </div>
                 </div>
 
@@ -182,14 +143,12 @@
                 <div class="card">
                     <div class="card-body p-6">
                         <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
-
                         <div class="form-group position-relative mb-6 form-group-dragable">
                             <input type="file" class="custom-file-input" id="images" name="images">
                             <label class="custom-file-label" for="favicon">
                                 {{ 'Click or Drag images here'|trans|capitalize }}
                             </label>
                         </div>
-
                     </div>
                 </div>
 
@@ -201,20 +160,8 @@
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
-
     </section>
-
-    {% include 'dashboard_organization/modals/offer_product.html.twig' %}
-
-    {% if product.offers|default %}
-        {% for offer in product.offers %}
-            {% include 'dashboard_organization/modals/offer_product.html.twig' with {
-                'resource': offer
-            } %}
-        {% endfor %}
-    {% endif %}
 
     <script>
         function addItem(id) {
