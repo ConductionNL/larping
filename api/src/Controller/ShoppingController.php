@@ -4,6 +4,7 @@
 
 namespace App\Controller;
 
+use App\Service\MailingService;
 use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
@@ -52,7 +53,7 @@ class ShoppingController extends AbstractController
      * @Route("/payment-status")
      * @Template
      */
-    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params)
+    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params, MailingService $mailingService)
     {
         if ($session->get('invoice@id') && $this->getUser()) {
             $variables['invoice'] = $commonGroundService->getResource($session->get('invoice@id'));
@@ -61,6 +62,11 @@ class ShoppingController extends AbstractController
             $object['target'] = $variables['invoice']['id'];
 
             $variables['invoice'] = $commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'status']);
+
+            //mail user
+            $data = [];
+            $data['invoice'] = $variables['invoice'];
+            $mailingService->sendMail('emails/new_invoice.html.twig', 'no-reply@larping.eu',$this->getUser()->getUsername(),'Larping invoice', $data);
 
             // Empty session order when order is paid
             if (isset($variables['invoice']['status']) && $variables['invoice']['status'] == 'paid') {
