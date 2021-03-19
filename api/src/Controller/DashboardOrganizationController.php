@@ -318,7 +318,7 @@ class DashboardOrganizationController extends AbstractController
 
                 $node = $commonGroundService->saveResource($node, ['component' => 'chin', 'type' => 'nodes']);
             }
-            
+
             if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
                 $path = $_FILES['image']['tmp_name'];
                 $type = filetype($_FILES['image']['tmp_name']);
@@ -577,7 +577,7 @@ class DashboardOrganizationController extends AbstractController
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer['name'] = $product['name'];
-            $offer['price'] = $product['price'];
+            $offer['price'] = ($product['price'] * 100);
             $offer['offeredBy'] = $variables['organization']['@id'];
             $offer['audience'] = 'public';
             $offer['products'][] = '/products/' . $product['id'];
@@ -663,7 +663,7 @@ class DashboardOrganizationController extends AbstractController
             $offer['price'] = (string)((float)$offer['price']);
             if (isset($offer['options'])) {
                 foreach ($offer['options'] as &$option) {
-                    $option['price'] = (string)((float)$option['price']);
+                    $option['price'] = (string)((float)$option['price'] * 100);
                 }
             }
 
