@@ -482,7 +482,7 @@
                                               required>{% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}</textarea>
                                 </div>
                                 <div id="renderedContentDiv">
-                                    {% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}
+                                    {% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content|raw }}{% endif %}
                                 </div>
                             </div>
 
