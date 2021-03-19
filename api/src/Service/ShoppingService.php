@@ -54,7 +54,7 @@ class ShoppingService
         $object['mollieKey'] = 'test_e56eJtnShswQS7Usn7uDhsheg9fjeH';
 
         if ($_ENV['APP_ENV'] != 'dev') {
-            $object['redirectUrl'] = 'https://larping.eu/order/payment-status';
+            $object['redirectUrl'] = 'https://larping.eu/payment-status';
         } else {
             $object['redirectUrl'] = 'https://dev.larping.eu/payment-status';
         }
