@@ -115,7 +115,7 @@ class OrganizationController extends AbstractController
             $author = $this->getUser()->getPerson();
         }
         $variables['reviews'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'reviews'], ['resource' => $variables['organization']['@id']])['hydra:member'];
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id'], 'status' => 'published'])['hydra:member'];
         foreach ($variables['events'] as $key => $event) {
             $variables['events'][$key]['totals'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'totals'], ['organization' => $event['organization'], 'resource'=>$event['@id'], 'author'=>$author]);
         }
