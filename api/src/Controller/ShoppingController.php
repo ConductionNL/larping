@@ -109,7 +109,8 @@ class ShoppingController extends AbstractController
                             return $group['id'] == $groupId;
                         });
                         // Check if the group exists and if this user is not in this group
-                        if (count($group) == 1 && !in_array($this->getUser()->getUsername(), array_column($group[array_key_first($group)]['users'], 'username'))) {
+                        $exists = $this->checkArrays($this->getUser()->getUsername(), ($group[array_key_first($group)]['users']));
+                        if (count($group) == 1 && !$exists) {
                             $idVaultService->inviteUser($provider['configuration']['app_id'], $groupId, $this->getUser()->getUsername(), true);
                         }
                     }
@@ -120,6 +121,16 @@ class ShoppingController extends AbstractController
         }
 
         return $variables;
+    }
+
+    private function checkArrays($username, $haystack) {
+        $exist = false;
+        foreach($haystack as $item) {
+            if ($item['username'] === $username) {
+                $exist = true;
+            }
+        }
+        return $exist;
     }
 
     /**
