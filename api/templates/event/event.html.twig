@@ -183,7 +183,7 @@
                         {% if event.location|default %}
                             {% set location = commonground_resource(event.location) %}
                             {% if location.address.street|default %}
-                        {% include 'widgets/map.html.twig ' with {'location': location} %}
+                                {% include 'widgets/map.html.twig' with {'location': location} %}
                             {% endif %}
                             <hr>
                         {% endif %}

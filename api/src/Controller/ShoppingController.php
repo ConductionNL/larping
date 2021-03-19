@@ -78,14 +78,15 @@ class ShoppingController extends AbstractController
                 // Get provider for when we need to get groups from id-vault
                 $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
-                //add user to the clients group
-                $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
-                $clientsGroup = array_filter($groups, function ($group) {
-                    return $group['name'] == 'clients';
-                });
-                if (count($clientsGroup) > 0 && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
-                    $idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
-                }
+                // TODO: put this back? removed for demo
+//                //add user to the clients group
+//                $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
+//                $clientsGroup = array_filter($groups, function ($group) {
+//                    return $group['name'] == 'clients';
+//                });
+//                if (count($clientsGroup) > 0 && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
+//                    $idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
+//                }
 
                 //lets see if we need to add the user to an userGroup of a any bought products
                 foreach ($variables['invoice']['items'] as $item) {
