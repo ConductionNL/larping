@@ -127,11 +127,27 @@
                                     {% endif %}
                                 >
                             </div>
-                            <div class="form-group col-md-12 mb-6">
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="region">{{ 'region'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"  name="address[region]"
+                                    {% if location.address.region|default %}
+                                        value="{{ location.address.region }}"
+                                    {% endif %}
+                                >
+                            </div>
+                            <div class="form-group col-md-6 mb-6">
                                 <label for="locality">{{ 'locality'|trans|capitalize }}</label>
                                 <input type="text" class="form-control"  name="address[locality]"
                                     {% if location.address.locality|default %}
                                         value="{{ location.address.locality }}"
+                                    {% endif %}
+                                >
+                            </div>
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="country">{{ 'country'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"  name="address[country]"
+                                    {% if location.address.country|default %}
+                                        value="{{ location.address.country }}"
                                     {% endif %}
                                 >
                             </div>
