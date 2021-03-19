@@ -4,6 +4,7 @@
 
 namespace App\Controller;
 
+use App\Service\MailingService;
 use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
@@ -52,7 +53,7 @@ class ShoppingController extends AbstractController
      * @Route("/payment-status")
      * @Template
      */
-    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params)
+    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params, MailingService $mailingService)
     {
         if ($session->get('invoice@id') && $this->getUser()) {
             $variables['invoice'] = $commonGroundService->getResource($session->get('invoice@id'));
@@ -61,6 +62,14 @@ class ShoppingController extends AbstractController
             $object['target'] = $variables['invoice']['id'];
 
             $variables['invoice'] = $commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'status']);
+            $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
+            $appId = $providers[0]['configuration']['app_id'];
+
+            //mail user
+            $data = [];
+            $data['user'] = $this->getUser()->getUsername();
+            $data['invoice'] = $variables['invoice'];
+            $idVaultService->sendMail($appId, 'emails/new_invoice.html.twig', 'Larping invoice', $data['user'], 'no-reply@larping.eu', $data);
 
             // Empty session order when order is paid
             if (isset($variables['invoice']['status']) && $variables['invoice']['status'] == 'paid') {
