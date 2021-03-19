@@ -75,18 +75,19 @@ class ShoppingController extends AbstractController
                     return $group['name'] == 'clients';
                 });
                 if (count($clientsGroup) > 0 && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
-                    $this->idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
+                    $idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
                 }
 
                 //lets see if we need to add the user to an userGroup of a any bought products
                 foreach ($variables['invoice']['items'] as $item) {
                     $offer = $commonGroundService->getResource($item['offer']);
 
-                    // Decrease quantity
-                    if (isset($offer['quantity']) && $offer['quantity'] <= 0) {
-                        $offer['quantity']--;
-                        $commonGroundService->saveResource($offer);
-                    }
+//                    // Decrease quantity
+//                    if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
+//                        $offer['quantity']--;
+//                        $offer['price'] = (string) $offer['price'];
+//                        $commonGroundService->saveResource($offer);
+//                    }
 
                     // Check if the product of this offer has a userGroup this user should be added to.
                     if (isset($offer['products'][0]['userGroup'])) {

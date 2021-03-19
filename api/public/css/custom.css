@@ -41,3 +41,7 @@
 .hover-color-primary:host{
     color: #2095F2;
 }
+
+.hover-pointer:hover {
+    cursor: pointer;
+}
