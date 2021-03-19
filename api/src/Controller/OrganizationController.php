@@ -123,6 +123,7 @@ class OrganizationController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['organization']['id']])['hydra:member'];
 
         // Getting the offers
+        // TODO:only get these of events that are published (now checked in html template, should not be there)
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'simple'])['hydra:member'];
         $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'ticket'])['hydra:member'];
         $variables['subscriptions'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'subscription'])['hydra:member'];
