@@ -382,7 +382,7 @@ class DashboardUserController extends AbstractController
 
             $customer = $commonGroundService->getResource($order['customer']);
             $organization = $commonGroundService->getResource($order['organization']);
-        $invoice = $commonGroundService->getResource($order['invoice']);
+            $invoice = $commonGroundService->getResource($order['invoice']);
 
             // The pdf
             $mpdf = new \Mpdf\Mpdf();
@@ -390,7 +390,7 @@ class DashboardUserController extends AbstractController
             $data = '';
             $data .= '<h1>Order for '.$customer['name'].'</h1>';
             $data .= '<h3>Ordered at '.$organization['name'].'</h3>';
-        $data .= '<span>'.$invoice['dateCreated'].'</span>';
+            $data .= '<span>'.$invoice['dateCreated'].'</span>';
             $data .= '<div style="height:30px"></div>';
 
             if (isset($order['items'])) {
