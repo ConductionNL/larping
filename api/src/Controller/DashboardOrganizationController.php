@@ -1297,8 +1297,8 @@ class DashboardOrganizationController extends AbstractController
         $variables['bcOrganizations'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'organizations'], ['shortCode' => $variables['organization']['@id']])['hydra:member'];
         if (count($variables['bcOrganizations']) > 0) {
             $variables['bcOrganization'] = $variables['bcOrganizations'][0];
+            $variables['providers'] = $variables['bcOrganization']['services'];
         }
-        $variables['providers'] = $variables['bcOrganization']['services'];
 
         // Update provider
         if ($request->isMethod('POST')) {
