@@ -126,13 +126,15 @@ class ShoppingController extends AbstractController
         return $variables;
     }
 
-    private function checkArrays($username, $haystack) {
+    private function checkArrays($username, $haystack)
+    {
         $exist = false;
-        foreach($haystack as $item) {
+        foreach ($haystack as $item) {
             if ($item['username'] === $username) {
                 $exist = true;
             }
         }
+
         return $exist;
     }
 
