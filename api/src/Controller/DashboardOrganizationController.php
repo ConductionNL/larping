@@ -289,6 +289,7 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             if ($id == 'add') {
                 $event['status'] = 'private';
+                $makeNode = true;
             }
 
             // Fix start and enddate timezone:
@@ -307,15 +308,17 @@ class DashboardOrganizationController extends AbstractController
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
 
             // Make a node
-            $node = [];
-            $node['name'] = 'Node for '.$event['name'];
-            $node['event'] = $event['@id'];
-            $node['accommodation'] = 'https://test.com';
-            $node['type'] = 'checkin';
-            $node['organization'] = $variables['organization']['@id'];
+            if (isset($makeNode) && $makeNode == true) {
+                $node = [];
+                $node['name'] = 'Node for ' . $event['name'];
+                $node['event'] = $event['@id'];
+                $node['accommodation'] = 'https://test.com';
+                $node['type'] = 'checkin';
+                $node['organization'] = $variables['organization']['@id'];
 
-            $node = $commonGroundService->saveResource($node, ['component' => 'chin', 'type' => 'nodes']);
-
+                $node = $commonGroundService->saveResource($node, ['component' => 'chin', 'type' => 'nodes']);
+            }
+            
             if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
                 $path = $_FILES['image']['tmp_name'];
                 $type = filetype($_FILES['image']['tmp_name']);
