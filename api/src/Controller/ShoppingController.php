@@ -109,8 +109,7 @@ class ShoppingController extends AbstractController
                             return $group['id'] == $groupId;
                         });
                         // Check if the group exists and if this user is not in this group
-                        if (count($group) == 1)
-                        {
+                        if (count($group) == 1) {
                             $exists = $this->checkArrays($this->getUser()->getUsername(), ($group[array_key_first($group)]['users']));
                             if (!$exists) {
                                 $idVaultService->inviteUser($provider['configuration']['app_id'], $groupId, $this->getUser()->getUsername(), true);
