@@ -60,7 +60,7 @@ class ShoppingService
         }
 
         // Only enable on localhost ! Dont forget to disable before pushing !
-//        $object['redirectUrl'] = 'http://localhost/payment-status';
+        //    $object['redirectUrl'] = 'http://localhost/payment-status';
 
         $object = $this->commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'order']);
 

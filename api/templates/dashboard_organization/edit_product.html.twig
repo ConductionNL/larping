@@ -111,7 +111,7 @@
                                     {% if groups|default %}
                                         {% for group in groups %}
                                             {# temp do not show the groups clients and root TODO:remove? #}
-                                            {% if group.name != 'clients' and group.name != 'root' %}
+                                            {% if group.name != 'clients' and group.name != 'root' and group.name != 'administrators'%}
                                             <option
                                                 value="https://www.id-vault.com/api/v1/wac/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/v1/wac/groups/' ~ group['id'] %} selected {% endif %}>{{ group.name|trans|capitalize }}</option>
                                             {% endif %}
@@ -156,7 +156,7 @@
                                                 {{ offer.audience }}
                                             </td>
                                             <td>
-                                                {{ (offer.price/100)|localizedcurrency(offer.priceCurrency) }}
+                                                {{ (offer.price)|localizedcurrency(offer.priceCurrency) }}
                                             </td>
                                             <td class="text-capitalize">
                                                 <a href="#" class="btn btn-sm btn-success float-right"

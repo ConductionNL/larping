@@ -15,6 +15,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The DashboardController handles any calls about administration and dashboard pages.
@@ -82,7 +83,7 @@ class DashboardUserController extends AbstractController
      * @Route("/organizations")
      * @Template
      */
-    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, IdVaultService $idVaultService)
+    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, IdVaultService $idVaultService, TranslatorInterface $translator)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables = [];
@@ -169,14 +170,20 @@ class DashboardUserController extends AbstractController
             $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
             $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "{$translator->trans('Administrators group for')} {$organization['name']}", $organizationUrl);
             $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
             $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "{$translator->trans('Members group for')} {$organization['name']}", $organizationUrl);
 
-            //create the groups clients, members, administrators
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
+            // TODO: put this back? removed for demo
+//            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
+//            $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
+//            $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
+//
+//            //create the groups clients, members, administrators
+//            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
+//            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
+//            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
 
             $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $organization['id']])['hydra:member'];
 
@@ -213,7 +220,7 @@ class DashboardUserController extends AbstractController
 
         if (isset($groups) && is_array($groups)) {
             foreach ($groups as $group) {
-                if (($group['name'] == 'admin' || $group['name'] == 'root') && !in_array($group['organization'], $organizationIds)) {
+                if (($group['name'] == 'administrators' || $group['name'] == 'root') && !in_array($group['organization'], $organizationIds)) {
                     $variables['organizations'][] = $commonGroundService->getResource($group['organization']);
                     $organizationIds[] = $group['organization'];
                 }
