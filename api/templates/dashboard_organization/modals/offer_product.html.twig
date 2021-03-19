@@ -1,19 +1,16 @@
-{# Offer modale #}
+{% extends "dashboard_organization/modals/modal.html.twig" %}
 
 {% if resource is defined %}
     {% set  id = resource['id'] %}
-    {% set  type = 'Offer' %}
 {% else %}
     {% set  id = 'Add' %}
-    {% set  type = 'Offer' %}
 {% endif %}
 
-{% set  modalClass = 'modal-lg' %}
-
-{% extends "dashboard_organization/modals/modal.html.twig" %}
+{% set  type = 'Offer' %}
 
 {% block body %}
     <form id="{{ type }}Form{{ id }}" method="post">
+
         {% if resource['id'] is defined %}<input type="hidden" id="id" name="id"
                                                  value="{{ resource['id'] }}">{% endif %}
         {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id"
@@ -32,7 +29,7 @@
         <div class="form-group">
             <label for="name">{{ 'price'|trans|capitalize }}*</label>
             <input type="text" class="form-control" id="price" name="price"
-                   {% if resource.price is defined %}value="{{ (resource.price/100) }}"{% endif %} required>
+                   {% if resource.price is defined %}value="{{ (resource.price) }}"{% endif %} required>
         </div>
         <div class="form-group">
             <label for="name">{{ 'audience'|trans|capitalize }}*</label>
@@ -50,7 +47,7 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-8">
-                        <label for="options">{{ 'options'|trans|capitalize }}*</label>
+                        <label for="options">{{ 'options'|trans|capitalize }}</label>
                     </div>
                     <div class="col-4">
                         <button type="button" onclick="showOptionInputs{{ resource.id|replace({'-': "" }) }}()"
@@ -83,9 +80,12 @@
                     {% for option in resource.options %}
                         <div id="optionDiv{{ resource.id }}{{ loop.index0 }}">
                             <p>{{ option.name }}  {{ (option.price/100)|localizedcurrency(offer.priceCurrency) }}
-                                <button value="{{ loop.index0 }}" style="background: none; border: none" onclick="removeOption{{ resource.id|replace({'-': "" }) }}(this.value)" type="button">
+                                <button value="{{ loop.index0 }}" style="background: none; border: none"
+                                        onclick="removeOption{{ resource.id|replace({'-': "" }) }}(this.value)"
+                                        type="button">
                                     <i style="color: red" class="fa fa-trash"></i>
-                                </button></p>
+                                </button>
+                            </p>
                             <input type="hidden" name="options[{{ loop.index0 }}][name]" value="{{ option.name }}">
                             <input type="hidden" name="options[{{ loop.index0 }}][price]"
                                    value="{{ (option.price/100)|localizedcurrency(offer.priceCurrency) }}">
@@ -121,14 +121,14 @@
                 newOptionDiv.id = 'optionDiv{{ resource.id }}' + optionsCounter{{ resource.id|replace({'-': "" }) }};
 
                 let newOptionP = document.createElement('p');
-                newOptionP.innerText = newOptionName{{ resource.id|replace({'-': "" }) }}.value + ' ' + '{{ resource.priceCurrency }}'+ ' ' + newOptionPrice{{ resource.id|replace({'-': "" }) }}.value;
+                newOptionP.innerText = newOptionName{{ resource.id|replace({'-': "" }) }}.value + ' ' + '{{ resource.priceCurrency }}' + ' ' + newOptionPrice{{ resource.id|replace({'-': "" }) }}.value;
                 newOptionDiv.appendChild(newOptionP);
 
                 let newDeleteButton = document.createElement('button');
                 newDeleteButton.type = 'button';
                 newDeleteButton.value = optionsCounter{{ resource.id|replace({'-': "" }) }};
                 newDeleteButton.style = 'background: none; border: none';
-                newDeleteButton.setAttribute('onclick', 'removeOption{{ resource.id|replace({'-': "" }) }}(this.value)' );
+                newDeleteButton.setAttribute('onclick', 'removeOption{{ resource.id|replace({'-': "" }) }}(this.value)');
 
                 let newDeleteButtonI = document.createElement('i');
                 newDeleteButtonI.style = 'color: red';
@@ -154,7 +154,7 @@
             }
 
             function removeOption{{ resource.id|replace({'-': "" }) }}(index) {
-                let deletedElem = document.getElementById('optionDiv{{ resource.id }}'+index);
+                let deletedElem = document.getElementById('optionDiv{{ resource.id }}' + index);
                 deletedElem.parentNode.removeChild(deletedElem);
             }
         </script>
