@@ -382,26 +382,29 @@ class DashboardUserController extends AbstractController
 
             $customer = $commonGroundService->getResource($order['customer']);
             $organization = $commonGroundService->getResource($order['organization']);
-//        $invoice = $commonGroundService->getResource($order['invoice']);
+            $invoice = $commonGroundService->getResource($order['invoice']);
 
             // The pdf
             $mpdf = new \Mpdf\Mpdf();
 
+            $dateCreated = new \DateTime($invoice['dateCreated']);
+
             $data = '';
             $data .= '<h1>Order for '.$customer['name'].'</h1>';
             $data .= '<h3>Ordered at '.$organization['name'].'</h3>';
-//        $data .= '<span>'.$invoice['dateCreated'].'</span>';
+            $data .= '<span>'.$dateCreated->format('d-m-Y H:i').'</span>';
             $data .= '<div style="height:30px"></div>';
 
-            if (isset($variables['order']['items'])) {
+            if (isset($order['items'])) {
                 $data .= '<h3>Items</h3>';
                 $data .= '<table>';
-                $data .= '<thead><tr><th>Name<th><th>Quantity</th><th>Price</th></tr></thead>';
+                $data .= '<thead><tr><th>Name</th><th>Quantity</th><th>Price</th></tr></thead>';
                 $data .= '<tbody>';
-                foreach ($variables['order']['items'] as $item) {
-                    $data .= '<tr><td>'.$item['name'].'<td><td>'.$item['quantity'].'</td><td>'.$item['priceCurrency'].' '.$item['price'].',-</td></tr>';
+                foreach ($order['items'] as $item) {
+                    $data .= '<tr><td>'.$item['name'].'</td><td style="text-align: center">'.$item['quantity'].'</td><td>'.$item['priceCurrency'].' '.$item['price'].',-</td></tr>';
                 }
-                $data .= '<tr><td></td><td></td><td><b>'.$variables['order']['priceCurrency'].' '.$variables['order']['price'].',-</b></td></tr>';
+                $data .= '<tr><td></td><td></td><td><hr></td></tr>';
+                $data .= '<tr><td></td><td></td><td><b>'.$order['priceCurrency'].' '.$order['price'].',-</b></td></tr>';
                 $data .= '</tbody>';
                 $data .= '</table>';
             }

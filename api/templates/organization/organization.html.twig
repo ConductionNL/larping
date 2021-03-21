@@ -113,9 +113,27 @@
                             <h3 class="font-weight-normal mb-6">{{ 'tickets'|trans|capitalize }}</h3>
                             <div class="row row-cols-1 row-cols-xl-2">
                                 {% for offer in tickets %}
-                                    <div class="col-12 col-xl-6" id="organization">
-                                        {% include 'cards/offer.html.twig'  with {'item': offer, 'maxHeightImage': 238, 'maxWidthImage': 358, 'minHeightCard': 306, 'minWidthCard': 360} %}
-                                    </div>
+                                    {% set showOffer = true %}
+                                    {% if offer.products|default and offer.products|length > 0 %}
+                                        {% set break = false %}
+                                        {% set event = false %}
+                                        {% for product in offer.products if not break %}
+                                            {% if product.event|default %}
+                                                {% if commonground_is_resource(product.event) %}
+                                                    {% set event = commonground_resource(product.event) %}
+                                                {% endif %}
+                                                {% set break = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if event|default and event.status != 'published' %}
+                                        {% set showOffer = false %}
+                                    {% endif %}
+                                    {% if showOffer %}
+                                        <div class="col-12 col-xl-6" id="organization">
+                                            {% include 'cards/offer.html.twig'  with {'item': offer, 'maxHeightImage': 238, 'maxWidthImage': 358, 'minHeightCard': 306, 'minWidthCard': 360} %}
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div><!-- /.row -->
                         </div>
@@ -129,9 +147,27 @@
                             <h3 class="font-weight-normal mb-6">{{ 'subscriptions'|trans|capitalize }}</h3>
                             <div class="row row-cols-1 row-cols-xl-2">
                                 {% for offer in subscriptions %}
-                                    <div class="col-12 col-xl-6" id="organization">
-                                        {% include 'cards/offer.html.twig'  with {'item': offer, 'maxHeightImage': 238, 'maxWidthImage': 358, 'minHeightCard': 306, 'minWidthCard': 360} %}
-                                    </div>
+                                    {% set showOffer = true %}
+                                    {% if offer.products|default and offer.products|length > 0 %}
+                                        {% set break = false %}
+                                        {% set event = false %}
+                                        {% for product in offer.products if not break %}
+                                            {% if product.event|default %}
+                                                {% if commonground_is_resource(product.event) %}
+                                                    {% set event = commonground_resource(product.event) %}
+                                                {% endif %}
+                                                {% set break = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if event|default and event.status != 'published' %}
+                                        {% set showOffer = false %}
+                                    {% endif %}
+                                    {% if showOffer %}
+                                        <div class="col-12 col-xl-6" id="organization">
+                                            {% include 'cards/offer.html.twig'  with {'item': offer, 'maxHeightImage': 238, 'maxWidthImage': 358, 'minHeightCard': 306, 'minWidthCard': 360} %}
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div><!-- /.row -->
                         </div>
@@ -145,9 +181,27 @@
                             <h3 class="font-weight-normal mb-6">{{ 'products'|trans|capitalize }}</h3>
                             <div class="row row-cols-1 row-cols-xl-2">
                                 {% for offer in products %}
-                                    <div class="col-12 col-xl-6" id="organization">
-                                        {% include 'cards/offer.html.twig'  with {'item': offer, 'maxHeightImage': 238, 'maxWidthImage': 358, 'minHeightCard': 306, 'minWidthCard': 360} %}
-                                    </div>
+                                    {% set showOffer = true %}
+                                    {% if offer.products|default and offer.products|length > 0 %}
+                                        {% set break = false %}
+                                        {% set event = false %}
+                                        {% for product in offer.products if not break %}
+                                            {% if product.event|default %}
+                                                {% if commonground_is_resource(product.event) %}
+                                                    {% set event = commonground_resource(product.event) %}
+                                                {% endif %}
+                                                {% set break = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if event|default and event.status != 'published' %}
+                                        {% set showOffer = false %}
+                                    {% endif %}
+                                    {% if showOffer %}
+                                        <div class="col-12 col-xl-6" id="organization">
+                                            {% include 'cards/offer.html.twig'  with {'item': offer, 'maxHeightImage': 238, 'maxWidthImage': 358, 'minHeightCard': 306, 'minWidthCard': 360} %}
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div><!-- /.row -->
                         </div>
@@ -177,8 +231,6 @@
                 <div class="col-md-5 col-lg-4 pl-xl-8">
                     <!-- Contact  -->
                     <h5>{{ 'contact'|trans|capitalize }} {{ organization.name }}</h5>
-                    <p>{{ organization.description }}</p>
-
 
                     {% include 'widgets/contact_details.html.twig' %}
 
