@@ -43,6 +43,10 @@ class DashboardAdministrationController extends AbstractController
     public function organizationsAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, IdVaultService $idVaultService)
     {
         $variables = [];
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
 
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
 
@@ -56,6 +60,10 @@ class DashboardAdministrationController extends AbstractController
     public function locationsAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, IdVaultService $idVaultService)
     {
         $variables = [];
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
 
         $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'])['hydra:member'];
 
@@ -69,6 +77,10 @@ class DashboardAdministrationController extends AbstractController
     public function categoriesAction(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, IdVaultService $idVaultService)
     {
         $variables = [];
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
 
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
         $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];

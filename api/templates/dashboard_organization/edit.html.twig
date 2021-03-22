@@ -473,15 +473,10 @@
                         <div class="card-body p-6">
                             <h3 class="h4 mb-4">{{ 'terms and conditions'|trans|capitalize }}</h3>
 
-                            <div class="form-group position-relative mb-6 form-group-dragable">
+                            <div class="form-group position-relative mb-6">
                                 <div class="form-group">
-                                    <label for="contentInput">{{ 'content'|trans|capitalize }}</label>
-                                    <textarea oninput="renderTermsAndConditions()" class="form-control" rows="10"
-                                              id="contentInput" name="template[content]"
-                                              required>{% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}</textarea>
-                                </div>
-                                <div id="renderedContentDiv">
-                                    {% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content|raw }}{% endif %}
+                                    <label for="summernote">{{ 'content'|trans|capitalize }} </label>
+                                    <textarea class="summernote" name="template[content]" id="summernote">{% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}</textarea>
                                 </div>
                             </div>
 
@@ -502,15 +497,15 @@
 
     </section>
 
-
+    <script>
+        $('#summernote').summernote({
+            placeholder: '{{ 'content'|trans|capitalize }}',
+            tabsize: 2,
+            height: 300
+        });
+    </script>
 
     <script>
-        function renderTermsAndConditions() {
-            console.log(document.getElementById('contentInput').value);
-            console.log(document.getElementById("renderedContentDiv").innerHTML);
-            document.getElementById("renderedContentDiv").innerHTML = document.getElementById('contentInput').value;
-        }
-
         function createUUID() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
                 var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
