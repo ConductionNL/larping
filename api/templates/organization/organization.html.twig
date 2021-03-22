@@ -75,7 +75,7 @@
                     {% if organization.description|default %}
                         <div class="fade-in">
                             <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {% if organization.name|default %}{{ organization.name }}{% endif %}</h3>
-                            <p class="mb-6">{{ organization.description }}</p>
+                            <p class="mb-6">{{ organization.description|raw }}</p>
                         </div>
 
                         <hr>

@@ -38,6 +38,10 @@ class DashboardController extends AbstractController
      */
     public function switchOrganizationAction(CommonGroundService $commonGroundService, IdVaultService $idVaultService, $id)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $user = $idVaultService->updateUserOrganization($id, $this->getUser()->getUsername());
         $person = $commonGroundService->getResource($user['person']);
         $userObject = new IdVaultUser($user['username'], $user['username'], $person['name'], null, $user['roles'], $user['person'], $user['organization'], 'id-vault');

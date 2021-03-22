@@ -32,7 +32,10 @@ class DashboardUserController extends AbstractController
      */
     public function indexAction(CommonGroundService $commonGroundService, ShoppingService $shoppingService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
 
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
@@ -50,7 +53,10 @@ class DashboardUserController extends AbstractController
      */
     public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ShoppingService $shoppingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
         $products = $shoppingService->getOwnedProducts($this->getUser()->getPerson());
         $groups = $this->getUser()->getGroups();
@@ -85,7 +91,10 @@ class DashboardUserController extends AbstractController
      */
     public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, IdVaultService $idVaultService, TranslatorInterface $translator)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
 //        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => $params->get('app_id')]);
         $variables['type'] = 'organization';
@@ -220,7 +229,7 @@ class DashboardUserController extends AbstractController
 
         if (isset($groups) && is_array($groups)) {
             foreach ($groups as $group) {
-                if (($group['name'] == 'administrators' || $group['name'] == 'root') && !in_array($group['organization'], $organizationIds)) {
+                if (($group['name'] == 'administrators') && !in_array($group['organization'], $organizationIds)) {
                     $variables['organizations'][] = $commonGroundService->getResource($group['organization']);
                     $organizationIds[] = $group['organization'];
                 }
@@ -236,7 +245,10 @@ class DashboardUserController extends AbstractController
      */
     public function addorganizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
 
         if ($request->isMethod('POST')) {
@@ -294,7 +306,10 @@ class DashboardUserController extends AbstractController
      */
     public function eventsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
 
@@ -307,7 +322,10 @@ class DashboardUserController extends AbstractController
      */
     public function charactersAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
         $variables['characters'] = []; //commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'], ['persons' => $this->getUser()->getPerson()])['hydra:member'];
@@ -325,7 +343,10 @@ class DashboardUserController extends AbstractController
      */
     public function favoritesAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
         $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson(), 'order[dateCreated]' => 'desc'])['hydra:member'];
         foreach ($variables['likes'] as &$like) {
@@ -347,8 +368,12 @@ class DashboardUserController extends AbstractController
      */
     public function ordersAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['customer' => $this->getUser()->getPerson(), 'order[dateCreated]' => 'desc'])['hydra:member'];
+
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
+        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['customer' => $this->getUser()->getPerson()])['hydra:member'];
 
         return $variables;
     }
@@ -359,7 +384,10 @@ class DashboardUserController extends AbstractController
      */
     public function orderAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['order'] = $commonGroundService->getResource(['component' => 'orc', 'type' => 'orders', 'id' => $id]);
 
         if ($this->getUser()->getPerson() != $variables['order']['customer']) {
@@ -375,7 +403,10 @@ class DashboardUserController extends AbstractController
      */
     public function downloadInvoiceAction(Session $session, Request $request, CommonGroundService $commonGroundService)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         if ($request->isMethod('POST')) {
             $redirectUrl = $request->get('redirectUrl');
             $order = $commonGroundService->getResource($request->get('order'));
