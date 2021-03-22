@@ -348,22 +348,26 @@ class ShoppingService
 
     public function ownsThisProduct($product)
     {
-        $thisProductIsOwned = false;
+        try {
+            $thisProductIsOwned = false;
 
-        // Checks if required product is in array of owned products | Needs to be logged in
-        if ($thisProductIsOwned == false && $this->security->getUser() && $this->security->getUser()->getPerson()) {
-            // Fetches owned products
-            $ownedProducts = $this->getOwnedProducts($this->security->getUser()->getPerson());
-            if (isset($ownedProducts) && count($ownedProducts) > 0) {
-                foreach ($ownedProducts as $ownedProduct) {
-                    if ($ownedProduct['id'] == $product['id']) {
-                        $thisProductIsOwned = true;
+            // Checks if required product is in array of owned products | Needs to be logged in
+            if ($thisProductIsOwned == false && $this->security->getUser() && $this->security->getUser()->getPerson()) {
+                // Fetches owned products
+                $ownedProducts = $this->getOwnedProducts($this->security->getUser()->getPerson());
+                if (isset($ownedProducts) && count($ownedProducts) > 0) {
+                    foreach ($ownedProducts as $ownedProduct) {
+                        if ($ownedProduct['id'] == $product['id']) {
+                            $thisProductIsOwned = true;
+                        }
                     }
                 }
             }
-        }
 
-        return $thisProductIsOwned;
+            return $thisProductIsOwned;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function productInCart($product)
