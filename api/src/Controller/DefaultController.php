@@ -155,6 +155,11 @@ class DefaultController extends AbstractController
     public function reviewAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
+
         // Add review
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();

@@ -162,6 +162,11 @@ class DashboardOrganizationController extends AbstractController
      */
     public function eventsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
@@ -242,7 +247,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function publishEventAction(CommonGroundService $commonGroundService, Request $request, FlashBagInterface $flash, $id)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
 
         try {
             $event = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events', 'id' => $id]);
@@ -261,7 +269,11 @@ class DashboardOrganizationController extends AbstractController
      */
     public function eventAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
+
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
 
         if ($id != 'add') {
@@ -444,6 +456,11 @@ class DashboardOrganizationController extends AbstractController
      */
     public function eventTicketsAction(CommonGroundService $commonGroundService, Request $request, SerializerInterface $serializer, $id)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
+
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id], ['organization' => $variables['organization']['@id']]);
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
@@ -474,7 +491,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function eventCheckinAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
 //        $variables['participants'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket'])['hydra:member'];
         $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
@@ -518,6 +538,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function checkSomeoneInAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         try {
             $event = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $node = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'nodes'], ['event' => $event['@id']])['hydra:member'][0];
@@ -558,6 +582,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function productsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['sourceOrganization' => $variables['organization']['@id']])['hydra:member'];
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['id']])['hydra:member'];
@@ -603,6 +631,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function editProductAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params, $id)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
 
         if ($id != 'add') {
@@ -691,6 +723,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function ordersAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
@@ -712,6 +748,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function offersAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['organization' => $variables['organization']['@id']])['hydra:member'];
@@ -726,6 +766,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function customersAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['customers'] = [];
 
@@ -738,6 +782,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function membersAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params, TranslatorInterface $translator)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $variables['organization']['id']]);
         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
@@ -918,6 +966,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function reviewsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         // If we are showing reviews of a specific resource, do so:
         if ($request->get('resource')) {
             $variables['resource'] = $commonGroundService->getResource($request->get('resource'));
@@ -977,6 +1029,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function balanceAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['acounts'] = [];
 
@@ -989,6 +1045,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function reservationsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['reservations'] = [];
 
@@ -1001,6 +1061,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function earningsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['earnings'] = [];
 
@@ -1013,6 +1077,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function charactersAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['characters'] = [];
 
@@ -1025,6 +1093,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function skillsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['skills'] = [];
 
@@ -1037,6 +1109,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function itemsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['items'] = [];
 
@@ -1049,6 +1125,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function conditionsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['conditions'] = [];
 
@@ -1061,6 +1141,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function storylinesAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['storylines'] = [];
 
@@ -1073,6 +1157,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function locationsAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['locations'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places'], ['organization' => $variables['organization']['@id']])['hydra:member'];
 
@@ -1085,6 +1173,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function locationAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params, $id)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];
         $variables['activeCategories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
@@ -1143,6 +1235,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function editAction(CommonGroundService $commonGroundService, Request $request, ParameterBagInterface $params, IdVaultService $idVaultService, TranslatorInterface $translator, $id)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         if ($id != 'add') {
             $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
         } else {
@@ -1284,6 +1380,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function makeOrderForMemberAction(CommonGroundService $commonGroundService, Request $request)
     {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
 
         return $variables;
@@ -1295,7 +1395,11 @@ class DashboardOrganizationController extends AbstractController
      */
     public function paymentProvidersAction(CommonGroundService $commonGroundService, Request $request)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
+
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
 
         $variables['bcOrganizations'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'organizations'], ['shortCode' => $variables['organization']['@id']])['hydra:member'];
@@ -1329,7 +1433,10 @@ class DashboardOrganizationController extends AbstractController
      */
     public function paymentProviderAction(CommonGroundService $commonGroundService, Request $request, $id)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
 
         if ($id != 'add') {
