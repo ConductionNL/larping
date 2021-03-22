@@ -123,10 +123,49 @@ class OrganizationController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['organization']['id']])['hydra:member'];
 
         // Getting the offers
-        // TODO:only get these of events that are published (now checked in html template, should not be there)
+        // Only get these of events that are published
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'simple'])['hydra:member'];
+        foreach ($variables['products'] as $key => $offer) {
+            if (isset($offer['products'])) {
+                foreach ($offer['products'] as $product) {
+                    if (isset($product['event']) and $commonGroundService->isResource($product['event'])){
+                        $event = $commonGroundService->getResource($product['event']);
+                        break;
+                    }
+                }
+            }
+            if ((isset($event) and $event['status'] != 'published') or !isset($event)){
+                unset($variables['products'][$key]);
+            }
+        }
         $variables['tickets'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'ticket'])['hydra:member'];
+        foreach ($variables['tickets'] as $key => $offer) {
+            if (isset($offer['products'])) {
+                foreach ($offer['products'] as $product) {
+                    if (isset($product['event']) and $commonGroundService->isResource($product['event'])){
+                        $event = $commonGroundService->getResource($product['event']);
+                        break;
+                    }
+                }
+            }
+            if ((isset($event) and $event['status'] != 'published') or !isset($event)){
+                unset($variables['tickets'][$key]);
+            }
+        }
         $variables['subscriptions'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'subscription'])['hydra:member'];
+        foreach ($variables['subscriptions'] as $key => $offer) {
+            if (isset($offer['products'])) {
+                foreach ($offer['products'] as $product) {
+                    if (isset($product['event']) and $commonGroundService->isResource($product['event'])){
+                        $event = $commonGroundService->getResource($product['event']);
+                        break;
+                    }
+                }
+            }
+            if ((isset($event) and $event['status'] != 'published') or !isset($event)){
+                unset($variables['subscriptions'][$key]);
+            }
+        }
 
         return $variables;
     }
