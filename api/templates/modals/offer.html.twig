@@ -70,8 +70,6 @@
                                 <h5>{{ (offer.price/100)|localizedcurrency(offer.priceCurrency) }}</h5>
 
                                 {% set isTicket = check_for_type_in_products('ticket', offer.products) %}
-                                                                {{ dump(isTicket) }}
-                                                                {{ dump(offer.products) }}
                                 {% set isSubscription = check_for_type_in_products('subscription', offer.products) %}
                                 {% if offer.audience|default and offer.audience == 'personal' and isTicket|default and isTicket == true %}
 
