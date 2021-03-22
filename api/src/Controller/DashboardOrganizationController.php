@@ -1162,10 +1162,6 @@ class DashboardOrganizationController extends AbstractController
                 $new = false;
             }
 
-            if ($organization['template']) {
-                unset($organization['template']);
-            }
-
             // Let set some aditional data
             $organization['rsin'] = '';
             $organization['chamberOfComerce'] = '';
@@ -1258,8 +1254,8 @@ class DashboardOrganizationController extends AbstractController
 
             $template = $request->get('template');
 
-            if (isset($organization['template'])) {
-                $template['@id'] = $organization['template']['@id'];
+            if (isset($organization['termsAndConditions']['@id'])) {
+                $template['@id'] = $organization['termsAndConditions']['@id'];
             }
 
             $template['name'] = 'Terms and conditions for '.$organization['name'];

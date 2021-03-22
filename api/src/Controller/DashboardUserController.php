@@ -220,7 +220,7 @@ class DashboardUserController extends AbstractController
 
         if (isset($groups) && is_array($groups)) {
             foreach ($groups as $group) {
-                if (($group['name'] == 'administrators' || $group['name'] == 'root') && !in_array($group['organization'], $organizationIds)) {
+                if (($group['name'] == 'administrators') && !in_array($group['organization'], $organizationIds)) {
                     $variables['organizations'][] = $commonGroundService->getResource($group['organization']);
                     $organizationIds[] = $group['organization'];
                 }

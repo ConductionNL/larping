@@ -51,15 +51,15 @@
                                         <li>
                                             <a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }} </a>
                                         </li>
-                                        {% set allowed = false %}
+                                        {% set organizationCount = [] %}
                                         {% for group in app.user.groups %}
-                                            {% if organizations|default and organizations > 1 %}
-                                                {% if group.name == 'root' or 'administrators' %}
-                                                    {% set allowed = true %}
+                                            {% if group.name == 'administrators' %}
+                                                {% if group.organization not in organizationCount %}
+                                                    {% set organizationCount = organizationCount|merge([group.organization]) %}
                                                 {% endif %}
                                             {% endif %}
                                         {% endfor %}
-                                        {% if allowed %}
+                                        {% if organizationCount|length > 1 %}
                                             <li>
                                                 <a href="{{ path('app_dashboarduser_organizations') }}">{{ 'switch organization'|trans|capitalize }}</a>
                                             </li>
