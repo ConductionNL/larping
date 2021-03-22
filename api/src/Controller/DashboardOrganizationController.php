@@ -542,6 +542,7 @@ class DashboardOrganizationController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirect($this->generateUrl('app_user_idvault'));
         }
+
         try {
             $event = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
             $node = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'nodes'], ['event' => $event['@id']])['hydra:member'][0];
