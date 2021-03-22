@@ -90,7 +90,7 @@ class DashboardAdministrationController extends AbstractController
             $category = $request->request->all();
             $category['name'] = $request->get('name');
             $category['icon'] = $request->get('icon');
-            $category['organization'] = '/organizations/d24e147f-00b9-4970-9809-6684a3fb965b';
+            $category['organization'] = '/organizations/e62b32b5-2d1f-4412-9eb7-225bce414d05';
             $category['parent'] = '/categories/'.$request->get('parent');
             $category['root'] = '/categories/'.$request->get('parent');
             $commonGroundService->saveResource($category, ['component' => 'wrc', 'type' => 'categories']);
