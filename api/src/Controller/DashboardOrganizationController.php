@@ -289,6 +289,7 @@ class DashboardOrganizationController extends AbstractController
             $event['organization'] = $variables['organization']['@id'];
             if ($id == 'add') {
                 $event['status'] = 'private';
+                $makeNode = true;
             }
 
             // Fix start and enddate timezone:
@@ -307,14 +308,16 @@ class DashboardOrganizationController extends AbstractController
             $event = $commonGroundService->saveResource($event, ['component' => 'arc', 'type' => 'events']);
 
             // Make a node
-            $node = [];
-            $node['name'] = 'Node for '.$event['name'];
-            $node['event'] = $event['@id'];
-            $node['accommodation'] = 'https://test.com';
-            $node['type'] = 'checkin';
-            $node['organization'] = $variables['organization']['@id'];
+            if (isset($makeNode) && $makeNode == true) {
+                $node = [];
+                $node['name'] = 'Node for '.$event['name'];
+                $node['event'] = $event['@id'];
+                $node['accommodation'] = 'https://test.com';
+                $node['type'] = 'checkin';
+                $node['organization'] = $variables['organization']['@id'];
 
-            $node = $commonGroundService->saveResource($node, ['component' => 'chin', 'type' => 'nodes']);
+                $node = $commonGroundService->saveResource($node, ['component' => 'chin', 'type' => 'nodes']);
+            }
 
             if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
                 $path = $_FILES['image']['tmp_name'];
@@ -371,7 +374,7 @@ class DashboardOrganizationController extends AbstractController
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer = [];
-            $offer['price'] = (string) ((float) $request->get('price') * 100);
+            $offer['price'] = (string) ((float) $request->get('price')*100);
             $offer['quantity'] = (int) $request->get('quantity');
             $offer['maxQuantity'] = (int) $request->get('maxQuantity');
             $offer['name'] = $product['name'];
@@ -567,12 +570,14 @@ class DashboardOrganizationController extends AbstractController
             // Set the current organization as owner
             $product['requiresAppointment'] = false;
             $product['sourceOrganization'] = $variables['organization']['@id'];
+            $offer['quantity'] = (int) $request->get('quantity');
+            $offer['maxQuantity'] = (int) $request->get('maxQuantity');
 
             // Save the resource
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             $offer['name'] = $product['name'];
-            $offer['price'] = $product['price'];
+            $offer['price'] = (string) ((float) $product['price'] * 100);
             $offer['offeredBy'] = $variables['organization']['@id'];
             $offer['audience'] = 'public';
             $offer['products'][] = '/products/'.$product['id'];
@@ -580,7 +585,8 @@ class DashboardOrganizationController extends AbstractController
             // Save the resource
             $offer = $commonGroundService->saveResource($offer, ['component' => 'pdc', 'type' => 'offers']);
 
-            $product['offer'] = '/offers/'.$offer['id'];
+            $product['offers'][] = '/offers/'.$offer['id'];
+            $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
             // redirects externally
             if ($product['id']) {
@@ -597,10 +603,14 @@ class DashboardOrganizationController extends AbstractController
      */
     public function editProductAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params, $id)
     {
+        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+
         if ($id != 'add') {
             $variables['product'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products', 'id' => $id]);
+            $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products' => $id])['hydra:member'];
         } else {
             $variables['product'] = [];
+            $variables['offers'] = [];
         }
 
         if ($request->get('action') == 'delete') {
@@ -609,8 +619,6 @@ class DashboardOrganizationController extends AbstractController
             return $this->redirectToRoute('app_dashboardorganization_products');
         }
 
-        $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
-        $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['@id']])['hydra:member'];
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
 
@@ -1297,8 +1305,8 @@ class DashboardOrganizationController extends AbstractController
         $variables['bcOrganizations'] = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'organizations'], ['shortCode' => $variables['organization']['@id']])['hydra:member'];
         if (count($variables['bcOrganizations']) > 0) {
             $variables['bcOrganization'] = $variables['bcOrganizations'][0];
+            $variables['providers'] = $variables['bcOrganization']['services'];
         }
-        $variables['providers'] = $variables['bcOrganization']['services'];
 
         // Update provider
         if ($request->isMethod('POST')) {

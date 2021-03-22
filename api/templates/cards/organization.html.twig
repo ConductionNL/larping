@@ -5,7 +5,7 @@
     }) %}
 {%  endif %}
 {% set organizationMembers = [] %}
-{% set organizationEvents = commonground_resource_list({'component':'arc', 'type':'events'}, {'organization':resource['@id']})['hydra:member'] %}
+{% set organizationEvents = commonground_resource_list({'component':'arc', 'type':'events'}, {'organization':resource['@id'], 'status':'published'})['hydra:member'] %}
 {% set upcomingEvents = [] %}
 {% for event in organizationEvents %}
     {% if event.endDate|date("Y-m-d") > "now"|date("Y-m-d") %}
