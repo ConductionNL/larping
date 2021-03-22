@@ -21,10 +21,10 @@
                             {% for product in product.prerequisiteProducts %}
                                 {% set ownsThisProduct = null %}
 
-                                {# Check if this product is owned or in session order  #}
+                                 Check if this product is owned or in session order
                                 {% set ownsThisProduct = owns_this_product(product) %}
                                 {% if ownsThisProduct == false %}
-                                {% set ownsThisProduct = product_in_cart(product) %}
+                                    {% set ownsThisProduct = product_in_cart(product) %}
                                 {% endif %}
 
                                 {% if ownsThisProduct is not null and ownsThisProduct == false %}
@@ -40,15 +40,15 @@
                                            value="{{ product.offers.0['@id'] }}">
                                     <input name="offers[{{ counter }}][path]" type="hidden"
                                            value="{{ app.request.requesturi }}">
-                                    {# Keep this for bugfixing #}
-                                    {#                                {% else %}#}
-                                    {#                                    <div class="form-group p-3"#}
-                                    {#                                         style="border-radius: 6px;background: rgba(144,238,144, 0.8)">#}
-                                    {#                                        <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}#}
-                                    {#                                            :</p>#}
-                                    {#                                        <label#}
-                                    {#                                            style="color: white">{{ product.name|capitalize }}</label>#}
-                                    {#                                    </div>#}
+                                     Keep this for bugfixing
+                                                                    {% else %}
+                                                                        <div class="form-group p-3"
+                                                                             style="border-radius: 6px;background: rgba(144,238,144, 0.8)">
+                                                                            <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}
+                                                                                :</p>
+                                                                            <label
+                                                                                style="color: white">{{ product.name|capitalize }}</label>
+                                                                        </div>
                                 {% endif %}
                             {% endfor %}
 
@@ -70,8 +70,8 @@
                                 <h5>{{ (offer.price/100)|localizedcurrency(offer.priceCurrency) }}</h5>
 
                                 {% set isTicket = check_for_type_in_products('ticket', offer.products) %}
-                                {#                                {{ dump(isTicket) }}#}
-                                {#                                {{ dump(offer.products) }}#}
+                                                                {{ dump(isTicket) }}
+                                                                {{ dump(offer.products) }}
                                 {% set isSubscription = check_for_type_in_products('subscription', offer.products) %}
                                 {% if offer.audience|default and offer.audience == 'personal' and isTicket|default and isTicket == true %}
 
