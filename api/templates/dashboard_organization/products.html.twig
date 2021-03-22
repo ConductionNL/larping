@@ -16,7 +16,6 @@
                         aria-current="page">{{ 'products'|trans|capitalize }}</li>
                 </ul>
             </nav>
-            <pre>{{ dump(app.user.groups) }}</pre>
             <!-- Products -->
             {%  include 'dashboard_organization/tables/products.html.twig' with {'id': 'products'} %}
         </div>

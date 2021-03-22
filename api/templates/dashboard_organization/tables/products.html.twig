@@ -37,7 +37,7 @@
                     {% endfor %}
                 </td>
                 <td>
-                    {% for group in app.user.groups %}
+                    {% for group in groups %}
                     {% if group['@id'] == product.userGroup %}
                         {{ group.name }}
                     {% endif %}

@@ -581,7 +581,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/products")
      * @Template
      */
-    public function productsAction(CommonGroundService $commonGroundService, Request $request)
+    public function productsAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params)
     {
         // Make sure the user is logged in
         if (!$this->getUser()) {
@@ -592,6 +592,8 @@ class DashboardOrganizationController extends AbstractController
         $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['organization' => $variables['organization']['id']])['hydra:member'];
         $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['organization' => $variables['organization']['id']])['hydra:member'];
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'])['hydra:member'];
+        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+        $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['organization']['@id'])['groups'];
 
         if ($request->isMethod('POST')) {
             // Get the current resource
