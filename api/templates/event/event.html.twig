@@ -96,7 +96,7 @@
                     {% if event.description|default %}
                     <div class="single-listing-content mb-6">
                         <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {% if event.name|default %}{{ event.name }}{% endif %}</h3>
-                        <p class="mb-6">{{ event.description }}</p>
+                        <p class="mb-6">{{ event.description|raw }}</p>
                     </div>
 
                     <hr>
