@@ -466,7 +466,7 @@ class DashboardOrganizationController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $id])['hydra:member'];
 
         $variables['ticket'] = $commonGroundService->getResource(['component' => 'pdc', 'type' => 'products'], ['type' => 'ticket', 'event' => $variables['event']['@id']])['hydra:member'];
-        if (count($variables['ticket']) > 0 and isset($variables['ticket'][0]['offers']) and count($variables['ticket'][0]['offers']) > 0) {
+        if (count($variables['ticket']) > 0 && isset($variables['ticket'][0]['offers']) && count($variables['ticket'][0]['offers']) > 0) {
             $variables['ticket'] = $variables['ticket'][0]['offers'][0];
         }
         $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
