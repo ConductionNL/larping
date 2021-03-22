@@ -368,6 +368,7 @@ class DashboardUserController extends AbstractController
      */
     public function ordersAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
+
         // Make sure the user is logged in
         if (!$this->getUser()) {
             return $this->redirect($this->generateUrl('app_user_idvault'));
