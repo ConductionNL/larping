@@ -29,8 +29,7 @@
                     <a class="text-hover-primary text-muted" >
                         {% for group in user.groups %}
                             {# temp do not show the groups clients and root TODO:remove? #}
-                            {% if group != 'clients' and group != 'root' %}{{ group|trans|capitalize }}
-                        {% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
+                            {% if group != 'clients' and group != 'root' %}{{ group|trans|capitalize }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
                     </a>
                 </td>
                 <td>
