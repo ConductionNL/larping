@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    <section class="py-7 py-md-10">
+        <div class="container">
+            {% if organization.privacyPolicy|default and organization.privacyPolicy.content|default %}
+                {{ organization.privacyPolicy.name }}
+                {{ organization.privacyPolicy.content|raw }}
+            {% endif %}
+        </div><!-- /.container -->
+    </section>
+
+{% endblock %}

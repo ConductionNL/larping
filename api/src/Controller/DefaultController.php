@@ -149,6 +149,21 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * @Route("/privacy-policy/{id}")
+     * @Template
+     */
+    public function privacyPolicyForOrgAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params, $id, Session $session)
+    {
+        try {
+            $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
+        } catch (\Exception $exception) {
+            return $this->redirectToRoute('app_index_default');
+        }
+
+        return $variables;
+    }
+
+    /**
      * @Route("/review")
      * @Template
      */
