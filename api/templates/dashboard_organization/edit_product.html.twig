@@ -20,7 +20,7 @@
                     <li class="breadcrumb-item active" aria-current="page">{{ 'edit product'|trans|capitalize }}</li>
                 </ul>
             </nav>
-            <form id="ProductForm{{ product.id }}" method="post" enctype="multipart/form-data">
+            <form id="ProductForm{{ product.id }}" method="post" enctype="multipart/form-data" name="productForm">
                 <input type="hidden" name="@type" value="Product">
                 {% if product['id'] is defined %}<input type="hidden" id="id" name="id"
                                                         value="{{ product['id'] }}">{% endif %}
@@ -138,6 +138,27 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Gallery -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
+
+                        <div class="form-group position-relative mb-6 form-group-dragable">
+                            <input onchange="showImage()" type="file" class="custom-file-input" id="image"
+                                   name="image">
+                            <div class="custom-file-label" for="image" id="imageHolder"
+                                 {{ dump(image) }}
+                                {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
+                                {% if image.base64 is defined %}
+                                    <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
+                                {% else %}
+                                    {{ 'Click or Drag an image here'|trans|capitalize }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
 
             <!-- Offers -->
@@ -150,30 +171,11 @@
                 </div>
             </div>
 
-            <!-- Gallery -->
-            <div class="card">
-                <div class="card-body p-6">
-                    <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
-
-                    <div class="form-group position-relative mb-6 form-group-dragable">
-                        <input onchange="showImage()" type="file" class="custom-file-input" id="image"
-                               name="image">
-                        <div class="custom-file-label" for="image" id="imageHolder"
-                             {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
-                            {% if image.base64 is defined %}
-                                <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
-                            {% else %}
-                                {{ 'Click or Drag an image here'|trans|capitalize }}
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="row justify-content-center">
                 <div class="col-md-7 col-lg-6 col-xl-5">
                     <div class="mb-6">
                         <button type="submit"
+                                onclick="document.productForm.submit()"
                                 class="btn btn-lg btn-primary btn-block">{{ 'save'|trans|capitalize }}</button>
                     </div>
                 </div>
