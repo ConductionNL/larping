@@ -3,10 +3,10 @@ entries:
   larping:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-03-22T16:19:03.4380702Z"
+    created: "2021-03-23T12:29:47.9217864Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
-    digest: 67d1a8debaf61bd4b685f8bb46e1f9d8061214c477f14e74b1c6a01cb23546a6
+    digest: d307e14a8e1516d1f438e9fe7150a2924ac8fa530cca697ea45b21a3f5bc675a
     home: https://www.conduction.nl
     icon: https://conductionnl.github.io/images/conduction_avatar_blue_on_transparant.svg
     keywords:
@@ -31,7 +31,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 11.10.0
-    created: "2021-03-22T16:19:03.4519112Z"
+    created: "2021-03-23T12:29:47.9339656Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -60,4 +60,4 @@ entries:
     urls:
     - charts/postgresql-10.1.1.tgz
     version: 10.1.1
-generated: "2021-03-22T16:19:03.4222216Z"
+generated: "2021-03-23T12:29:47.910541Z"

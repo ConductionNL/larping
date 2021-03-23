@@ -10,6 +10,10 @@
     {% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':eventLocation['id']})['hydra:member'] %}
 {% endif %}
 {% set eventOrganization = commonground_resource(item.organization) %}
+{% set organizationImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':eventOrganization['@id'], 'organization':'/organizations/'~eventOrganization['id']})['hydra:member'] %}
+    {% if organizationImages|length > 0 %}
+        {% set organizationImage = organizationImages[0] %}
+    {% endif %}
 {% set eventImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':item['@id'], 'organization':'/organizations/'~eventOrganization['id']})['hydra:member'] %}
 {% if eventImages|length > 0 %}
     {% set eventImage = eventImages[0] %}
@@ -22,6 +26,13 @@
                      {% if maxHeightImage|default %}max-height: {{ maxHeightImage }}px;{% endif%}
                      width: auto;height: auto;"
                  src="{{ eventImage.base64 }}"
+                 alt="Card image cap">
+        {% elseif organizationImage.base64 is defined %}
+            <img class="card-img rounded-0"
+                 style="{% if maxWidthImage|default %}max-width: {{ maxWidthImage }}px;{% endif%}
+                     {% if maxHeightImage|default %}max-height: {{ maxHeightImage }}px;{% endif%}
+                     width: auto;height: auto;"
+                 src="{{ organizationImage.base64 }}"
                  alt="Card image cap">
         {% else %}
             <img class="card-img rounded-0"

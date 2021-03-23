@@ -16,7 +16,7 @@
             </ul>
         </nav>
 
-        <form method="post" action="{{ path('app_dashboarduser_addorganization') }}">
+        <form method="post" action="{{ path('app_dashboarduser_addorganization') }}" enctype="multipart/form-data">
             <!-- About -->
             <div class="card">
                 <div class="card-body px-6 pt-6 pb-1">
@@ -117,21 +117,20 @@
             <!-- Gallery -->
             <div class="card">
                 <div class="card-body p-6">
-                    <h3 class="h4 mb-4">Gallery</h3>
-                    <p class="mb-5">We are not responsible for any damages caused by the use of this website, or by posting
-                        business listings here.
-                        Please use our site at your own discretion and exercise good judgement as well as common sense when
-                        advertising
-                        business here.
-                    </p>
+                    <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
 
                     <div class="form-group position-relative mb-6 form-group-dragable">
-                        <input type="file" class="custom-file-input">
-                        <label class="custom-file-label" for="customFile">
-                            Click or Drag images here
-                        </label>
+                        <input onchange="showImage()" type="file" class="custom-file-input" id="image"
+                               name="image">
+                        <div class="custom-file-label" for="image" id="imageHolder"
+                             {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
+                            {% if image.base64 is defined %}
+                                <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
+                            {% else %}
+                                {{ 'Click or Drag an image here'|trans|capitalize }}
+                            {% endif %}
+                        </div>
                     </div>
-
                 </div>
             </div>
 
@@ -212,6 +211,36 @@
             }
 
             formDiv.appendChild(input);
+        }
+    </script>
+
+    <script>
+        function showImage() {
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+
+            async function Main() {
+                let file = document.querySelector('#image').files[0];
+                let imageHolder = document.querySelector('#imageHolder');
+                if (file) {
+                    imageHolder.setAttribute('style', 'padding-top: 10px;')
+                    imageHolder.innerHTML = '';
+                    let image = document.createElement('img');
+                    let base64 = await toBase64(file);
+                    image.setAttribute('style', 'height: 150px;');
+                    image.setAttribute('src', base64);
+                    imageHolder.appendChild(image);
+                } else {
+                    imageHolder.setAttribute('style', '')
+                    imageHolder.innerHTML = '{{ 'Click or Drag an image here'|trans|capitalize }}';
+                }
+            }
+
+            Main();
         }
     </script>
 {% endblock %}

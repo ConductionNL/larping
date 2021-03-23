@@ -128,13 +128,13 @@ class OrganizationController extends AbstractController
         foreach ($variables['products'] as $key => $offer) {
             if (isset($offer['products'])) {
                 foreach ($offer['products'] as $product) {
-                    if (isset($product['event']) and $commonGroundService->isResource($product['event'])){
+                    if (isset($product['event']) and $commonGroundService->isResource($product['event'])) {
                         $event = $commonGroundService->getResource($product['event']);
                         break;
                     }
                 }
             }
-            if ((isset($event) and $event['status'] != 'published') or !isset($event)){
+            if ((isset($event) and $event['status'] != 'published') or !isset($event)) {
                 unset($variables['products'][$key]);
             }
         }
@@ -142,13 +142,13 @@ class OrganizationController extends AbstractController
         foreach ($variables['tickets'] as $key => $offer) {
             if (isset($offer['products'])) {
                 foreach ($offer['products'] as $product) {
-                    if (isset($product['event']) and $commonGroundService->isResource($product['event'])){
+                    if (isset($product['event']) and $commonGroundService->isResource($product['event'])) {
                         $event = $commonGroundService->getResource($product['event']);
                         break;
                     }
                 }
             }
-            if ((isset($event) and $event['status'] != 'published') or !isset($event)){
+            if ((isset($event) and $event['status'] != 'published') or !isset($event)) {
                 unset($variables['tickets'][$key]);
             }
         }
@@ -156,13 +156,13 @@ class OrganizationController extends AbstractController
         foreach ($variables['subscriptions'] as $key => $offer) {
             if (isset($offer['products'])) {
                 foreach ($offer['products'] as $product) {
-                    if (isset($product['event']) and $commonGroundService->isResource($product['event'])){
+                    if (isset($product['event']) and $commonGroundService->isResource($product['event'])) {
                         $event = $commonGroundService->getResource($product['event']);
                         break;
                     }
                 }
             }
-            if ((isset($event) and $event['status'] != 'published') or !isset($event)){
+            if ((isset($event) and $event['status'] != 'published') or !isset($event)) {
                 unset($variables['subscriptions'][$key]);
             }
         }
