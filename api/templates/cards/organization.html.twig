@@ -13,9 +13,25 @@
     {% endif %}
 {% endfor %}
 {% set organizationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':resource.id})['hydra:member'] %}
-<div class="card rounded-0 card-hover-overlay">
-    <div class="position-relative">
-        <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
+{% set organizationImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':resource['@id'], 'organization':'/organizations/'~resource['id']})['hydra:member'] %}
+{% if organizationImages|length > 0 %}
+    {% set organizationImage = organizationImages[0] %}
+{% endif %}
+<div class="card rounded-0 card-hover-overlay" style="{% if minHeightCard|default %}min-height: {{ minHeightCard }}px;{% endif %}{% if minWidthCard|default %}min-width: {{ minWidthCard }}px;{% endif %}">
+    <div class="position-relative text-center">
+        {% if organizationImage.base64 is defined %}
+            <img class="card-img rounded-0"
+                 style="{% if maxWidthImage|default %}max-width: {{ maxWidthImage }}px;{% endif%}
+                     {% if maxHeightImage|default %}max-height: {{ maxHeightImage }}px;{% endif%}
+                     width: auto;height: auto;"
+                 src="{{ organizationImage.base64 }}"
+                 alt="Card image cap">
+        {% else %}
+            <img class="card-img rounded-0"
+                 style="{% if maxHeightImage|default %}max-height: {{ maxHeightImage }}px;{% endif%}"
+                 src="https://picsum.photos/300/200"
+                 alt="Card image cap">
+        {% endif %}
         <div class="card-img-overlay pt-3 pb-0" onclick="location.href = '{{ path('app_organization_organization', {id: resource.id}) }}';" style="cursor: pointer;">
             <a href="{{ path('app_organization_organization', {id: resource.id}) }}#reviews">
                 <div class="d-flex align-items-center">

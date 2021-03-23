@@ -23,7 +23,7 @@
             </nav>
 
             <form id="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}" method="post"
-                  enctype="multipart/form-data"
+                  enctype="multipart/form-data" name="eventForm"
                   name="EventForm{% if event['@id'] is defined %}{{ event.id }}{% else %}Add{% endif %}">
                 <input type="hidden" name="@type" value="Event">
                 {% if event['id'] is defined %}<input type="hidden" id="id" name="id"
@@ -166,6 +166,16 @@
                     </div>
                 </div>
             {% endif %}
+
+            <div class="row justify-content-center">
+                <div class="col-md-7 col-lg-6 col-xl-5">
+                    <div class="mb-6">
+                        <button type="submit"
+                                onclick="document.eventForm.submit()"
+                                class="btn btn-lg btn-primary btn-block">{{ 'save'|trans|capitalize }}</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </section>

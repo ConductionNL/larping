@@ -197,7 +197,7 @@ class DashboardOrganizationController extends AbstractController
                 $path = $_FILES['image']['tmp_name'];
                 $type = filetype($_FILES['image']['tmp_name']);
                 $data = file_get_contents($path);
-                $image['name'] = 'image for '.$event['name'];
+                $image['name'] = $event['name'];
                 $image['description'] = 'image for '.$event['name'];
                 $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
                 $image['resource'] = $event['@id'];
@@ -338,7 +338,7 @@ class DashboardOrganizationController extends AbstractController
                 if ($id != 'add' && isset($variables['image'])) {
                     $image = $variables['image'];
                 }
-                $image['name'] = 'image for '.$event['name'];
+                $image['name'] = $event['name'];
                 $image['description'] = 'image for '.$event['name'];
                 $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
                 $image['resource'] = $event['@id'];
@@ -619,6 +619,20 @@ class DashboardOrganizationController extends AbstractController
             $product['offers'][] = '/offers/'.$offer['id'];
             $product = $commonGroundService->saveResource($product, ['component' => 'pdc', 'type' => 'products']);
 
+            // Save the image for this product if there is one
+            if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
+                $path = $_FILES['image']['tmp_name'];
+                $type = filetype($_FILES['image']['tmp_name']);
+                $data = file_get_contents($path);
+                $image['name'] = $product['name'];
+                $image['description'] = 'image for '.$product['name'];
+                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+                $image['resource'] = $product['@id'];
+                $image['organization'] = '/organizations/'.$variables['organization']['id'];
+                // save image in wrc connected to the $event
+                $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
+            }
+
             // redirects externally
             if ($product['id']) {
                 return $this->redirectToRoute('app_dashboardorganization_editproduct', ['id' => $product['id']]);
@@ -643,6 +657,10 @@ class DashboardOrganizationController extends AbstractController
         if ($id != 'add') {
             $variables['product'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products', 'id' => $id]);
             $variables['offers'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products' => $id])['hydra:member'];
+            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['product']['@id'], 'organization' => '/organizations/'.$variables['organization']['id']])['hydra:member'];
+            if (count($images) > 0) {
+                $variables['image'] = $images[0];
+            }
         } else {
             $variables['product'] = [];
             $variables['offers'] = [];
@@ -691,6 +709,23 @@ class DashboardOrganizationController extends AbstractController
 //            }
             // Save the resource
             $variables['product'] = $commonGroundService->updateResource($product, ['component' => 'pdc', 'type' => 'products', 'id' => $id]);
+
+            // Save the image for this product if there is one
+            if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
+                $path = $_FILES['image']['tmp_name'];
+                $type = filetype($_FILES['image']['tmp_name']);
+                $data = file_get_contents($path);
+                if ($id != 'add' && isset($variables['image'])) {
+                    $image = $variables['image'];
+                }
+                $image['name'] = $variables['product']['name'];
+                $image['description'] = 'image for '.$variables['product']['name'];
+                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+                $image['resource'] = $variables['product']['@id'];
+                $image['organization'] = '/organizations/'.$variables['organization']['id'];
+                // save image in wrc connected to the $organization
+                $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
+            }
         }
 
         if ($request->isMethod('POST') && $request->request->get('@type') == 'Offer') {
@@ -1187,6 +1222,10 @@ class DashboardOrganizationController extends AbstractController
 
         if ($id != 'add') {
             $variables['location'] = $commonGroundService->getResourceList(['component' => 'lc', 'type' => 'places', 'id' => $id]);
+            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['location']['@id'], 'organization' => '/organizations/'.$variables['organization']['id']])['hydra:member'];
+            if (count($images) > 0) {
+                $variables['image'] = $images[0];
+            }
         } else {
             $variables['location'] = [];
         }
@@ -1212,6 +1251,23 @@ class DashboardOrganizationController extends AbstractController
 
             // Lets save the location
             $variables['location'] = $commonGroundService->saveResource($location, ['component' => 'lc', 'type' => 'places']);
+
+            // Save the image for this location if there is one
+            if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
+                $path = $_FILES['image']['tmp_name'];
+                $type = filetype($_FILES['image']['tmp_name']);
+                $data = file_get_contents($path);
+                if ($id != 'add' && isset($variables['image'])) {
+                    $image = $variables['image'];
+                }
+                $image['name'] = $variables['location']['name'];
+                $image['description'] = 'image for '.$variables['location']['name'];
+                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+                $image['resource'] = $variables['location']['@id'];
+                $image['organization'] = '/organizations/'.$variables['organization']['id'];
+                // save image in wrc connected to the $organization
+                $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
+            }
 
             if (isset($categories)) {
                 /*@todo  This should go to a wrc service */
@@ -1244,6 +1300,10 @@ class DashboardOrganizationController extends AbstractController
         }
         if ($id != 'add') {
             $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
+            $images = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'images'], ['resource' => $variables['organization']['@id'], 'organization' => '/organizations/'.$variables['organization']['id']])['hydra:member'];
+            if (count($images) > 0) {
+                $variables['image'] = $images[0];
+            }
         } else {
             $variables['organization'] = ['id' => 'add', '@type' => 'Organization'];
         }
@@ -1315,6 +1375,7 @@ class DashboardOrganizationController extends AbstractController
             }
             $contact['description'] = $organization['description'];
 
+            // Lets save te organization
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
 
             // Lets save the contact
@@ -1327,7 +1388,7 @@ class DashboardOrganizationController extends AbstractController
                 $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
             }
 
-            // Lets save te organization
+            // Create new objects for a new organization
             if ($new) {
                 $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
                 $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
@@ -1348,8 +1409,24 @@ class DashboardOrganizationController extends AbstractController
 //                $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
             }
 
-            // Setting the categories
+            // Save the image for this organization if there is one
+            if (isset($_FILES['image']) && $_FILES['image']['error'] !== 4) {
+                $path = $_FILES['image']['tmp_name'];
+                $type = filetype($_FILES['image']['tmp_name']);
+                $data = file_get_contents($path);
+                if (!$new && isset($variables['image'])) {
+                    $image = $variables['image'];
+                }
+                $image['name'] = $organization['name'];
+                $image['description'] = 'image for '.$organization['name'];
+                $image['base64'] = 'data:image/'.$type.';base64,'.base64_encode($data);
+                $image['resource'] = $organization['@id'];
+                $image['organization'] = '/organizations/'.$organization['id'];
+                // save image in wrc connected to the $organization
+                $commonGroundService->saveResource($image, ['component' => 'wrc', 'type' => 'images']);
+            }
 
+            // Setting the categories
             /*@todo  This should go to a wrc service */
             $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $organization['id']])['hydra:member'];
             if (count($resourceCategories) > 0) {

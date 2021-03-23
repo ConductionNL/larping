@@ -17,7 +17,7 @@
                     <li class="breadcrumb-item active" aria-current="page">{% if location['@id']|default %}{{ 'edit location'|trans|capitalize }}{% else %}{{ 'add location'|trans|capitalize }}{% endif %}</li>
                 </ul>
             </nav>
-            <form id="LocationForm{% if location.id|default %}{{ location['id'] }}{% else %}Add{% endif %}" method="post">
+            <form id="LocationForm{% if location.id|default %}{{ location['id'] }}{% else %}Add{% endif %}" method="post" enctype="multipart/form-data">
                 {% if location['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ location['id'] }}">{% endif %}
                 {% if location['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ location['@id'] }}">{% endif %}
                 {% if location['@type'] is defined %}<input type="hidden" id="@type" name="@type" value="{{ location['@type'] }}">{% endif %}
@@ -159,15 +159,20 @@
                 <!-- Gallery -->
                 <div class="card">
                     <div class="card-body p-6">
-                        <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
+                        <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
 
                         <div class="form-group position-relative mb-6 form-group-dragable">
-                            <input type="file" class="custom-file-input" id="favicon" name="favicon">
-                            <label class="custom-file-label" for="favicon">
-                                {{ 'Click or Drag images here'|trans|capitalize }}
-                            </label>
+                            <input onchange="showImage()" type="file" class="custom-file-input" id="image"
+                                   name="image">
+                            <div class="custom-file-label" for="image" id="imageHolder"
+                                 {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
+                                {% if image.base64 is defined %}
+                                    <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
+                                {% else %}
+                                    {{ 'Click or Drag an image here'|trans|capitalize }}
+                                {% endif %}
+                            </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -189,6 +194,36 @@
             tabsize: 2,
             height: 300
         });
+    </script>
+
+    <script>
+        function showImage() {
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+
+            async function Main() {
+                let file = document.querySelector('#image').files[0];
+                let imageHolder = document.querySelector('#imageHolder');
+                if (file) {
+                    imageHolder.setAttribute('style', 'padding-top: 10px;')
+                    imageHolder.innerHTML = '';
+                    let image = document.createElement('img');
+                    let base64 = await toBase64(file);
+                    image.setAttribute('style', 'height: 150px;');
+                    image.setAttribute('src', base64);
+                    imageHolder.appendChild(image);
+                } else {
+                    imageHolder.setAttribute('style', '')
+                    imageHolder.innerHTML = '{{ 'Click or Drag an image here'|trans|capitalize }}';
+                }
+            }
+
+            Main();
+        }
     </script>
 
 {% endblock %}

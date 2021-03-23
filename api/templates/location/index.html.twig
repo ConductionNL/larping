@@ -103,10 +103,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row row-cols-1 row-cols-lg-1 row-cols-xl-2">
                         {% for location in locations %}
-                            <div class="col-md-6" id="organization">
-                                {% include '/cards/location.html.twig' with {'item': location} %}
+                            <div class="col-12 col-lg-12 col-xl-6" id="organization">
+                                {% include '/cards/location.html.twig' with {'item': location, 'maxHeightImage': 167, 'maxWidthImage': 250, 'minHeightCard': 235, 'minWidthCard': 252} %}
                             </div>
                         {% endfor %}
                     </div>
