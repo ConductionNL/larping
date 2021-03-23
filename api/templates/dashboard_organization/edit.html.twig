@@ -476,10 +476,24 @@
                             <div class="form-group position-relative mb-6">
                                 <div class="form-group">
                                     <label for="summernote">{{ 'content'|trans|capitalize }} </label>
-                                    <textarea class="summernote" name="template[content]" id="summernote">{% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}</textarea>
+                                    <textarea class="summernote" name="terms[content]" id="summernote">{% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}</textarea>
                                 </div>
                             </div>
 
+                        </div>
+                    </div>
+
+                    <!-- privacy policy -->
+                    <div class="card">
+                        <div class="card-body p-6">
+                            <h3 class="h4 mb-4">{{ 'privacy policy'|trans|capitalize }}</h3>
+
+                            <div class="form-group position-relative mb-6">
+                                <div class="form-group">
+                                    <label for="summernote">{{ 'content'|trans|capitalize }} </label>
+                                    <textarea class="summernote" name="privacy[content]" id="summernote">{% if organization.privacyPolicy|default %}{{ organization.privacyPolicy.content }}{% endif %}</textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% endif %}
@@ -498,7 +512,7 @@
     </section>
 
     <script>
-        $('#summernote').summernote({
+        $('.summernote').summernote({
             placeholder: '{{ 'content'|trans|capitalize }}',
             tabsize: 2,
             height: 300
