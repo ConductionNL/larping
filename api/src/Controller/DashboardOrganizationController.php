@@ -1366,11 +1366,11 @@ class DashboardOrganizationController extends AbstractController
             //get address
             $addresses = $contact['adresses'];
             //check  adresses, save them and add them to the contact of the organization
-            if ($new) {
-                foreach ($addresses as $key => $addres) {
-                    $addres['name'] = 'address for ' . $contact['name'];
+            foreach ($addresses as $key => $addres) {
+                if (!isset($addres['@id']) || !isset($addres['id'])) {
+                    $addres['name'] = 'address for '.$contact['name'];
                     $addres = $commonGroundService->saveResource($addres, ['component' => 'cc', 'type' => 'addresses']);
-                    $contact['addresses'][$key] = '/addresses/' . $addres['id'];
+                    $contact['addresses'][$key] = '/addresses/'.$addres['id'];
                 }
             }
             $contact['description'] = $organization['description'];
@@ -1462,7 +1462,7 @@ class DashboardOrganizationController extends AbstractController
             $privacy['templateEngine'] = 'twig';
             $privacy['organization'] = '/organizations/'.$organization['id'];
 
-            $privacy = $commonGroundService->saveResource($privacy,['component' => 'wrc', 'type' => 'templates']);
+            $privacy = $commonGroundService->saveResource($privacy, ['component' => 'wrc', 'type' => 'templates']);
 
             $organization['privacyPolicy'] = '/templates/'.$privacy['id'];
 
