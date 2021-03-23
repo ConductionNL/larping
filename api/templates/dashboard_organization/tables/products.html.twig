@@ -6,6 +6,7 @@
             <th>{{ 'name'|trans|capitalize }}</th>
             <th>{{ 'type'|trans|capitalize }}</th>
             <th>{{ 'offers'|trans|capitalize }}</th>
+            <th>{{ 'group'|trans|capitalize }}</th>
             <th>
                 <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
                         data-target="#ProductModalAdd">{{ 'add'|trans|capitalize }}</button>
@@ -61,6 +62,15 @@
                     {% for offer in product.offers %}
                         <span class="d-block ">{{ offer.name }} {{ (offer.price / 100)|localizedcurrency(offer.priceCurrency) }}</span>
                     {% endfor %}
+                </td>
+                <td>
+                    {% if groups|default %}
+                    {% for group in groups %}
+                    {% if group['@id'] == product.userGroup %}
+                        {{ group.name }}
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
                 </td>
                 <td>
                     <a class="btn btn-outline-primary btn-sm float-right"
