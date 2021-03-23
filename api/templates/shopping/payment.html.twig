@@ -17,7 +17,7 @@
 
                                 {% if invoice|default and invoice.order|default %}
                                     <p class="mb-0 text-center">{{ 'view your'|trans|capitalize }}
-                                        <a href="{{ path('app_dashboarduser_order', {id: invoice.order|split('/')[7]}) }}"
+                                        <a href="{{ path('app_dashboarduser_order', {id: invoice.order|split('/')|last}) }}"
                                         class="link">{{ 'invoice'|trans }}</a>
                                     </p>
                                 {% endif %}
