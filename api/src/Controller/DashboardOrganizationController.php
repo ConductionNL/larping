@@ -1302,8 +1302,15 @@ class DashboardOrganizationController extends AbstractController
             } else {
                 $contact = [];
             }
-
             $contact['name'] = $organization['name'];
+            //get address
+            $addresses = $contact['adresses'];
+            //check  adresses, save them and add them to the contact of the organization
+            foreach ($addresses as $key => $addres){
+                    $addres['name'] = 'address for '.$contact['name'];
+                    $addres = $commonGroundService->saveResource($addres, ['component' => 'cc', 'type' => 'addresses']);
+                    $contact['addresses'][$key] = '/addresses/'.$addres['id'];
+            }
             $contact['description'] = $organization['description'];
 
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
@@ -1311,6 +1318,7 @@ class DashboardOrganizationController extends AbstractController
             // Lets save the contact
             $contact['sourceOrganization'] = $organization['@id'];
             $contact = $commonGroundService->saveResource($contact, ['component' => 'cc', 'type' => 'organizations']);
+
             // If the current contact is different then the one saved in the organisation we need to save that
             if ($organization['contact'] != $contact['@id']) {
                 $organization['contact'] = $contact['@id'];

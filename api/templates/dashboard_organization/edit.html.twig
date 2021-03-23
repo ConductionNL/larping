@@ -150,8 +150,8 @@
                                                onclick="removeItemFromList(this);"><i class="fal fa-trash-alt"></i></a>
                                         </div>
                                     </div>
-                                    {% if contact.adresses is defined and contact.adresses is not empty %}
-                                        {% for address in contact.adresses %}
+                                    {% if contact.addresses is defined and contact.addresses is not empty %}
+                                        {% for address in contact.addresses %}
                                             <div class="row" id="{{ address.id }}">
 
                                                 <input type="hidden" id={{ address.id }}_id"
