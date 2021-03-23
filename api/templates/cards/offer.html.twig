@@ -30,7 +30,6 @@
 {% endif %}
 <div class="card rounded-0 card-hover-overlay" style="{% if minHeightCard|default %}min-height: {{ minHeightCard }}px;{% endif %}{% if minWidthCard|default %}min-width: {{ minWidthCard }}px;{% endif %}">
     <div class="position-relative text-center">
-        {# if offers ever get their own images, first check if there is an image for this offer, then elseif eventimage gebruiken: #}
         {% if eventImage.base64 is defined %}
             <img class="card-img rounded-0"
                  style="{% if maxWidthImage|default %}max-width: {{ maxWidthImage }}px;{% endif%}

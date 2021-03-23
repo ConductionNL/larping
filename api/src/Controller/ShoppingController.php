@@ -70,10 +70,10 @@ class ShoppingController extends AbstractController
             $data['user'] = $this->getUser()->getUsername();
             $data['invoice'] = $variables['invoice'];
             $data['items'] = $variables['invoice']['items'];
-            $idVaultService->sendMail($appId, 'emails/new_invoice.html.twig', 'Larping invoice', $data['user'], 'no-reply@larping.eu', $data);
 
             // Empty session order when order is paid
             if (isset($variables['invoice']['status']) && $variables['invoice']['status'] == 'paid') {
+                $idVaultService->sendMail($appId, 'emails/new_invoice.html.twig', 'Larping invoice', $data['user'], 'no-reply@larping.eu', $data);
                 $shoppingService->removeOrderByInvoice($variables['invoice']);
 
                 // Get provider for when we need to get groups from id-vault

@@ -86,7 +86,7 @@
                         <div class="row">
                             {% for organization in organizations %}
                                 <div class="col-md-4" id="organization">
-                                    {% include '/cards/organization.html.twig' with {'resource': organization} %}
+                                    {% include '/cards/organization.html.twig' with {'resource': organization, 'maxHeightImage': 174, 'maxWidthImage': 260, 'minHeightCard': 242, 'minWidthCard': 262} %}
                                 </div>
                             {% endfor %}
                         </div>

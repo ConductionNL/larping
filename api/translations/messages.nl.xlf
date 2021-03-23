@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="fqam6aX" resname="add a picture">
         <source>add a picture</source>
-        <target>afbeeldingen toevoegen</target>
+        <target>afbeelding toevoegen</target>
       </trans-unit>
       <trans-unit id="ZFMJYS8" resname="Click or Drag an image here">
         <source>Click or Drag an image here</source>
