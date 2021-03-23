@@ -1306,10 +1306,12 @@ class DashboardOrganizationController extends AbstractController
             //get address
             $addresses = $contact['adresses'];
             //check  adresses, save them and add them to the contact of the organization
-            foreach ($addresses as $key => $addres){
-                    $addres['name'] = 'address for '.$contact['name'];
+            if ($new) {
+                foreach ($addresses as $key => $addres) {
+                    $addres['name'] = 'address for ' . $contact['name'];
                     $addres = $commonGroundService->saveResource($addres, ['component' => 'cc', 'type' => 'addresses']);
-                    $contact['addresses'][$key] = '/addresses/'.$addres['id'];
+                    $contact['addresses'][$key] = '/addresses/' . $addres['id'];
+                }
             }
             $contact['description'] = $organization['description'];
 
@@ -1359,19 +1361,34 @@ class DashboardOrganizationController extends AbstractController
             $resourceCategory['categories'] = $categories;
             $resourceCategory = $commonGroundService->saveResource($resourceCategory, ['component' => 'wrc', 'type' => 'resource_categories']);
 
-            $template = $request->get('template');
-
+            $terms = $request->get('terms');
+            $privacy = $request->get('privacy');
+            //save termsAndConditions
             if (isset($organization['termsAndConditions']['@id'])) {
-                $template['@id'] = $organization['termsAndConditions']['@id'];
+                $terms['@id'] = $organization['termsAndConditions']['@id'];
             }
 
-            $template['name'] = 'Terms and conditions for '.$organization['name'];
-            $template['templateEngine'] = 'twig';
-            $template['organization'] = '/organizations/'.$organization['id'];
+            $terms['name'] = 'Terms and conditions for '.$organization['name'];
+            $terms['templateEngine'] = 'twig';
+            $terms['organization'] = '/organizations/'.$organization['id'];
 
-            $template = $commonGroundService->saveResource($template, ['component' => 'wrc', 'type' => 'templates']);
+            $terms = $commonGroundService->saveResource($terms, ['component' => 'wrc', 'type' => 'templates']);
 
-            $organization['termsAndConditions'] = '/templates/'.$template['id'];
+            $organization['termsAndConditions'] = '/templates/'.$terms['id'];
+
+            //save privacyPolicy
+            if (isset($organization['privacyPolicy']['@id'])) {
+                $privacy['@id'] = $organization['privacyPolicy']['@id'];
+            }
+
+            $privacy['name'] = 'Privacy policy for '.$organization['name'];
+            $privacy['templateEngine'] = 'twig';
+            $privacy['organization'] = '/organizations/'.$organization['id'];
+
+            $privacy = $commonGroundService->saveResource($privacy,['component' => 'wrc', 'type' => 'templates']);
+
+            $organization['privacyPolicy'] = '/templates/'.$privacy['id'];
+
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
 
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
