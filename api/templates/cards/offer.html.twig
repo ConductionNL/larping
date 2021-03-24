@@ -6,10 +6,14 @@
 {% endif %}
 {% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']}) %}
 
+{% set offerOrganization = commonground_resource(item.offeredBy) %}
+
 {% if item.products|default and item.products|length > 0 %}
     {% set break = false %}
+    {% set productUrl = false %}
     {% set eventUrl = false %}
     {% for product in item.products if not break %}
+        {% set productUrl = product['@id'] %}
         {% if product.event|default %}
             {% set eventUrl = product.event %}
             {% set break = true %}
@@ -17,8 +21,15 @@
     {% endfor %}
 {% endif %}
 
+{% if productUrl|default %}
+    {% set productImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':productUrl, 'organization':'/organizations/'~offerOrganization['id']})['hydra:member'] %}
+    {% if productImages|length > 0 %}
+        {% set productImage = productImages[0] %}
+    {% endif %}
+{% endif %}
+
 {% if eventUrl|default %}
-    {% set eventImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':eventUrl})['hydra:member'] %}
+    {% set eventImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':eventUrl, 'organization':'/organizations/'~offerOrganization['id']})['hydra:member'] %}
     {% if eventImages|length > 0 %}
         {% set eventImage = eventImages[0] %}
     {% endif %}
@@ -30,8 +41,14 @@
 {% endif %}
 <div class="card rounded-0 card-hover-overlay" style="{% if minHeightCard|default %}min-height: {{ minHeightCard }}px;{% endif %}{% if minWidthCard|default %}min-width: {{ minWidthCard }}px;{% endif %}">
     <div class="position-relative text-center">
-        {# if offers ever get their own images, first check if there is an image for this offer, then elseif eventimage gebruiken: #}
-        {% if eventImage.base64 is defined %}
+        {% if productImage.base64 is defined %}
+            <img class="card-img rounded-0"
+                 style="{% if maxWidthImage|default %}max-width: {{ maxWidthImage }}px;{% endif%}
+                     {% if maxHeightImage|default %}max-height: {{ maxHeightImage }}px;{% endif%}
+                     width: auto;height: auto;"
+                 src="{{ productImage.base64 }}"
+                 alt="Card image cap">
+        {% elseif eventImage.base64 is defined %}
             <img class="card-img rounded-0"
                  style="{% if maxWidthImage|default %}max-width: {{ maxWidthImage }}px;{% endif%}
                      {% if maxHeightImage|default %}max-height: {{ maxHeightImage }}px;{% endif%}
