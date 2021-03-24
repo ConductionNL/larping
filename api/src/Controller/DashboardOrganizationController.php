@@ -826,7 +826,27 @@ class DashboardOrganizationController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirect($this->generateUrl('app_user_idvault'));
         }
+
+
+
+
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        //get organization subscribtion
+        $variables['subscription'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'subscription', 'sourceOrganization' => $variables['organization']['@id']])['hydra:member'];
+        if (count($variables['subscription']) > 0){
+            $variables['subscription'] = $variables['subscription'][0];
+            $variables['subscription']['offers'] = $variables['subscription']['offers'][0];
+        }
+//        //get invoice items with this offer
+//        /*@todo add filters to betaalservice invoice_items to do this*/
+        $invoiceItems = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'invoice_items'])['hydra:member'];
+        $variables['invoiceItems'] = [];
+        foreach ($invoiceItems as $item){
+            if ($item['offer'] == $variables['subscription']['offers']['@id']){
+                $variables['invoiceItems'][] = $item;
+            }
+        }
+
         $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $variables['organization']['id']]);
         $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
@@ -864,7 +884,6 @@ class DashboardOrganizationController extends AbstractController
             }
         }
         $variables['users'] = $users;
-
         if ($request->isMethod('POST') && $request->get('newGroup')) {
             $result = $idVaultService->createGroup($provider['configuration']['app_id'], $request->get('name'), $request->get('description'), $organizationUrl);
             if (isset($result['id'])) {
