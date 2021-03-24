@@ -72,7 +72,6 @@
                             <h3 class="h4 mb-4">{{ 'categories'|trans|capitalize }} </h3>
                             <ul class="list-unstyled mb-6">
                                 {% for category in settings %}
-                                    {% if category.name != 'algemene ledenvergadering' or 'ALV' %}
                                         <li class="d-inline-block mr-4 mb-2">
                                             <div class="form-check">
                                                 <input
@@ -91,7 +90,6 @@
                                                 </label>
                                             </div>
                                         </li>
-                                    {% endif %}
                                 {% endfor %}
                             </ul>
                         </div>
@@ -118,12 +116,6 @@
                                         <input type="hidden" name="contact[adresses][uuid][name]">
 
                                         <div class="form-group col-md-6 mb-6">
-                                            <label>{{ 'postal code'|trans|capitalize }}</label>
-                                            <input type="text" class="form-control"
-                                                   name="contact[adresses][uuid][postalCode]">
-                                        </div>
-
-                                        <div class="form-group col-md-6 mb-6">
                                             <label>{{ 'street'|trans|capitalize }}</label>
                                             <input type="text" class="form-control"
                                                    name="contact[adresses][uuid][street]">
@@ -140,6 +132,13 @@
                                             <input type="text" class="form-control"
                                                    name="contact[adresses][uuid][suffix]">
                                         </div>
+
+                                        <div class="form-group col-md-6 mb-6">
+                                            <label>{{ 'postal code'|trans|capitalize }}</label>
+                                            <input type="text" class="form-control"
+                                                   name="contact[adresses][uuid][postalCode]">
+                                        </div>
+
                                         <div class="form-group col-md-12 mb-6">
                                             <label>{{ 'locality'|trans|capitalize }}</label>
                                             <input type="text" class="form-control"
@@ -166,15 +165,6 @@
                                                        name="contact[adresses][{{ address.id }}][name]">
 
                                                 <div class="form-group col-6">
-                                                    <label
-                                                        for="{{ address.id }}_postalCode">{{ 'postal code'|trans|capitalize }}</label>
-                                                    <input type="text" class="form-control"
-                                                           {% if address.postalCode|default %}value="{{ address.postalCode }}"{% endif %}
-                                                           id="{{ address.id }}_postalCode"
-                                                           name="contact[adresses][{{ address.id }}][postalCode]">
-                                                </div>
-
-                                                <div class="form-group col-6">
                                                     <label for="street">{{ 'street'|trans|capitalize }}</label>
                                                     <input type="text" class="form-control"
                                                            {% if address.street|default %}value="{{ address.street }}"{% endif %}
@@ -199,6 +189,17 @@
                                                            id="{{ address.id }}_suffix"
                                                            name="contact[adresses][{{ address.id }}][suffix]">
                                                 </div>
+
+                                                <div class="form-group col-6">
+                                                    <label
+                                                        for="{{ address.id }}_postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                                    <input type="text" class="form-control"
+                                                           {% if address.postalCode|default %}value="{{ address.postalCode }}"{% endif %}
+                                                           id="{{ address.id }}_postalCode"
+                                                           name="contact[adresses][{{ address.id }}][postalCode]">
+                                                </div>
+
+
                                                 <div class="form-group col-md-12 mb-6">
                                                     <label
                                                         for="{{ address.id }}_locality">{{ 'locality'|trans|capitalize }}</label>
