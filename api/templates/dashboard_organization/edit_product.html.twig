@@ -148,7 +148,6 @@
                             <input onchange="showImage()" type="file" class="custom-file-input" id="image"
                                    name="image">
                             <div class="custom-file-label" for="image" id="imageHolder"
-                                 {{ dump(image) }}
                                 {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
                                 {% if image.base64 is defined %}
                                     <img style="height: 150px;" src="{{ image.base64 }}" alt="...">

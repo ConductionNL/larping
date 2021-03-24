@@ -267,7 +267,7 @@ class DashboardOrganizationController extends AbstractController
      * @Route("/events/{id}")
      * @Template
      */
-    public function eventAction(CommonGroundService $commonGroundService, Request $request, $id)
+    public function eventAction(CommonGroundService $commonGroundService, Request $request, IdVaultService $idVaultService, ParameterBagInterface $params, $id)
     {
         // Make sure the user is logged in
         if (!$this->getUser()) {
@@ -275,6 +275,8 @@ class DashboardOrganizationController extends AbstractController
         }
 
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
+        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+        $variables['groups'] = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['organization']['@id'])['groups'];
 
         if ($id != 'add') {
             $variables['event'] = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);

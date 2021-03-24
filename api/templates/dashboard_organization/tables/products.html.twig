@@ -64,12 +64,15 @@
                     {% endfor %}
                 </td>
                 <td>
-                    {% if groups|default %}
-                    {% for group in groups %}
-                    {% if group['@id'] == product.userGroup %}
-                        {{ group.name }}
+                    {% if product.userGroup|default %}
+                    {% set userGroupId = product.userGroup|split('/')|last %}
                     {% endif %}
-                    {% endfor %}
+                    {% if groups|default %}
+                        {% for group in groups %}
+                            {% if group.id == userGroupId %}
+                            {{ group.name }}
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                 </td>
                 <td>
