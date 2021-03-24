@@ -1310,7 +1310,15 @@ class DashboardOrganizationController extends AbstractController
             $variables['organization'] = ['id' => 'add', '@type' => 'Organization'];
         }
 
-        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
+        $settings = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
+        $variables['settings'] = [];
+        //remove ALV from categories for organizations
+        foreach ($settings as $category){
+            if ($category['name'] != 'ALV'){
+                $variables['settings'][] = $category;
+            }
+        }
+
         $variables['type'] = 'organization';
 
         if ($request->isMethod('POST')) {
