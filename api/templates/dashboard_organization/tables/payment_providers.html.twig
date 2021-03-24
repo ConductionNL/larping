@@ -1,4 +1,4 @@
-{% if providers is defined and providers|length > 0 %}
+{% if providers|default %}
     <table id="events" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
@@ -17,14 +17,15 @@
                 </td>
                 <td>
                 <td>
-                    <div class="dropdown"  style="float: right">
+                    <div class="dropdown" style="float: right">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><i
                                 class="fas fa-ellipsis-v"></i>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" data-toggle="modal" data-target="#ProviderModal{{ provider.id }}" href=""><i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#ProviderModal{{ provider.id }}"
+                               href=""><i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
                         </div>
                     </div>
                 </td>
@@ -36,13 +37,17 @@
     <div class="card border-light shadow-sm">
         <div class="card-body text-center">
             <p>{{ 'no providers found'|trans|capitalize }}</p>
-            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ProviderModalAdd">{{ 'add your first provider'|trans|capitalize }}!</a>
+            <a href="#" class="btn btn-primary" data-toggle="modal"
+               data-target="#ProviderModalAdd">{{ 'add your first provider'|trans|capitalize }}!</a>
         </div>
     </div>
 {% endif %}
+
 {% include 'dashboard_organization/modals/payment_provider.html.twig' %}
 
-{% for provider in providers  %}
-    {% include 'dashboard_organization/modals/payment_provider.html.twig' with {'resource': provider} %}
-{% endfor %}
+{% if providers|default %}
+    {% for provider in providers %}
+        {% include 'dashboard_organization/modals/payment_provider.html.twig' with {'resource': provider} %}
+    {% endfor %}
+{% endif %}
 
