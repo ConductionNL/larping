@@ -40,6 +40,8 @@
                     {% else %}
                         {{ 'unpaid'|trans|capitalize }}
                     {% endif %}
+                    {% else %}
+                        {{ 'n/a'|trans|capitalize }}
                     {% endif %}
                 {% endfor %}
                 </td>
