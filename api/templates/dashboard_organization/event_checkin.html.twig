@@ -34,7 +34,8 @@
                         </div>
 
                         <div class="card-body widget-content">
-                            <span id="totalCheckinsSpan" class="widget-content-title">{% if totalCheckins|default %}{{ totalCheckins|length }}{% else %}0{% endif %}</span>
+                            <span id="totalCheckinsSpan"
+                                  class="widget-content-title">{% if totalCheckins|default %}{{ totalCheckins|length }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people currently pressent'|trans|capitalize }}</p>
                             </div>
@@ -47,11 +48,12 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header bg-white">
-                            <span class="text-content" >{{ 'To do'|trans|capitalize }}</span>
+                            <span class="text-content">{{ 'To do'|trans|capitalize }}</span>
                         </div>
 
                         <div class="card-body widget-content">
-                            <span id="todoCheckinsSpan" class="widget-content-title" >{% if peopleToCheckinCount|default %}{{ peopleToCheckinCount }}{% else %}0{% endif %}</span>
+                            <span id="todoCheckinsSpan"
+                                  class="widget-content-title">{% if peopleToCheckinCount|default %}{{ peopleToCheckinCount }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people yet to check in'|trans|capitalize }}</p>
                             </div>
@@ -68,17 +70,19 @@
                         </div>
 
                         <div class="card-body widget-content">
-                            <span id="checkedOutCheckinsSpan" class="widget-content-title">{% if checkOutsCount|default %}{{ checkOutsCount }}{% else %}0{% endif %}</span>
+                            <span id="checkedOutCheckinsSpan"
+                                  class="widget-content-title">{% if checkOutsCount|default %}{{ checkOutsCount }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people that have left'|trans|capitalize }}</p>
                             </div>
-                            <a onclick="showCheckedOut()"  class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
+                            <a onclick="showCheckedOut()" class="btn btn-link">{{ 'filter'|trans|capitalize }}</a>
                         </div>
                     </div><!-- /.col -->
                 </div><!-- /.col -->
 
             </div><!-- /.row -->
-            <button type="button" class="btn btn-success btn-sm m-2 mt-n3 float-right hover-pointer" onclick="resetFilters()">{{ 'reset filters'|trans|capitalize }}</button>
+            <button type="button" class="btn btn-success btn-sm m-2 mt-n3 float-right hover-pointer"
+                    onclick="resetFilters()">{{ 'reset filters'|trans|capitalize }}</button>
 
             <!-- events -->
             <table id="checkin" class="display nowrap table" style="width:100%">
@@ -86,7 +90,7 @@
                 <tr>
                     <th>{{ 'reference'|trans|capitalize }}</th>
                     <th>{{ 'person'|trans|capitalize }}</th>
-{#                    <th>{{ 'membership'|trans|capitalize }}</th>#}
+                    {#                    <th>{{ 'membership'|trans|capitalize }}</th>#}
                     <th>{{ 'order'|trans|capitalize }}</th>
                     <th>{{ 'payment'|trans|capitalize }}</th>
                     <th>{{ 'status'|trans|capitalize }}</th>
@@ -106,22 +110,31 @@
                             <td class="text-capitalize">
                                 <a class="text-hover-primary text-muted">{{ checkin.person.name }}</a>
                             </td>
-{#                            <td>#}
-{#                                Jaarlid#}
-{#                            </td>#}
+                            {#                            <td>#}
+                            {#                                Jaarlid#}
+                            {#                            </td>#}
                             <td>
-                                {{ checkin.invoiceItem.name }}
+                                {% if checkin.invoiceItem.name|default %}
+                                    {{ checkin.invoiceItem.name }}
+                                {% endif %}
                             </td>
                             <td>
-                                <span class="badge {% if checkin.paymentStatus == 'paid' %}badge-success{% else%}badge-danger{% endif %} px-2 py-1">{{ checkin.paymentStatus }}</span>
+                                {% if checkin.paymentStatus|default %}
+                                    <span
+                                        class="badge {% if checkin.paymentStatus == 'paid' %}badge-success{% else %}badge-danger{% endif %} px-2 py-1">{{ checkin.paymentStatus }}</span>
+                                {% endif %}
                             </td>
                             <td>
                                 <span
                                     class="badge {% if checkin.dateCheckedOut|default %}badge-danger{% elseif checkin.checkedIn|default %}badge-success{% else %}badge-warning{% endif %} px-2 py-1">{% if checkin.dateCheckedOut|default %}Checked out{% elseif checkin.checkedIn|default %}Checked in{% else %}Not checked in{% endif %}</span>
                             </td>
                             <td>
-                                <a {% if checkin.checkedIn|default %}style="color: white"{% endif%} class="btn {% if checkin.checkedIn|default %}btn-danger color-white{% else %}btn-outline-primary{% endif%} btn-sm text-center w-100"{% if checkin.checkedIn|default %}onclick="checkThisPersonOut(this, '{{ checkin.person['@id'] }}')" {% else %} onclick="checkThisPersonIn(this, '{{ checkin.person['@id'] }}')"{% endif %}>{% if checkin.checkedIn|default %}<i class="fas fa-close"
-                                aria-hidden="true"></i> {{ 'check out'|capitalize }}{% else %}<i class="fas fa-edit" aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}{% endif %}
+                                <a {% if checkin.checkedIn|default %}style="color: white"{% endif %}
+                                   class="btn {% if checkin.checkedIn|default %}btn-danger color-white{% else %}btn-outline-primary{% endif %} btn-sm text-center w-100"{% if checkin.checkedIn|default %}onclick="checkThisPersonOut(this, '{{ checkin.person['@id'] }}')" {% else %} onclick="checkThisPersonIn(this, '{{ checkin.person['@id'] }}')"{% endif %}>{% if checkin.checkedIn|default %}
+                                        <i class="fas fa-close"
+                                           aria-hidden="true"></i> {{ 'check out'|capitalize }}{% else %}<i
+                                        class="fas fa-edit"
+                                        aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}{% endif %}
                                 </a>
                             </td>
                         </tr>
@@ -157,7 +170,7 @@
             var children = [].slice.call(document.getElementById('checkinTableBody').children);
             children.forEach(function (item) {
                 console.log(item.children[4].children[0].innerText);
-                if (item.children[4].children[0].innerText !== 'Checked in' && item.children[4].children[0].innerText !== 'Checked out' ) {
+                if (item.children[4].children[0].innerText !== 'Checked in' && item.children[4].children[0].innerText !== 'Checked out') {
                     item.style.display = "none";
                 }
             });
