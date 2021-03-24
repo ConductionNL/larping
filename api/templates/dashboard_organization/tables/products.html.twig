@@ -66,13 +66,15 @@
                 <td>
                     {% if product.userGroup|default %}
                     {% set userGroupId = product.userGroup|split('/')|last %}
-                    {% endif %}
                     {% if groups|default %}
                         {% for group in groups %}
                             {% if group.id == userGroupId %}
                             {{ group.name }}
                             {% endif %}
                         {% endfor %}
+                    {% endif %}
+                    {% else %}
+                        {{ 'none'|trans|capitalize }}
                     {% endif %}
                 </td>
                 <td>
