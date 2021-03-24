@@ -475,8 +475,23 @@
 
                             <div class="form-group position-relative mb-6">
                                 <div class="form-group">
-                                    <label for="summernote">{{ 'content'|trans|capitalize }} </label>
-                                    <textarea class="summernote" name="template[content]" id="summernote">{% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}</textarea>
+                                    <label for="summernoteTandC">{{ 'content'|trans|capitalize }} </label>
+                                    <textarea class="summernote" name="termsAndConditions[content]" id="summernoteTandC">{% if organization.termsAndConditions|default %}{{ organization.termsAndConditions.content }}{% endif %}</textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Privacy policy -->
+                    <div class="card">
+                        <div class="card-body p-6">
+                            <h3 class="h4 mb-4">{{ 'privacy policy'|trans|capitalize }}</h3>
+
+                            <div class="form-group position-relative mb-6">
+                                <div class="form-group">
+                                    <label for="summernotePrivacyPolicy">{{ 'privacy policy'|trans|capitalize }} </label>
+                                    <textarea class="summernote" name="privacyPolicy[content]" id="summernotePrivacyPolicy">{% if organization.privacyPolicy|default %}{{ organization.privacyPolicy.content }}{% endif %}</textarea>
                                 </div>
                             </div>
 
@@ -556,7 +571,13 @@
             console.log(url);
         }
 
-        $('#summernoteOrganizationDescription').summernote({
+        $('#summernoteTandC').summernote({
+            placeholder: '{{ 'content'|trans|capitalize }}',
+            tabsize: 2,
+            height: 300
+        });
+
+        $('#summernotePrivacyPolicy').summernote({
             placeholder: '{{ 'content'|trans|capitalize }}',
             tabsize: 2,
             height: 300
