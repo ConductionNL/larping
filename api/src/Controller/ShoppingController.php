@@ -65,14 +65,13 @@ class ShoppingController extends AbstractController
             $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
             $appId = $providers[0]['configuration']['app_id'];
 
-            //mail user
-            $data = [];
-            $data['user'] = $this->getUser()->getUsername();
-            $data['invoice'] = $variables['invoice'];
-            $data['items'] = $variables['invoice']['items'];
-
             // Empty session order when order is paid
             if (isset($variables['invoice']['status']) && $variables['invoice']['status'] == 'paid') {
+                //mail user
+                $data = [];
+                $data['user'] = $this->getUser()->getUsername();
+                $data['invoice'] = $variables['invoice'];
+                $data['items'] = $variables['invoice']['items'];
                 $idVaultService->sendMail($appId, 'emails/new_invoice.html.twig', 'Larping invoice', $data['user'], 'no-reply@larping.eu', $data);
                 $shoppingService->removeOrderByInvoice($variables['invoice']);
 

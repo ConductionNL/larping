@@ -1,0 +1,53 @@
+{% if carouselEvent|default %}
+    {% set eventImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':carouselEvent['@id'], 'organization':'/organizations/'~organization['id']})['hydra:member'] %}
+    {% set eventOffers = commonground_resource_list({'component':'pdc','type':'offers'}, {'products.event':carouselEvent['@id']})['hydra:member'] %}
+    {% if eventOffers|length > 0 %}
+        {% set offerImages = [] %}
+        {% for eventOffer in eventOffers %}
+            {% if eventOffer.products|default and eventOffer.products|length > 0 %}
+                {% set break = false %}
+                {% set productUrl = false %}
+                {% for product in eventOffer.products if not break %}
+                    {% set productUrl = product['@id'] %}
+                    {% set break = true %}
+                {% endfor %}
+            {% endif %}
+
+            {% if productUrl|default %}
+                {% set productImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':productUrl, 'organization':'/organizations/'~organization['id']})['hydra:member'] %}
+                {% if productImages|length > 0 %}
+                    {% set offerImages = offerImages|merge(productImages) %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% set images = eventImages|merge(offerImages) %}
+    {% endif %}
+{% elseif carouselOrganization|default %}
+    {% set images = commonground_resource_list({'component':'wrc','type':'images'}, {'organization':'/organizations/'~carouselOrganization['id']})['hydra:member'] %}
+{% endif %}
+
+<div class="owl-carousel owl-theme listing-details-carousel nav-light-dark owl-loaded owl-drag">
+    <div class="owl-stage-outer">
+        <div class="owl-stage">
+            {% if images|default %}
+                {% for image in images %}
+                    {% if image.base64|default %}
+                        <div class="owl-item" style="height: 300px;">
+                            <img src="{{ image.base64 }}" alt="Image">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="owl-item" style="height: 300px;">
+                    <img src="https://picsum.photos/260/174" alt="Image">
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="owl-nav">
+        <button type="button" class="owl-prev"><i class="fa fa-angle-left " aria-hidden="true"></i>
+        </button>
+        <button type="button" class="owl-next"><i class="fa fa-angle-right" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
