@@ -709,15 +709,15 @@
         <source>members</source>
         <target>leden</target>
       </trans-unit>
-      <trans-unit id="7XBPmFm" resname="Members group for">
+      <trans-unit id="svqjhe3" resname="Members group for">
         <source>Members group for</source>
         <target>Leden groep van</target>
       </trans-unit>
-      <trans-unit id="FQ2Izz3" resname="administrators">
+      <trans-unit id="PFMML0S" resname="administrators">
         <source>administrators</source>
         <target>beheerders</target>
       </trans-unit>
-      <trans-unit id="tpvTWx8" resname="Administrators group for">
+      <trans-unit id="l.iNGHs" resname="Administrators group for">
         <source>Administrators group for</source>
         <target>Beheerders groep van</target>
       </trans-unit>
@@ -753,7 +753,7 @@
         <source>memberships</source>
         <target>lidmaatschappen</target>
       </trans-unit>
-      <trans-unit id="4fNNw9i" resname="membership paid">
+      <trans-unit id="Tsa_hG4" resname="membership paid">
         <source>membership paid</source>
         <target>lidmaatschap betaald</target>
       </trans-unit>
@@ -1289,7 +1289,7 @@
         <source>download tickets</source>
         <target>download kaartjes</target>
       </trans-unit>
-      <trans-unit id="lGYAsi7" resname="download list">
+      <trans-unit id="AWU3IX8" resname="download list">
         <source>download list</source>
         <target>download lijst</target>
       </trans-unit>
@@ -1820,6 +1820,62 @@
       <trans-unit id="Ab4wu0o" resname="reset">
         <source>reset</source>
         <target>resetten</target>
+      </trans-unit>
+      <trans-unit id="DWxBE7K" resname="general contact information">
+        <source>general contact information</source>
+        <target>algemene contactgegevens </target>
+      </trans-unit>
+      <trans-unit id="K3KBHV8" resname="privacy policy">
+        <source>privacy policy</source>
+        <target>privacybeleid</target>
+      </trans-unit>
+      <trans-unit id="83GRStg" resname="unpublish the event">
+        <source>unpublish the event</source>
+        <target>zet evenement prive</target>
+      </trans-unit>
+      <trans-unit id="Fv11ylW" resname="reset filters">
+        <source>reset filters</source>
+        <target>filters resetten</target>
+      </trans-unit>
+      <trans-unit id="yN7nj4x" resname="extra">
+        <source>extra</source>
+        <target>extra</target>
+      </trans-unit>
+      <trans-unit id="d4iHLeW" resname="province">
+        <source>province</source>
+        <target>provincie</target>
+      </trans-unit>
+      <trans-unit id="OwPUtAh" resname="mollie">
+        <source>mollie</source>
+        <target>mollie</target>
+      </trans-unit>
+      <trans-unit id="oU49dCs" resname="edit provider">
+        <source>edit provider</source>
+        <target>bewerk provider</target>
+      </trans-unit>
+      <trans-unit id="Swl6G7C" resname="add provider">
+        <source>add provider</source>
+        <target>provider toevoegen</target>
+      </trans-unit>
+      <trans-unit id="t9ZKkiE" resname="configuration">
+        <source>configuration</source>
+        <target>configuratie</target>
+      </trans-unit>
+      <trans-unit id="pdR6QxH" resname="publish">
+        <source>publish</source>
+        <target>publiceren</target>
+      </trans-unit>
+      <trans-unit id="WSLYBQH" resname="event managment">
+        <source>event managment</source>
+        <target>evenement beheer</target>
+      </trans-unit>
+      <trans-unit id="cI3wGR9" resname="you have this product in your cart or own this product">
+        <source>you have this product in your cart or own this product</source>
+        <target>u heeft dit product in uw winkelwagen of bezit dit product</target>
+      </trans-unit>
+      <trans-unit id="MDJeQ.k" resname="the minimal recomended size for images is 260 by 174 pixels, you can upload smaller imgages but they may mess with the look of the card">
+        <source>the minimal recomended size for images is 260 by 174 pixels, you can upload smaller imgages but they may mess with the look of the card</source>
+        <target>de minimaal aanbevolen grootte voor afbeeldingen is 260 bij 174 pixels, u kunt kleinere afbeeldingen uploaden, maar deze kunnen het uiterlijk van de kaartjes ondermijnen</target>
       </trans-unit>
     </body>
   </file>

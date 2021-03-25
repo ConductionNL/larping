@@ -93,14 +93,6 @@
                         {% endif %}
 
                         <div class="row">
-                            <div class="form-group col-md-6 mb-6">
-                                <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
-                                <input type="text" class="form-control" name="address[postalCode]"
-                                {% if location.address.postalCode|default %}
-                                    value="{{ location.address.postalCode }}"
-                                {% endif %}
-                                >
-                            </div>
 
                             <div class="form-group col-md-6 mb-6">
                                 <label for="street">{{ 'street'|trans|capitalize }}</label>
@@ -128,14 +120,16 @@
                                     {% endif %}
                                 >
                             </div>
+
                             <div class="form-group col-md-6 mb-6">
-                                <label for="region">{{ 'province'|trans|capitalize }}</label>
-                                <input type="text" class="form-control"  name="address[region]"
-                                    {% if location.address.region|default %}
-                                        value="{{ location.address.region }}"
+                                <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" name="address[postalCode]"
+                                    {% if location.address.postalCode|default %}
+                                        value="{{ location.address.postalCode }}"
                                     {% endif %}
                                 >
                             </div>
+
                             <div class="form-group col-md-6 mb-6">
                                 <label for="locality">{{ 'locality'|trans|capitalize }}</label>
                                 <input type="text" class="form-control"  name="address[locality]"
@@ -144,7 +138,7 @@
                                     {% endif %}
                                 >
                             </div>
-                            <div class="form-group col-md-12 mb-6">
+                            <div class="form-group col-md-6 mb-6">
                                 <label for="country">{{ 'country'|trans|capitalize }}</label>
                                 <input type="text" class="form-control"  name="address[country]"
                                     {% if location.address.country|default %}
@@ -160,7 +154,7 @@
                 <div class="card">
                     <div class="card-body p-6">
                         <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
-
+                        <p class="text-muted">{{ 'the minimal recomended size for images is 260 by 174 pixels, you can upload smaller imgages but they may mess with the look of the card'|trans|capitalize }}</p>
                         <div class="form-group position-relative mb-6 form-group-dragable">
                             <input onchange="showImage()" type="file" class="custom-file-input" id="image"
                                    name="image">
