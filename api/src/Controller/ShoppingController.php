@@ -92,19 +92,20 @@ class ShoppingController extends AbstractController
                 foreach ($variables['invoice']['items'] as $item) {
                     $offer = $commonGroundService->getResource($item['offer']);
 
-//                    // Decrease quantity
-//                    if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
-//                        $offer['quantity']--;
-//                        $offer['price'] = (string) $offer['price'];
-//                        $commonGroundService->saveResource($offer);
-//                    }
+                    // Decrease quantity
+                    if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
+                        $offer['quantity']--;
+                        unset($offer['products']);
+                        unset($offer['price']);
+                        $commonGroundService->saveResource($offer);
+                    }
 
                     // Check if the product of this offer has a userGroup this user should be added to.
                     if (isset($offer['products'][0]['userGroup'])) {
                         $groupId = str_replace('https://www.id-vault.com/api/v1/wac/groups/', '', $offer['products'][0]['userGroup']);
 
                         // Get groups from id-vault to check if the group^ exists and if this user is already in this group or not (must be in foreach to get up to date groups!)
-                        $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
+                        $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['organization'])['groups'];
                         $group = array_filter($groups, function ($group) use ($groupId) {
                             return $group['id'] == $groupId;
                         });
