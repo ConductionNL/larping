@@ -4,6 +4,7 @@
         <tr>
             <th>{{ 'type'|trans|capitalize }}</th>
             <th>{{ 'authorization'|trans|capitalize }}</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -15,7 +16,6 @@
                 <td class="text-capitalize">
                     {% if provider.authorization|default %}{{ provider.authorization }}{% endif %}
                 </td>
-                <td>
                 <td>
                     <div class="dropdown" style="float: right">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -38,7 +38,7 @@
         <div class="card-body text-center">
             <p>{{ 'no providers found'|trans|capitalize }}</p>
             <a href="#" class="btn btn-primary" data-toggle="modal"
-               data-target="#ProviderModalAdd">{{ 'add your first provider'|trans|capitalize }}!</a>
+               data-target="#ProviderModalAdd">{{ 'add your payment provider'|trans|capitalize }}!</a>
         </div>
     </div>
 {% endif %}
