@@ -498,7 +498,6 @@ class DashboardOrganizationController extends AbstractController
             return $this->redirect($this->generateUrl('app_user_idvault'));
         }
 
-
         $variables['checkOutsCount'] = 0;
         $variables['checkInsCount'] = 0;
         $variables['peopleToCheckinCount'] = 0;
@@ -509,15 +508,14 @@ class DashboardOrganizationController extends AbstractController
         $nodes = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'nodes'], ['event' => $variables['event']['@id']])['hydra:member'];
         if (!isset($nodes[0])) {
             $node = [
-                'type' => 'checkin',
-                'name' => 'Node for ' . $variables['event']['name'],
+                'type'          => 'checkin',
+                'name'          => 'Node for '.$variables['event']['name'],
                 'accommodation' => 'https://dev.larping.eu',
-                'event' => $variables['event']['@id'],
-                'organization' => $variables['organization']['@id']
+                'event'         => $variables['event']['@id'],
+                'organization'  => $variables['organization']['@id'],
             ];
             $commonGroundService->saveResource($node, ['component' => 'chin', 'type' => 'nodes']);
         }
-
 
         $customers = [];
         $products = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['event' => $variables['event']['@id']])['hydra:member'];
@@ -534,7 +532,7 @@ class DashboardOrganizationController extends AbstractController
                                 $checkin = $checkin[0];
                                 $checkin['checkedIn'] = true;
                                 $variables['checkInsCount']++;
-                                if (isset($checkin['dateCheckedOut']) && date('Y', strtotime($checkin['dateCheckedOut'])) != "1970") {
+                                if (isset($checkin['dateCheckedOut']) && date('Y', strtotime($checkin['dateCheckedOut'])) != '1970') {
                                     $variables['checkOutsCount']++;
                                     $variables['checkInsCount']--;
                                     unset($checkin['checkedIn']);
@@ -575,16 +573,14 @@ class DashboardOrganizationController extends AbstractController
         $event = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
         $nodes = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'nodes'], ['event' => $event['@id']])['hydra:member'];
 
-
         if (isset($nodes[0])) {
             $node = $nodes[0];
         } else {
             return new JsonResponse([
                 'status' => 'failed',
-                'nodes' => $nodes
+                'nodes'  => $nodes,
             ]);
         }
-
 
         // Check for existing checkin
 //        $person = 'https://dev.larping.eu/api/v1/cc/people/5c74f378-a85f-4415-8f76-e702f2d727dd';
@@ -596,9 +592,9 @@ class DashboardOrganizationController extends AbstractController
         }
 
         // If dateCheckedOut already is set unset it so people can check in again, else set dateCheckedOut
-        if (isset($checkin['dateCheckedOut']) && date('Y', strtotime($checkin['dateCheckedOut'])) != "1970") {
+        if (isset($checkin['dateCheckedOut']) && date('Y', strtotime($checkin['dateCheckedOut'])) != '1970') {
             // cant set date to null so then 1970
-            $checkin['dateCheckedOut'] = "1970";
+            $checkin['dateCheckedOut'] = '1970';
             unset($checkin['node']);
             $commonGroundService->saveResource($checkin, ['component' => 'chin', 'type' => 'checkins']);
         } elseif (isset($checkin)) {
@@ -607,14 +603,14 @@ class DashboardOrganizationController extends AbstractController
             $commonGroundService->saveResource($checkin, ['component' => 'chin', 'type' => 'checkins']);
         } elseif (isset($node)) {
             $newCheckin = [
-                'node' => '/nodes/' . $node['id'],
+                'node'   => '/nodes/'.$node['id'],
                 'person' => $person,
             ];
             $commonGroundService->saveResource($newCheckin, ['component' => 'chin', 'type' => 'checkins']);
         }
 
         return new JsonResponse([
-            'status' => 'success'
+            'status' => 'success',
         ]);
     }
 
