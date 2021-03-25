@@ -35,7 +35,7 @@
 
                         <div class="card-body widget-content">
                             <span id="totalCheckinsSpan"
-                                  class="widget-content-title">{% if totalCheckins|default %}{{ totalCheckins|length }}{% else %}0{% endif %}</span>
+                                  class="widget-content-title">{% if checkInsCount|default %}{{ checkInsCount|length }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people currently pressent'|trans|capitalize }}</p>
                             </div>
@@ -81,8 +81,6 @@
                 </div><!-- /.col -->
 
             </div><!-- /.row -->
-            <button type="button" class="btn btn-success btn-sm m-2 mt-n3 float-right hover-pointer"
-                    onclick="resetFilters()">{{ 'reset filters'|trans|capitalize }}</button>
 
             <!-- events -->
             <table id="checkin" class="display nowrap table" style="width:100%">
@@ -95,8 +93,10 @@
                     <th>{{ 'payment'|trans|capitalize }}</th>
                     <th>{{ 'status'|trans|capitalize }}</th>
                     <th>
-                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                data-target="#CheckinModalAdd">{{ 'add'|trans|capitalize }}</button>
+                        {#                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"#}
+                        {#                                data-target="#CheckinModalAdd">{{ 'add'|trans|capitalize }}</button>#}
+                        <button type="button" class="btn btn-success btn-sm float-right hover-pointer"
+                                onclick="resetFilters()">{{ 'reset filters'|trans|capitalize }}</button>
                     </th>
                 </tr>
                 </thead>
@@ -110,9 +110,6 @@
                             <td class="text-capitalize">
                                 <a class="text-hover-primary text-muted">{{ checkin.person.name }}</a>
                             </td>
-                            {#                            <td>#}
-                            {#                                Jaarlid#}
-                            {#                            </td>#}
                             <td>
                                 {% if checkin.invoiceItem.name|default %}
                                     {{ checkin.invoiceItem.name }}
@@ -126,16 +123,17 @@
                             </td>
                             <td>
                                 <span
-                                    class="badge {% if checkin.dateCheckedOut|default %}badge-danger{% elseif checkin.checkedIn|default %}badge-success{% else %}badge-warning{% endif %} px-2 py-1">{% if checkin.dateCheckedOut|default %}Checked out{% elseif checkin.checkedIn|default %}Checked in{% else %}Not checked in{% endif %}</span>
+                                    class="badge {% if checkin.dateCheckedOut|default and checkin.dateCheckedOut|date('Y') != '1970' %}badge-danger{% elseif checkin.checkedIn|default %}badge-success{% else %}badge-warning{% endif %} px-2 py-1">{% if checkin.dateCheckedOut|default and checkin.dateCheckedOut|date('Y') != '1970' %}Checked out{% elseif checkin.checkedIn|default %}Checked in{% else %}Not checked in{% endif %}</span>
                             </td>
                             <td>
-                                <a {% if checkin.checkedIn|default %}style="color: white"{% endif %}
-                                   class="btn {% if checkin.checkedIn|default %}btn-danger color-white{% else %}btn-outline-primary{% endif %} btn-sm text-center w-100"{% if checkin.checkedIn|default %}onclick="checkThisPersonOut(this, '{{ checkin.person['@id'] }}')" {% else %} onclick="checkThisPersonIn(this, '{{ checkin.person['@id'] }}')"{% endif %}>{% if checkin.checkedIn|default %}
-                                        <i class="fas fa-close"
-                                           aria-hidden="true"></i> {{ 'check out'|capitalize }}{% else %}<i
-                                        class="fas fa-edit"
-                                        aria-hidden="true"></i>{{ 'checkin'|trans|capitalize }}{% endif %}
-                                </a>
+                                <button class="btn {% if checkin.checkedIn|default %}btn-danger color-white{% else %}btn-success{% endif %} btn-sm text-center w-100"
+                                    {% if checkin.checkedIn|default %}onclick="checkThisPersonOut(this, '{{ checkin.person['@id'] }}')" {% else %} onclick="checkThisPersonIn(this, '{{ checkin.person['@id'] }}')"{% endif %}>
+                                    {% if checkin.checkedIn|default %}
+                                        {{ 'check out'|capitalize }}
+                                    {% else %}
+                                        {{ 'checkin'|trans|capitalize }}
+                                    {% endif %}
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -159,7 +157,7 @@
             var children = [].slice.call(document.getElementById('checkinTableBody').children);
             children.forEach(function (item) {
                 console.log(item.children[4].children[0].innerText);
-                if (item.children[4].children[0].innerText === 'Checked in') {
+                if (item.children[4].children[0].innerText !== 'Not checked in') {
                     item.style.display = "none";
                 }
             });
@@ -170,7 +168,7 @@
             var children = [].slice.call(document.getElementById('checkinTableBody').children);
             children.forEach(function (item) {
                 console.log(item.children[4].children[0].innerText);
-                if (item.children[4].children[0].innerText !== 'Checked in' && item.children[4].children[0].innerText !== 'Checked out') {
+                if (item.children[4].children[0].innerText !== 'Checked in') {
                     item.style.display = "none";
                 }
             });
@@ -202,7 +200,7 @@
                 },
                 dataType: "json",
                 complete: function (response) {
-                    console.log(response.responseJSON);
+                    console.log(response.responseJSON.id);
                     if (response.responseJSON == undefined) {
                         aElement.innerHTML = "Checking failed";
                         setTimeout(function () {
@@ -213,10 +211,11 @@
                         // aElement.innerHTML = "<i class=\"fas fa-check\" aria-hidden=\"true\"></i>";
                         aElement.parentElement.previousElementSibling.firstElementChild.innerHTML = "Checked in";
                         aElement.parentElement.previousElementSibling.firstElementChild.classList.remove("badge-danger");
+                        aElement.parentElement.previousElementSibling.firstElementChild.classList.remove("badge-warning");
                         aElement.parentElement.previousElementSibling.firstElementChild.classList.add("badge-success");
 
                         // Make button ready for checkin out
-                        aElement.classList.remove("btn-outline-primary");
+                        aElement.classList.remove("btn-success");
                         aElement.classList.add("btn-danger");
                         aElement.style.color = 'white';
                         aElement.innerHTML = 'Check out';
@@ -253,23 +252,23 @@
                 },
                 dataType: "json",
                 complete: function (response) {
-                    console.log(response.responseJSON);
+                    console.log(response.responseJSON.id);
                     if (response.responseJSON == undefined) {
                         aElement.innerHTML = "Checkout failed";
                         setTimeout(function () {
-                            aElement.innerHTML = "<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Check out";
+                            aElement.innerHTML = "Check out";
                             aElement.setAttribute("onclick", " checkThisPersonOut(this, '" + person + "')");
                         }, 2000)
                     } else if (response.responseJSON.status == 'success') {
                         aElement.innerHTML = "";
                         aElement.parentElement.previousElementSibling.firstElementChild.innerHTML = "Checked out";
                         aElement.parentElement.previousElementSibling.firstElementChild.classList.remove("badge-success");
+                        aElement.parentElement.previousElementSibling.firstElementChild.classList.remove("badge-success");
                         aElement.parentElement.previousElementSibling.firstElementChild.classList.add("badge-danger");
 
-                        aElement.classList.add("btn-outline-primary");
+                        aElement.classList.add("btn-success");
                         aElement.classList.remove("btn-danger");
-                        aElement.style.color = 'gray';
-                        aElement.innerHTML = '<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Checkin';
+                        aElement.innerHTML = 'Checkin';
 
                         aElement.setAttribute("onclick", " checkThisPersonIn(this, '" + person + "')");
 
@@ -283,7 +282,7 @@
                     } else {
                         aElement.innerHTML = "Checking failed";
                         setTimeout(function () {
-                            aElement.innerHTML = "<i class=\"fas fa-edit\" aria-hidden=\"true\"></i>Check out";
+                            aElement.innerHTML = "Check out";
                             aElement.setAttribute("onclick", " checkThisPersonOut(this, '" + person + "')");
                         }, 2000)
                     }
