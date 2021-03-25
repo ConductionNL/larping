@@ -576,13 +576,16 @@ class DashboardOrganizationController extends AbstractController
         $event = $commonGroundService->getResource(['component' => 'arc', 'type' => 'events', 'id' => $id]);
         $nodes = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'nodes'], ['event' => $event['@id']])['hydra:member'];
 
+
         if (isset($nodes[0])) {
             $node = $nodes[0];
         } else {
             return new JsonResponse([
                 'status' => 'failed',
+                'nodes' => $nodes
             ]);
         }
+
 
         // Check for existing checkin
 //        $person = 'https://dev.larping.eu/api/v1/cc/people/5c74f378-a85f-4415-8f76-e702f2d727dd';
@@ -604,21 +607,15 @@ class DashboardOrganizationController extends AbstractController
             unset($checkin['node']);
             $commonGroundService->saveResource($checkin, ['component' => 'chin', 'type' => 'checkins']);
         } elseif (isset($node)) {
-            $checkin = [
+            $newCheckin = [
                 'node' => '/nodes/' . $node['id'],
                 'person' => $person,
             ];
-            $commonGroundService->saveResource($checkin, ['component' => 'chin', 'type' => 'checkins']);
-        } else {
-            return new JsonResponse([
-                'status' => 'failed',
-            ]);
-
+            $commonGroundService->saveResource($newCheckin, ['component' => 'chin', 'type' => 'checkins']);
         }
 
         return new JsonResponse([
-            'status' => 'success',
-            'id' => $checkin['id']
+            'status' => 'success'
         ]);
     }
 

@@ -35,7 +35,7 @@
 
                         <div class="card-body widget-content">
                             <span id="totalCheckinsSpan"
-                                  class="widget-content-title">{% if checkInsCount|default %}{{ checkInsCount|length }}{% else %}0{% endif %}</span>
+                                  class="widget-content-title">{% if checkInsCount|default %}{{ checkInsCount }}{% else %}0{% endif %}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="mb-0">{{ 'people currently pressent'|trans|capitalize }}</p>
                             </div>
@@ -200,7 +200,7 @@
                 },
                 dataType: "json",
                 complete: function (response) {
-                    console.log(response.responseJSON.id);
+                    console.log(response.responseJSON);
                     if (response.responseJSON == undefined) {
                         aElement.innerHTML = "Checking failed";
                         setTimeout(function () {
@@ -252,7 +252,7 @@
                 },
                 dataType: "json",
                 complete: function (response) {
-                    console.log(response.responseJSON.id);
+                    console.log(response.responseJSON);
                     if (response.responseJSON == undefined) {
                         aElement.innerHTML = "Checkout failed";
                         setTimeout(function () {
