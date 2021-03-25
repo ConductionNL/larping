@@ -827,13 +827,10 @@ class DashboardOrganizationController extends AbstractController
             return $this->redirect($this->generateUrl('app_user_idvault'));
         }
 
-
-
-
         $variables['organization'] = $commonGroundService->getResource($this->getUser()->getOrganization());
         //get organization subscribtion
         $variables['subscription'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'products'], ['type' => 'subscription', 'sourceOrganization' => $variables['organization']['@id']])['hydra:member'];
-        if (count($variables['subscription']) > 0){
+        if (count($variables['subscription']) > 0) {
             $variables['subscription'] = $variables['subscription'][0];
             $variables['subscription']['offers'] = $variables['subscription']['offers'][0];
         }
@@ -841,8 +838,8 @@ class DashboardOrganizationController extends AbstractController
 //        /*@todo add filters to betaalservice invoice_items to do this*/
         $invoiceItems = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'invoice_items'])['hydra:member'];
         $variables['invoiceItems'] = [];
-        foreach ($invoiceItems as $item){
-            if ($item['offer'] == $variables['subscription']['offers']['@id']){
+        foreach ($invoiceItems as $item) {
+            if ($item['offer'] == $variables['subscription']['offers']['@id']) {
                 $variables['invoiceItems'][] = $item;
             }
         }
@@ -1332,8 +1329,8 @@ class DashboardOrganizationController extends AbstractController
         $settings = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
         $variables['settings'] = [];
         //remove ALV from categories for organizations
-        foreach ($settings as $category){
-            if ($category['name'] != 'ALV'){
+        foreach ($settings as $category) {
+            if ($category['name'] != 'ALV') {
                 $variables['settings'][] = $category;
             }
         }
