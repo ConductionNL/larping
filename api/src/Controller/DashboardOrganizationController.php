@@ -1500,17 +1500,6 @@ class DashboardOrganizationController extends AbstractController
 
             $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
 
-            $privacyPolicy = $request->get('privacyPolicy');
-            if (isset($organization['privacyPolicy']['@id'])) {
-                $template['@id'] = $organization['privacyPolicy']['@id'];
-            }
-            $privacyPolicy['name'] = 'Privacy policy ' . $organization['name'];
-            $privacyPolicy['templateEngine'] = 'twig';
-            $privacyPolicy['organization'] = '/organizations/' . $organization['id'];
-            $privacyPolicy = $commonGroundService->saveResource($privacyPolicy, ['component' => 'wrc', 'type' => 'templates']);
-            $organization['privacyPolicy'] = '/templates/' . $privacyPolicy['id'];
-            $organization = $commonGroundService->saveResource($organization, ['component' => 'wrc', 'type' => 'organizations']);
-
             return $this->redirectToRoute('app_dashboardorganization_edit', ['id' => $organization['id']]);
         }
 
