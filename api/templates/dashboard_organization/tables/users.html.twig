@@ -33,18 +33,28 @@
                     </a>
                 </td>
                 <td>
-
+                {% for item in invoiceItems %}
+                    {% if userData.person == item.invoice.customer  %}
+                    {% if item.invoice.paid == true %}
+                        {{ 'paid'|trans|capitalize }}
+                    {% else %}
+                        {{ 'unpaid'|trans|capitalize }}
+                    {% endif %}
+                    {% else %}
+                        {{ 'n/a'|trans|capitalize }}
+                    {% endif %}
+                {% endfor %}
                 </td>
-{#                <td>#}
-{#                    <div class="dropdown">#}
-{#                        <a class="dropdown-toggle icon-burger-mini float-right" href="#" role="button" id="dropdownMenuLink"#}
-{#                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">#}
-{#                        </a>#}
-{#                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">#}
+                <td>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle icon-burger-mini float-right" href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
 {#                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailModal{{ user.id }}">{{ 'mail to user'|trans|capitalize }}</a>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </td>#}
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
