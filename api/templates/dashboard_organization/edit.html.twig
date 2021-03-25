@@ -606,7 +606,13 @@
             console.log(url);
         }
 
-        $('#summernoteOrganizationDescription').summernote({
+        $('#summernoteTandC').summernote({
+            placeholder: '{{ 'content'|trans|capitalize }}',
+            tabsize: 2,
+            height: 300
+        });
+
+        $('#summernotePrivacyPolicy').summernote({
             placeholder: '{{ 'content'|trans|capitalize }}',
             tabsize: 2,
             height: 300
