@@ -41,9 +41,10 @@
                                 {% if event['@id'] is defined %}
                                     <button type="submit"
                                             class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
-                                    {% if event.status == 'pending' or event.status == 'private' %}
+                                    {% if event.status != 'published' %}
                                         <button type="submit" name="status" value="published"
                                                 class="btn btn-success float-right mr-1">{{ 'publish event'|trans|capitalize }}</button>
+                                        <a class="btn btn-outline-primary float-right mr-1" href="{{ path('app_event_event', {id: event.id}) }}">{{ 'preview'|trans|capitalize }}</a>
                                     {% else %}
                                         <button type="submit" name="status" value="private"
                                                 class="btn btn-warning float-right mr-1">{{ "unpublish the event"|trans|capitalize }}</button>
