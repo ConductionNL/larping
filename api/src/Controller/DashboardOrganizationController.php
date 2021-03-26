@@ -293,6 +293,10 @@ class DashboardOrganizationController extends AbstractController
             $variables['locations'] = [];
         }
 
+        if (isset($variables['event']['organization']) && $this->getUser()->getOrganization() != null && $variables['event']['organization'] != $this->getUser()->getOrganization()) {
+            return $this->redirectToRoute('app_dashboardorganization_events');
+        }
+
         $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
 
         // Update event
