@@ -1873,9 +1873,9 @@
         <source>you have this product in your cart or own this product</source>
         <target>u heeft dit product in uw winkelwagen of bezit dit product</target>
       </trans-unit>
-      <trans-unit id="MDJeQ.k" resname="the minimal recomended size for images is 260 by 174 pixels, you can upload smaller imgages but they may mess with the look of the card">
-        <source>the minimal recomended size for images is 260 by 174 pixels, you can upload smaller imgages but they may mess with the look of the card</source>
-        <target>de minimaal aanbevolen grootte voor afbeeldingen is 260 bij 174 pixels, u kunt kleinere afbeeldingen uploaden, maar deze kunnen het uiterlijk van de kaartjes ondermijnen</target>
+      <trans-unit id="MDJeQ.k" resname="the recomended aspect ratio for images is 3:2 (for example: 960x640 or 260x173), you can upload different aspect ratio images, but they may mess with the look of the cards">
+        <source>the recomended aspect ratio for images is 3:2 (for example: 960x640 or 260x173), you can upload different aspect ratio images, but they may mess with the look of the cards</source>
+        <target>de aanbevolen hoogte-breedteverhouding voor afbeeldingen is 3:2 (bijvoorbeeld: 960x640 of 260x173), je kunt afbeeldingen met een andere hoogte-breedteverhoudingen uploaden, maar deze kunnen het uiterlijk van de kaarten negatief beïnvloeden</target>
       </trans-unit>
     </body>
   </file>

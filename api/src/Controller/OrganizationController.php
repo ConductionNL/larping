@@ -123,7 +123,7 @@ class OrganizationController extends AbstractController
         $variables['categories'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['resources.resource' => $variables['organization']['id']])['hydra:member'];
 
         // Getting the offers
-        // Only get these of events that are published
+        // Only get these of events that are published TODO: this might need some cleaner code:
         $variables['products'] = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['offeredBy' => $variables['organization']['@id'], 'products.type' => 'simple'])['hydra:member'];
         foreach ($variables['products'] as $key => $offer) {
             if (isset($offer['products'])) {

@@ -21,7 +21,7 @@
                             {% for product in product.prerequisiteProducts %}
                                 {% set ownsThisProduct = null %}
 
-                                 Check if this product is owned or in session order
+                                {#                                 Check if this product is owned or in session order#}
                                 {% set ownsThisProduct = owns_this_product(product) %}
                                 {% if ownsThisProduct == false %}
                                     {% set ownsThisProduct = product_in_cart(product) %}
@@ -40,15 +40,15 @@
                                            value="{{ product.offers.0['@id'] }}">
                                     <input name="offers[{{ counter }}][path]" type="hidden"
                                            value="{{ app.request.requesturi }}">
-                                     Keep this for bugfixing
-                                                                    {% else %}
-                                                                        <div class="form-group p-3"
-                                                                             style="border-radius: 6px;background: rgba(144,238,144, 0.8)">
-                                                                            <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}
-                                                                                :</p>
-                                                                            <label
-                                                                                style="color: white">{{ product.name|capitalize }}</label>
-                                                                        </div>
+                                    {#                                     Keep this for bugfixing#}
+                                    {#                                                                    {% else %}#}
+                                    {#                                                                        <div class="form-group p-3"#}
+                                    {#                                                                             style="border-radius: 6px;background: rgba(144,238,144, 0.8)">#}
+                                    {#                                                                            <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}#}
+                                    {#                                                                                :</p>#}
+                                    {#                                                                            <label#}
+                                    {#                                                                                style="color: white">{{ product.name|capitalize }}</label>#}
+                                    {#                                                                        </div>#}
                                 {% endif %}
                             {% endfor %}
 
@@ -71,7 +71,7 @@
 
                                 {% set isTicket = check_for_type_in_products('ticket', offer.products) %}
                                 {% set isSubscription = check_for_type_in_products('subscription', offer.products) %}
-                                {% if offer.audience|default and offer.audience == 'personal' and isTicket|default and isTicket == true %}
+                                {% if isTicket|default and isTicket == true %}
 
                                     <h5>{{ '1'~' '~'ticket'~' '~'max' }}</h5>
                                     <input value="1" name="offers[0][quantity]"
@@ -91,7 +91,7 @@
                                 {% else %}
                                     <div class="form-group">
                                         <label for="quantityInput">{{ 'quantity'|trans|capitalize }}</label>
-                                        <input min="1" value="1" class="form-control"
+                                        <input style="max-width: 80px" min="1" value="1" class="form-control"
                                                name="offers[0][quantity]"
                                                type="number"
                                                id="quantityInput">
@@ -138,9 +138,15 @@
                     {% endfor %}
                 {% endif %}
 
-                <input type="hidden" name="makeOrder" value="true">
-                <button type="submit"
-                        class="btn btn-primary btn-block">{{ 'add to shopping cart and view'|trans|capitalize }}</button>
+                {% set service = commonground_resource_list({'component':'bc', 'type':'services'}, {'organization':offer.offeredBy})['hydra:member'] %}
+
+                {% if service|default and service|length > 0 %}
+                    <input type="hidden" name="makeOrder" value="true">
+                    <button type="submit"
+                            class="btn btn-primary btn-block">{{ 'add to shopping cart and view'|trans|capitalize }}</button>
+                {% else %}
+                    <p>{{ 'this product is unavailable due configuration being uncomplete from the offering organization'|trans|capitalize }}</p>
+                {% endif %}
             </form>
         </div>
     </div>

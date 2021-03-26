@@ -50,8 +50,7 @@ class ShoppingService
 
     public function redirectToMollie($order)
     {
-        $object['url'] = $order['@id'];
-        $object['mollieKey'] = 'test_e56eJtnShswQS7Usn7uDhsheg9fjeH';
+        $object['orderUrl'] = $order['@id'];
 
         if ($_ENV['APP_ENV'] != 'dev') {
             $object['redirectUrl'] = 'https://larping.eu/payment-status';
