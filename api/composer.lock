@@ -781,12 +781,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/id-vault-php.git",
-                "reference": "039e6fc44330307a80a08dfb11947ae523fc9e7d"
+                "reference": "72c400ccfe95845691a0e862a48a3700273ca91a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/039e6fc44330307a80a08dfb11947ae523fc9e7d",
-                "reference": "039e6fc44330307a80a08dfb11947ae523fc9e7d",
+                "url": "https://api.github.com/repos/ConductionNL/id-vault-php/zipball/72c400ccfe95845691a0e862a48a3700273ca91a",
+                "reference": "72c400ccfe95845691a0e862a48a3700273ca91a",
                 "shasum": ""
             },
             "require": {
@@ -830,7 +830,7 @@
                 "issues": "https://github.com/ConductionNL/id-vault-php/issues",
                 "source": "https://github.com/ConductionNL/id-vault-php"
             },
-            "time": "2021-03-11T11:58:01+00:00"
+            "time": "2021-03-26T13:26:14+00:00"
         },
         {
             "name": "conduction/idvaultbundle",
@@ -838,12 +838,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ConductionNL/IdVaultBundle.git",
-                "reference": "34db9f76ffba257143f9c01ca2659dbd5462a6b9"
+                "reference": "4c6a31eb85b834ec8d19ba93341d19fba9decf75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/34db9f76ffba257143f9c01ca2659dbd5462a6b9",
-                "reference": "34db9f76ffba257143f9c01ca2659dbd5462a6b9",
+                "url": "https://api.github.com/repos/ConductionNL/IdVaultBundle/zipball/4c6a31eb85b834ec8d19ba93341d19fba9decf75",
+                "reference": "4c6a31eb85b834ec8d19ba93341d19fba9decf75",
                 "shasum": ""
             },
             "require": {
@@ -889,7 +889,7 @@
                 "issues": "https://github.com/ConductionNL/IdVaultBundle/issues",
                 "source": "https://github.com/ConductionNL/IdVaultBundle"
             },
-            "time": "2021-02-11T08:13:50+00:00"
+            "time": "2021-03-26T13:26:24+00:00"
         },
         {
             "name": "conduction/listybundle",
