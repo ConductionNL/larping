@@ -36,17 +36,6 @@
                     </a>
                 </td>
                 <td>
-                {% for item in invoiceItems %}
-                    {% if userData.person == item.invoice.customer  %}
-                    {% if item.invoice.paid == true %}
-                        {{ 'paid'|trans|capitalize }}
-                    {% else %}
-                        {{ 'unpaid'|trans|capitalize }}
-                    {% endif %}
-                    {% else %}
-                        {{ 'n/a'|trans|capitalize }}
-                    {% endif %}
-                {% endfor %}
                 </td>
                 <td>
                     <div class="dropdown">
