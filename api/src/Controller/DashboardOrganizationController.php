@@ -874,7 +874,7 @@ class DashboardOrganizationController extends AbstractController
         $invoiceItems = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'invoice_items'])['hydra:member'];
         $variables['invoiceItems'] = [];
         foreach ($invoiceItems as $item) {
-            if ($item['offer'] == $variables['subscription']['offers']['@id']) {
+            if ( count($variables['subscription']) > 0 && $item['offer'] == $variables['subscription']['offers']['@id']) {
                 $variables['invoiceItems'][] = $item;
             }
         }

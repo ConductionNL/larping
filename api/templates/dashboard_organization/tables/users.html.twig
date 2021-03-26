@@ -1,4 +1,7 @@
 {% if users|default and  users|length > 0 %}
+    <div class="row">
+            <input class="form-control ml-3 w-100 col-11" onkeyup="search()" type="text" id="searchFilter" placeholder="{{ 'Search by name, email or group'|trans|capitalize }}">
+    </div>
     <table id="users" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
@@ -104,5 +107,33 @@
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    function search() {
+        var input, filter, table, i;
+        input = document.getElementById("searchFilter");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("users");
+        var rows = table.getElementsByTagName("tr");
+        var head = table.getElementsByTagName("thead");
+        for (i = 0; i < rows.length; i++) {
+            if (i == 0){continue;}
+            var cells = rows[i].getElementsByTagName("td");
+            var j;
+            var rowContainsFilter = false;
+            for (j = 0; j < cells.length; j++) {
+                if (cells[j]) {
+                    if (cells[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        rowContainsFilter = true;
+                        continue;
+                    }
+                }
+            }
+            if (! rowContainsFilter) {
+                rows[i].style.display = "none";
+            } else {
+                rows[i].style.display = "";
+            }
+        }
     }
 </script>

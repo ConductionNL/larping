@@ -82,6 +82,7 @@
 
             </div><!-- /.row -->
 
+            <input class="form-control md-10" onkeyup="search()" type="text" id="searchFilter" placeholder="{{ 'Search by name, status or reference code'|trans|capitalize }}">
             <!-- events -->
             <table id="checkin" class="display nowrap table" style="width:100%">
                 <thead>
@@ -145,6 +146,36 @@
     </section>
 
     <script>
+
+        function search() {
+            var input, filter, table, i;
+            input = document.getElementById("searchFilter");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("checkin");
+            var rows = table.getElementsByTagName("tr");
+            var head = table.getElementsByTagName("thead");
+            for (i = 0; i < rows.length; i++) {
+                if (i == 0){continue;}
+                var cells = rows[i].getElementsByTagName("td");
+                var j;
+                var rowContainsFilter = false;
+                for (j = 0; j < cells.length; j++) {
+                    if (cells[j]) {
+                        if (cells[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            rowContainsFilter = true;
+                            continue;
+                        }
+                    }
+                }
+                if (! rowContainsFilter) {
+                    rows[i].style.display = "none";
+                } else {
+                    rows[i].style.display = "";
+                }
+            }
+        }
+
+
         function resetFilters() {
             var children = [].slice.call(document.getElementById('checkinTableBody').children);
             children.forEach(function (item) {
@@ -291,6 +322,4 @@
             });
         }
     </script>
-
-
 {% endblock %}
