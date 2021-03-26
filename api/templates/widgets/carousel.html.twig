@@ -26,7 +26,24 @@
     {% set images = commonground_resource_list({'component':'wrc','type':'images'}, {'organization':'/organizations/'~carouselOrganization['id']})['hydra:member'] %}
 {% endif %}
 
-<div class="owl-carousel owl-theme listing-details-carousel nav-light-dark owl-loaded owl-drag">
+{# make sure all images are unique #}
+{% if images|default %}
+    {% set noDoubleImages = [] %}
+    {% for image in images %}
+        {% set foundDouble = false %}
+        {% for checkForDouble in images %}
+            {% if image.id != checkForDouble.id and image.base64 == checkForDouble.base64 %}
+                {% set foundDouble = true %}
+            {% endif %}
+        {% endfor %}
+        {% if not foundDouble %}
+            {% set noDoubleImages = noDoubleImages|merge([image]) %}
+        {% endif %}
+    {% endfor %}
+    {% set images = noDoubleImages %}
+{% endif %}
+
+<div id="carouselDiv" class="owl-carousel owl-theme listing-details-carousel nav-light-dark owl-loaded {% if images|length > 4 %}owl-drag{% endif %}">
     <div class="owl-stage-outer">
         <div class="owl-stage">
             {% if images|default %}
@@ -44,10 +61,12 @@
             {% endif %}
         </div>
     </div>
-    <div class="owl-nav">
-        <button type="button" class="owl-prev"><i class="fa fa-angle-left " aria-hidden="true"></i>
-        </button>
-        <button type="button" class="owl-next"><i class="fa fa-angle-right" aria-hidden="true"></i>
-        </button>
-    </div>
+    {% if images|length > 4 %}
+        <div class="owl-nav">
+            <button type="button" class="owl-prev"><i class="fa fa-angle-left " aria-hidden="true"></i>
+            </button>
+            <button type="button" class="owl-next"><i class="fa fa-angle-right" aria-hidden="true"></i>
+            </button>
+        </div>
+    {% endif %}
 </div>
