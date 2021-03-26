@@ -240,6 +240,10 @@ class ShoppingService
             return false;
         }
 
+        if (isset($order['id']) && isset($order['@id'])) {
+            $uploadedOrder['id'] = $order['id'];
+            $uploadedOrder['@id'] = $order['@id'];
+        }
         $uploadedOrder['name'] = 'Order for '.$person['name'];
         $uploadedOrder['description'] = 'Order for '.$person['name'];
         $uploadedOrder['organization'] = $order['organization'];
@@ -285,6 +289,8 @@ class ShoppingService
         $uploadedOrder = $this->commonGroundService->getResource($uploadedOrder['@id']);
 
         $order['@id'] = $uploadedOrder['@id'];
+        $order['id'] = $uploadedOrder['id'];
+        $order['organization'] = $uploadedOrder['organization'];
         $ordersInSession = $this->session->get('orders');
         foreach ($ordersInSession as $k => $orderInSession) {
             if (isset($orderInSession['organization']) && $orderInSession['organization'] == $uploadedOrder['organization']) {
