@@ -886,7 +886,7 @@ class DashboardOrganizationController extends AbstractController
         $invoiceItems = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'invoice_items'])['hydra:member'];
         $variables['invoiceItems'] = [];
         foreach ($invoiceItems as $item) {
-            if ($item['offer'] == $variables['subscription']['offers']['@id']) {
+            if (count($variables['subscription']) > 0 && $item['offer'] == $variables['subscription']['offers']['@id']) {
                 $variables['invoiceItems'][] = $item;
             }
         }
@@ -947,8 +947,9 @@ class DashboardOrganizationController extends AbstractController
 //                    $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, true);
 //                }
                 if ($group['id'] == $selectedGroup && !in_array($email, array_column($group['users'], 'username'))) {
-                    $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, false);
-                    $this->addFlash('success', 'gebruiker is uitgenodigd voor de groep ' . $group['name']);
+                    $groupOrganization = $commonGroundService->getResource($group['organization']); // get group organization
+                    $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $email, false, $groupOrganization['name']);
+                    $this->addFlash('success', 'gebruiker is uitgenodigd voor de groep '.$group['name']);
                 } elseif ($group['id'] == $selectedGroup && in_array($email, array_column($group['users'], 'username')) && $group['name'] !== 'root') {
                     $this->addFlash('error', 'Gebruiker zit al in de gekozen groep');
                 }
