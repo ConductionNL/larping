@@ -10,7 +10,7 @@ export default class App extends Component {
     let url = null;
 
     if (window.location.href.includes('http://localhost')) {
-      url ='http://localhost';
+      url ='http://localhost:3000';
       api = 'http://localhost:83/api';
     }
     else
