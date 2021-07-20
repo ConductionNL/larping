@@ -1,0 +1,56 @@
+{
+  "name": "dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.7.3",
+    "babel-polyfill": "^6.26.0",
+    "bootstrap": "^4.6.0",
+    "bootstrap-switch-button-react": "^1.2.0",
+    "chart.js": "^2.9.4",
+    "jquery": "^3.6.0",
+    "oidc-client": "^1.11.5",
+    "react": "^17.0.1",
+    "react-bootstrap": "^1.5.0",
+    "react-chartjs-2": "^2.11.1",
+    "react-cookie-consent": "^6.2.3",
+    "react-countup": "^4.3.3",
+    "react-dom": "^17.0.1",
+    "react-markdown": "^5.0.3",
+    "react-openidconnect": "^1.1.1",
+    "react-router-dom": "^5.2.0",
+    "react-router-hash-link": "^2.4.0",
+    "react-scripts": "4.0.3",
+    "react-toastify": "^7.0.3",
+    "react-tooltip": "^4.2.17",
+    "react-xterm": "^2.0.4",
+    "web-vitals": "^1.1.0",
+    "xterm": "^4.11.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

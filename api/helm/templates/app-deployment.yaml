@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.settings.name }}-app
+  labels:
+    app.kubernetes.io/name: {{ .Values.settings.name }}-app
+    app.kubernetes.io/part-of: {{ .Values.settings.name }}
+    helm.sh/chart: {{ include "chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.settings.name }}-app
+  replicas: {{ .Values.react.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.settings.name }}-app
+        app.kubernetes.io/part-of: {{ .Values.settings.name }}
+        helm.sh/chart: {{ include "chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+    spec:
+      containers:
+        - name: {{ .Values.settings.name }}-app
+        {{ if eq .Values.settings.env "prod"}}
+          image: "{{ .Values.settings.registryBase }}/{{ .Values.settings.projectName }}-app:latest"
+        {{ else }}
+          image: "{{ .Values.settings.registryBase }}/{{ .Values.settings.projectName }}-app:{{ .Values.settings.env }}"
+        {{ end }}
+          imagePullPolicy: {{ .Values.settings.pullPolicy }}
+          ports:
+            - containerPort: 3000
+              name: http
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
