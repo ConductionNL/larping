@@ -993,10 +993,6 @@ class DashboardOrganizationController extends AbstractController
             $data['user'] = $this->getUser()->getUsername();
 
             $test = $idVaultService->sendMail($appId, 'emails/mail_user.html.twig', $request->get('subject'), $request->get('email'), 'no-reply@larping.eu', $data);
-
-            var_dump($test);
-            die;
-
             $this->addFlash('success', 'Email sent to ' . $request->get('email'));
 
             return $this->redirect($this->generateUrl('app_dashboardorganization_members'));
