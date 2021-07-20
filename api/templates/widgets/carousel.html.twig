@@ -43,10 +43,10 @@
     {% set images = noDoubleImages %}
 {% endif %}
 
-<div id="carouselDiv" class="owl-carousel owl-theme listing-details-carousel nav-light-dark owl-loaded {% if images|length > 4 %}owl-drag{% endif %}">
-    <div class="owl-stage-outer">
-        <div class="owl-stage">
-            {% if images|default %}
+{% if images|default %}
+    <div id="carouselDiv" class="owl-carousel owl-theme listing-details-carousel nav-light-dark owl-loaded {% if images|length > 4 %}owl-drag{% endif %}">
+        <div class="owl-stage-outer">
+            <div class="owl-stage">
                 {% for image in images %}
                     {% if image.base64|default %}
                         <div class="owl-item" style="height: 300px;">
@@ -54,19 +54,15 @@
                         </div>
                     {% endif %}
                 {% endfor %}
-            {% else %}
-                <div class="owl-item" style="height: 300px;">
-                    <img src="https://picsum.photos/260/174" alt="Image">
-                </div>
-            {% endif %}
+            </div>
         </div>
+        {% if images|length > 4 %}
+            <div class="owl-nav">
+                <button type="button" class="owl-prev"><i class="fa fa-angle-left " aria-hidden="true"></i>
+                </button>
+                <button type="button" class="owl-next"><i class="fa fa-angle-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        {% endif %}
     </div>
-    {% if images|length > 4 %}
-        <div class="owl-nav">
-            <button type="button" class="owl-prev"><i class="fa fa-angle-left " aria-hidden="true"></i>
-            </button>
-            <button type="button" class="owl-next"><i class="fa fa-angle-right" aria-hidden="true"></i>
-            </button>
-        </div>
-    {% endif %}
-</div>
+{% endif %}
