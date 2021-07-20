@@ -530,15 +530,22 @@ class DashboardOrganizationController extends AbstractController
                 if ($prodIsBought != true) {
                     $invoiceItems = $commonGroundService->getResourceList(['component' => 'bc', 'type' => 'invoice_items'], ['offer' => $offer['@id']])['hydra:member'];
                     foreach ($invoiceItems as $item) {
+
+                        if (filter_var($item['invoice']['customer'], FILTER_VALIDATE_URL)) {
+                            $personUrl = $item['invoice']['customer'];
+                        } else {
+                            $personUrl = $item['invoice']['customer']['customerUrl'];
+                        }
+
                         if (!in_array($item['invoice']['customer'], $paidCustomers)) {
-                            $customerCheckins = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['person' => $item['invoice']['customer'], 'node.event' => $variables['event']['@id']])['hydra:member'];
+                            $customerCheckins = $commonGroundService->getResourceList(['component' => 'chin', 'type' => 'checkins'], ['person' => $personUrl, 'node.event' => $variables['event']['@id']])['hydra:member'];
                             if (isset($customerCheckins[0])) {
                                 $checkin = $customerCheckins[0];
                                 if (isset($checkin['id']) && (!isset($checkin['dateCheckedOut']) || isset($checkin['dateCheckedOut']) && date('Y', strtotime($checkin['dateCheckedOut'])) == '1970') ) {
                                     $checkin['checkedIn'] = true;
                                 }
                             }
-                            $checkin['person'] = $commonGroundService->getResource($item['invoice']['customer']);
+                            $checkin['person'] = $commonGroundService->getResource($personUrl);
                             $checkin['paymentStatus'] = $item['invoice']['status'];
                             $checkin['invoiceItem'] = $item;
                             if (in_array($checkin['person']['@id'], $customers)) {
