@@ -43,7 +43,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-{#                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailModal{{ user.id }}">{{ 'mail to user'|trans|capitalize }}</a>#}
+                            {% if userData|default %}<a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailModal{{ userData.id }}">{{ 'mail to user'|trans|capitalize }}</a>{% endif %}
                         </div>
                     </div>
                 </td>
@@ -63,7 +63,13 @@
 {% include 'dashboard_organization/modals/user.html.twig' %}
 
 {% for user in users %}
-    {% include 'dashboard_organization/modals/user.html.twig' %}
+    {% set userData = commonground_resource_list({'component':'uc','type':'users'}, {'username' : user.name})['hydra:member'] %}
+    {% if userData|length > 0 %}
+        {% set userData = userData[0] %}
+    {% endif %}
+    {% if userData|default %}
+        {% include 'dashboard_organization/modals/mail_user.html.twig' with {'resource': userData} %}
+    {% endif %}
 {% endfor %}
 
 <script>
