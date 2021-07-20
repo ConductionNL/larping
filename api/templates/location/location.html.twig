@@ -21,7 +21,7 @@
                         <div class="d-flex align-items-center">
                             {% include 'widgets/rating.html.twig' with {'rating':totals.rating} %}
                             <span class="d-inline-block mr-2">{{ totals.rating }} ({{ totals.reviews }} {{ 'reviews'|trans|capitalize }})</span>
-                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favourite this listing">
+                            <button class="btn-like px-2" data-toggle="tooltip" data-placement="top" title="Favorite this listing">
                                 <i class="fal fa-heart text-primary" aria-hidden="true"></i>
                                 <span>{{ totals.likes }}</span>
                             </button>
@@ -48,7 +48,7 @@
                     {% if location.description|default %}
                         <div class="single-listing-content mb-6">
                             <h3 class="font-weight-normal mb-6">{{ 'about'|trans|capitalize }}  {%if location.name|default %}{{ location.name }}{% endif %}</h3>
-                            <p class="mb-6">{{ location.description }}</p>
+                            <p class="mb-6">{{ location.description|raw }}</p>
                         </div>
 
                         <hr>

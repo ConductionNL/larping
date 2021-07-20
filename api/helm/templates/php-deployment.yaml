@@ -184,16 +184,6 @@ spec:
                 configMapKeyRef:
                   name: {{ template "fullname" . }}
                   key: app-web
-            -   name: APP_INTERNAL
-                valueFrom:
-                    configMapKeyRef:
-                        name: {{ template "fullname" . }}
-                        key: app-internal
-            -   name: APP_SESSION_DURATION
-                valueFrom:
-                    configMapKeyRef:
-                        name: {{ template "fullname" . }}
-                        key: app-session-duration
             - name: APP_SUBPATH_ROUTING
               valueFrom:
                 configMapKeyRef:
@@ -248,6 +238,16 @@ spec:
                 secretKeyRef:
                   name: {{ template "fullname" . }}
                   key: app_commonground_key
+            - name: APP_APPLICATION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: app_application_key
+            - name: APP_USER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: app_user_key
             - name: APP_URL
               {{- if and (eq $.Values.settings.env "prod") (eq $.Values.settings.type "component") }}
               value: https://{{ $.Values.settings.domain }}/api/{{ $.Values.settings.majorVersion }}/{{ $.Values.settings.subpath }}
@@ -269,18 +269,32 @@ spec:
                       name: {{ template "fullname" . }}
                       key: app_mollie_key
             {{ end }}
-            - name: APP_APPLICATION_KEY
+            -   name: GITHUB_KEY
+                valueFrom:
+                    secretKeyRef:
+                        name: {{ template "fullname" . }}
+                        key: github_key
+            -   name: APP_SESSION_DURATION
+                valueFrom:
+                    configMapKeyRef:
+                        name: {{ template "fullname" . }}
+                        key: app-session-duration
+            -   name: ARTIFACT_KEY
+                valueFrom:
+                    secretKeyRef:
+                        name: {{ template "fullname" . }}
+                        key: artifact_key
+            - name: GITLAB_KEY
               valueFrom:
-                secretKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: app_application_key
-            - name: APP_USER_KEY
+                  secretKeyRef:
+                      name: {{ template "fullname" . }}
+                      key: gitlab_key
+            - name: BITBUCKET_KEY
               valueFrom:
-                secretKeyRef:
-                  name: {{ template "fullname" . }}
-                  key: app_user_key
-           
-          #Redis
+                  secretKeyRef:
+                      name: {{ template "fullname" . }}
+                      key: bitbucket_key
+                #Redis
             - name: REDIS_HOST
               valueFrom:
                 configMapKeyRef:
@@ -288,21 +302,9 @@ spec:
                   key: redis-host
             - name: REDIS_PORT
               valueFrom:
-                configMapKeyRef:
+               configMapKeyRef:
                   name: {{ template "fullname" . }}
                   key: redis-port
-                  
-          #URLs
-            - name: APP_DIGISPOOF_LOCATION
-              valueFrom:
-                  configMapKeyRef:
-                      name: {{ template "fullname" . }}
-                      key: digispoof-location
-            - name: APP_EHERKENNING_LOCATION
-              valueFrom:
-                  configMapKeyRef:
-                      name: {{ template "fullname" . }}
-                      key: eherkenning-location
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}

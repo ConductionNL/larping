@@ -15,6 +15,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The DashboardController handles any calls about administration and dashboard pages.
@@ -31,7 +32,10 @@ class DashboardUserController extends AbstractController
      */
     public function indexAction(CommonGroundService $commonGroundService, ShoppingService $shoppingService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
 
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
@@ -49,10 +53,16 @@ class DashboardUserController extends AbstractController
      */
     public function membershipsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ShoppingService $shoppingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
         $products = $shoppingService->getOwnedProducts($this->getUser()->getPerson());
         $groups = $this->getUser()->getGroups();
+
+        $rootGroupIds = [];
+
         if (count($products) > 0) {
             foreach ($products as &$product) {
                 $product['groups'] = [];
@@ -61,6 +71,10 @@ class DashboardUserController extends AbstractController
                         if ($product['sourceOrganization'] == $group['organization'] && $group['name'] !== 'root') {
                             $product['groups'][] = $group['name'];
                             $product['joined'] = $group['dateJoined'];
+                        } elseif ($product['sourceOrganization'] == $group['organization'] && $group['name'] == 'root' &&
+                            !in_array($group['id'], $rootGroupIds)) {
+                            $variables['rootGroups'][] = $group;
+                            $rootGroupIds[] = $group['id'];
                         }
                     }
                     $variables['products'][] = $product;
@@ -75,9 +89,12 @@ class DashboardUserController extends AbstractController
      * @Route("/organizations")
      * @Template
      */
-    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, IdVaultService $idVaultService)
+    public function organizationsAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, IdVaultService $idVaultService, TranslatorInterface $translator)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
 //        $application = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'applications', 'id' => $params->get('app_id')]);
         $variables['type'] = 'organization';
@@ -162,21 +179,27 @@ class DashboardUserController extends AbstractController
             $organizationUrl = $commonGroundService->cleanUrl(['component' => 'wrc', 'type' => 'organizations', 'id' => $organization['id']]);
             $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
 
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "{$translator->trans('Administrators group for')} {$organization['name']}", $organizationUrl);
             $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
             $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
+            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "{$translator->trans('Members group for')} {$organization['name']}", $organizationUrl);
 
-            //create the groups clients, members, administrators
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
-            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
+            // TODO: put this back? removed for demo
+//            $idVaultService->createGroup($provider['configuration']['app_id'], 'root', "Root group for {$organization['name']}", $organizationUrl);
+//            $result = $idVaultService->getGroups($provider['configuration']['app_id'], $organizationUrl);
+//            $idVaultService->inviteUser($provider['configuration']['app_id'], $result['groups'][0]['id'], $this->getUser()->getUsername(), true);
+//
+//            //create the groups clients, members, administrators
+//            $idVaultService->createGroup($provider['configuration']['app_id'], 'clients', "Clients group for {$organization['name']}", $organizationUrl);
+//            $idVaultService->createGroup($provider['configuration']['app_id'], 'members', "Members group for {$organization['name']}", $organizationUrl);
+//            $idVaultService->createGroup($provider['configuration']['app_id'], 'administrators', "Administrators group for {$organization['name']}", $organizationUrl);
 
-            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource'=>$organization['id']])['hydra:member'];
+            $resourceCategories = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'resource_categories'], ['resource' => $organization['id']])['hydra:member'];
 
             if (count($categories) > 0) {
                 $resourceCategory = $resourceCategories[0];
             } else {
-                $resourceCategory = ['resource'=>$organization['@id'], 'catagories'=>[]];
+                $resourceCategory = ['resource' => $organization['@id'], 'catagories' => []];
             }
 
             $resourceCategory['categories'] = $categories;
@@ -198,7 +221,20 @@ class DashboardUserController extends AbstractController
 //
 //            }
         }
-        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+//        $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'organizations'])['hydra:member'];
+
+        $groups = $this->getUser()->getGroups();
+        $variables['organizations'] = [];
+        $organizationIds = [];
+
+        if (isset($groups) && is_array($groups)) {
+            foreach ($groups as $group) {
+                if (($group['name'] == 'administrators') && !in_array($group['organization'], $organizationIds)) {
+                    $variables['organizations'][] = $commonGroundService->getResource($group['organization']);
+                    $organizationIds[] = $group['organization'];
+                }
+            }
+        }
 
         return $variables;
     }
@@ -209,7 +245,10 @@ class DashboardUserController extends AbstractController
      */
     public function addorganizationAction(Session $session, Request $request, CommonGroundService $commonGroundService, MailingService $mailingService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
 
         if ($request->isMethod('POST')) {
@@ -267,9 +306,12 @@ class DashboardUserController extends AbstractController
      */
     public function eventsAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
-        $variables['events'] = $commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
 
         return $variables;
     }
@@ -280,7 +322,10 @@ class DashboardUserController extends AbstractController
      */
     public function charactersAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
         $variables['characters'] = []; //commonGroundService->getResourceList(['component'=>'arc', 'type'=>'events'])['hydra:member'];
         $variables['organizations'] = $commonGroundService->getResourceList(['component' => 'cc', 'type' => 'organizations'], ['persons' => $this->getUser()->getPerson()])['hydra:member'];
@@ -298,13 +343,20 @@ class DashboardUserController extends AbstractController
      */
     public function favoritesAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables = [];
         $variables['likes'] = $commonGroundService->getResourceList(['component' => 'rc', 'type' => 'likes'], ['author' => $this->getUser()->getPerson(), 'order[dateCreated]' => 'desc'])['hydra:member'];
         foreach ($variables['likes'] as &$like) {
             if ($commonGroundService->isResource($like['resource'])) {
                 $like['resource'] = $commonGroundService->getResource($like['resource']);
             }
+        }
+        //don't display page if there aren't any likes from the user
+        if (!$variables['likes'] > 0) {
+            return $this->redirect($this->generateUrl('app_default_index'));
         }
 
         return $variables;
@@ -316,7 +368,11 @@ class DashboardUserController extends AbstractController
      */
     public function ordersAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['customer' => $this->getUser()->getPerson()])['hydra:member'];
 
         return $variables;
@@ -328,7 +384,10 @@ class DashboardUserController extends AbstractController
      */
     public function orderAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher, $id)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
         $variables['order'] = $commonGroundService->getResource(['component' => 'orc', 'type' => 'orders', 'id' => $id]);
 
         if ($this->getUser()->getPerson() != $variables['order']['customer']) {
@@ -336,5 +395,60 @@ class DashboardUserController extends AbstractController
         }
 
         return $variables;
+    }
+
+    /**
+     * @Route("/dowload-invoice")
+     * @Template
+     */
+    public function downloadInvoiceAction(Session $session, Request $request, CommonGroundService $commonGroundService)
+    {
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
+        if ($request->isMethod('POST')) {
+            $redirectUrl = $request->get('redirectUrl');
+            $order = $commonGroundService->getResource($request->get('order'));
+
+            $customer = $commonGroundService->getResource($order['customer']);
+            $organization = $commonGroundService->getResource($order['organization']);
+            $invoice = $commonGroundService->getResource($order['invoice']);
+
+            // The pdf
+            $mpdf = new \Mpdf\Mpdf();
+
+            $dateCreated = new \DateTime($invoice['dateCreated']);
+
+            $data = '';
+            $data .= '<h1>Order for '.$customer['name'].'</h1>';
+            $data .= '<h3>Ordered at '.$organization['name'].'</h3>';
+            $data .= '<span>'.$dateCreated->format('d-m-Y H:i').'</span>';
+            $data .= '<div style="height:30px"></div>';
+
+            if (isset($order['items'])) {
+                $data .= '<h3>Items</h3>';
+                $data .= '<table>';
+                $data .= '<thead><tr><th>Name</th><th>Quantity</th><th>Price</th></tr></thead>';
+                $data .= '<tbody>';
+                foreach ($order['items'] as $item) {
+                    $data .= '<tr><td>'.$item['name'].'</td><td style="text-align: center">'.$item['quantity'].'</td><td>'.$item['priceCurrency'].' '.$item['price'].',-</td></tr>';
+                }
+                $data .= '<tr><td></td><td></td><td><hr></td></tr>';
+                $data .= '<tr><td></td><td></td><td><b>'.$order['priceCurrency'].' '.$order['price'].',-</b></td></tr>';
+                $data .= '</tbody>';
+                $data .= '</table>';
+            }
+            $mpdf->WriteHtml($data);
+            $mpdf->Output('invoice.pdf', 'D');
+
+            if ($redirectUrl) {
+                return $this->redirect($redirectUrl);
+            } else {
+                return $this->redirectToRoute('app_dashboarduser_orders');
+            }
+        }
+
+        return $this->redirectToRoute('app_dashboarduser_orders');
     }
 }

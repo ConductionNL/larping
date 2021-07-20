@@ -15,13 +15,18 @@
                     <li class="breadcrumb-item"><a
                             href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item"><a
-                            href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a>
+                            href="{{ path('app_dashboardorganization_products') }}">{{ 'products'|trans|capitalize }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">{{ 'edit product'|trans|capitalize }}</li>
                 </ul>
             </nav>
-            <form id="{{ type }}Form{{ id }}" method="post">
+            <form id="ProductForm{{ product.id }}" method="post" enctype="multipart/form-data" name="productForm">
                 <input type="hidden" name="@type" value="Product">
+                {% if product['id'] is defined %}<input type="hidden" id="id" name="id"
+                                                        value="{{ product['id'] }}">{% endif %}
+                {% if product['@id'] is defined %}<input type="hidden" id="@id" name="@id"
+                                                         value="{{ product['@id'] }}">{% endif %}
+
                 <!-- About -->
                 <div class="card">
                     <div class="card-body px-6 pt-6 pb-1">
@@ -30,8 +35,10 @@
                                 <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {{ product.name }}</h3>
                             </div>
                             <div class="form-group  col-md-6 mb-6">
-                                <button type="submit" class="btn btn-primary float-right ">{{ 'save'|trans|capitalize }}</button>
-                                <a class="btn btn-danger float-right mr-2 text-white" data-toggle="modal" data-target="#ProductModalDelete{{ product.id }}">{{ 'delete'|trans|capitalize }}</a>
+                                <button type="submit"
+                                        class="btn btn-primary float-right ">{{ 'save'|trans|capitalize }}</button>
+                                <a class="btn btn-danger float-right mr-2 text-white" data-toggle="modal"
+                                   data-target="#ProductModalDelete{{ product.id }}">{{ 'delete'|trans|capitalize }}</a>
                                 {% include 'dashboard_organization/modals/model_delete.html.twig' with {'name': product.name,'id': product.id,'type':'Product','url': path('app_dashboardorganization_editproduct', {id: product.id, action: 'delete'}) } %}
                             </div>
                         </div>
@@ -43,32 +50,48 @@
                             </div>
                             <div class="form-group  col-md-4">
                                 <label for="type">{{ 'type'|trans|capitalize }}</label>
-                                <select class="form-control" aria-label="{{ 'the type of this product'|trans|capitalize }}" required id="type" name="type" {% if product.type|default %}disabled{% endif%}>
-                                    <option value="simple" {% if product.type is defined  and product.type == "simple"%} selected {% endif %}>{{ 'simple'|trans|capitalize }}</option>
-                                    <option value="ticket" {% if product.type is defined  and product.type == "ticket"%} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
-                                    <option value="subscription" {% if product.type is defined  and product.type == "subscription"%} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
+                                <select class="form-control"
+                                        aria-label="{{ 'the type of this product'|trans|capitalize }}" required
+                                        id="type" name="type" {% if product.type|default %}disabled{% endif %}>
+                                    <option
+                                        value="simple" {% if product.type is defined  and product.type == "simple" %} selected {% endif %}>{{ 'simple'|trans|capitalize }}</option>
+                                    <option
+                                        value="ticket" {% if product.type is defined  and product.type == "ticket" %} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
+                                    <option
+                                        value="subscription" {% if product.type is defined  and product.type == "subscription" %} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
                                     <!--
-                                    <option value="set" {% if product.type is defined  and product.type == "set"%} selected {% endif %}>{{ 'set'|trans|capitalize }}</option>
-                                    <option value="virtual" {% if product.type is defined  and product.type == "virtual"%} selected {% endif %}>{{ 'virtual'|trans|capitalize }}</option>
-                                    <option value="external" {% if product.type is defined  and product.type == "external"%} selected {% endif %}>{{ 'external'|trans|capitalize }}</option>
-                                    <option value="variable" {% if product.type is defined  and product.type == "variable"%} selected {% endif %}>{{ 'variable'|trans|capitalize }}</option>
-                                    <option value="person" {% if product.type is defined  and product.type == "person"%} selected {% endif %}>{{ 'person'|trans|capitalize }}</option>
-                                    <option value="location" {% if product.type is defined  and product.type == "location"%} selected {% endif %}>{{ 'location'|trans|capitalize }}</option>
-                                    <option value="service" {% if product.type is defined  and product.type == "service"%} selected {% endif %}>{{ 'service'|trans|capitalize }}</option>
+                                    <option value="set" {% if product.type is defined  and product.type == "set" %} selected {% endif %}>{{ 'set'|trans|capitalize }}</option>
+                                    <option value="virtual" {% if product.type is defined  and product.type == "virtual" %} selected {% endif %}>{{ 'virtual'|trans|capitalize }}</option>
+                                    <option value="external" {% if product.type is defined  and product.type == "external" %} selected {% endif %}>{{ 'external'|trans|capitalize }}</option>
+                                    <option value="variable" {% if product.type is defined  and product.type == "variable" %} selected {% endif %}>{{ 'variable'|trans|capitalize }}</option>
+                                    <option value="person" {% if product.type is defined  and product.type == "person" %} selected {% endif %}>{{ 'person'|trans|capitalize }}</option>
+                                    <option value="location" {% if product.type is defined  and product.type == "location" %} selected {% endif %}>{{ 'location'|trans|capitalize }}</option>
+                                    <option value="service" {% if product.type is defined  and product.type == "service" %} selected {% endif %}>{{ 'service'|trans|capitalize }}</option>
                                     -->
                                 </select>
                             </div>
+{#                            <div class="form-group col-6">#}
+{#                                <label for="quantity">{{ 'quantity'|trans|capitalize }}*</label>#}
+{#                                <input type="number" class="form-control" id="quantity" name="quantity"#}
+{#                                       {% if offers is defined %}value="{{ offers.quantity }}"{% endif %}#}
+{#                                       required>#}
+{#                            </div>#}
+{#                            <div class="form-group col-6">#}
+{#                                <label for="maxQuantity">{{ 'maximum quantity'|trans|capitalize }}*</label>#}
+{#                                <input type="number" class="form-control" id="maxQuantity" name="maxQuantity"#}
+{#                                       {% if offers is defined %}value="{{ offers.maxQuantity }}"{% endif %}#}
+{#                                       required>#}
+{#                            </div>#}
                             <div class="form-group col-md-12 mb-6">
-                                <label for="description">{{ 'description'|trans|capitalize }}</label>
-                                <textarea class="form-control" rows="6" id="description"
-                                          name="description">{{ product.description }}</textarea>
+                                <label for="summernoteProductDescription">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="summernote" name="description" id="summernoteProductDescription">{% if product.description|default %}{{ product.description }}{% endif %}</textarea>
                             </div>
                         </div>
 
                     </div>
                 </div>
 
-                {% if product.type == "ticket"%}
+                {% if product.type == "ticket" %}
                     <!-- Event -->
                     <div class="card">
                         <div class="card-body px-6 pt-6 pb-1">
@@ -76,10 +99,13 @@
                             <div class="row">
                                 <div class="form-group  col-md-12 mb-6">
                                     <label for="name">{{ 'event'|trans|capitalize }}* </label>
-                                    <select class="form-control" aria-label="{{ 'the event of this product'|trans|capitalize }}" required id="event" name="event">
-                                    {% for event in events %}
-                                        <option value="{{ event['@id'] }}" {% if product.event|default  and product.event == event['@id']%} selected {% endif %}>{{ event.name }}</option>
-                                    {% endfor %}
+                                    <select class="form-control"
+                                            aria-label="{{ 'the event of this product'|trans|capitalize }}" required
+                                            id="event" name="event">
+                                        {% for event in events %}
+                                            <option
+                                                value="{{ event['@id'] }}" {% if product.event|default  and product.event == event['@id'] %} selected {% endif %}>{{ event.name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
@@ -94,90 +120,67 @@
                         <div class="row">
                             <div class="form-group  col-md-12 mb-6">
                                 <label for="name">{{ 'group'|trans|capitalize }}* </label>
-                                <select class="form-control" aria-label="{{ 'the group of this product'|trans|capitalize }}" required id="userGroup" name="userGroup">
-                                    <option value="" >{{ 'none'|trans|capitalize }}</option>
-                                    {% for group in groups %}
-                                        <option value="https://www.id-vault.com/api/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/groups/' ~ group['id']%} selected {% endif %}>{{ group.name }}</option>
-                                    {% endfor %}
+                                <select class="form-control"
+                                        aria-label="{{ 'the group of this product'|trans|capitalize }}"
+                                        id="userGroup" name="userGroup">
+                                    <option value="">{{ 'none'|trans|capitalize }}</option>
+                                    {% if groups|default %}
+                                        {% for group in groups %}
+                                            {# temp do not show the groups clients and root TODO:remove? #}
+                                            {% if group.name != 'clients' and group.name != 'root' and group.name != 'administrators' %}
+                                                <option
+                                                    value="https://www.id-vault.com/api/v1/wac/groups/{{ group['id'] }}" {% if product.userGroup|default  and product.userGroup == 'https://www.id-vault.com/api/v1/wac/groups/' ~ group['id'] %} selected {% endif %}>{{ group.name|trans|capitalize }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- About -->
-                <div class="card">
-                    <div class="card-body px-6 pt-6 pb-1">
-                        <h3 class="h4 mb-4">{{ 'pricing'|trans|capitalize }} </h3>
-                        <div class="row">
-                            {% if product.offers is  defined and product.offers|length > 0 %}
-                                <table id="events" class="display nowrap table" style="width:100%">
-                                    <thead>
-                                    <tr>
-                                        <th>{{ 'name'|trans|capitalize }}</th>
-                                        <th>{{ 'audiance'|trans|capitalize }}</th>
-                                        <th>{{ 'price'|trans|capitalize }}</th>
-                                        <th><a type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#OfferModalAdd">{{ 'add pricing'|trans|capitalize }}</a>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for offer in product.offers %}
-                                        <tr>
-                                            <td class="text-capitalize">
-                                               {{ offer.name }}
-                                            </td>
-                                            <td>
-                                                {{ offer.audience }}
-                                            </td>
-                                            <td>
-                                                {{ offer.priceCurrency }} {{ offer.price }}
-                                            </td>
-                                            <td class="text-capitalize">
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            {% else %}
-                                    <a href="#"  class="btn btn-primary btn-block" data-toggle="modal" data-target="#OfferModalAdd">{{ 'add pricing'|trans|capitalize }}</a>
-                            {% endif %}
-
-                        </div>
-                        <div class="row">
-
-                        </div>
-
-                    </div>
-                </div>
-
                 <!-- Gallery -->
                 <div class="card">
                     <div class="card-body p-6">
-                        <h3 class="h4 mb-4">{{ 'gallery'|trans|capitalize }}</h3>
-
+                        <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
+                        <p class="text-muted">{{ 'the recomended aspect ratio for images is 3 : 2 (for example: 960x640 or 260x173), you can upload different aspect ratio images, but they may mess with the look of the cards'|trans|capitalize }}</p>
                         <div class="form-group position-relative mb-6 form-group-dragable">
-                            <input type="file" class="custom-file-input" id="favicon" name="favicon">
-                            <label class="custom-file-label" for="favicon">
-                               {{ 'Click or Drag images here'|trans|capitalize }}
-                            </label>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="row justify-content-center">
-                    <div class="col-md-7 col-lg-6 col-xl-5">
-                        <div class="mb-6">
-                            <button type="submit" class="btn btn-lg btn-primary btn-block">{{ 'submit'|trans|capitalize }}</button>
+                            <input onchange="showImage()" type="file" class="custom-file-input" id="image"
+                                   name="image">
+                            <div class="custom-file-label" for="image" id="imageHolder"
+                                {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
+                                {% if image.base64 is defined %}
+                                    <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
+                                {% else %}
+                                    {{ 'Click or Drag an image here'|trans|capitalize }}
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </form>
+
+            <!-- Offers -->
+            <div class="card">
+                <div class="card-body px-6 pt-6 pb-1">
+                    <h3 class="h4 mb-4">{{ 'offers'|trans|capitalize }} </h3>
+                    <div class="row">
+                        {% include 'dashboard_organization/tables/offers.html.twig' with {'id': 'offers'} %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-7 col-lg-6 col-xl-5">
+                    <div class="mb-6">
+                        <button type="submit"
+                                onclick="document.productForm.submit()"
+                                class="btn btn-lg btn-primary btn-block">{{ 'save'|trans|capitalize }}</button>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </section>
-
-    {% include 'dashboard_organization/modals/offer_product.html.twig'%}
 
     <script>
         function addItem(id) {
@@ -190,11 +193,11 @@
             input.setAttribute('id', id);
 
             var options_array = {
-                ValueA : '{{ 'select type'|trans|capitalize }}',
-                ValueB : '{{ 'website'|trans|capitalize }}',
-                ValueC : '{{ 'facebook'|trans|capitalize }}',
-                ValueD : '{{ 'twitter'|trans|capitalize }}',
-                ValueE : '{{ 'instagram'|trans|capitalize }}'
+                ValueA: '{{ 'select type'|trans|capitalize }}',
+                ValueB: '{{ 'website'|trans|capitalize }}',
+                ValueC: '{{ 'facebook'|trans|capitalize }}',
+                ValueD: '{{ 'twitter'|trans|capitalize }}',
+                ValueE: '{{ 'instagram'|trans|capitalize }}'
             };
 
             const select = document.createElement("select");
@@ -202,12 +205,50 @@
                 select.setAttribute('class', "form-control mb-2");
                 input.setAttribute('placeholder', '{{ 'add url'|trans|capitalize }}');
                 formDiv.appendChild(select);
-                for(option in options_array) {
+                for (option in options_array) {
                     select.options[select.options.length] = new Option(options_array[option], option);
                 }
             }
 
             formDiv.appendChild(input);
+        }
+    </script>
+
+    <script>
+        $('#summernoteProductDescription').summernote({
+            placeholder: '{{ 'content'|trans|capitalize }}',
+            tabsize: 2,
+            height: 300
+        });
+    </script>
+
+    <script>
+        function showImage() {
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+
+            async function Main() {
+                let file = document.querySelector('#image').files[0];
+                let imageHolder = document.querySelector('#imageHolder');
+                if (file) {
+                    imageHolder.setAttribute('style', 'padding-top: 10px;')
+                    imageHolder.innerHTML = '';
+                    let image = document.createElement('img');
+                    let base64 = await toBase64(file);
+                    image.setAttribute('style', 'height: 150px;');
+                    image.setAttribute('src', base64);
+                    imageHolder.appendChild(image);
+                } else {
+                    imageHolder.setAttribute('style', '')
+                    imageHolder.innerHTML = '{{ 'Click or Drag an image here'|trans|capitalize }}';
+                }
+            }
+
+            Main();
         }
     </script>
 {% endblock %}

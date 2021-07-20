@@ -28,7 +28,8 @@
                 </td>
                 <td class="text-capitalize">
                     {% if event.location|default %}
-                        <span class="d-block">{{ event.location }}</span>
+                        {% set location = commonground_resource(event.location) %}
+                        <span class="d-block">{{ location.name }}</span>
                     {% endif %}
                 </td>
 

@@ -9,7 +9,7 @@
         <div class="container">
             <!-- Breadcrumb -->
             <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
-                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'tickets'|trans|capitalize }}</h2>
+                <h2 class="font-weight-normal mb-4 mb-md-0">{{ 'tickets'|trans|capitalize }} {{ event.name }}</h2>
                 <ul class="list-unstyled d-flex p-0 m-0">
                     <li class="breadcrumb-item"><a href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
                     <li class="breadcrumb-item"><a href="{{ path('app_dashboardorganization_index') }}">{{ 'dashboard'|trans|capitalize }}</a></li>
@@ -18,12 +18,76 @@
                 </ul>
             </nav>
 
-            <!-- events -->
-            {%  include 'dashboard_organization/tables/products.html.twig' %}
+            <table id="tickets" class="display nowrap table" style="width:100%">
+                <thead>
+                <tr id="test">
+                    <th>{{ 'reference'|trans|capitalize }}</th>
+                    <th>{{ 'name'|trans|capitalize }}</th>
+                    <th>{{ 'paid'|trans|capitalize }}</th>
+                    <th>{{ 'type'|trans|capitalize }}</th>
+                    <th>{{ 'extra'|trans|capitalize }}</th>
+                        {% if app.request.attributes.get('_route') == 'app_dashboardorganization_eventtickets' %}
+                            <button onclick="sendDownload('tickets')" {#href="{{ path('app_dashboardorganization_eventtickets', {'action': 'download', id: event.id}) }}"#} class="btn btn-warning btn-sm ml-2 text-white float-right mb-1">{{ 'download tickets'|trans|capitalize }}</button>
+                        {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
 
-            {%  include 'dashboard_organization/tables/offers.html.twig'  with {'offers': offers} %}
+                    {% set items = order.items %}
+                    <tr>
+                        <td>{{ order.reference }}</td>
+                        <td>{{ commonground_resource(order.customer).name }}</td>
+                        <td {% if commonground_resource(order.invoice).paid == true %} class="text-success" {% else %} class="text-danger" {% endif %}>{% if commonground_resource(order.invoice).paid == true %}{{ 'paid'|trans|capitalize }}{% else %}{{ 'unpaid'|trans|capitalize }}{% endif %}</td>
+                        {% for item in items %}
+                            {% set offer = commonground_resource(item.offer) %}
+                            <td>{{ offer.products[0].type }}</td>
 
+                            {% if offer.options|default %}
+                                {% for option in options %}
+                                    <td>{{ option.name }}</td>
+                                {% endfor %}
+                            {% else %}
+                                <td class="text-danger">{{ 'none'|trans|capitalize }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </section>
 
+    <script>
+
+        function sendDownload(table_id, separator = ',') {
+            // Select rows from table_id
+            var rows = document.querySelectorAll('#' + table_id + ' tr');
+            // Construct csv
+            var csv = [];
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll('td, th');
+                for (var j = 0; j < cols.length; j++) {
+                    // Clean innertext to remove multiple spaces and jumpline (break csv)
+                    var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                    // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                    data = data.replace(/"/g, '""');
+                    // Push escaped string
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(separator));
+            }
+            var csv_string = csv.join('\n');
+            // Download it
+            var filename = 'export_' + table_id + '_' + '{{ event.name }}' + '.csv';
+            var link = document.createElement('a');
+            link.style.display = 'none';
+            link.setAttribute('target', '_blank');
+            link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 {% endblock %}

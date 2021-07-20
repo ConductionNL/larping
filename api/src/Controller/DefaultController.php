@@ -32,10 +32,10 @@ class DefaultController extends AbstractController
     public function indexAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'])['hydra:member'];
-        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'settings'])['hydra:member'];
-        $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'regions'])['hydra:member'];
-        $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name'=>'features'])['hydra:member'];
+        $variables['events'] = $commonGroundService->getResourceList(['component' => 'arc', 'type' => 'events'], ['status' => 'published'])['hydra:member'];
+        $variables['settings'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'settings'])['hydra:member'];
+        $variables['regions'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'regions'])['hydra:member'];
+        $variables['features'] = $commonGroundService->getResourceList(['component' => 'wrc', 'type' => 'categories'], ['parent.name' => 'features'])['hydra:member'];
 
         return $variables;
     }
@@ -46,8 +46,6 @@ class DefaultController extends AbstractController
      */
     public function newsletterAction(Session $session, Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        // TODO: use email used in form to subscribe to the newsletter?
-
         $session->set('backUrl', $request->query->get('backUrl'));
 
         $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
@@ -91,7 +89,7 @@ class DefaultController extends AbstractController
                 $like['author'] = $this->getUser()->getPerson();
                 $like['resource'] = $request->get('resource');
                 $like['organization'] = $request->get('organization');
-                $commonGroundService->saveResource($like, ['component'=>'rc', 'type'=>'likes']);
+                $commonGroundService->saveResource($like, ['component' => 'rc', 'type' => 'likes'], [], [], false, false);
 
                 return new JsonResponse([
                     'status'        => 'liked',
@@ -136,12 +134,47 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * @Route("/terms-and-conditions/{id}")
+     * @Template
+     */
+    public function termsAndConditionsForOrgAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params, $id, Session $session)
+    {
+        try {
+            $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
+        } catch (\Exception $exception) {
+            return $this->redirectToRoute('app_index_default');
+        }
+
+        return $variables;
+    }
+
+    /**
+     * @Route("/privacy-policy/{id}")
+     * @Template
+     */
+    public function privacyPolicyForOrgAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params, $id, Session $session)
+    {
+        try {
+            $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => $id]);
+        } catch (\Exception $exception) {
+            return $this->redirectToRoute('app_index_default');
+        }
+
+        return $variables;
+    }
+
+    /**
      * @Route("/review")
      * @Template
      */
     public function reviewAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
+        // Make sure the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirect($this->generateUrl('app_user_idvault'));
+        }
+
         // Add review
         if ($request->isMethod('POST')) {
             $resource = $request->request->all();
@@ -150,7 +183,7 @@ class DefaultController extends AbstractController
             $resource['rating'] = (int) $resource['rating'];
 
             // Save to the commonground component
-            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews']);
+            $variables['review'] = $commonGroundService->saveResource($resource, ['component' => 'rc', 'type' => 'reviews'], [], [], false, false);
 
             // redirects externally
             if ($request->get('redirect')) {
@@ -168,7 +201,7 @@ class DefaultController extends AbstractController
     public function contactAction(CommonGroundService $commonGroundService, MailingService $mailingService, Request $request, ParameterBagInterface $params)
     {
         $variables = [];
-        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id'=>'d24e147f-00b9-4970-9809-6684a3fb965b']);
+        $variables['organization'] = $commonGroundService->getResource(['component' => 'wrc', 'type' => 'organizations', 'id' => 'f85e3808-7744-4fd4-a1e1-4b903c5f3d9d']);
         if (array_key_exists('contact', $variables['organization']) && $variables['organization']['contact']) {
             $variables['contact'] = $commonGroundService->getResource($variables['organization']['contact']);
         }

@@ -1,22 +1,41 @@
 {% if users|default and  users|length > 0 %}
-    <table id="products" class="display nowrap table" style="width:100%">
+    <div class="row">
+            <input class="form-control ml-3 w-100 col-11" onkeyup="search()" type="text" id="searchFilter" placeholder="{{ 'Search by name, email or group'|trans|capitalize }}">
+    </div>
+    <table id="users" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
             <th>{{ 'name'|trans|capitalize }}</th>
+            <th>{{ 'email'|trans|capitalize }}</th>
             <th>{{ 'group(s)'|trans|capitalize }}</th>
-            <th><button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#UserModalAdd">{{ 'invite'|trans|capitalize }}</button></th>
+            <th style="min-width: 150px">{{ 'membership paid'|trans|capitalize }}</th>
+            <th style="min-width: 270px">
+                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#UserModalAdd">{{ 'invite'|trans|capitalize }}</button>
+                <button type="button" class="btn btn-warning btn-sm float-right text-white mr-2" onclick="sendDownload('users')">{{ 'download list'|trans|capitalize }}</button>
+            </th>
         </tr>
         </thead>
         <tbody>
         {% for user in users %}
+            {% set userData = commonground_resource_list({'component':'uc','type':'users'}, {'username' : user.name})['hydra:member'] %}
+            {% if userData|length > 0 %}
+                {% set userData = userData[0] %}
+            {% endif %}
             <tr>
                 <td>
-                    <a class="text-hover-primary text-muted" >{{ user.name }}</a>
+                    <a class="text-hover-primary text-muted" >{% if userData|default %} {{ commonground_resource(userData.person).name }} {% endif %}</a>
+                </td>
+                <td>
+                    <a class="text-hover-primary text-muted">{{ user.name }}</a>
                 </td>
                 <td>
                     <a class="text-hover-primary text-muted" >
-                        {% for group in user.groups %}{{ group|capitalize }}{% if not loop.last %}, {% endif %}{% endfor %}
+                        {% for group in user.groups %}
+                            {# temp do not show the groups clients and root TODO:remove? #}
+                            {% if group != 'clients' and group != 'root' %}{{ group|trans|capitalize }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}
                     </a>
+                </td>
+                <td>
                 </td>
                 <td>
                     <div class="dropdown">
@@ -24,7 +43,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#UserModal{{ user.name }}">Edit</a>
+{#                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#MailModal{{ user.id }}">{{ 'mail to user'|trans|capitalize }}</a>#}
                         </div>
                     </div>
                 </td>
@@ -47,4 +66,63 @@
     {% include 'dashboard_organization/modals/user.html.twig' %}
 {% endfor %}
 
+<script>
 
+    function sendDownload(table_id, separator = ',') {
+        // Select rows from table_id
+        var rows = document.querySelectorAll('#' + table_id + ' tr');
+        // Construct csv
+        var csv = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll('td, th');
+            for (var j = 0; j < cols.length; j++) {
+                // Clean innertext to remove multiple spaces and jumpline (break csv)
+                var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                data = data.replace(/"/g, '""');
+                // Push escaped string
+                row.push('"' + data + '"');
+            }
+            csv.push(row.join(separator));
+        }
+        var csv_string = csv.join('\n');
+        // Download it
+        var filename = 'export_' + table_id + '_' + '{{ organization.name }}' + '.csv';
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        link.setAttribute('target', '_blank');
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function search() {
+        var input, filter, table, i;
+        input = document.getElementById("searchFilter");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("users");
+        var rows = table.getElementsByTagName("tr");
+        var head = table.getElementsByTagName("thead");
+        for (i = 0; i < rows.length; i++) {
+            if (i == 0){continue;}
+            var cells = rows[i].getElementsByTagName("td");
+            var j;
+            var rowContainsFilter = false;
+            for (j = 0; j < cells.length; j++) {
+                if (cells[j]) {
+                    if (cells[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        rowContainsFilter = true;
+                        continue;
+                    }
+                }
+            }
+            if (! rowContainsFilter) {
+                rows[i].style.display = "none";
+            } else {
+                rows[i].style.display = "";
+            }
+        }
+    }
+</script>

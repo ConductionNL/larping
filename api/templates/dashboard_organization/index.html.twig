@@ -19,73 +19,21 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header bg-white">
-                            <span class="text-content">{{'events'|trans|capitalize}}</span>
+                            <span class="text-content">{{'upcoming events'|trans|capitalize}}</span>
+                            <span class="badge badge-primary">{{ 'upcoming'|trans }}</span>
                         </div>
 
                         <div class="card-body widget-content">
-                            <span class="widget-content-title">{{events|length}}</span>
+                            <span class="widget-content-title">{{ upcomingEventsCount }}</span>
+                            {% if upcomingEvent|default %}
                             <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0">Compare to last month</p>
+                                <p class="mb-0">{{ 'next event'|trans|capitalize }}</p>
+                                <b>{{ upcomingEvent.name }}</b>
                             </div>
-                            <a href="{{ path('app_dashboardorganization_events') }}" class="btn btn-link">{{ 'all events'|trans|capitalize }}</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- reviews -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header bg-white">
-                            <span class="text-content">{{'reviews '|trans|capitalize}}</span>
-                            <span class="badge badge-primary">total</span>
-                        </div>
-
-                        <div class="card-body widget-content">
-                            <span class="widget-content-title">28</span>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0">{{ 'aggregate rating'|trans|capitalize }} <b>8.5/10</b></p>
-                            </div>
-                            <a href="{{ path('app_dashboardorganization_reviews') }}" class="btn btn-link">{{ 'all reviews'|trans|capitalize }}</a>
-                        </div>
-                    </div>
-                </div><!-- /.col -->
-
-                <!-- revenue -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header bg-white">
-                            <span class="text-content">{{ 'revenue'|trans|capitalize }}</span>
-                            <span class="badge badge-primary">{{ 'monthly'|trans|capitalize }}</span>
-                        </div>
-
-                        <div class="card-body widget-content">
-                            <span class="widget-content-title">$1250,95</span>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0">Compared to last month</p>
-                                <span class="text-danger"> 3% <i class="fa fa-level-down" aria-hidden="true"></i> </span>
-                            </div>
-                            <a href="{{ path('app_dashboardorganization_earnings') }}" class="btn btn-link">{{ 'all earnings'|trans|capitalize }}</a>
-                        </div>
-                    </div>
-                </div><!-- /.col -->
-
-
-
-                <!-- Members -->
-                <div class="col-sm-4">
-                    <div class="card">
-                        <div class="card-header bg-white">
-                            <span class="text-content">{{ 'members'|trans|capitalize }}</span>
-                            <span class="badge badge-primary">{{'weekly'|trans|capitalize}}</span>
-                        </div>
-
-                        <div class="card-body widget-content">
-                            <span class="widget-content-title">5238</span>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0">{{ 'members since last week'|trans }}</p>
-                                <span class="text-success"> 25 <i class="fa fa-level-up" aria-hidden="true"></i> </span>
-                            </div>
-                            <a href="{{ path('app_dashboardorganization_members') }}" class="btn btn-link">{{'all members'|trans|capitalize}}</a>
+                            {% endif %}
+                            <a href="{{ path('app_dashboardorganization_events') }}"
+                               class="btn btn-link {% if not upcomingEvent|default %}mt-5{% endif %}"
+                            >{{ 'all events'|trans|capitalize }}</a>
                         </div>
                     </div>
                 </div>
@@ -95,76 +43,100 @@
                     <div class="card">
                         <div class="card-header bg-white">
                             <span class="text-content">{{ 'orders'|trans|capitalize }}</span>
-                            <span class="badge badge-primary">Weekly</span>
+                            <span class="badge badge-primary">{{'upcoming'|trans}}</span>
                         </div>
 
                         <div class="card-body widget-content">
-                            <span class="widget-content-title">+15%</span>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0">Compare to last week</p>
-                                <span class="text-danger"> 5% <i class="fa fa-level-up" aria-hidden="true"></i> </span>
-                            </div>
-                            <a href="{{ path('app_dashboardorganization_orders') }}" class="btn btn-link">{{'all orders'|trans|capitalize}}</a>
+                            <span class="widget-content-title">
+                                {% if ticketsSold is defined %}
+                                    {% if ticketsSold == 1 %}
+                                        1 {{ 'ticket'|trans }}
+                                    {% else %}
+                                        {{ ticketsSold }} {{ 'tickets'|trans }}
+                                    {% endif %}
+                                {% else %}
+                                    x
+                                {% endif %}
+                            </span>
+                            {% if ticketsSoldLastWeek is defined %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="mb-0">{{ 'last week'|trans|capitalize }}</p>
+                                    <span>
+                                        {% if ticketsSoldLastWeek == 1 %}
+                                            1 {{ 'ticket'|trans }}
+                                        {% else %}
+                                            {{ ticketsSoldLastWeek }} {{ 'tickets'|trans }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {% endif %}
+                            <a href="{{ path('app_dashboardorganization_orders') }}"
+                               class="btn btn-link {% if ticketsSoldLastWeek is not defined %}mt-5{% endif %}"
+                            >{{'all orders'|trans|capitalize}}</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bookings -->
+                <!-- revenue -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{ 'revenue'|trans|capitalize }}</span>
+                            <span class="badge badge-primary">{{ 'monthly'|trans }}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">{{ revenue.thisMonth }}</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">{{ 'last month'|trans|capitalize }}</p>
+                                <span>{{ revenue.lastMonth }}</span>
+                            </div>
+                            <a href="{{ path('app_dashboardorganization_earnings') }}" class="btn btn-link">{{ 'all earnings'|trans|capitalize }}</a>
+                        </div>
+                    </div>
+                </div><!-- /.col -->
+
+                <!-- reviews -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <span class="text-content">{{'all reviews'|trans|capitalize}}</span>
+                            <span class="badge badge-primary">{{ 'total'|trans }}</span>
+                        </div>
+
+                        <div class="card-body widget-content">
+                            <span class="widget-content-title">{{ totals.reviews }}</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">{{ 'average rating'|trans|capitalize }}</p>
+                                <b>{{ totals.rating|round(1, 'common') }} / 5</b>
+                            </div>
+                            <a href="{{ path('app_dashboardorganization_reviews') }}" class="btn btn-link">{{ 'all reviews'|trans|capitalize }}</a>
+                        </div>
+                    </div>
+                </div><!-- /.col -->
+
+                <!-- Members -->
                 <div class="col-sm-4">
                     <div class="card">
                         <div class="card-header bg-white">
-                            <span class="text-content">Bookings</span>
-                            <span class="badge badge-primary">Daily</span>
+                            <span class="text-content">{{ 'members'|trans|capitalize }}</span>
+                            <span class="badge badge-primary">{{'total'|trans}}</span>
                         </div>
 
                         <div class="card-body widget-content">
-                            <span class="widget-content-title">1,443</span>
+                            <span class="widget-content-title">{{ totalUsers }}</span>
                             <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0">Compare to yesterday</p>
-                                <span class="text-success"> 6% <i class="fa fa-level-up" aria-hidden="true"></i> </span>
+                                <p class="mb-0">{{ 'new members this month'|trans|capitalize }}</p>
+                                {% if newUsersThisMonth > 0 %}
+                                    <span class="text-success"> {{ newUsersThisMonth }} <i class="fa fa-level-up" aria-hidden="true"></i> </span>
+                                {% else %}
+                                    <b>{{ newUsersThisMonth }}</b>
+                                {% endif %}
                             </div>
-                            <a href="#" class="btn btn-link">All Bookings</a>
+                            <a href="{{ path('app_dashboardorganization_members') }}" class="btn btn-link">{{'all members'|trans|capitalize}}</a>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Orders -->
-            <div class="card">
-                <div class="card-header bg-white">
-                    <span class="text-content">Orders</span>
-                    <form class="ml-auto d-flex align-items-center">
-                        <div class="form-group mb-0 mr-2">
-                            <input type="text" class="form-control double-date form-control-sm">
-                        </div>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-outline-secondary btn-sm active">Left</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm">Middle</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm">Right</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="card-body widget-content">
-                    <div class="row">
-                        <div class="col-md-4 col-lg-3">
-                            <div class="mb-5">
-                                <span class="widget-content-title">2,450</span>
-                                <p>Total Orders</p>
-                            </div>
-                            <div class="mb-5">
-                                <span class="widget-content-title">$50,500</span>
-                                <p>Total Payments</p>
-                            </div>
-                        </div>
-                        <div class="col-md-8 col-lg-9">
-                            <div class="flot-chart">
-                                <div class="flot-chart-content" id="flot-dashboard-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             </div><!-- /.row -->
         </div>
     </section>

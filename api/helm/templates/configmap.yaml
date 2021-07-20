@@ -25,8 +25,6 @@ data:
   app-description: {{ .Values.settings.description | quote }}
   app-type: {{ .Values.settings.type | quote }}
   app-web: {{ .Values.settings.web | quote }}
-  app-internal: {{ .Values.settings.internal | quote }}
-  app-session-duration: {{ .Values.settings.sessionDuration | quote }}
   app-subpath-routing: {{ .Values.settings.subpathRouting | quote }}
   app-subpath: {{ .Values.settings.subpath | quote }}
   
@@ -57,5 +55,4 @@ data:
   redis-host: '{{ .Values.settings.name }}-cache'
   redis-port: {{ .Values.redis.port | toString | quote }}
   
-  digispoof-location: {{ .Values.commonground.digispoof.location }}
-  eherkenning-location: {{ .Values.commonground.eherkenning.location }}
+  app-session-duration: {{ .Values.security.sessionDuration | toString | quote }}

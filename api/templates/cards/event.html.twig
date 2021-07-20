@@ -5,10 +5,41 @@
     }) %}
 {% endif %}
 {% set eventCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':item['id']})['hydra:member'] %}
-{% set eventOrganizations = commonground_resource(event.organization)%}
-<div class="card rounded-0 card-hover-overlay">
-    <div class="position-relative">
-        <img class="card-img rounded-0" src="https://picsum.photos/300/200" alt="Card image cap">
+{% if item.location is defined and item.location is not empty %}
+    {% set eventLocation  = commonground_resource(item.location) %}
+    {% set locationCategories = commonground_resource_list({'component':'wrc','type':'categories'}, {'resources.resource':eventLocation['id']})['hydra:member'] %}
+{% endif %}
+{% set eventOrganization = commonground_resource(item.organization) %}
+{% set organizationImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':eventOrganization['@id'], 'organization':'/organizations/'~eventOrganization['id']})['hydra:member'] %}
+    {% if organizationImages|length > 0 %}
+        {% set organizationImage = organizationImages[0] %}
+    {% endif %}
+{% set eventImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':item['@id'], 'organization':'/organizations/'~eventOrganization['id']})['hydra:member'] %}
+{% if eventImages|length > 0 %}
+    {% set eventImage = eventImages[0] %}
+{% endif %}
+<div class="card rounded-0 card-hover-overlay"  style="{% if minHeightCard|default %}min-height: {{ minHeightCard }}px;{% endif %}{% if minWidthCard|default %}min-width: {{ minWidthCard }}px;{% endif %}">
+    <div class="position-relative text-center">
+        {% if eventImage.base64 is defined %}
+            <img class="card-img rounded-0"
+                 style="{% if maxWidthImage|default %}max-width: {{ maxWidthImage }}px;{% endif%}
+                     {% if maxHeightImage|default %}max-height: {{ maxHeightImage }}px;{% endif%}
+                     width: auto;height: auto;"
+                 src="{{ eventImage.base64 }}"
+                 alt="Card image cap">
+        {% elseif organizationImage.base64 is defined %}
+            <img class="card-img rounded-0"
+                 style="{% if maxWidthImage|default %}max-width: {{ maxWidthImage }}px;{% endif%}
+                     {% if maxHeightImage|default %}max-height: {{ maxHeightImage }}px;{% endif%}
+                     width: auto;height: auto;"
+                 src="{{ organizationImage.base64 }}"
+                 alt="Card image cap">
+        {% else %}
+            <img class="card-img rounded-0"
+                 style="{% if maxHeightImage|default %}max-height: {{ maxHeightImage }}px;{% endif%}"
+                 src="https://picsum.photos/300/200"
+                 alt="Card image cap">
+        {% endif %}
         <div class="card-img-overlay pt-3 pb-0" onclick=" location.href = '{{ path('app_event_event', {id: item.id}) }}';" style="cursor: pointer;">
             <a href="{{ path('app_event_event', {id: item.id}) }}#reviews">
                 <div class="d-flex align-items-center">
@@ -20,42 +51,43 @@
                 {{ item.name|capitalize|length > 30 ? item.name|slice(0, 30) ~ '...' : item.name }}
             </h3>
             <p class="text-white">
-                {% set eventOrganization = commonground_resource(item.organization) %}
                 {{ 'by'|trans|capitalize }}: <a href="{{ path('app_organization_organization', {'id': eventOrganization.id }) }}">{{ eventOrganization.name|length > 35 ? eventOrganization.name|slice(0, 35) ~ '...' : eventOrganization.name }}</a>
             </p>
+
             <ul class="list-unstyled text-white">
-                {% if item.location is defined and item.location is not empty %}
-                    {% set eventLocation  = commonground_resource(item.location) %}
-                    <li><i class="far fa-calendar-alt" aria-hidden="true"></i> <a href="{{ path('app_location_location', {'id':eventLocation.id }) }}" class="text-white">{{ eventLocation.name|length > 35 ? eventLocation.name|slice(0, 35) ~ '...' : eventLocation.name }}</a></li>
+                {% if eventLocation|default %}
+                    <li>
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                       <a href="{{ path('app_location_location', {'id':eventLocation.id }) }}" class="text-white">{{ eventLocation.name|length > 35 ? eventLocation.name|slice(0, 35) ~ '...' : eventLocation.name }}</a>
+                    </li>
                 {% endif %}
-                <li><i class="far fa-calendar-alt" aria-hidden="true"></i> {{ item.startDate|date("d-m-Y H:m") }}</li>
+                <li><i class="far fa-calendar-alt" aria-hidden="true" id="{{ item.id }}_date"></i> {{ item.startDate|date("d-m-Y H:m") }}</li>
             </ul>
-            </p>
         </div>
     </div>
     <div class="card-footer bg-transparent">
         <ul class="list-unstyled d-flex mb-0 py-2">
             {% for category in eventCategories %}
-            <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip"
-                    data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
+                <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip"
+                        data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
             {% endfor %}
-            {% if features|default %}
-                {% for feature in features %}
-            <li ><i class="{% if feature.icon|default %}{{ feature.icon }}{% endif %} mr-1" data-toggle="tooltip"
-                       data-placement="top" title="{{ feature.name }}" aria-hidden="true"></i> </li>
+            {% if locationCategories|default %}
+                {% for category in locationCategories %}
+                    <li ><i class="{% if category.icon|default %}{{ category.icon }}{% endif %} mr-1" data-toggle="tooltip"
+                            data-placement="top" title="{{ category.name }}" aria-hidden="true"></i> </li>
                 {% endfor %}
             {% endif %}
             <li class="ml-auto">
-                <i {% if item.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ item['id'] }}" {% if app.user|default %}
+                <i {% if item.totals.liked|default %} class="fas fa-heart text-primary" {% else %}class="fal fa-heart text-primary" {% endif %} aria-hidden="true" id="icon_{{ item['id'] }}" {% if app.user|default %}
                     onclick="likeItem('{{ item['id'] }}','{{ item['@id'] }}','{{ eventOrganization['@id'] }}', this)"
-                    data-original-title="{{ 'favourite this event'|trans|capitalize }}"
+                    data-original-title="{{ 'favorite this event'|trans|capitalize }}"
                 {% else %}
-                    data-original-title="{{ 'login to favourite this event'|trans|capitalize }}"
+                    data-original-title="{{ 'login to favorite this event'|trans|capitalize }}"
                 {% endif %}
-                     liked="{% if item.liked|default %}true{% else %}false{% endif %}"
-                     data-toggle="tooltip"
-                     data-placement="top"
-                     title=""></i>
+                    liked="{% if item.totals.liked|default %}true{% else %}false{% endif %}"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title=""></i>
                 <span id="counter_{{ item['id'] }}">{{ item.totals.likes }}</span>
             </li>
         </ul>

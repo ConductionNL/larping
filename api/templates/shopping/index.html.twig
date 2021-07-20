@@ -26,6 +26,12 @@
                                     aria-label="Listing: activate to sort column ascending">
                                     {{ 'name'|trans|capitalize }}
                                 </th>
+                                <th class="sorting" tabindex="0" aria-controls="my-booking" rowspan="1"
+                                    colspan="1"
+                                    style="width: 188px;"
+                                    aria-label="Listing: activate to sort column ascending">
+                                    {{ 'type'|trans|capitalize }}
+                                </th>
                                 <th class="sorting text-center" tabindex="0" aria-controls="my-booking"
                                     rowspan="1"
                                     colspan="1"
@@ -53,12 +59,33 @@
                             {% if order.orderItems|default and order.orderItems > 0 %}
                                 {% set sum = 0 %}
                                 {% for item in order.orderItems %}
+                                    {% set ownsThisProduct = null %}
                                     {% set offer = commonground_resource(item.offer) %}
+
+                                    {% if offer.products|default %}
+                                        {% for prod in offer.products %}
+                                            {% if prod.productsThatAreDependent|default %}
+                                                {% set ownsThisProduct = owns_this_product(prod) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+
                                     <tr style="border-top: #f6f6f6 1px solid" role="row" class="odd">
                                         <td class="text-capitalize">
                                             <a class="text-hover-primary text-muted"
                                                href="{% if item.path|default %}{{ item.path }}{% endif %}">{{ offer.name|capitalize }}</a>
+                                            {% if ownsThisProduct|default and ownsThisProduct == true %}
+                                                <span data-toggle="tooltip"
+                                                      data-placement="top" title=""
+                                                      data-original-title="This product is not required for other products">
+                    <i style="color: red" class="fa fa-info-circle" aria-hidden="true"></i>
+                  </span>
+                                            {% endif %}
                                         </td>
+                                        <td class="text-capitalize">
+                                            {% if offer.products|default %}
+                                                {{ offer.products.0.type|capitalize }}
+                                            {% endif %}</td>
                                         <td class="text-capitalize text-center">
                                             {% if item.price|default %}
                                                 {{ item.quantity }}
@@ -76,7 +103,7 @@
                                         <td class=" text-center">
                                             <div></div>
                                             {% if item.price|default %}
-                                                &euro; {{ item.price }},-
+                                                {{ (item.price)|localizedcurrency('EUR') }}
                                             {% endif %}
                                         </td>
                                         <td>
@@ -93,19 +120,25 @@
                                         {% for option in item.options %}
                                             <tr class="collapse" id="options{{ loop.parent.loop.index0 }}">
                                                 <td class="text-capitalize">
-                                                    {{ option.name }}
+                                                    {% if option.name|default %}
+                                                        {{ option.name }}
+                                                    {% endif %}
                                                 </td>
                                                 <td class="text-capitalize text-center">
                                                 <td>
                                                 </td>
+                                                <td>
+                                                </td>
                                                 <td class=" text-center">
-                                                    &euro; {{ option.price }},-
+                                                    {{ (option.price)|localizedcurrency('EUR') }}
                                                 </td>
                                                 <td>
                                                     <form action="{{ path('app_shopping_removeoption') }}"
                                                           method="post">
-                                                        <input type="hidden" name="option[name]"
-                                                               value="{{ option.name }}">
+                                                        {% if option.name|default %}
+                                                            <input type="hidden" name="option[name]"
+                                                                   value="{{ option.name }}">
+                                                        {% endif %}
                                                         <input type="hidden" name="option[offer]"
                                                                value="{{ option.offer }}">
                                                         <input type="hidden" name="redirect"
@@ -129,10 +162,12 @@
                                     </td>
                                     <td>
                                     </td>
+                                    <td>
+                                    </td>
                                     <td class="text-center pt-0">
                                         <div class="text-center pt-4 mx-auto"
                                              style="width: 50%;border-top: 1px solid grey">
-                                            <b>&euro; {{ sum }},-</b>
+                                            <b>{{ (sum)|localizedcurrency('EUR') }}</b>
                                         </div>
                                     </td>
                                     <td>
@@ -171,18 +206,33 @@
                                     </div>
                                     <div class="col-6">
 
-                                        <div class="form-group mb-3 text-center">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input required type="checkbox">
-                                                    I agree to the <a href="#">Terms of Use</a> &amp; <a
-                                                        href="#">Privacy
-                                                        Policy</a>.
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <button type="submit" name="makeOrder" value="true"
-                                                class="btn btn-lg btn-primary btn-block">{{ 'pay'|trans|capitalize }}</button>
+
+                                        {% set service = commonground_resource_list({'component':'bc', 'type':'services'}, {'organization':order.organization})['hydra:member'] %}
+
+                                        {% if service|default and service|length > 0 %}
+
+                                            {% if organization.termsAndConditions|default and organization.termsAndConditions.content|default %}
+                                                <div class="form-group mb-3 text-center">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input required type="checkbox">
+                                                            I agree to the <a target="_blank"
+                                                                              href="{{ path('app_default_termsandconditionsfororg', {'id': organization.id}) }}">Terms
+                                                                of Use</a> &amp; <a target="_blank"
+                                                                                    href="{{ path('app_default_privacypolicyfororg', {'id': organization.id}) }}">Privacy
+                                                                Policy</a>.
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <p>{{ 'this organization has no terms and conditions.'|trans|capitalize }}</p>
+                                            {% endif %}
+
+                                            <button type="submit" name="makeOrder" value="true"
+                                                    class="btn btn-lg btn-primary btn-block">{{ 'pay'|trans|capitalize }}</button>
+                                        {% else %}
+                                            <p>{{ 'you can\'t order from the offering organization due configuration being uncomplete'|trans|capitalize }}</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </form>
@@ -199,9 +249,12 @@
 
                 {% endfor %}
             {% else %}
-                <h3 class="mb-4">{{ 'your shopping cart is empty'|trans|capitalize }}</h3>
-                <a href="{{ path('app_event_index') }}"
-                   class="btn btn-primary">{{ 'browse through events'|trans|capitalize }}</a>
+                <div class="card text-center p-5">
+                    <p class="mb-4">{{ 'no results found'|trans|capitalize }}</p>
+                    <p class="mb-4">{{ 'you haven\'t made any orders.'|trans|capitalize~' '~'if you want to make a order, search here for a event.'|trans|capitalize }}</p>
+                    <a style="width: 33%; margin: auto" href="{{ path('app_event_index') }}"
+                       class="btn btn-primary">{{ 'find a event'|trans|capitalize }}</a>
+                </div>
             {% endif %}
 
         </div>

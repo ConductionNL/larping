@@ -1,41 +1,72 @@
 {% extends "dashboard_organization/modals/modal.html.twig" %}
 
 {% if resource is defined %}
-    {% set  id = resource['id'] %}
-    {% set  type = 'Product' %}
+    {% set id = resource['id'] %}
 {% else %}
-    {% set  id = 'Add' %}
-    {% set  type = 'Product' %}
+    {% set id = 'Add' %}
 {% endif %}
 
+{% set type = 'Product' %}
+
 {% block body %}
-<form id="{{ type }}Form{{ id }}" method="post">
-    {% if resource['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ resource['id'] }}">{% endif %}
-    {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ resource['@id'] }}">{% endif %}
-    <div class="form-group">
-        <label for="name">{{ 'name of your product'|trans|capitalize }}*</label>
-        <input type="text" class="form-control" id="name" name="name" {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
-    </div>
-    <div class="form-group">
-        <label for="description">{{ 'description'|trans|capitalize }}</label>
-        <textarea class="form-control" rows="5" id="description" name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
-    </div>
-    <div class="form-group">
-        <label for="description">{{ 'type'|trans|capitalize }}</label>
-        <select class="form-control" aria-label="{{ 'the type of this product'|trans|capitalize }}" required id="type" name="type" {% if esource.type|default %}disabled{% endif %}>
-            <option value="simple" {% if resource.type is defined  and resource.type == "simple"%} selected {% endif %}>{{ 'simple'|trans|capitalize }}</option>
-            <option value="ticket" {% if resource.type is defined  and resource.type == "ticket"%} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
-            <option value="subscription" {% if resource.type is defined  and resource.type == "subscription"%} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
-            <!--
-            <option value="set" {% if resource.type is defined  and resource.type == "set"%} selected {% endif %}>{{ 'set'|trans|capitalize }}</option>
-            <option value="virtual" {% if resource.type is defined  and resource.type == "virtual"%} selected {% endif %}>{{ 'virtual'|trans|capitalize }}</option>
-            <option value="external" {% if resource.type is defined  and resource.type == "external"%} selected {% endif %}>{{ 'external'|trans|capitalize }}</option>
-            <option value="variable" {% if resource.type is defined  and resource.type == "variable"%} selected {% endif %}>{{ 'variable'|trans|capitalize }}</option>
-            <option value="person" {% if resource.type is defined  and resource.type == "person"%} selected {% endif %}>{{ 'person'|trans|capitalize }}</option>
-            <option value="location" {% if resource.type is defined  and resource.type == "location"%} selected {% endif %}>{{ 'location'|trans|capitalize }}</option>
-            <option value="service" {% if resource.type is defined  and resource.type == "service"%} selected {% endif %}>{{ 'service'|trans|capitalize }}</option>
+    <form id="{{ type }}Form{{ id }}" method="post"
+        {% if app.request.attributes.get('_route') == 'app_dashboardorganization_event' %}
+          action="{{ path('app_dashboardorganization_event', {id: event['id']}) }}"
+        {% else %}
+          action="{{ path('app_dashboardorganization_products') }}"
+        {% endif %}>
+        {% if resource['id'] is defined %}<input type="hidden" id="id" name="id"
+                                                 value="{{ resource['id'] }}">{% endif %}
+        {% if resource['@id'] is defined %}<input type="hidden" id="@id" name="@id"
+                                                  value="{{ resource['@id'] }}">{% endif %}
+        <input type="hidden" name="@type" value="Product">
+        <div class="form-group">
+            <label for="name">{{ 'name of your product'|trans|capitalize }}*</label>
+            <input type="text" class="form-control" id="name" name="name"
+                   {% if resource.name is defined %}value="{{ resource.name|capitalize }}"{% endif %} required>
+        </div>
+        <div class="form-group">
+            <label for="description">{{ 'description'|trans|capitalize }}</label>
+            <textarea class="form-control" rows="5" id="description"
+                      name="description">{% if resource.description is defined %}{{ resource.description }}{% endif %}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="price">{{ 'price'|trans|capitalize }}*</label>
+            <input type="text" class="form-control" id="price" name="price"
+                   {% if resource.price is defined %}value="{{ resource.price }}"{% endif %} required>
+        </div>
+        <div class="row">
+            <div class="form-group col-6">
+                <label for="quantity">{{ 'quantity'|trans|capitalize }}*</label>
+                <input type="number" class="form-control" id="quantity" name="quantity"
+                       {% if resource.quantity is defined %}value="{{ resource.quantity }}"{% endif %} required>
+            </div>
+            <div class="form-group col-6">
+                <label for="maxQuantity">{{ 'maximum quantity'|trans|capitalize }}*</label>
+                <input type="number" class="form-control" id="maxQuantity" name="maxQuantity"
+                       {% if resource.maxQuantity is defined %}value="{{ resource.maxQuantity }}"{% endif %} required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">{{ 'type'|trans|capitalize }}</label>
+            <select class="form-control" aria-label="{{ 'the type of this product'|trans|capitalize }}" required
+                    id="type" name="type" {% if resource.type|default %}disabled{% endif %}>
+                <option
+                    value="simple" {% if resource.type is defined  and resource.type == "simple" %} selected {% endif %}>{{ 'simple'|trans|capitalize }}</option>
+                <option
+                    value="ticket" {% if resource.type is defined  and resource.type == "ticket" %} selected {% endif %}>{{ 'ticket'|trans|capitalize }}</option>
+                <option
+                    value="subscription" {% if resource.type is defined  and resource.type == "subscription" %} selected {% endif %}>{{ 'subscription'|trans|capitalize }}</option>
+                <!--
+            <option value="set" {% if resource.type is defined  and resource.type == "set" %} selected {% endif %}>{{ 'set'|trans|capitalize }}</option>
+            <option value="virtual" {% if resource.type is defined  and resource.type == "virtual" %} selected {% endif %}>{{ 'virtual'|trans|capitalize }}</option>
+            <option value="external" {% if resource.type is defined  and resource.type == "external" %} selected {% endif %}>{{ 'external'|trans|capitalize }}</option>
+            <option value="variable" {% if resource.type is defined  and resource.type == "variable" %} selected {% endif %}>{{ 'variable'|trans|capitalize }}</option>
+            <option value="person" {% if resource.type is defined  and resource.type == "person" %} selected {% endif %}>{{ 'person'|trans|capitalize }}</option>
+            <option value="location" {% if resource.type is defined  and resource.type == "location" %} selected {% endif %}>{{ 'location'|trans|capitalize }}</option>
+            <option value="service" {% if resource.type is defined  and resource.type == "service" %} selected {% endif %}>{{ 'service'|trans|capitalize }}</option>
             -->
-        </select>
-    </div>
-</form>
+            </select>
+        </div>
+    </form>
 {% endblock %}

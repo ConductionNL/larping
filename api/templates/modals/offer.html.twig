@@ -19,9 +19,13 @@
                         {% if product.prerequisiteProducts|default %}
                             {% set counter = 1 %}
                             {% for product in product.prerequisiteProducts %}
+                                {% set ownsThisProduct = null %}
 
-                                {# Check if this product is owned or in session order  #}
+                                {#                                 Check if this product is owned or in session order#}
                                 {% set ownsThisProduct = owns_this_product(product) %}
+                                {% if ownsThisProduct == false %}
+                                    {% set ownsThisProduct = product_in_cart(product) %}
+                                {% endif %}
 
                                 {% if ownsThisProduct is not null and ownsThisProduct == false %}
                                     {% set product = commonground_resource(product['@id']) %}
@@ -36,92 +40,113 @@
                                            value="{{ product.offers.0['@id'] }}">
                                     <input name="offers[{{ counter }}][path]" type="hidden"
                                            value="{{ app.request.requesturi }}">
-                                    {# Keep this for bugfixing #}
-                                    {#                                {% else %}#}
-                                    {#                                    <div class="form-group p-3"#}
-                                    {#                                         style="border-radius: 6px;background: rgba(144,238,144, 0.8)">#}
-                                    {#                                        <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}#}
-                                    {#                                            :</p>#}
-                                    {#                                        <label#}
-                                    {#                                            style="color: white">{{ product.name|capitalize }}</label>#}
-                                    {#                                    </div>#}
+                                    {#                                     Keep this for bugfixing#}
+                                    {#                                                                    {% else %}#}
+                                    {#                                                                        <div class="form-group p-3"#}
+                                    {#                                                                             style="border-radius: 6px;background: rgba(144,238,144, 0.8)">#}
+                                    {#                                                                            <p style="color: white">{{ 'you have this product in your cart or own this product'|trans|capitalize }}#}
+                                    {#                                                                                :</p>#}
+                                    {#                                                                            <label#}
+                                    {#                                                                                style="color: white">{{ product.name|capitalize }}</label>#}
+                                    {#                                                                        </div>#}
+                                {% endif %}
+                            {% endfor %}
 
+                        {% endif %}
 
-                                    <div class="row mb-3 pt-6">
-                                        <div class="form-group col-7">
-                                            <h5 class="">{{ offer.name }}</h5>
-                                        </div>
-                                        <input name="offers[0][offer]" type="hidden" value="{{ offer['@id'] }}">
-                                        <input name="offers[0][path]" type="hidden"
-                                               value="{{ app.request.requesturi }}">
+                        <div class="row mb-3 pt-6">
+                            <div class="form-group col-6">
+                                <h5 class="">{{ offer.name }}</h5>
+                                <h6 class="">{{ offer.products.0.type|capitalize }}</h6>
+                            </div>
+                            <input name="offers[0][offer]" type="hidden" value="{{ offer['@id'] }}">
+                            <input name="offers[0][path]" type="hidden"
+                                   value="{{ app.request.requesturi }}">
 
-                                        <div class="col-5 d-flex justify-content-around">
-                                            <h5>&euro; {{ offer.price }},-</h5>
+                            <input name="redirectUrl" type="hidden"
+                                   value="{{ app.request.requesturi }}">
 
-                                            {% set isTicket = check_for_type_in_products('ticket', offer.products) %}
-                                            {% if offer.audience|default and offer.audience == 'personal' and isTicket|default and isTicket == true %}
+                            <div class="col-6 d-flex justify-content-around">
+                                <h5>{{ (offer.price/100)|localizedcurrency(offer.priceCurrency) }}</h5>
 
-                                                <h5>{{ '1'~' '~'item'~' '~'max' }}</h5>
-                                                <input value="1" name="offers[0][quantity]"
-                                                       type="hidden">
-                                            {% else %}
-                                                <div class="form-group">
-                                                    <label for="quantityInput">{{ 'quantity'|trans|capitalize }}</label>
-                                                    <input min="1" value="1" class="form-control"
-                                                           name="offers[0][quantity]"
-                                                           type="number"
-                                                           id="quantityInput">
+                                {% set isTicket = check_for_type_in_products('ticket', offer.products) %}
+                                {% set isSubscription = check_for_type_in_products('subscription', offer.products) %}
+                                {% if isTicket|default and isTicket == true %}
+
+                                    <h5>{{ '1'~' '~'ticket'~' '~'max' }}</h5>
+                                    <input value="1" name="offers[0][quantity]"
+                                           type="hidden">
+                                {% elseif isSubscription|default and isSubscription == true and offer.recurrence|default and offer.notice|default %}
+                                    <h5>
+                                        <span>{{ 'every'|trans~' '~offer.recurrence|split('')[1] }}</span>  </span>
+                                        {% if offer.recurrence|split('')[2] == 'M' %}
+                                            <span>{{ 'month(s)'|trans }}</span>
+                                        {% elseif offer.recurrence|split('')[2] == 'D' %}
+                                            <span>{{ 'day(s)'|trans }}</span>
+                                        {% elseif offer.recurrence|split('')[2] == 'Y' %}
+                                            <span>{{ 'year(s)'|trans }}</span>
+                                        {% endif %}
+                                    </h5>
+
+                                {% else %}
+                                    <div class="form-group">
+                                        <label for="quantityInput">{{ 'quantity'|trans|capitalize }}</label>
+                                        <input style="max-width: 80px" min="1" value="1" class="form-control"
+                                               name="offers[0][quantity]"
+                                               type="number"
+                                               id="quantityInput">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% if offer.options|default and offer.options|length > 0 %}
+
+                            <h5>{{ 'options/extra\'s'|trans|capitalize }}</h5>
+                            <p>{{ 'a negative price of a option can improve the total price'|trans|capitalize }}</p>
+
+                            <div class="row">
+                                {% for option in offer.options %}
+                                    <div class="col-12">
+                                        <div class="form-group form-check mb-6 ">
+                                            <div class="row align-items-center form-check-readonly">
+                                                <div class="col-8">
+                                                    <input type="checkbox" class="form-check-input"
+                                                           id="options{{ loop.index0 }}"
+                                                           name="offers[0][options][{{ loop.index0 }}][name]"
+                                                           value="{{ option.name }}">
+                                                    <label class="form-check-label pl-1"
+                                                           for="options{{ loop.index0 }}">{{ option.name }}</label>
                                                 </div>
-                                            {% endif %}
+                                                <div class="col-4 text-right">
+                                                    <b class="pr-1">{{ offer.priceCurrency }} {{ option.price }}
+                                                        ,-</b>
+                                                    <input type="hidden"
+                                                           name="offers[0][options][{{ loop.index0 }}][price]"
+                                                           value="{{ option.price }}">
+                                                    <input type="hidden"
+                                                           name="offers[0][options][{{ loop.index0 }}][offer]"
+                                                           value="{{ offer['@id'] }}">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    {% if offer.options|default and offer.options|length > 0 %}
-
-                                        <h5>{{ 'options/extra\'s'|trans|capitalize }}</h5>
-                                        <p>{{ 'a negative price of a option can improve the total price'|trans|capitalize }}</p>
-
-                                        <div class="row">
-                                            {% for option in offer.options %}
-                                                <div class="col-12">
-                                                    <div class="form-group form-check mb-6 ">
-                                                        <div class="row align-items-center form-check-readonly">
-                                                            <div class="col-8">
-                                                                <input type="checkbox" class="form-check-input"
-                                                                       id="options{{ loop.index0 }}"
-                                                                       name="offers[0][options][{{ loop.index0 }}][name]"
-                                                                       value="{{ option.name }}">
-                                                                <label class="form-check-label pl-1"
-                                                                       for="options{{ loop.index0 }}">{{ option.name }}</label>
-                                                            </div>
-                                                            <div class="col-4 text-right">
-                                                                <b class="pr-1">{{ offer.priceCurrency }} {{ option.price }}
-                                                                    ,-</b>
-                                                                <input type="hidden"
-                                                                       name="offers[0][options][{{ loop.index0 }}][price]"
-                                                                       value="{{ option.price }}">
-                                                                <input type="hidden"
-                                                                       name="offers[0][options][{{ loop.index0 }}][offer]"
-                                                                       value="{{ offer['@id'] }}">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-
-
-                                {% endif %}
-                                {% set ownsThisProduct = 'false' %}
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         {% endif %}
+                        {% set ownsThisProduct = 'false' %}
                     {% endfor %}
                 {% endif %}
 
-                <input type="hidden" name="makeOrder" value="true">
-                <button type="submit"
-                        class="btn btn-primary btn-block">{{ 'add to shopping cart and view'|trans|capitalize }}</button>
+                {% set service = commonground_resource_list({'component':'bc', 'type':'services'}, {'organization':offer.offeredBy})['hydra:member'] %}
+
+                {% if service|default and service|length > 0 %}
+                    <input type="hidden" name="makeOrder" value="true">
+                    <button type="submit"
+                            class="btn btn-primary btn-block">{{ 'add to shopping cart and view'|trans|capitalize }}</button>
+                {% else %}
+                    <p>{{ 'this product is unavailable due configuration being uncomplete from the offering organization'|trans|capitalize }}</p>
+                {% endif %}
             </form>
         </div>
     </div>

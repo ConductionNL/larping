@@ -2,15 +2,17 @@
     <table id="products" class="display nowrap table" style="width:100%">
         <thead>
         <tr>
-            <th>{{ 'image'|trans|capitalize }}</th>
+            <th style="width: 80px;">{{ 'image'|trans|capitalize }}</th>
             <th>{{ 'name'|trans|capitalize }}</th>
             <th>{{ 'type'|trans|capitalize }}</th>
             <th>{{ 'offers'|trans|capitalize }}</th>
-            <th>Status</th>
+            <th>{{ 'group'|trans|capitalize }}</th>
             <th>
-                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#ProductModalAdd">{{ 'add'|trans|capitalize }}</button>
+                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
+                        data-target="#ProductModalAdd">{{ 'add'|trans|capitalize }}</button>
                 {% if app.request.attributes.get('_route') == 'app_dashboardorganization_eventtickets' %}
-                    <a href="{{ path('app_dashboardorganization_eventtickets', {'action': 'download', id: event.id}) }}" class="btn btn-warning btn-sm">{{ 'download tickets'|trans|capitalize }}</a>
+                    <a href="{{ path('app_dashboardorganization_eventtickets', {'action': 'download', id: event.id}) }}"
+                       class="btn btn-warning btn-sm">{{ 'download tickets'|trans|capitalize }}</a>
                 {% endif %}
             </th>
         </tr>
@@ -18,26 +20,67 @@
         <tbody>
         {% for product in products %}
             <tr>
-                <td>
-                    <img class="img-sm rounded" src="assets/img/listing/listing-03.jpg" alt="Image">
+                <td class="text-center">
+                    {% set productImage = false %}
+                    {% set eventImage = false %}
+                    {% set productImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':product['@id'], 'organization':'/organizations/'~organization['id']})['hydra:member'] %}
+                    {% if productImages|length > 0 %}
+                        {% set productImage = productImages[0] %}
+                    {% endif %}
+                    {% if product.event|default %}
+                        {% set eventImages = commonground_resource_list({'component':'wrc','type':'images'}, {'resource':product.event, 'organization':'/organizations/'~organization['id']})['hydra:member'] %}
+                        {% if eventImages|length > 0 %}
+                            {% set eventImage = eventImages[0] %}
+                        {% endif %}
+                    {% endif %}
+                    {% if productImage.base64 is defined %}
+                        <img class="img-sm rounded"
+                             style="max-width: 60px;max-height: 40px;
+                                 width: auto;height: auto;"
+                             src="{{ productImage.base64 }}"
+                             alt="Image">
+                    {% elseif eventImage.base64 is defined %}
+                        <img class="img-sm rounded"
+                             style="max-width: 60px;max-height: 40px;
+                                 width: auto;height: auto;"
+                             src="{{ eventImage.base64 }}"
+                             alt="Image">
+                    {% else %}
+                        <img class="img-sm rounded"
+                             style="max-height: 40px;"
+                             src="https://picsum.photos/300/200"
+                             alt="Image">
+                    {% endif %}
                 </td>
                 <td class="text-capitalize">
-                    <a class="text-hover-primary text-muted" >{{ product.name }}</a>
+                    <a class="text-hover-primary text-muted">{{ product.name }}</a>
                 </td>
                 <td>
-                    <a class="text-hover-primary text-muted" >{{ product.type }}</a>
+                    <a class="text-hover-primary text-muted">{{ product.type }}</a>
                 </td>
                 <td>
                     {% for offer in product.offers %}
-                        <span class="d-block ">{{ offer.name }} ({{ offer.price }})</span>
+                        <span class="d-block ">{{ offer.name }} {{ (offer.price / 100)|localizedcurrency(offer.priceCurrency) }}</span>
                     {% endfor %}
                 </td>
                 <td>
-                    <span class="badge badge-warning px-2 py-1">Pending</span>
+                    {% if product.userGroup|default %}
+                    {% set userGroupId = product.userGroup|split('/')|last %}
+                    {% if groups|default %}
+                        {% for group in groups %}
+                            {% if group.id == userGroupId %}
+                            {{ group.name }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% else %}
+                        {{ 'none'|trans|capitalize }}
+                    {% endif %}
                 </td>
                 <td>
-
-                    <a class="btn btn-outline-primary btn-sm float-right" href="{{ path('app_dashboardorganization_editproduct', { id: product.id}) }}"><i class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
+                    <a class="btn btn-outline-primary btn-sm float-right"
+                       href="{{ path('app_dashboardorganization_editproduct', { id: product.id}) }}"><i
+                            class="fas fa-edit" aria-hidden="true"></i>{{ 'edit'|trans|capitalize }}</a>
                 </td>
             </tr>
         {% endfor %}
@@ -47,7 +90,8 @@
     <div class="card border-light shadow-sm">
         <div class="card-body text-center">
             <p>{{ 'no products found'|trans|capitalize }}</p>
-            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ProductModalAdd">{{ 'add your first product'|trans|capitalize }}!</a>
+            <a href="#" class="btn btn-primary" data-toggle="modal"
+               data-target="#ProductModalAdd">{{ 'add your first product'|trans|capitalize }}!</a>
         </div>
     </div>
 {% endif %}

@@ -1,0 +1,223 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+    {# include 'dashboard_user/menu.html.twig' #}
+
+    <section class="bg-light py-5 height100vh">
+        <div class="container">
+            <nav class="bg-transparent breadcrumb breadcrumb-2 px-0 mb-5" aria-label="breadcrumb">
+                <h2 class="font-weight-normal mb-4 mb-md-0">{% if location['@id']|default %}{{ 'edit location'|trans|capitalize }}{% else %}{{ 'add location'|trans|capitalize }}{% endif %}</h2>
+                <ul class="list-unstyled d-flex p-0 m-0">
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_default_index') }}">{{ 'home'|trans|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ path('app_dashboardorganization_locations') }}">{{ 'locations'|trans|capitalize }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{% if location['@id']|default %}{{ 'edit location'|trans|capitalize }}{% else %}{{ 'add location'|trans|capitalize }}{% endif %}</li>
+                </ul>
+            </nav>
+            <form id="LocationForm{% if location.id|default %}{{ location['id'] }}{% else %}Add{% endif %}" method="post" enctype="multipart/form-data">
+                {% if location['id'] is defined %}<input type="hidden" id="id" name="id" value="{{ location['id'] }}">{% endif %}
+                {% if location['@id'] is defined %}<input type="hidden" id="@id" name="@id" value="{{ location['@id'] }}">{% endif %}
+                {% if location['@type'] is defined %}<input type="hidden" id="@type" name="@type" value="{{ location['@type'] }}">{% endif %}
+
+
+                <!-- About -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <div class="row">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'about'|trans|capitalize }} {% if location.name is defined %}{{ location.name }}{% else %}{{ 'new location'|trans|capitalize }}{% endif %}</h3>
+                            </div>
+                            <div class="form-group  col-md-6 mb-6">
+                                <button type="submit" class="btn btn-primary float-right">{{ 'save'|trans|capitalize }}</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="name">{{ 'name'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" {% if location.name is defined %}value="{{ location.name }}"{% endif %} id="name" name="name">
+                            </div>
+
+                            <div class="form-group col-md-12 mb-6">
+                                <label for="summernoteLocationDescription">{{ 'description'|trans|capitalize }}</label>
+                                <textarea class="summernote" name="description" id="summernoteLocationDescription">{% if location.description|default %}{{ location.description }}{% endif %}</textarea>
+{#                                <textarea class="form-control" rows="6" id="description" name="description">{% if location.description is defined %}{{ location.description }}{% endif %}</textarea>#}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="card">
+                    <div class="card-body px-6 pt-6 pb-1">
+                        <h3 class="h4 mb-4">{{ 'categories'|trans|capitalize }} </h3>
+                        <ul class="list-unstyled mb-6">
+                            {% for category in categories %}
+                                <li class="d-inline-block mr-4 mb-2">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            value="/categories/{{ category.id }}"
+                                            id="category{{ category.id }}"
+                                            name="categories[]"
+                                            {% if category.id in activeCategories %}
+                                                checked="checked"
+                                            {% endif %}
+                                        />
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <i class="{{ category.icon }} mr-2" aria-hidden="true"></i>{{ category.name }}
+                                        </label>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                {% if location['@id']|default %}
+                <!-- Contact -->
+                <div class="card">
+                    <div class="card-body p-6" id="contact-list">
+                        <div class="row">
+                            <div class="form-group  col-md-6 mb-6">
+                                <h3 class="h4 mb-4">{{ 'address'|trans|capitalize }}</h3>
+                            </div>
+                        </div>
+                        {% if location.address['@id']|default %}
+                            <input type="hidden" name="address[@id]" value="{{ location.address['@id'] }}">
+                            <input type="hidden" name="address[id]" value="{{ location.address.id }}">
+                        {% endif %}
+
+                        <div class="row">
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="street">{{ 'street'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"  name="address[street]"
+                                {% if location.address.street|default %}
+                                    value="{{ location.address.street }}"
+                                {% endif %}
+                                >
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="houseNumber">{{ 'house number'|trans|capitalize }}</label>
+                                <input type="number" class="form-control" name="address[houseNumber]"
+                                    {% if location.address.houseNumber|default %}
+                                        value="{{ location.address.houseNumber }}"
+                                    {% endif %}
+                                >
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="suffix">{{ 'suffix'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" name="address[suffix]"
+                                    {% if location.address.suffix|default %}
+                                        value="{{ location.address.suffix }}"
+                                    {% endif %}
+                                >
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="postalCode">{{ 'postal code'|trans|capitalize }}</label>
+                                <input type="text" class="form-control" name="address[postalCode]"
+                                    {% if location.address.postalCode|default %}
+                                        value="{{ location.address.postalCode }}"
+                                    {% endif %}
+                                >
+                            </div>
+
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="locality">{{ 'locality'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"  name="address[locality]"
+                                    {% if location.address.locality|default %}
+                                        value="{{ location.address.locality }}"
+                                    {% endif %}
+                                >
+                            </div>
+                            <div class="form-group col-md-6 mb-6">
+                                <label for="country">{{ 'country'|trans|capitalize }}</label>
+                                <input type="text" class="form-control"  name="address[country]"
+                                    {% if location.address.country|default %}
+                                        value="{{ location.address.country }}"
+                                    {% endif %}
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gallery -->
+                <div class="card">
+                    <div class="card-body p-6">
+                        <h3 class="h4 mb-4">{{ 'add a picture'|trans|capitalize }}</h3>
+                        <p class="text-muted">{{ 'the recomended aspect ratio for images is 3 : 2 (for example: 960x640 or 260x173), you can upload different aspect ratio images, but they may mess with the look of the cards'|trans|capitalize }}</p>
+                        <div class="form-group position-relative mb-6 form-group-dragable">
+                            <input onchange="showImage()" type="file" class="custom-file-input" id="image"
+                                   name="image">
+                            <div class="custom-file-label" for="image" id="imageHolder"
+                                 {% if image.base64 is defined %}style="padding-top: 10px;"{% endif %}>
+                                {% if image.base64 is defined %}
+                                    <img style="height: 150px;" src="{{ image.base64 }}" alt="...">
+                                {% else %}
+                                    {{ 'Click or Drag an image here'|trans|capitalize }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-6 col-xl-5">
+                        <div class="mb-6">
+                                <button type="submit" class="btn btn-lg btn-primary btn-block">{{ 'save'|trans|capitalize }}</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </section>
+
+    <script>
+        $('#summernoteLocationDescription').summernote({
+            placeholder: '{{ 'content'|trans|capitalize }}',
+            tabsize: 2,
+            height: 300
+        });
+    </script>
+
+    <script>
+        function showImage() {
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+
+            async function Main() {
+                let file = document.querySelector('#image').files[0];
+                let imageHolder = document.querySelector('#imageHolder');
+                if (file) {
+                    imageHolder.setAttribute('style', 'padding-top: 10px;')
+                    imageHolder.innerHTML = '';
+                    let image = document.createElement('img');
+                    let base64 = await toBase64(file);
+                    image.setAttribute('style', 'height: 150px;');
+                    image.setAttribute('src', base64);
+                    imageHolder.appendChild(image);
+                } else {
+                    imageHolder.setAttribute('style', '')
+                    imageHolder.innerHTML = '{{ 'Click or Drag an image here'|trans|capitalize }}';
+                }
+            }
+
+            Main();
+        }
+    </script>
+
+{% endblock %}

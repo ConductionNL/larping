@@ -4,6 +4,7 @@
 
 namespace App\Controller;
 
+use App\Service\MailingService;
 use App\Service\ShoppingService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Conduction\IdVaultBundle\Service\IdVaultService;
@@ -37,7 +38,9 @@ class ShoppingController extends AbstractController
             if ($order != false) {
                 $person = $commonGroundService->getResource($this->getUser()->getPerson());
                 $order = $shoppingService->uploadOrder($order, $person);
-                if (isset($order['@id'])) {
+                if ($order === false) {
+                    return $variables;
+                } elseif (isset($order['@id'])) {
                     $shoppingService->redirectToMollie($order);
                 }
             }
@@ -50,31 +53,67 @@ class ShoppingController extends AbstractController
      * @Route("/payment-status")
      * @Template
      */
-    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params)
+    public function paymentAction(Session $session, CommonGroundService $commonGroundService, ShoppingService $shoppingService, IdVaultService $idVaultService, Request $request, ParameterBagInterface $params, MailingService $mailingService)
     {
-        if ($session->get('invoice@id')) {
+        if ($session->get('invoice@id') && $this->getUser()) {
             $variables['invoice'] = $commonGroundService->getResource($session->get('invoice@id'));
 
             // Get invoice with updated status from mollie
             $object['target'] = $variables['invoice']['id'];
 
             $variables['invoice'] = $commonGroundService->saveResource($object, ['component' => 'bc', 'type' => 'status']);
+            $providers = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'];
+            $appId = $providers[0]['configuration']['app_id'];
 
             // Empty session order when order is paid
             if (isset($variables['invoice']['status']) && $variables['invoice']['status'] == 'paid') {
+                //mail user
+                $data = [];
+                $data['user'] = $this->getUser()->getUsername();
+                $data['invoice'] = $variables['invoice'];
+                $data['items'] = $variables['invoice']['items'];
+                $idVaultService->sendMail($appId, 'emails/new_invoice.html.twig', 'Larping invoice', $data['user'], 'no-reply@larping.eu', $data);
                 $shoppingService->removeOrderByInvoice($variables['invoice']);
 
-                //lets see if we need to add the user to the members group of the organization
+                // Get provider for when we need to get groups from id-vault
+                $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
+
+                // TODO: put this back? removed for demo
+//                //add user to the clients group
+//                $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
+//                $clientsGroup = array_filter($groups, function ($group) {
+//                    return $group['name'] == 'clients';
+//                });
+//                if (count($clientsGroup) > 0 && !in_array($this->getUser()->getUsername(), array_column($clientsGroup[array_key_first($clientsGroup)]['users'], 'username'))) {
+//                    $idVaultService->inviteUser($provider['configuration']['app_id'], $clientsGroup[array_key_first($clientsGroup)]['id'], $this->getUser()->getUsername(), true);
+//                }
+
+                //lets see if we need to add the user to an userGroup of a any bought products
                 foreach ($variables['invoice']['items'] as $item) {
                     $offer = $commonGroundService->getResource($item['offer']);
-                    if ($offer['products'][0]['type'] == 'subscription') {
-                        //add user to clients group
-                        $provider = $commonGroundService->getResourceList(['component' => 'uc', 'type' => 'providers'], ['type' => 'id-vault', 'application' => $params->get('app_id')])['hydra:member'][0];
-                        $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['targetOrganization'])['groups'];
 
-                        foreach ($groups as $group) {
-                            if ($group['name'] == 'members' || $group['name'] == 'root' && !in_array($this->getUser()->getUsername(), $group['users'])) {
-                                $idVaultService->inviteUser($provider['configuration']['app_id'], $group['id'], $this->getUser()->getUsername(), true);
+                    // Decrease quantity
+                    if (isset($offer['quantity']) && $offer['quantity'] <= !0) {
+                        $offer['quantity']--;
+                        unset($offer['products']);
+                        unset($offer['price']);
+                        $commonGroundService->saveResource($offer);
+                    }
+
+                    // Check if the product of this offer has a userGroup this user should be added to.
+                    if (isset($offer['products'][0]['userGroup'])) {
+                        $groupId = str_replace('https://www.id-vault.com/api/v1/wac/groups/', '', $offer['products'][0]['userGroup']);
+
+                        // Get groups from id-vault to check if the group^ exists and if this user is already in this group or not (must be in foreach to get up to date groups!)
+                        $groups = $idVaultService->getGroups($provider['configuration']['app_id'], $variables['invoice']['organization'])['groups'];
+                        $group = array_filter($groups, function ($group) use ($groupId) {
+                            return $group['id'] == $groupId;
+                        });
+                        // Check if the group exists and if this user is not in this group
+                        if (count($group) == 1) {
+                            $exists = $this->checkArrays($this->getUser()->getUsername(), ($group[array_key_first($group)]['users']));
+                            if (!$exists) {
+                                $idVaultService->inviteUser($provider['configuration']['app_id'], $groupId, $this->getUser()->getUsername(), true);
                             }
                         }
                     }
@@ -87,6 +126,18 @@ class ShoppingController extends AbstractController
         return $variables;
     }
 
+    private function checkArrays($username, $haystack)
+    {
+        $exist = false;
+        foreach ($haystack as $item) {
+            if ($item['username'] === $username) {
+                $exist = true;
+            }
+        }
+
+        return $exist;
+    }
+
     /**
      * @Route("/add-items")
      * @Template
@@ -95,12 +146,33 @@ class ShoppingController extends AbstractController
     {
         if ($request->isMethod('POST')) {
             $offers = $request->get('offers');
+            $redirectUrl = $request->get('redirectUrl');
 
-            $shoppingService->addItemsToCart($offers);
+            if ($shoppingService->addItemsToCart($offers, $redirectUrl) === false) {
+                return $this->redirect($redirectUrl);
+            }
         }
 
         return $this->redirectToRoute('app_shopping_index');
     }
+
+//    /**
+//     * @Route("/add-item")
+//     * @Template
+//     */
+//    public function addItemAction(CommonGroundService $commonGroundService, ShoppingService $shoppingService, Request $request)
+//    {
+//        if ($request->isMethod('POST')) {
+//            $offers = $request->get('offers');
+//            $redirectUrl = $request->get('redirectUrl');
+//
+//            if ($shoppingService->addItemsToCart($offers, $redirectUrl) === false) {
+//                return $this->redirect($redirectUrl);
+//            }
+//        }
+//
+//        return $this->redirectToRoute('app_shopping_index');
+//    }
 
     /**
      * @Route("/remove-option")

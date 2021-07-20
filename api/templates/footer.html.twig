@@ -10,18 +10,18 @@
                     {% set query = app.request.attributes.get('_route_params') %}
                     <a id="langsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle footer-language-link pb-2">
                         {% if app.request.locale == 'en'  %}
-                            <img src="/bundles/listy/img/united-kingdom.svg" width="20" height="20" alt="uk Flag" class="language-flag">{{ 'english'|trans|capitalize }}
+                            <img src="/images/flags/united-kingdom.svg" width="20" height="20" alt="uk Flag" class="language-flag"> {{ 'english'|trans|capitalize }}
                         {% elseif app.request.locale == 'nl'  %}
-                            <img src="/bundles/listy/img/netherlands.svg" alt="NL Flag" width="20" height="20" class="language-flag">{{ 'dutch'|trans|capitalize }}
+                            <img src="/images/flags/netherlands.svg" alt="NL Flag" width="20" height="20" class="language-flag"> {{ 'dutch'|trans|capitalize }}
                         {% else %}
                             {{ 'no curent language could be established'|trans|capitalize }}
                         {% endif %}
                     </a>
                     <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-center mt-0">
                         {% set query = query|merge({'_locale': 'en'}) %}
-                        <a href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}" class="dropdown-item text-gray text-sm"><img src="/bundles/listy/img/united-kingdom.svg" width="20" height="20" alt="UK Flag" class="language-flag">{{ 'english'|trans|capitalize }}</a>
+                        <a href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}" class="dropdown-item text-gray text-sm"><img src="/images/flags/united-kingdom.svg" width="20" height="20" alt="UK Flag" class="language-flag"> {{ 'english'|trans|capitalize }}</a>
                         {% set query = query|merge({'_locale': 'nl'}) %}
-                        <a href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}" class="dropdown-item text-gray text-sm"><img src="/bundles/listy/img/netherlands.svg" alt="NL Flag" width="20" alt="NL Flag" class="language-flag">{{ 'dutch'|trans|capitalize }}</a>
+                        <a href="{{ absolute_url(path(app.request.attributes.get('_route'), query)) }}" class="dropdown-item text-gray text-sm"><img src="/images/flags/netherlands.svg" alt="NL Flag" width="20" alt="NL Flag" class="language-flag"> {{ 'dutch'|trans|capitalize }}</a>
                     </div>
                 </div>
                 <ul class="list-unstyled text-muted">
@@ -65,7 +65,7 @@
                 </div>
                 <ul class="list-unstyled list-gray">
                     <li class="mb-3">
-                        <a href="{{ path('app_default_contact') }}">{{ 'contact us'|trans|capitalize }}</a>
+                        <a href="#">{{ 'contact us'|trans|capitalize }}</a>
                     </li>
                     <li class="mb-3">
                         <a href="{{ path('app_default_termsandconditions') }}">{{ 'terms and conditions'|trans|capitalize }}</a>
