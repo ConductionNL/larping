@@ -35,19 +35,19 @@
                                 {% endif %}
 
                                     <div class="ml-md-auto d-flex align-items-center justify-content-between">
-                                        <div class="select-bg-transparent select-border">
-                                            <div class="selectric-wrapper selectric-select-location">
-                                                <div class="selectric-select">
-                                                    <select class="selectpicker select-location" style="text-align: center" name="sorting_order"
+                                        <div class="select-bg-transparent select-border" style="width: fit-content">
+                                            <div class="selectric-wrapper selectric-select-location" style="width: fit-content">
+                                                <div class="selectric-select" style="width: fit-content">
+                                                    <select class="selectpicker select-location" style="text-align: center; width: fit-content" name="sorting_order"
                                                             onchange="javascript:document.getElementById('eventSortingForm').submit();">
-                                                        <option data-icon="fa fa-arrow-up" value="likes-asc" {% if sorting is defined  and sorting == "likes-asc"%} selected {% endif %}>{{ 'likes'|trans|capitalize }}</option>
-                                                        <option data-icon="fa fa-arrow-down" value="likes-desc" {% if sorting is defined  and sorting == "likes-desc"%} selected {% endif %}> {{ 'likes'|trans|capitalize }}</option>
-                                                        <option data-icon="fa fa-arrow-up" value="rating-asc" {% if sorting is defined  and sorting == "rating-asc"%} selected {% endif %}>{{ 'rating'|trans|capitalize }}</option>
-                                                        <option data-icon="fa fa-arrow-down" value="rating-desc" {% if sorting is defined  and sorting == "rating-desc"%} selected {% endif %}> {{ 'rating'|trans|capitalize }}</option>
-                                                        <option data-icon="fa fa-arrow-up" value="name-asc" {% if sorting is defined  and sorting == "name-asc"%} selected {% endif %}>{{ 'name'|trans|capitalize }}</option>
-                                                        <option data-icon="fa fa-arrow-down" value="name-desc" {% if sorting is defined  and sorting == "name-desc"%} selected {% endif %}> {{ 'name'|trans|capitalize }}</option>
-                                                        <option data-icon="fa fa-arrow-up" value="startDate-asc" {% if sorting is defined  and sorting == "startDate-asc"%} selected {% endif %}>{{ 'date'|trans|capitalize }}</option>
-                                                        <option data-icon="fa fa-arrow-down" value="startDate-desc" {% if sorting is defined  and sorting == "startDate-desc"%} selected {% endif %}>{{ 'date'|trans|capitalize }}</option>
+                                                        <option value="likes-asc" {% if sorting is defined  and sorting == "likes-asc"%} selected {% endif %}> &#xf077; {{ 'likes'|trans|capitalize }}</option>
+                                                        <option value="likes-desc" {% if sorting is defined  and sorting == "likes-desc"%} selected {% endif %}> &#xf078; {{ 'likes'|trans|capitalize }}</option>
+                                                        <option value="rating-asc" {% if sorting is defined  and sorting == "rating-asc"%} selected {% endif %}> &#xf077; {{ 'rating'|trans|capitalize }}</option>
+                                                        <option value="rating-desc" {% if sorting is defined  and sorting == "rating-desc"%} selected {% endif %}> &#xf078; {{ 'rating'|trans|capitalize }}</option>
+                                                        <option value="name-asc" {% if sorting is defined  and sorting == "name-asc"%} selected {% endif %}> &#xf077; {{ 'name'|trans|capitalize }}</option>
+                                                        <option value="name-desc" {% if sorting is defined  and sorting == "name-desc"%} selected {% endif %}> &#xf078; {{ 'name'|trans|capitalize }}</option>
+                                                        <option value="startDate-asc" {% if sorting is defined  and sorting == "startDate-asc"%} selected {% endif %}> &#xf077; {{ 'date'|trans|capitalize }}</option>
+                                                        <option value="startDate-desc" {% if sorting is defined  and sorting == "startDate-desc"%} selected {% endif %}> &#xf078; {{ 'date'|trans|capitalize }}</option>
                                                     </select>
                                                 </div>
                                                 <div class="selectric-items" tabindex="-1">
