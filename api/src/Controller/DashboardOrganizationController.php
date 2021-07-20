@@ -475,7 +475,15 @@ class DashboardOrganizationController extends AbstractController
         if (count($variables['ticket']) > 0 && isset($variables['ticket'][0]['offers']) && count($variables['ticket'][0]['offers']) > 0) {
             $variables['ticket'] = $variables['ticket'][0]['offers'][0];
         }
-        $variables['orders'] = $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['organization' => $variables['organization']['@id']])['hydra:member'];
+
+        $offers = $commonGroundService->getResourceList(['component' => 'pdc', 'type' => 'offers'], ['products.event' => $variables['event']['@id']])['hydra:member'];
+        $orders = [];
+
+        foreach ($offers as $offer) {
+            $orders = array_merge($orders, $commonGroundService->getResourceList(['component' => 'orc', 'type' => 'orders'], ['items.offers' => $offer['@id']])['hydra:member']);
+        }
+
+        $variables['orders'] = $orders;
 
         //downloads tickets
         if ($request->query->has('action') && $request->query->get('action') == 'download') {
