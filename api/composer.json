@@ -11,7 +11,7 @@
         "conduction/id-vault-php": "dev-main",
         "conduction/idvaultbundle": "dev-master",
         "conduction/listybundle": "dev-master",
-        "dompdf/dompdf": "^0.8.5",
+        "dompdf/dompdf": "^2.0.1",
         "endroid/qr-code-bundle": "^3.4",
         "mpdf/mpdf": "dev-master",
         "phpdocumentor/reflection-docblock": "^4.3",
